@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Friend Requests</h2>
+<ul>
+  {% for req in requests %}
+    <li>
+      {{ req.from_user.username }} te ha enviado una solicitud.
+      <a href="{% url 'accept_friend_request' req.id %}">Aceptar</a> |
+      <a href="{% url 'reject_friend_request' req.id %}">Rechazar</a>
+    </li>
+  {% empty %}
+    <li>No tienes solicitudes pendientes.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

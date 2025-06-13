@@ -70,6 +70,15 @@ class Message(models.Model):
     disliked = models.BooleanField(default=False)
     sent_at = models.DateTimeField(auto_now_add=True)
 
+class FriendRequest(models.Model):
+    from_user = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(User, related_name='received_requests', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
+    accepted = models.BooleanField(default=False)
+    
+    class Meta:
+        unique_together = ('from_user', 'to_user')
+
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_private = models.BooleanField(default=False)

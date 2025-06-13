@@ -87,7 +87,8 @@ body {
 .main-content {
     margin-left: 240px;
     margin-top: 80px;
-    margin-right: 300px; /* prevent overlap with right sidebar */
+    margin-right: 300px;
+    /* prevent overlap with right sidebar */
     padding: 1rem;
     flex: 1;
     overflow-y: auto;
@@ -103,7 +104,7 @@ body {
     border: 1px solid #e0b9d8;
 }
 
-.input-bar > * {
+.input-bar>* {
     margin-bottom: 0.5rem;
 }
 
@@ -232,4 +233,47 @@ body {
 .friend-status span {
     color: #777;
     font-size: 0.9rem;
+}
+
+.search-friends-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+#searchFriendInput {
+    width: 100%;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#searchResults {
+    list-style: none;
+    padding-left: 0;
+    margin-top: 8px;
+}
+
+.search-user {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #ffe;
+    padding: 6px;
+    border: 1px solid #ccc;
+    margin-top: 5px;
+    border-radius: 6px;
+}
+
+.search-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.add-friend-btn {
+    text-decoration: none;
+    color: green;
+    font-size: 18px;
+    padding: 0 8px;
 }

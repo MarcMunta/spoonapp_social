@@ -74,11 +74,26 @@
     </div>
     <div class="friends">
       <h3>Friends</h3>
-      <div class="friend-status">Lola_Laloca4 <span>Accept | Remove</span></div>
-      <div class="friend-status">Thomas_Jef34 <span>Connected</span></div>
-      <div class="friend-status">Jenifer_32 <span>Last Time 42 Minutes</span></div>
+
+      <div class="search-friends-container">
+        <input type="text" id="searchFriendInput" placeholder="Search users..." onkeyup="filterUsers()">
+        <ul id="searchResults"></ul>
+      </div>
+
+      {% if pending_requests %}
+      {% for req in pending_requests %}
+      <div class="friend-status">
+        {{ req.from_user.username }}
+        <span>
+          <a href="{% url 'accept_friend_request' req.id %}">Accept</a> |
+          <a href="{% url 'reject_friend_request' req.id %}">Remove</a>
+        </span>
+      </div>
+      {% endfor %}
+      {% else %}
+      <div class="friend-status">No pending friend requests</div>
+      {% endif %}
     </div>
   </div>
 </body>
-
 </html>

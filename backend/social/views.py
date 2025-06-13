@@ -1,8 +1,10 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.shortcuts import render
 from .models import Post, PostLike, PostComment, PostShare, Profile
 from .forms import PostForm, CommentForm, ProfileForm
+from .models import FriendRequest
 
 
 def home(request):
@@ -68,6 +70,24 @@ def comment_post(request, post_id):
             )
     return redirect('feed')
 
+@login_required
+def friend_requests_view(request):
+    requests = FriendRequest.objects.filter(to_user=request.user, accepted=False)
+    return render(request, 'friend_requests.html', {'requests': requests})
+
+@login_required
+def accept_friend_request(request, req_id):
+    req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
+    req.accepted = True
+    req.save()
+    # Aquí podrías añadir una tabla de amistad real
+    return redirect('friend_requests')
+
+@login_required
+def reject_friend_request(request, req_id):
+    req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
+    req.delete()
+    return redirect('friend_requests')
 
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)

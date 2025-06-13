@@ -4,4 +4,7 @@ env/
 # Ignore node modules
 frontend/node_modules/
 
+# Uploaded media
+media/
+
 __pycache__/

@@ -94,6 +94,7 @@ body {
 
 .input-bar {
     display: flex;
+    flex-direction: column;
     margin-bottom: 1rem;
     background-color: #fff3f7;
     padding: 0.5rem;
@@ -101,8 +102,13 @@ body {
     border: 1px solid #e0b9d8;
 }
 
-.input-bar input {
-    flex: 1;
+.input-bar > * {
+    margin-bottom: 0.5rem;
+}
+
+.input-bar input,
+.input-bar select,
+.input-bar textarea {
     border: none;
     background: transparent;
     font-size: 1rem;
@@ -110,6 +116,7 @@ body {
 }
 
 .input-bar button {
+    align-self: flex-end;
     background: none;
     border: none;
     font-size: 1.2rem;

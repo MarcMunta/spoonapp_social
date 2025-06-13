@@ -1,7 +1,7 @@
 {% extends 'social/base.html' %}
 {% block title %}Feed{% endblock %}
 {% block content %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and show_form %}
 <form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="input-bar mb-3">
   {% csrf_token %}
   {{ post_form.image }}

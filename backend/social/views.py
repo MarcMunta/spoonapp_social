@@ -7,20 +7,26 @@ from .forms import PostForm, CommentForm, ProfileForm
 from .models import FriendRequest
 
 
-def home(request):
-    """Render the landing page."""
-    return render(request, 'social/home.html')
-
-
-def feed(request):
+def _build_feed_context():
     posts = Post.objects.all().order_by('-created_at')
     post_form = PostForm()
     comment_form = CommentForm()
-    context = {
+    return {
         'posts': posts,
         'post_form': post_form,
         'comment_form': comment_form,
     }
+
+
+def home(request):
+    context = _build_feed_context()
+    context['show_form'] = False
+    return render(request, 'social/feed.html', context)
+
+
+def feed(request):
+    context = _build_feed_context()
+    context['show_form'] = True
     return render(request, 'social/feed.html', context)
 
 
@@ -33,7 +39,7 @@ def create_post(request):
             new_post.user = request.user
             new_post.save()
             form.save_m2m()
-    return redirect('feed')
+    return redirect('home')
 
 
 @login_required
@@ -42,14 +48,14 @@ def like_post(request, post_id):
     like, created = PostLike.objects.get_or_create(user=request.user, post=post)
     if not created:
         like.delete()
-    return redirect('feed')
+    return redirect('home')
 
 
 @login_required
 def share_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     PostShare.objects.create(user=request.user, post=post)
-    return redirect('feed')
+    return redirect('home')
 
 
 @login_required
@@ -68,7 +74,7 @@ def comment_post(request, post_id):
                 parent=parent,
                 content=form.cleaned_data['content']
             )
-    return redirect('feed')
+    return redirect('home')
 
 @login_required
 def friend_requests_view(request):
@@ -95,7 +101,7 @@ def like_comment(request, comment_id):
     like, created = PostCommentLike.objects.get_or_create(user=request.user, comment=comment)
     if not created:
         like.delete()
-    return redirect('feed')
+    return redirect('home')
 
 
 def profile(request, username):

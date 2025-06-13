@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import Post, PostLike, PostComment, PostShare, Profile
-from .forms import PostForm, CommentForm
+from .forms import PostForm, CommentForm, ProfileForm
 
 
 def home(request):
@@ -56,9 +56,14 @@ def comment_post(request, post_id):
     if request.method == 'POST':
         form = CommentForm(request.POST)
         if form.is_valid():
+            parent_id = request.POST.get('parent')
+            parent = None
+            if parent_id:
+                parent = PostComment.objects.filter(id=parent_id, post=post).first()
             PostComment.objects.create(
                 user=request.user,
                 post=post,
+                parent=parent,
                 content=form.cleaned_data['content']
             )
     return redirect('feed')
@@ -67,9 +72,21 @@ def comment_post(request, post_id):
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
     posts = Post.objects.filter(user=profile_user).order_by('-created_at')
-    user_profile = Profile.objects.filter(user=profile_user).first()
-    return render(request, 'social/profile.html', {
-        'profile_user': profile_user,
-        'posts': posts,
-        'user_profile': user_profile,
-    })
+    user_profile, _ = Profile.objects.get_or_create(user=profile_user)
+    if request.method == 'POST' and request.user == profile_user:
+        form = ProfileForm(request.POST, request.FILES, instance=user_profile)
+        if form.is_valid():
+            form.save()
+            return redirect('profile', username=username)
+    else:
+        form = ProfileForm(instance=user_profile)
+    return render(
+        request,
+        'social/profile.html',
+        {
+            'profile_user': profile_user,
+            'posts': posts,
+            'user_profile': user_profile,
+            'form': form,
+        },
+    )

@@ -5,6 +5,13 @@
 {% if user_profile and user_profile.profile_picture %}
 <img src="{{ user_profile.profile_picture.url }}" class="img-thumbnail mb-3" width="150">
 {% endif %}
+{% if user == profile_user %}
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.profile_picture }}
+  <button type="submit" class="btn btn-primary btn-sm mt-2">Actualizar foto</button>
+</form>
+{% endif %}
 {% for post in posts %}
 <div class="post mb-3">
   {% if post.image %}

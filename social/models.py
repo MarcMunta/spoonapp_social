@@ -19,7 +19,16 @@ class PostLike(models.Model):
 class PostComment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    parent = models.ForeignKey(
+        "self",
+        null=True,
+        blank=True,
+        related_name="replies",
+        on_delete=models.CASCADE,
+    )
     content = models.TextField()
+    likes = models.PositiveIntegerField(default=0)
+    dislikes = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
 class PostShare(models.Model):

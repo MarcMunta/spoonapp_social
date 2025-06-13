@@ -17,7 +17,7 @@ class PostForm(forms.ModelForm):
 
     def clean_categories(self):
         categories = self.cleaned_data['categories']
-        primary_types = {'primer plato', 'segundo plato', 'postres'}
+        primary_types = {'entrantes', 'primer plato', 'segundo plato', 'postres'}
         selected_primary = [c.name.lower() for c in categories if c.name.lower() in primary_types]
         if len(selected_primary) > 1:
             raise forms.ValidationError(
@@ -29,6 +29,12 @@ class CommentForm(forms.ModelForm):
     class Meta:
         model = PostComment
         fields = ['content']
+        widgets = {
+            'content': forms.TextInput(attrs={
+                'class': 'comment-input',
+                'placeholder': 'Comentario',
+            })
+        }
 
 
 class ProfileForm(forms.ModelForm):

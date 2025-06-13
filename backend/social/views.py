@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Post, PostLike, PostComment, PostShare, Profile
+from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike
 from .forms import PostForm, CommentForm, ProfileForm
 
 
@@ -66,6 +66,15 @@ def comment_post(request, post_id):
                 parent=parent,
                 content=form.cleaned_data['content']
             )
+    return redirect('feed')
+
+
+@login_required
+def like_comment(request, comment_id):
+    comment = get_object_or_404(PostComment, id=comment_id)
+    like, created = PostCommentLike.objects.get_or_create(user=request.user, comment=comment)
+    if not created:
+        like.delete()
     return redirect('feed')
 
 

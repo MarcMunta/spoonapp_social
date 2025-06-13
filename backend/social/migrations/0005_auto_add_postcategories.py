@@ -6,10 +6,7 @@ from django.db import migrations
 def create_categories(apps, schema_editor):
     PostCategory = apps.get_model('social', 'PostCategory')
     categories = [
-        'Verduras',
-        'Carne',
-        'Pasta',
-        'Pescado',
+        'Entrantes',
         'Primer plato',
         'Segundo plato',
         'Postres',

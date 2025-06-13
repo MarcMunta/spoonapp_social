@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SpoonApp SOCIAL</title>
-    <link rel="stylesheet" href="../../static/css/home.css">
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/home.css' %}">
   </head>
   <body>
     <div class="topbar">
       <div class="app-title">SpoonApp SOCIAL</div>
       <div class="topbar-icons">
         <span>🏠</span>
-        <span>➕</span>
+        <a href="{% url 'feed' %}">➕</a>
         <span>💬</span>
         <span>🍴</span>
         <span>⚙️</span>

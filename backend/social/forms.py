@@ -15,6 +15,16 @@ class PostForm(forms.ModelForm):
             'categories': forms.SelectMultiple(attrs={'class': 'category-select'}),
         }
 
+    def clean_categories(self):
+        categories = self.cleaned_data['categories']
+        primary_types = {'primer plato', 'segundo plato', 'postres'}
+        selected_primary = [c.name.lower() for c in categories if c.name.lower() in primary_types]
+        if len(selected_primary) > 1:
+            raise forms.ValidationError(
+                'Solo puede elegir un tipo principal: primer plato, segundo plato o postres.'
+            )
+        return categories
+
 class CommentForm(forms.ModelForm):
     class Meta:
         model = PostComment

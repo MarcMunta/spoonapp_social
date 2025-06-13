@@ -233,3 +233,11 @@ body {
     color: #777;
     font-size: 0.9rem;
 }
+
+.post-categories {
+    margin-top: 0.5rem;
+}
+
+.post-categories .badge {
+    margin-right: 0.25rem;
+}

@@ -6,7 +6,7 @@ const options = {
   entryPoints: ['src/main.js'],
   bundle: true,
   format: 'esm',
-  outfile: '../static/main.js',
+  outfile: '../backend/static/main.js',
   sourcemap: watch,
   minify: !watch,
 };

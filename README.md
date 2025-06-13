@@ -1,9 +1,9 @@
 # SpoonApp Social
 
-This Django project powers the SpoonApp social network. The repository now separates
-backend and frontend code. The backend is a standard Django project located in this
-root directory. The modern JavaScript frontend is contained in the `frontend/` folder
-and built with [esbuild](https://esbuild.github.io/).
+This Django project powers the SpoonApp social network. The repository separates
+backend and frontend code. The backend resides in the `backend/` directory while
+the modern JavaScript frontend lives inside the `frontend/` folder and is built
+with [esbuild](https://esbuild.github.io/).
 
 ## Features
 * Publicaciones con imagen estilo Instagram
@@ -28,7 +28,7 @@ En resumen, esta interfaz es una fusión clara de las funcionalidades de redes s
 
 ## Frontend
 See `frontend/README.md` for setup and build instructions. After building, the
-bundle is placed in `static/main.js` and automatically loaded on the home page.
+bundle is placed in `backend/static/main.js` and automatically loaded on the home page.
 
 ## Running
 Ensure Python and Node.js are installed, then install Python dependencies:
@@ -48,5 +48,6 @@ npm run build
 Run the Django development server:
 
 ```bash
+cd backend
 python manage.py runserver
 ```

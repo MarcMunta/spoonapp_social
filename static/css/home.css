@@ -1,0 +1,193 @@
+body {
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+.topbar {
+    background-color: #d48ac1;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    color: white;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    z-index: 1000;
+}
+
+.app-title {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+.topbar-icons span {
+    margin: 0 0.5rem;
+    font-size: 1.2rem;
+    cursor: pointer;
+}
+
+.profile-icon {
+    background: #e0b9d8;
+    padding: 0.5rem 1rem;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.sidebar {
+    background-color: #f7e6f2;
+    width: 220px;
+    position: fixed;
+    top: 60px;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
+    border-right: 2px solid #d48ac1;
+    overflow-y: auto;
+}
+
+.menu-item {
+    padding: 0.75rem;
+    color: #333;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+.restaurants-section h3 {
+    margin-top: 1.5rem;
+    margin-bottom: 0.75rem;
+    color: #555;
+}
+
+.restaurant-item {
+    padding: 0.5rem 0;
+    color: #333;
+}
+
+.restaurant-item a {
+    color: #d48ac1;
+    text-decoration: none;
+}
+
+.see-more {
+    background-color: #d48ac1;
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.main-content {
+    margin-left: 240px;
+    margin-top: 80px;
+    padding: 1rem;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.input-bar {
+    display: flex;
+    margin-bottom: 1rem;
+    background-color: #fff3f7;
+    padding: 0.5rem;
+    border-radius: 10px;
+    border: 1px solid #e0b9d8;
+}
+
+.input-bar input {
+    flex: 1;
+    border: none;
+    background: transparent;
+    font-size: 1rem;
+    outline: none;
+}
+
+.input-bar button {
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: #d48ac1;
+}
+
+.post {
+    background-color: #ffffff;
+    border: 2px solid #e0b9d8;
+    border-radius: 10px;
+    margin-bottom: 1.5rem;
+    padding: 1rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.post img {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.post-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 0.75rem;
+    color: #555;
+}
+
+.post-title {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.post-stats span {
+    margin-left: 1rem;
+    font-size: 1rem;
+}
+
+.rightbar {
+    position: fixed;
+    right: 0;
+    top: 60px;
+    width: 280px;
+    background-color: #fdf0f7;
+    padding: 1rem;
+    border-left: 2px solid #d48ac1;
+    overflow-y: auto;
+    height: calc(100vh - 60px);
+}
+
+.sponsored h3,
+.friends h3 {
+    margin-bottom: 0.75rem;
+    color: #555;
+}
+
+.sponsored-item {
+    background-color: #fff;
+    padding: 0.75rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+    border: 1px solid #e0b9d8;
+}
+
+.sponsored-item img {
+    width: 100%;
+    border-radius: 8px;
+    object-fit: cover;
+}
+
+.friend-status {
+    padding: 0.5rem 0;
+    color: #333;
+}
+
+.friend-status span {
+    color: #777;
+    font-size: 0.9rem;
+}

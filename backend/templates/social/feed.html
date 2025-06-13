@@ -15,6 +15,14 @@
   {% if post.image %}
   <img src="{{ post.image.url }}" alt="">
   {% endif %}
+  {% if post.caption %}
+  <p class="post-caption">{{ post.caption }}</p>
+  {% endif %}
+  <div class="post-categories mb-2">
+    {% for cat in post.categories.all %}
+    <span class="badge bg-secondary me-1">{{ cat.name }}</span>
+    {% endfor %}
+  </div>
   <div class="post-footer">
     <div class="post-title">{{ post.user.username }}</div>
     <div class="post-stats">

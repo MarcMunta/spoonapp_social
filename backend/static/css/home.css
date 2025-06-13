@@ -87,6 +87,7 @@ body {
 .main-content {
     margin-left: 240px;
     margin-top: 80px;
+    margin-right: 300px; /* prevent overlap with right sidebar */
     padding: 1rem;
     flex: 1;
     overflow-y: auto;
@@ -109,19 +110,53 @@ body {
 .input-bar input,
 .input-bar select,
 .input-bar textarea {
-    border: none;
-    background: transparent;
     font-size: 1rem;
     outline: none;
 }
 
-.input-bar button {
-    align-self: flex-end;
-    background: none;
-    border: none;
-    font-size: 1.2rem;
+.file-input {
+    padding: 0.5rem;
+    border: 1px dashed #d48ac1;
+    border-radius: 5px;
+    background-color: #ffffff;
     cursor: pointer;
-    color: #d48ac1;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.file-input:hover {
+    background-color: #f7e6f2;
+    transform: scale(1.02);
+}
+
+.caption-input {
+    border: 1px solid #e0b9d8;
+    border-radius: 5px;
+    padding: 0.5rem;
+    background-color: #ffffff;
+}
+
+.category-select {
+    border: 1px solid #e0b9d8;
+    border-radius: 5px;
+    padding: 0.4rem;
+    background-color: #ffffff;
+}
+
+.publish-btn {
+    align-self: flex-end;
+    background-color: #d48ac1;
+    border: none;
+    color: #fff;
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.publish-btn:hover {
+    background-color: #b86ba3;
+    transform: scale(1.05);
 }
 
 .post {

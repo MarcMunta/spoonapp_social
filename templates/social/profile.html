@@ -1,17 +1,21 @@
 {% extends 'social/base.html' %}
 {% block title %}Perfil{% endblock %}
 {% block content %}
-<h2>{{ profile_user.username }}</h2>
+<h2 class="mb-3">{{ profile_user.username }}</h2>
 {% if user_profile and user_profile.profile_picture %}
 <img src="{{ user_profile.profile_picture.url }}" class="img-thumbnail mb-3" width="150">
 {% endif %}
 {% for post in posts %}
-<div class="card mb-3">
+<div class="post mb-3">
   {% if post.image %}
-  <img src="{{ post.image.url }}" class="card-img-top" alt="">
+  <img src="{{ post.image.url }}" alt="">
   {% endif %}
-  <div class="card-body">
-    <p class="card-text">{{ post.caption }}</p>
+  <div class="post-footer">
+    <div class="post-title">{{ post.caption }}</div>
+    <div class="post-stats">
+      <span>🥄 {{ post.postlike_set.count }}</span>
+      <span>💬 {{ post.postcomment_set.count }}</span>
+    </div>
   </div>
 </div>
 {% empty %}

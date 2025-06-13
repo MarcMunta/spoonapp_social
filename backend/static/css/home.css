@@ -87,6 +87,7 @@ body {
 .main-content {
     margin-left: 240px;
     margin-top: 80px;
+    margin-right: 300px; /* prevent overlap with right sidebar */
     padding: 1rem;
     flex: 1;
     overflow-y: auto;

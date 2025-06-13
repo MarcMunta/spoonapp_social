@@ -2,20 +2,66 @@
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>{% block title %}SpoonApp{% endblock %}</title>
+  <title>{% block title %}SpoonApp SOCIAL{% endblock %}</title>
+  {% load static %}
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 <body>
-<nav class="navbar navbar-light bg-light mb-4">
-  <div class="container">
-    <a class="navbar-brand" href="{% url 'home' %}">SpoonApp</a>
-    {% if user.is_authenticated %}
-    <span class="navbar-text">{{ user.username }}</span>
-    {% endif %}
+  <div class="topbar">
+    <div class="app-title"><a href="{% url 'home' %}">SpoonApp SOCIAL</a></div>
+    <div class="topbar-icons">
+      <a href="{% url 'home' %}">🏠</a>
+      {% if user.is_authenticated %}
+      <a href="{% url 'feed' %}">➕</a>
+      {% endif %}
+      <span>💬</span>
+      <span>🍴</span>
+      <span>⚙️</span>
+    </div>
+    <div class="profile-icon">
+      {% if user.is_authenticated %}
+      <a href="{% url 'profile' user.username %}">Profile</a>
+      {% else %}
+      <a href="{% url 'home' %}">Login</a>
+      {% endif %}
+    </div>
   </div>
-</nav>
-<div class="container">
-  {% block content %}{% endblock %}
-</div>
+
+  <div class="sidebar">
+    <div class="menu-item">Streams</div>
+    <div class="menu-item">Events</div>
+    <div class="menu-item">Friends</div>
+    <div class="menu-item">Memories</div>
+    <div class="menu-item">Games</div>
+    <div class="restaurants-section">
+      <h3>Restaurants</h3>
+      <div class="restaurant-item">Luigi's Kitchen - <a href="#">Go To Site</a></div>
+      <div class="restaurant-item">Restaurant 2 - <a href="#">Go To Site</a></div>
+      <div class="restaurant-item">Restaurant 3 - <a href="#">Go To Site</a></div>
+      <div class="restaurant-item">Restaurant 4 - <a href="#">Go To Site</a></div>
+      <button class="see-more">See More</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <div class="rightbar">
+    <div class="sponsored">
+      <h3>Sponsored</h3>
+      <div class="sponsored-item">
+        <img src="https://via.placeholder.com/250" alt="Sponsored Image">
+        <div>Pizza with Pepperoni<br>Lorem ipsum dolor sit amet. -30%</div>
+      </div>
+    </div>
+    <div class="friends">
+      <h3>Friends</h3>
+      <div class="friend-status">Lola_Laloca4 <span>Accept | Remove</span></div>
+      <div class="friend-status">Thomas_Jef34 <span>Connected</span></div>
+      <div class="friend-status">Jenifer_32 <span>Last Time 42 Minutes</span></div>
+    </div>
+  </div>
 </body>
 </html>

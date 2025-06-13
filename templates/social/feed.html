@@ -1,0 +1,45 @@
+{% extends 'social/base.html' %}
+{% block title %}Feed{% endblock %}
+{% block content %}
+<h2 class="mb-4">Feed</h2>
+{% if user.is_authenticated %}
+<form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="mb-4">
+  {% csrf_token %}
+  {{ post_form.as_p }}
+  <button type="submit" class="btn btn-primary">Publicar</button>
+</form>
+{% endif %}
+{% for post in posts %}
+<div class="card mb-3">
+  {% if post.image %}
+  <img src="{{ post.image.url }}" class="card-img-top" alt="">
+  {% endif %}
+  <div class="card-body">
+    <p class="card-text">{{ post.caption }}</p>
+    <p>
+      {{ post.postlike_set.count }} Me gusta |
+      {{ post.postcomment_set.count }} Comentarios |
+      {{ post.postshare_set.count }} Compartidos
+    </p>
+    {% if user.is_authenticated %}
+    <a href="{% url 'like_post' post.id %}" class="btn btn-sm btn-outline-primary">Like</a>
+    <a href="{% url 'share_post' post.id %}" class="btn btn-sm btn-outline-secondary">Compartir</a>
+    <form method="post" action="{% url 'comment_post' post.id %}" class="mt-2">
+      {% csrf_token %}
+      {{ comment_form.as_p }}
+      <button type="submit" class="btn btn-sm btn-success">Comentar</button>
+    </form>
+    {% endif %}
+  </div>
+  {% if post.postcomment_set.exists %}
+  <ul class="list-group list-group-flush">
+    {% for comment in post.postcomment_set.all %}
+    <li class="list-group-item">
+      <strong>{{ comment.user.username }}:</strong> {{ comment.content }}
+    </li>
+    {% endfor %}
+  </ul>
+  {% endif %}
+</div>
+{% endfor %}
+{% endblock %}

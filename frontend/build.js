@@ -3,10 +3,10 @@ import { argv } from 'node:process';
 
 const watch = argv.includes('--watch');
 const options = {
-  entryPoints: ['frontend/src/main.js'],
+  entryPoints: ['src/main.js'],
   bundle: true,
   format: 'esm',
-  outfile: 'static/main.js',
+  outfile: '../static/main.js',
   sourcemap: watch,
   minify: !watch,
 };

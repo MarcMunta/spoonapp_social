@@ -5,6 +5,11 @@ backend and frontend code. The backend is a standard Django project located in t
 root directory. The modern JavaScript frontend is contained in the `frontend/` folder
 and built with [esbuild](https://esbuild.github.io/).
 
+## Features
+* Publicaciones con imagen estilo Instagram
+* Comentarios, likes y contador de compartidos
+* Vista de perfil para cada usuario
+
 ## Frontend
 See `frontend/README.md` for setup and build instructions. After building, the
 bundle is placed in `static/main.js` and automatically loaded on the home page.

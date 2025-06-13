@@ -8,7 +8,7 @@
 <body>
 <nav class="navbar navbar-light bg-light mb-4">
   <div class="container">
-    <a class="navbar-brand" href="{% url 'feed' %}">SpoonApp</a>
+    <a class="navbar-brand" href="{% url 'home' %}">SpoonApp</a>
     {% if user.is_authenticated %}
     <span class="navbar-text">{{ user.username }}</span>
     {% endif %}

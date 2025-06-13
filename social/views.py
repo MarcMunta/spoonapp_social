@@ -5,6 +5,11 @@ from .models import Post, PostLike, PostComment, PostShare, Profile
 from .forms import PostForm, CommentForm
 
 
+def home(request):
+    """Render the landing page."""
+    return render(request, 'social/home.html')
+
+
 def feed(request):
     posts = Post.objects.all().order_by('-created_at')
     post_form = PostForm()

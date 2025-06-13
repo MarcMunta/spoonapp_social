@@ -241,3 +241,30 @@ body {
 .post-categories .badge {
     margin-right: 0.25rem;
 }
+
+.spoon-like {
+    display: inline-block;
+    background-color: #e0b9d8;
+    color: #fff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 50%;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.spoon-like:hover {
+    transform: scale(1.2);
+}
+
+.comment-input {
+    width: 100%;
+    border: 1px solid #e0b9d8;
+    border-radius: 20px;
+    padding: 0.4rem 0.8rem;
+    color: #333;
+}
+
+.comment-form {
+    display: flex;
+    gap: 0.5rem;
+}

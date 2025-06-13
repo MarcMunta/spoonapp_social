@@ -33,17 +33,24 @@
     </div>
   </div>
   {% if user.is_authenticated %}
-  <a href="{% url 'like_post' post.id %}" class="btn btn-sm btn-outline-primary mt-2">Like</a>
-  <form method="post" action="{% url 'comment_post' post.id %}" class="mt-2">
+  <a href="{% url 'like_post' post.id %}" class="spoon-like mt-2">🥄</a>
+  <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
     {% csrf_token %}
-    {{ comment_form.as_p }}
+    {{ comment_form.content }}
     <button type="submit" class="btn btn-sm btn-success">Comentar</button>
   </form>
   {% endif %}
   {% if post.postcomment_set.exists %}
   <ul class="list-group list-group-flush mt-2">
     {% for comment in post.postcomment_set.all %}
-    <li class="list-group-item"><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</li>
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</div>
+      {% if user.is_authenticated %}
+      <a href="{% url 'like_comment' comment.id %}" class="spoon-like">🥄 {{ comment.postcommentlike_set.count }}</a>
+      {% else %}
+      <span>🥄 {{ comment.postcommentlike_set.count }}</span>
+      {% endif %}
+    </li>
     {% endfor %}
   </ul>
   {% endif %}

@@ -1,7 +1,7 @@
 {% extends 'social/base.html' %}
 {% block title %}Feed{% endblock %}
 {% block content %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and show_form %}
 <form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="input-bar mb-3">
   {% csrf_token %}
   {{ post_form.image }}
@@ -26,14 +26,17 @@
   <div class="post-footer">
     <div class="post-title">{{ post.user.username }}</div>
     <div class="post-stats">
+      {% if user.is_authenticated %}
+      <a href="{% url 'like_post' post.id %}" class="spoon-like">🥄 {{ post.postlike_set.count }}</a>
+      {% else %}
       <span>🥄 {{ post.postlike_set.count }}</span>
+      {% endif %}
       <span>💬 {{ post.postcomment_set.count }}</span>
       <a href="{% url 'share_post' post.id %}">📤</a>
       <span>🔖</span>
     </div>
   </div>
   {% if user.is_authenticated %}
-  <a href="{% url 'like_post' post.id %}" class="spoon-like mt-2">🥄</a>
   <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
     {% csrf_token %}
     {{ comment_form.content }}

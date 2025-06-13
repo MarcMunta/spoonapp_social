@@ -1,5 +1,6 @@
 from django import forms
-from .models import Post, PostComment, Profile
+from django.db.models import Case, When, IntegerField
+from .models import Post, PostComment, Profile, PostCategory
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -14,6 +15,15 @@ class PostForm(forms.ModelForm):
             }),
             'categories': forms.SelectMultiple(attrs={'class': 'category-select'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        order = ['Entrantes', 'Primer plato', 'Segundo plato', 'Postres']
+        when_statements = [When(name=name, then=idx) for idx, name in enumerate(order)]
+        queryset = PostCategory.objects.annotate(
+            order_priority=Case(*when_statements, default=len(order), output_field=IntegerField())
+        ).order_by('order_priority', 'name')
+        self.fields['categories'].queryset = queryset
 
     def clean_categories(self):
         categories = self.cleaned_data['categories']

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import render
-from .models import Post, PostLike, PostComment, PostShare, Profile
+from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike
 from .forms import PostForm, CommentForm, ProfileForm
 from .models import FriendRequest
 
@@ -88,6 +88,15 @@ def reject_friend_request(request, req_id):
     req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
     req.delete()
     return redirect('friend_requests')
+
+@login_required
+def like_comment(request, comment_id):
+    comment = get_object_or_404(PostComment, id=comment_id)
+    like, created = PostCommentLike.objects.get_or_create(user=request.user, comment=comment)
+    if not created:
+        like.delete()
+    return redirect('feed')
+
 
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)

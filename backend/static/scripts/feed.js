@@ -31,6 +31,40 @@ document.addEventListener('DOMContentLoaded', () => {
   };
   updateRelativeTimes();
   setInterval(updateRelativeTimes, 60000);
+  const storyInput = document.getElementById('id_media_file');
+  if (storyInput) {
+    storyInput.addEventListener('change', () => {
+      document.getElementById('storyForm').submit();
+    });
+  }
+
+  document.querySelectorAll('.open-story').forEach(el => {
+    el.addEventListener('click', () => {
+      const url = el.dataset.url;
+      const user = el.dataset.user;
+      const modal = document.getElementById('storyModal');
+      const img = document.getElementById('storyImage');
+      const video = document.getElementById('storyVideo');
+      document.querySelector('.story-modal-user').textContent = user;
+      if (/\.(mp4|webm|ogg)$/i.test(url)) {
+        video.src = url;
+        video.classList.remove('d-none');
+        img.classList.add('d-none');
+      } else {
+        img.src = url;
+        img.classList.remove('d-none');
+        video.classList.add('d-none');
+        video.pause();
+      }
+      modal.style.display = 'flex';
+      setTimeout(() => { modal.style.display = 'none'; }, 5000);
+    });
+  });
+
+  document.querySelector('.story-modal-close')?.addEventListener('click', () => {
+    document.getElementById('storyModal').style.display = 'none';
+  });
+
   document.querySelectorAll('.like-post').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();

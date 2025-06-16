@@ -97,7 +97,6 @@ class Profile(models.Model):
 
     @property
     def online(self):
+        from django.utils import timezone
+        from datetime import timedelta
         return timezone.now() - self.last_seen < timedelta(minutes=5)
-
-    def __str__(self):
-        return self.user.username

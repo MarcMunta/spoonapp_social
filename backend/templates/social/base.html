@@ -94,13 +94,14 @@
         <div class="friends-list">
           {% for f in friends %}
           <div class="friend-item">
-            <span class="status-dot {{ 'online' if f.online else 'offline' }}"></span>
+            <span class="status-dot {% if f.online %}online{% else %}offline{% endif %}"></span>
             {{ f.user.username }}
             {% if not f.online %}
             <small>Last seen: {{ f.last_seen|naturaltime }}</small>
             {% endif %}
           </div>
           {% endfor %}
+
         </div>
       </div>
 

@@ -58,8 +58,12 @@ def home(request):
     # Display the main feed with all posts and without the form
     context = _build_feed_context()
     context['show_form'] = False
-    context['friends'] = get_friends(request.user)  # ⬅️ AÑADIDO
+
+    if request.user.is_authenticated:
+        context['friends'] = get_friends(request.user)  # ✅ Solo si el usuario está logueado
+
     return render(request, 'social/feed.html', context)
+
 
 def feed(request):
     # Page for creating a post; only show the form, not existing posts

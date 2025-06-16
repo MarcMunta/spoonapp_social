@@ -50,7 +50,7 @@
   {% endif %}
   {% with comments=post.postcomment_set.all %}
   {% if comments %}
-  <ul id="comments-{{ post.id }}" class="list-group list-group-flush mt-2 comment-list">
+  <ul id="comments-{{ post.id }}" data-post-id="{{ post.id }}" data-expanded="false" class="list-group list-group-flush mt-2 comment-list">
     {% for comment in comments|slice:":5" %}
     <li class="list-group-item">
       <div class="d-flex justify-content-between align-items-center">

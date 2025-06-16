@@ -466,19 +466,20 @@ body {
 }
 
 .comment-btn {
-    background-color: #0d6efd;
+    background-color: #0056b3;
+    color: #ffffff;
     border: none;
-    color: #fff;
-    padding: 0.4rem 1rem;
-    border-radius: 20px;
+    padding: 0.6rem 1.4rem;
+    border-radius: 25px;
     font-size: 0.9rem;
     cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.2s ease;
+    box-shadow: 0 4px 0 #004a9f;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .comment-btn:hover {
-    background-color: #0b5ed7;
-    transform: scale(1.05);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #003e80;
 }
 
 .load-more-comments {
@@ -497,6 +498,42 @@ body {
 .load-more-comments:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 0 #5fa8d3;
+}
+
+.show-more-comments {
+    background-color: #87cefa;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 25px;
+    cursor: pointer;
+    display: block;
+    margin: 0.5rem auto;
+    box-shadow: 0 4px 0 #7ab8e6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.show-more-comments:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #5fa8d3;
+}
+
+.show-less-comments {
+    background-color: #f08080;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 25px;
+    cursor: pointer;
+    display: block;
+    margin: 0.5rem auto;
+    box-shadow: 0 4px 0 #e76c6c;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.show-less-comments:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #d45f5f;
 }
 
 .status-dot {

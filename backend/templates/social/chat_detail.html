@@ -9,15 +9,25 @@
             <div class="spoon-chat-detail">
                 <!-- Chat Header -->
                 <div class="spoon-chat-header-detail">
-                    <a href="{% url 'chat_list' %}" class="spoon-back-btn text-white text-decoration-none">
+                    <a href="{% url 'chat_list' %}" class="spoon-back-btn" title="Back to chat list">
                         <i class="fas fa-arrow-left"></i>
                     </a>
                     
                     <div class="spoon-avatar-container me-3">
                         {% if other_user.profile.profile_picture %}
-                        <img src="{{ other_user.profile.profile_picture.url }}" alt="Profile" class="spoon-avatar" style="width: 50px; height: 50px;">
+                        <img src="{{ other_user.profile.profile_picture.url }}" 
+                             alt="Profile" 
+                             class="spoon-avatar" 
+                             style="width: 50px; height: 50px;"
+                             onclick="window.location.href='{% url 'profile' other_user.username %}';"
+                             title="View {{ other_user.username }}'s profile">
                         {% else %}
-                        <img src="https://i.imgur.com/jNNT4LE.png" alt="Default" class="spoon-avatar" style="width: 50px; height: 50px;">
+                        <img src="https://i.imgur.com/jNNT4LE.png" 
+                             alt="Default" 
+                             class="spoon-avatar" 
+                             style="width: 50px; height: 50px;"
+                             onclick="window.location.href='{% url 'profile' other_user.username %}';"
+                             title="View {{ other_user.username }}'s profile">
                         {% endif %}
                         
                         {% if other_user.profile.online %}
@@ -25,7 +35,7 @@
                         {% endif %}
                     </div>
                     
-                    <div>
+                    <div class="flex-grow-1">
                         <div class="fw-bold fs-5">{{ other_user.username }}</div>
                         {% if other_user.profile.online %}
                         <div class="spoon-status-indicator">Online now</div>
@@ -34,9 +44,9 @@
                         {% endif %}
                     </div>
                     
-                    <div class="ms-auto">
-                        <span style="font-size: 1.5rem;">🍴</span>
-                    </div>
+                    <a href="{% url 'home' %}" class="spoon-home-btn" title="Home">
+                        <i class="fas fa-home"></i>
+                    </a>
                 </div>
                 
                 <!-- Messages Area -->
@@ -57,7 +67,7 @@
                         {% csrf_token %}
                         <input type="text" name="content" id="spoon-message-input" 
                                class="spoon-message-input" placeholder="Share your food thoughts... 🍽️" required>
-                        <button type="submit" class="spoon-send-button">
+                        <button type="submit" class="spoon-send-button" title="Send message">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>

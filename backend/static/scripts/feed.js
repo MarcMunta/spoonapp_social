@@ -36,6 +36,13 @@ document.addEventListener('DOMContentLoaded', () => {
     storyInput.addEventListener('change', () => {
       document.getElementById('storyForm').submit();
     });
+    const addBtn = document.querySelector('.story-add');
+    if (addBtn) {
+      addBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        storyInput.click();
+      });
+    }
   }
 
   let currentUrls = [];

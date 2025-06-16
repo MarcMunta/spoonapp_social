@@ -149,11 +149,36 @@ def like_comment(request, comment_id):
         return JsonResponse({"likes": comment.postcommentlike_set.count()})
     return redirect('home')
 
+@login_required
+def follow_user(request, username):
+    target_user = get_object_or_404(User, username=username)
+    existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=target_user)
+    if not existing_request.exists() and request.user != target_user:
+        FriendRequest.objects.create(from_user=request.user, to_user=target_user)
+    return redirect('profile', username=username)
+
+@login_required
+def unfollow_user(request, username):
+    target_user = get_object_or_404(User, username=username)
+    FriendRequest.objects.filter(from_user=request.user, to_user=target_user).delete()
+    # Opcionalmente, también elimina si ya son amigos (si así lo gestionas)
+    request.user.profile.friends.remove(target_user)
+    return redirect('profile', username=username)
+
 
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
     posts = Post.objects.filter(user=profile_user).order_by('-created_at')
     user_profile, _ = Profile.objects.get_or_create(user=profile_user)
+
+    is_following = False
+    if request.user.is_authenticated and request.user != profile_user:
+        is_following = FriendRequest.objects.filter(
+            from_user=request.user, to_user=profile_user, accepted=True
+        ).exists() or FriendRequest.objects.filter(
+            from_user=profile_user, to_user=request.user, accepted=True
+        ).exists()
+
     if request.method == 'POST' and request.user == profile_user:
         form = ProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
@@ -161,16 +186,19 @@ def profile(request, username):
             return redirect('profile', username=username)
     else:
         form = ProfileForm(instance=user_profile)
-    return render(
-        request,
-        'social/profile.html',
-        {
-            'profile_user': profile_user,
-            'posts': posts,
-            'user_profile': user_profile,
-            'form': form,
-        },
-    )
+
+    context = {
+        'profile_user': profile_user,
+        'user_profile': user_profile,
+        'posts': posts,
+        'form': form,
+        'is_following': is_following,
+        'total_matches': PostLike.objects.filter(post__user=profile_user).count(),  # ejemplo
+        'total_friends': get_friends(profile_user).count(),  # si usas tu función get_friends()
+    }
+
+    return render(request, 'social/profile.html', context)
+
 
 @login_required
 def search_users(request):

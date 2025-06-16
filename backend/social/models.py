@@ -122,6 +122,7 @@ class Message(models.Model):
     chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
     content = models.TextField()
+    story = models.ForeignKey(Story, null=True, blank=True, on_delete=models.SET_NULL)
     sent_at = models.DateTimeField(auto_now_add=True)
     read = models.BooleanField(default=False)
 

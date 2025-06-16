@@ -71,14 +71,14 @@ def home(request):
     if request.user.is_authenticated:
         context['friends'] = get_friends(request.user)  # ✅ Solo si el usuario está logueado
 
-    return render(request, 'social/feed.html', context)
+    return render(request, 'social/pages/feed.html', context)
 
 
 def feed(request):
     # Page for creating a post; only show the form, not existing posts
     context = _build_feed_context(show_posts=False)
     context['show_form'] = True
-    return render(request, 'social/feed.html', context)
+    return render(request, 'social/pages/feed.html', context)
 
 
 @login_required
@@ -132,7 +132,7 @@ def comment_post(request, post_id):
 @login_required
 def friend_requests_view(request):
     requests = FriendRequest.objects.filter(to_user=request.user, accepted=False)
-    return render(request, 'social/friend_requests.html', {'requests': requests})
+    return render(request, 'social/pages/friend_requests.html', {'requests': requests})
 
 @login_required
 def accept_friend_request(request, req_id):
@@ -172,7 +172,7 @@ def profile(request, username):
         form = ProfileForm(instance=user_profile)
     return render(
         request,
-        'social/profile.html',
+        'social/pages/profile.html',
         {
             'profile_user': profile_user,
             'posts': posts,
@@ -234,7 +234,7 @@ def load_comments(request, post_id):
         .prefetch_related("replies")
     )
     html = render_to_string(
-        "social/comments_partial.html",
+        "social/partials/comments_partial.html",
         {"comments": comments_qs, "user": request.user},
     )
     total = post.postcomment_set.filter(parent__isnull=True).count()

@@ -112,7 +112,7 @@ def comment_post(request, post_id):
 @login_required
 def friend_requests_view(request):
     requests = FriendRequest.objects.filter(to_user=request.user, accepted=False)
-    return render(request, 'friend_requests.html', {'requests': requests})
+    return render(request, 'social/friend_requests.html', {'requests': requests})
 
 @login_required
 def accept_friend_request(request, req_id):

@@ -6,7 +6,7 @@ from django.shortcuts import render
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike
 from .forms import PostForm, CommentForm, ProfileForm
 from .models import FriendRequest
-from django.db.models import Q
+from django.db.models import Q, Prefetch, Count
 import json
 
 
@@ -21,9 +21,23 @@ def _build_feed_context(show_posts=True):
         themselves.
     """
 
-    posts = (
-        Post.objects.all().order_by("-created_at") if show_posts else Post.objects.none()
-    )
+    posts = Post.objects.all().order_by("-created_at") if show_posts else Post.objects.none()
+    if show_posts:
+        posts = posts.prefetch_related(
+            Prefetch(
+                "postcomment_set",
+                queryset=PostComment.objects.filter(parent__isnull=True)
+                .annotate(num_likes=Count("postcommentlike"))
+                .order_by("-num_likes", "-created_at")
+                .prefetch_related(
+                    Prefetch(
+                        "replies",
+                        queryset=PostComment.objects.annotate(num_likes=Count("postcommentlike"))
+                        .order_by("-num_likes", "-created_at"),
+                    )
+                ),
+            )
+        )
     post_form = PostForm()
     comment_form = CommentForm()
     return {
@@ -65,6 +79,8 @@ def like_post(request, post_id):
     like, created = PostLike.objects.get_or_create(user=request.user, post=post)
     if not created:
         like.delete()
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"likes": post.postlike_set.count()})
     return redirect('home')
 
 
@@ -118,6 +134,8 @@ def like_comment(request, comment_id):
     like, created = PostCommentLike.objects.get_or_create(user=request.user, comment=comment)
     if not created:
         like.delete()
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"likes": comment.postcommentlike_set.count()})
     return redirect('home')
 
 

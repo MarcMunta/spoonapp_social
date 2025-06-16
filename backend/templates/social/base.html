@@ -97,7 +97,7 @@
     </div>
   </div>
   
-  <script>
+<script>
 document.getElementById("searchFriendInput").addEventListener("input", function() {
     const query = this.value.trim();
     const resultsList = document.getElementById("searchResults");
@@ -146,6 +146,7 @@ function getCSRFToken() {
     return cookie ? cookie.split('=')[1] : '';
 }
 </script>
+<script src="{% static 'feed.js' %}"></script>
 
 
 </body>

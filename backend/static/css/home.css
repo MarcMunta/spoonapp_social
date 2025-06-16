@@ -166,7 +166,12 @@ body {
     border-radius: 10px;
     margin-bottom: 1.5rem;
     padding: 1rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 8px 20px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+}
+
+.post:hover {
+    transform: translateY(-3px);
 }
 
 .post img {
@@ -313,6 +318,14 @@ body {
     gap: 0.5rem;
 }
 
+.comment-toggle {
+    cursor: pointer;
+}
+
+.extra-comment {
+    display: none;
+}
+
 .autocomplete-list {
     list-style: none;
     border: 1px solid #ccc;
@@ -335,4 +348,9 @@ body {
 
 .user-suggestion img {
     border-radius: 50%;
+}
+
+.comment-list .list-group-item {
+    border: none;
+    padding-left: 0;
 }

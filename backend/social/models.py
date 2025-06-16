@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils import timezone
+from datetime import timedelta
 
 class PostCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -91,3 +93,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_private = models.BooleanField(default=False)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    last_seen = models.DateTimeField(auto_now=True)
+
+    @property
+    def online(self):
+        return timezone.now() - self.last_seen < timedelta(minutes=5)
+
+    def __str__(self):
+        return self.user.username

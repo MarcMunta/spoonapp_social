@@ -2,6 +2,8 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.sessions.models import Session
+from django.utils.timezone import now
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike
 from .forms import PostForm, CommentForm, ProfileForm
 from .models import FriendRequest
@@ -46,13 +48,18 @@ def _build_feed_context(show_posts=True):
         "comment_form": comment_form,
     }
 
+def get_friends(user):
+    sent = FriendRequest.objects.filter(from_user=user, accepted=True).values_list('to_user', flat=True)
+    received = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
+    all_friend_ids = list(sent) + list(received)
+    return User.objects.filter(id__in=all_friend_ids)
 
 def home(request):
     # Display the main feed with all posts and without the form
     context = _build_feed_context()
     context['show_form'] = False
+    context['friends'] = get_friends(request.user)  # ⬅️ AÑADIDO
     return render(request, 'social/feed.html', context)
-
 
 def feed(request):
     # Page for creating a post; only show the form, not existing posts
@@ -220,4 +227,29 @@ def load_comments(request, post_id):
     total = post.postcomment_set.filter(parent__isnull=True).count()
     has_more = offset + limit < total
     return JsonResponse({"html": html, "has_more": has_more})
+
+def get_user_online_status(user):
+    sessions = Session.objects.filter(expire_date__gte=now())
+    for session in sessions:
+        data = session.get_decoded()
+        if data.get('_auth_user_id') == str(user.id):
+            return True
+    return False
+
+@login_required
+def friends_list_view(request):
+    user = request.user
+    friends = FriendRequest.objects.filter(
+        (Q(from_user=user) | Q(to_user=user)) & Q(accepted=True)
+    )
+
+    all_friends = []
+    for f in friends:
+        friend = f.to_user if f.from_user == user else f.from_user
+        online = get_user_online_status(friend)
+        all_friends.append({'user': friend, 'online': online})
+
+    return render(request, 'social/friends_panel.html', {
+        'friends': all_friends
+    })
 

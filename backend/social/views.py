@@ -26,10 +26,8 @@ def _build_feed_context(show_posts=True):
     posts = (
         Post.objects.all()
         .annotate(
-            comment_count=Count(
-                "postcomment",
-                filter=Q(postcomment__parent__isnull=True),
-            )
+            # Count all comments including replies
+            comment_count=Count("postcomment", distinct=True)
         )
         .order_by("-created_at")
         if show_posts

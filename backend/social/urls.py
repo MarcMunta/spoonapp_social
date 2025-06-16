@@ -16,4 +16,13 @@ urlpatterns = [
     path('friend-requests/reject/<int:req_id>/', views.reject_friend_request, name='reject_friend_request'),
     path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
     path("api/search-users/", views.search_users, name="search_users"),
+    path('follow/<str:username>/', views.follow_user, name='follow'),
+    path('unfollow/<str:username>/', views.unfollow_user, name='unfollow'),
+    path('chats/', views.chat_list, name='chat_list'),
+    path('chat/<int:chat_id>/', views.chat_detail, name='chat_detail'),
+    path('start-chat/<int:user_id>/', views.start_chat, name='start_chat'),
+    path('chat/<int:chat_id>/messages/', views.load_messages, name='load_messages'),
+    path('notifications/', views.notifications_view, name='notifications'),
+    path('mark-notification-read/<int:notification_id>/', views.mark_notification_read, name='mark_notification_read'),
+    path('api/notifications-count/', views.get_notifications_count, name='notifications_count'),
 ]

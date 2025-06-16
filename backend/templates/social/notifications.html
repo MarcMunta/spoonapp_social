@@ -1,0 +1,53 @@
+{% extends "social/base.html" %}
+
+{% block title %}Notifications - SpoonApp SOCIAL{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>All Notifications</h2>
+    
+    {% if notifications %}
+    <div class="notifications-container">
+        {% for notification in notifications %}
+        <div class="notification-card {% if not notification.is_read %}unread{% endif %}">
+            <div class="notification-icon">
+                {% if notification.notification_type == 'message' %}
+                💬
+                {% elif notification.notification_type == 'friend_request' %}
+                👥
+                {% elif notification.notification_type == 'friend_accepted' %}
+                ✅
+                {% endif %}
+            </div>
+            <div class="notification-body">
+                <h5>{{ notification.title }}</h5>
+                <p>{{ notification.message }}</p>
+                <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
+                {% if notification.related_user %}
+                <div class="notification-actions mt-2">
+                    {% if notification.notification_type == 'message' %}
+                    <a href="{% url 'chat_detail' notification.related_chat.id %}" class="btn btn-sm btn-primary">View Chat</a>
+                    {% elif notification.notification_type == 'friend_accepted' %}
+                    <a href="{% url 'profile' notification.related_user.username %}" class="btn btn-sm btn-success">View Profile</a>
+                    {% endif %}
+                </div>
+                {% endif %}
+            </div>
+            {% if not notification.is_read %}
+            <div class="notification-status">
+                <span class="badge bg-primary">New</span>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-notifications">
+        <div class="text-center py-5">
+            <h4>No notifications yet</h4>
+            <p class="text-muted">You'll see notifications here when you receive messages or friend requests.</p>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

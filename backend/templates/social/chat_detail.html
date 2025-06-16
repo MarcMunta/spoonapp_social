@@ -1,0 +1,128 @@
+{% extends "social/base.html" %}
+
+{% block title %}Chat with {{ other_user.username }}{% endblock %}
+
+{% block content %}
+<div class="container-fluid h-100">
+    <div class="row h-100">
+        <div class="col-12">
+            <!-- Chat Header -->
+            <div class="chat-header bg-light p-3 border-bottom d-flex align-items-center">
+                <a href="{% url 'chat_list' %}" class="btn btn-outline-secondary btn-sm me-3">← Back</a>
+                
+                {% if other_user.profile.profile_picture %}
+                <img src="{{ other_user.profile.profile_picture.url }}" alt="Profile" 
+                     style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+                {% else %}
+                <img src="https://i.imgur.com/jNNT4LE.png" alt="Default" 
+                     style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+                {% endif %}
+                
+                <div>
+                    <h5 class="mb-0">{{ other_user.username }}</h5>
+                    {% if other_user.profile.online %}
+                    <small class="text-success">Online</small>
+                    {% else %}
+                    <small class="text-muted">Last seen {{ other_user.profile.last_seen|timesince }} ago</small>
+                    {% endif %}
+                </div>
+            </div>
+            
+            <!-- Messages Container -->
+            <div id="messages-container" class="messages-container p-3" style="height: 400px; overflow-y: auto;">
+                {% for message in messages %}
+                <div class="message mb-3 {% if message.sender == user %}text-end{% endif %}">
+                    <div class="message-bubble {% if message.sender == user %}bg-primary text-white ms-auto{% else %}bg-light{% endif %} p-2 rounded" style="max-width: 70%; display: inline-block;">
+                        <div>{{ message.content }}</div>
+                        <small class="message-time {% if message.sender == user %}text-light{% else %}text-muted{% endif %}">
+                            {{ message.sent_at|date:"H:i" }}
+                        </small>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            
+            <!-- Message Input -->
+            <div class="message-input-container border-top p-3">
+                <form method="post" id="message-form" class="d-flex">
+                    {% csrf_token %}
+                    <input type="text" name="content" id="message-input" 
+                           class="form-control me-2" placeholder="Type a message..." required>
+                    <button type="submit" class="btn btn-primary">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.messages-container {
+    background-color: #f8f9fa;
+}
+
+.message-bubble {
+    word-wrap: break-word;
+}
+
+.message-time {
+    font-size: 0.75rem;
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const messagesContainer = document.getElementById('messages-container');
+    const messageForm = document.getElementById('message-form');
+    const messageInput = document.getElementById('message-input');
+    
+    // Scroll to bottom
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    
+    // Handle form submission
+    messageForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(messageForm);
+        
+        fetch('', {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                messageInput.value = '';
+                loadMessages();
+            }
+        });
+    });
+    
+    // Load messages periodically
+    function loadMessages() {
+        fetch('{% url "load_messages" chat.id %}')
+        .then(response => response.json())
+        .then(data => {
+            messagesContainer.innerHTML = '';
+            data.messages.forEach(msg => {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message mb-3 ${msg.is_mine ? 'text-end' : ''}`;
+                messageDiv.innerHTML = `
+                    <div class="message-bubble ${msg.is_mine ? 'bg-primary text-white ms-auto' : 'bg-light'} p-2 rounded" style="max-width: 70%; display: inline-block;">
+                        <div>${msg.content}</div>
+                        <small class="message-time ${msg.is_mine ? 'text-light' : 'text-muted'}">${msg.sent_at}</small>
+                    </div>
+                `;
+                messagesContainer.appendChild(messageDiv);
+            });
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+    }
+    
+    // Refresh messages every 3 seconds
+    setInterval(loadMessages, 3000);
+});
+</script>
+{% endblock %}

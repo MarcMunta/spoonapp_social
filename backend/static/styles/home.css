@@ -208,6 +208,12 @@ body {
     object-fit: cover;
 }
 
+/* Apply a subtle black border only to the main post image */
+.post-image img {
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    border-radius: 12px;
+}
+
 .post-user {
     display: inline-flex;
     align-items: center;
@@ -247,6 +253,13 @@ body {
 .post-stats span {
     margin-left: 1rem;
     font-size: 1rem;
+}
+
+/* Distinct background for post description */
+.post-caption {
+    background-color: #f7f7f7;
+    padding: 0.5rem;
+    border-radius: 8px;
 }
 
 .rightbar {

@@ -411,21 +411,43 @@ body {
     border: none;
     padding-left: 0;
 }
+@keyframes pop {0%{transform:scale(1);}50%{transform:scale(1.3);}100%{transform:scale(1);}}
+.animate-pop{animation:pop 0.3s ease;}
 
-@keyframes pop {
-    0% {
-        transform: scale(1);
-    }
-
-    50% {
-        transform: scale(1.3);
-    }
-
-    100% {
-        transform: scale(1);
-    }
+.post-header {
+    border-bottom: 1px solid #e0b9d8;
+    padding-bottom: 0.5rem;
+    margin-bottom: 0.5rem;
 }
 
-.animate-pop {
-    animation: pop 0.3s ease;
+.post-divider {
+    border: 0;
+    border-bottom: 1px solid #e0b9d8;
+    margin: 0 0 0.5rem 0;
 }
+
+.post-title strong {
+    font-size: 1.2rem;
+}
+
+.share-btn,
+.bookmark-btn {
+    cursor: pointer;
+}
+
+.load-more-comments {
+    background-color: #d48ac1;
+    color: #fff;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 0.5rem;
+}
+
+.load-more-comments:hover {
+    background-color: #b86ba3;
+    transform: scale(1.05);
+}
+

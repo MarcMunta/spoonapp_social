@@ -57,11 +57,15 @@ class PostSave(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     saved_at = models.DateTimeField(auto_now_add=True)
 
+def default_expiration():
+    return timezone.now() + timedelta(hours=24)
+
+
 class Story(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='stories/')
+    media_file = models.FileField(upload_to='stories/')
     created_at = models.DateTimeField(auto_now_add=True)
-    expires_at = models.DateTimeField()
+    expires_at = models.DateTimeField(default=default_expiration)
 
 class StoryView(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)

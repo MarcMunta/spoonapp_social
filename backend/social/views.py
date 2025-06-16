@@ -4,10 +4,14 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
-from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification
-from .forms import PostForm, CommentForm, ProfileForm
+from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
+from .forms import PostForm, CommentForm, ProfileForm, StoryForm
 from .models import FriendRequest
+<<<<<<< HEAD
 from .models import PostCategory  # asegúrate de importar esto
+=======
+from django.utils import timezone
+>>>>>>> bdbda1af10b170d710abc733871989e7ac1457df
 from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 import json
@@ -71,6 +75,10 @@ def home(request):
 
     if request.user.is_authenticated:
         context['friends'] = get_friends(request.user)  # ✅ Solo si el usuario está logueado
+        active_stories = Story.objects.filter(expires_at__gt=timezone.now())
+        context['user_story'] = active_stories.filter(user=request.user).first()
+        context['friend_stories'] = active_stories.filter(user__in=context['friends']).exclude(user=request.user)
+        context['story_form'] = StoryForm()
 
     return render(request, 'social/pages/feed.html', context)
 
@@ -95,6 +103,17 @@ def create_post(request):
             new_post.user = request.user
             new_post.save()
             form.save_m2m()
+    return redirect('home')
+
+
+@login_required
+def upload_story(request):
+    if request.method == 'POST':
+        form = StoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            story = form.save(commit=False)
+            story.user = request.user
+            story.save()
     return redirect('home')
 
 

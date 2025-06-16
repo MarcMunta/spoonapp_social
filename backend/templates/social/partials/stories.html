@@ -1,0 +1,38 @@
+<div class="stories-container mb-3">
+  <div class="story-item">
+    <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}">
+      {% csrf_token %}
+      {{ story_form.media_file }}
+      <div class="story-thumb user-story" onclick="document.getElementById('id_media_file').click()">
+        {% if user.profile.profile_picture %}
+        <img src="{{ user.profile.profile_picture.url }}" class="story-img" alt="{{ user.username }}">
+        {% else %}
+        <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ user.username }}">
+        {% endif %}
+        <span class="story-add">+</span>
+      </div>
+    </form>
+    <div class="story-username">{{ user.username }}</div>
+  </div>
+  {% for st in friend_stories %}
+  <div class="story-item">
+    <div class="story-thumb open-story" data-url="{{ st.media_file.url }}" data-user="{{ st.user.username }}">
+      {% if st.user.profile.profile_picture %}
+      <img src="{{ st.user.profile.profile_picture.url }}" class="story-img" alt="{{ st.user.username }}">
+      {% else %}
+      <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ st.user.username }}">
+      {% endif %}
+    </div>
+    <div class="story-username">{{ st.user.username }}</div>
+  </div>
+  {% endfor %}
+</div>
+
+<div id="storyModal" class="story-modal">
+  <div class="story-modal-content">
+    <span class="story-modal-close">&times;</span>
+    <div class="story-modal-user text-white mb-2"></div>
+    <img id="storyImage" class="w-100 d-none" />
+    <video id="storyVideo" class="w-100 d-none" controls></video>
+  </div>
+</div>

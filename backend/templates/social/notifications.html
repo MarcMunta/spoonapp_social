@@ -1,53 +1,242 @@
-{% extends "social/base.html" %}
+{% extends "social/layouts/base.html" %}
 
 {% block title %}Notifications - SpoonApp SOCIAL{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h2>All Notifications</h2>
-    
-    {% if notifications %}
-    <div class="notifications-container">
-        {% for notification in notifications %}
-        <div class="notification-card {% if not notification.is_read %}unread{% endif %}">
-            <div class="notification-icon">
-                {% if notification.notification_type == 'message' %}
-                💬
-                {% elif notification.notification_type == 'friend_request' %}
-                👥
-                {% elif notification.notification_type == 'friend_accepted' %}
-                ✅
-                {% endif %}
-            </div>
-            <div class="notification-body">
-                <h5>{{ notification.title }}</h5>
-                <p>{{ notification.message }}</p>
-                <small class="text-muted">{{ notification.created_at|timesince }} ago</small>
-                {% if notification.related_user %}
-                <div class="notification-actions mt-2">
-                    {% if notification.notification_type == 'message' %}
-                    <a href="{% url 'chat_detail' notification.related_chat.id %}" class="btn btn-sm btn-primary">View Chat</a>
-                    {% elif notification.notification_type == 'friend_accepted' %}
-                    <a href="{% url 'profile' notification.related_user.username %}" class="btn btn-sm btn-success">View Profile</a>
-                    {% endif %}
+<div class="container-fluid px-4">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- SpoonApp Header -->
+            <div class="spoon-section-header mb-4">
+                <div class="d-flex align-items-center">
+                    <div class="spoon-header-icon me-3">
+                        <span class="fs-2">🔔</span>
+                    </div>
+                    <div>
+                        <h2 class="spoon-section-title mb-1">Notifications</h2>
+                        <p class="spoon-section-subtitle mb-0">Stay updated with your SpoonApp activity</p>
+                    </div>
                 </div>
-                {% endif %}
             </div>
-            {% if not notification.is_read %}
-            <div class="notification-status">
-                <span class="badge bg-primary">New</span>
+            
+            {% if notifications %}
+            <div class="spoon-notifications-container">
+                {% for notification in notifications %}
+                <div class="spoon-notification-card {% if not notification.is_read %}spoon-unread{% endif %}">
+                    <div class="d-flex align-items-start">
+                        <div class="spoon-notification-icon me-3">
+                            {% if notification.notification_type == 'message' %}
+                            <span class="spoon-icon-message">💬</span>
+                            {% elif notification.notification_type == 'friend_request' %}
+                            <span class="spoon-icon-friend">👥</span>
+                            {% elif notification.notification_type == 'friend_accepted' %}
+                            <span class="spoon-icon-accepted">✅</span>
+                            {% endif %}
+                        </div>
+                        <div class="spoon-notification-body flex-grow-1">
+                            <h5 class="spoon-notification-title">{{ notification.title }}</h5>
+                            <p class="spoon-notification-message">{{ notification.message }}</p>
+                            <small class="spoon-notification-time">{{ notification.created_at|timesince }} ago</small>
+                            {% if notification.related_user %}
+                            <div class="spoon-notification-actions mt-3">
+                                {% if notification.notification_type == 'message' and notification.related_chat %}
+                                <a href="{% url 'chat_detail' notification.related_chat.id %}" class="spoon-action-btn spoon-btn-chat">
+                                    <i class="fas fa-comment me-1"></i>View Chat
+                                </a>
+                                {% elif notification.notification_type == 'friend_accepted' %}
+                                <a href="{% url 'profile' notification.related_user.username %}" class="spoon-action-btn spoon-btn-profile">
+                                    <i class="fas fa-user me-1"></i>View Profile
+                                </a>
+                                <a href="{% url 'start_chat' notification.related_user.id %}" class="spoon-action-btn spoon-btn-chat ms-2">
+                                    <i class="fas fa-comment me-1"></i>Start Chat
+                                </a>
+                                {% endif %}
+                            </div>
+                            {% endif %}
+                        </div>
+                        {% if not notification.is_read %}
+                        <div class="spoon-notification-badge">
+                            <span class="spoon-new-badge">New</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% else %}
+            <div class="spoon-empty-state-container">
+                <div class="text-center py-5">
+                    <div class="spoon-empty-icon mb-4">🔔🍴</div>
+                    <h4 class="spoon-empty-title">No notifications yet</h4>
+                    <p class="spoon-empty-text">You'll see notifications here when you receive messages or friend requests.</p>
+                    <a href="{% url 'home' %}" class="spoon-btn-primary mt-3">
+                        <i class="fas fa-home me-2"></i>Back to Feed
+                    </a>
+                </div>
             </div>
             {% endif %}
         </div>
-        {% endfor %}
     </div>
-    {% else %}
-    <div class="empty-notifications">
-        <div class="text-center py-5">
-            <h4>No notifications yet</h4>
-            <p class="text-muted">You'll see notifications here when you receive messages or friend requests.</p>
-        </div>
-    </div>
-    {% endif %}
 </div>
+
+<style>
+.spoon-notifications-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.spoon-notification-card {
+    background: linear-gradient(135deg, #ffffff 0%, #fdf2f9 100%);
+    border: 2px solid #e8d5f0;
+    border-radius: 20px;
+    padding: 20px;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.1);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.spoon-notification-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 138, 193, 0.1), transparent);
+    transition: left 0.5s;
+}
+
+.spoon-notification-card:hover {
+    transform: translateX(5px);
+    box-shadow: 0 6px 25px rgba(212, 138, 193, 0.2);
+    border-color: #d48ac1;
+}
+
+.spoon-notification-card:hover::before {
+    left: 100%;
+}
+
+.spoon-notification-card.spoon-unread {
+    border-left: 5px solid #d48ac1;
+    background: linear-gradient(135deg, #fdf2f9 0%, #f8e8f5 100%);
+    box-shadow: 0 4px 20px rgba(212, 138, 193, 0.2);
+}
+
+.spoon-notification-icon {
+    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+    flex-shrink: 0;
+}
+
+.spoon-notification-title {
+    color: #6b21a8;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-bottom: 8px;
+}
+
+.spoon-notification-message {
+    color: #8b5a96;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
+    line-height: 1.5;
+}
+
+.spoon-notification-time {
+    color: #a855a0;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.spoon-notification-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.spoon-action-btn {
+    padding: 8px 16px;
+    border-radius: 20px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    display: inline-flex;
+    align-items: center;
+}
+
+.spoon-btn-chat {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(59, 130, 246, 0.3);
+}
+
+.spoon-btn-chat:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4);
+}
+
+.spoon-btn-profile {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+    color: white;
+    box-shadow: 0 3px 10px rgba(34, 197, 94, 0.3);
+}
+
+.spoon-btn-profile:hover {
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(34, 197, 94, 0.4);
+}
+
+.spoon-notification-badge {
+    flex-shrink: 0;
+}
+
+.spoon-new-badge {
+    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    box-shadow: 0 3px 10px rgba(239, 68, 68, 0.3);
+    animation: pulse-badge 2s infinite;
+}
+
+@keyframes pulse-badge {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+/* Responsive improvements */
+@media (max-width: 768px) {
+    .spoon-notification-actions {
+        flex-direction: column;
+    }
+    
+    .spoon-action-btn {
+        justify-content: center;
+    }
+    
+    .spoon-notification-card {
+        padding: 15px;
+    }
+    
+    .spoon-notification-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 1.2rem;
+    }
+}
+</style>
 {% endblock %}

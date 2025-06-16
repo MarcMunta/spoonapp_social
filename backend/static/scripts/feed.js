@@ -99,11 +99,15 @@ document.addEventListener('DOMContentLoaded', () => {
     progressTimeout = setTimeout(nextStory, 5000);
   }
 
-  function openStories(urls, expires, user) {
-    currentUrls = urls;
-    currentExpires = expires;
+  const storyEls = Array.from(document.querySelectorAll('.open-story'));
+  let currentStoryElIndex = 0;
+
+  function openStories(el, idx) {
+    currentUrls = el.dataset.urls.split('|');
+    currentExpires = el.dataset.expires.split('|');
     currentIndex = 0;
-    document.querySelector('.story-modal-user').textContent = user;
+    currentStoryElIndex = idx;
+    document.querySelector('.story-modal-user').textContent = el.dataset.user;
     modal.style.display = 'flex';
     modalContent.classList.add('open-anim');
     showStory(currentIndex);
@@ -123,7 +127,12 @@ document.addEventListener('DOMContentLoaded', () => {
       currentIndex++;
       showStory(currentIndex);
     } else {
-      closeStories();
+      const nextEl = storyEls[currentStoryElIndex + 1];
+      if (nextEl) {
+        openStories(nextEl, currentStoryElIndex + 1);
+      } else {
+        closeStories();
+      }
     }
   }
 
@@ -134,12 +143,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  document.querySelectorAll('.open-story').forEach(el => {
+  storyEls.forEach((el, idx) => {
     el.addEventListener('click', () => {
-      const urls = el.dataset.urls.split('|');
-      const expires = el.dataset.expires.split('|');
-      const user = el.dataset.user;
-      openStories(urls, expires, user);
+      openStories(el, idx);
     });
   });
 

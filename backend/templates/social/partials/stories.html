@@ -5,9 +5,9 @@
       {{ story_form.media_file }}
       <div class="story-thumb user-story" onclick="document.getElementById('id_media_file').click()">
         {% if user.profile.profile_picture %}
-        <img src="{{ user.profile.profile_picture.url }}" class="story-img" alt="{{ user.username }}">
+        <img src="{{ user.profile.profile_picture.url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% else %}
-        <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ user.username }}">
+        <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% endif %}
         <span class="story-add">+</span>
       </div>
@@ -18,9 +18,9 @@
   <div class="story-item">
     <div class="story-thumb open-story" data-url="{{ st.media_file.url }}" data-user="{{ st.user.username }}" data-expires="{{ st.expires_at|date:'c' }}">
       {% if st.user.profile.profile_picture %}
-      <img src="{{ st.user.profile.profile_picture.url }}" class="story-img" alt="{{ st.user.username }}">
+      <img src="{{ st.user.profile.profile_picture.url }}" class="story-img" alt="{{ st.user.username }}" width="50" height="50">
       {% else %}
-      <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ st.user.username }}">
+      <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ st.user.username }}" width="50" height="50">
       {% endif %}
     </div>
     <div class="story-username">{{ st.user.username }}</div>

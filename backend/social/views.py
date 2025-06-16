@@ -7,11 +7,8 @@ from django.utils.timezone import now
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm
 from .models import FriendRequest
-<<<<<<< HEAD
 from .models import PostCategory  # asegúrate de importar esto
-=======
 from django.utils import timezone
->>>>>>> bdbda1af10b170d710abc733871989e7ac1457df
 from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 import json

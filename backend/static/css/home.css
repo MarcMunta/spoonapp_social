@@ -457,18 +457,20 @@ body {
 }
 
 .load-more-comments {
-    background: linear-gradient(135deg, #f2e9ff, #d3f9d8);
-    color: #333;
+    background-color: #87cefa;
+    color: #ffffff;
     border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 30px;
+    padding: 0.6rem 1.4rem;
+    border-radius: 25px;
     cursor: pointer;
-    transition: transform 0.2s ease, opacity 0.2s ease;
-    margin-top: 0.5rem;
+    display: block;
+    margin: 0.5rem auto;
+    box-shadow: 0 4px 0 #7ab8e6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .load-more-comments:hover {
-    transform: scale(1.05);
-    opacity: 0.9;
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #5fa8d3;
 }
 

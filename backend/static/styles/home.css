@@ -1125,13 +1125,13 @@ body:has(.spoon-chat-container) .rightbar {
 
 .story-item {
     text-align: center;
-    width: 55px;
+    width: 110px;
     flex-shrink: 0;
 }
 
 .story-thumb {
-    width: 50px;
-    height: 50px;
+    width: 100px;
+    height: 100px;
     border-radius: 50%;
     overflow: hidden;
     position: relative;
@@ -1181,7 +1181,7 @@ body:has(.spoon-chat-container) .rightbar {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0,0,0,0.8);
+    background: rgba(0,0,0,0.6);
     align-items: center;
     justify-content: center;
     z-index: 2000;
@@ -1189,8 +1189,8 @@ body:has(.spoon-chat-container) .rightbar {
 
 .story-modal-content {
     position: relative;
-    max-width: 500px;
-    width: 85%;
+    max-width: 1000px;
+    width: 90%;
     background: #000;
     padding: 10px;
     border-radius: 25px;
@@ -1244,6 +1244,16 @@ body:has(.spoon-chat-container) .rightbar {
 .story-modal-user {
     color: #fff;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    font-size: 1.2rem;
+}
+
+.story-modal-avatar {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
 }
 
 .story-prev,
@@ -1258,5 +1268,5 @@ body:has(.spoon-chat-container) .rightbar {
     user-select: none;
 }
 
-.story-prev { left: 5px; }
-.story-next { right: 5px; }
+.story-prev { left: -40px; }
+.story-next { right: -40px; }

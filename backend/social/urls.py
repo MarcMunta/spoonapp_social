@@ -23,6 +23,7 @@ urlpatterns = [
     path('chat/<int:chat_id>/', views.chat_detail, name='chat_detail'),
     path('start-chat/<int:user_id>/', views.start_chat, name='start_chat'),
     path('chat/<int:chat_id>/messages/', views.load_messages, name='load_messages'),
+    path('story/<int:story_id>/reply/', views.reply_story, name='reply_story'),
     path('notifications/', views.notifications_view, name='notifications'),
     path('mark-notification-read/<int:notification_id>/', views.mark_notification_read, name='mark_notification_read'),
     path('api/notifications-count/', views.get_notifications_count, name='notifications_count'),

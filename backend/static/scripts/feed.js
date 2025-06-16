@@ -67,9 +67,12 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
     const minutes = Math.floor(diff / 60000);
-    const hours = Math.floor(minutes / 60);
-    const mins = minutes % 60;
-    countdownEl.textContent = `${hours}h ${mins}m`;
+    if (minutes < 60) {
+      countdownEl.textContent = `${minutes}m`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      countdownEl.textContent = `${hours}h`;
+    }
   }
 
   function showStory(idx) {
@@ -97,6 +100,11 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCountdown(currentExpires[idx]);
     countdownInterval = setInterval(() => updateCountdown(currentExpires[idx]), 1000);
     progressTimeout = setTimeout(nextStory, 5000);
+    const replyBtn = document.getElementById('storyReplySend');
+    if (replyBtn && currentStoryElIndex != null) {
+      const storyIds = storyEls[currentStoryElIndex].dataset.storyId.split('|');
+      replyBtn.dataset.storyId = storyIds[idx];
+    }
   }
 
   const storyEls = Array.from(document.querySelectorAll('.open-story'));
@@ -107,7 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
     currentExpires = el.dataset.expires.split('|');
     currentIndex = 0;
     currentStoryElIndex = idx;
-    document.querySelector('.story-modal-user').textContent = el.dataset.user;
+    const userContainer = document.querySelector('.story-modal-user');
+    if (userContainer) {
+      userContainer.innerHTML = `<img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40">` +
+        `<a href="${el.dataset.profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
+    }
+    const replyBtn = document.getElementById('storyReplySend');
+    if (replyBtn) replyBtn.dataset.storyId = el.dataset.storyId.split('|')[currentIndex];
     modal.style.display = 'flex';
     modalContent.classList.add('open-anim');
     showStory(currentIndex);
@@ -152,6 +166,29 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelector('.story-next')?.addEventListener('click', nextStory);
   document.querySelector('.story-prev')?.addEventListener('click', prevStory);
   document.querySelector('.story-modal-close')?.addEventListener('click', closeStories);
+
+  const replyBtnEl = document.getElementById('storyReplySend');
+  if (replyBtnEl) {
+    replyBtnEl.addEventListener('click', () => {
+      const storyId = replyBtnEl.dataset.storyId;
+      const input = document.getElementById('storyReplyInput');
+      const content = input ? input.value.trim() : '';
+      if (!storyId) return;
+      const formData = new FormData();
+      formData.append('content', content);
+      fetch(`/story/${storyId}/reply/`, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.chat_id) {
+            window.location.href = `/chat/${data.chat_id}/`;
+          }
+        });
+    });
+  }
 
   document.querySelectorAll('.like-post').forEach(btn => {
     btn.addEventListener('click', e => {

@@ -1,6 +1,6 @@
 from django import forms
 from django.db.models import Case, When, IntegerField
-from .models import Post, PostComment, Profile, PostCategory
+from .models import Post, PostComment, Profile, PostCategory, Story
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -51,3 +51,15 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_picture']
+
+
+class StoryForm(forms.ModelForm):
+    class Meta:
+        model = Story
+        fields = ['media_file']
+        widgets = {
+            'media_file': forms.ClearableFileInput(attrs={
+                'accept': 'image/*,video/*',
+                'hidden': True,
+            })
+        }

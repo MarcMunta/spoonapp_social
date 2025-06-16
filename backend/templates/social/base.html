@@ -76,7 +76,7 @@
       <h3>Friends</h3>
 
       <div class="search-friends-container">
-        <input type="text" id="searchFriendInput" placeholder="Search users..." onkeyup="filterUsers()">
+<input type="text" id="searchFriendInput" placeholder="Search users..." onkeyup="filterUsers()" />
         <ul id="searchResults"></ul>
       </div>
 
@@ -95,5 +95,32 @@
       {% endif %}
     </div>
   </div>
+
+
+  <script>
+  const allUsers = [
+    {% for user in all_users %}
+      { "username": "{{ user.username }}", "url": "{% url 'profile' user.username %}" }{% if not forloop.last %},{% endif %}
+    {% endfor %}
+  ];
+
+  function filterUsers() {
+    const input = document.getElementById('searchFriendInput').value.toLowerCase();
+    const resultsList = document.getElementById('searchResults');
+    resultsList.innerHTML = '';
+
+    if (input.length === 0) return;
+
+    const filtered = allUsers.filter(u => u.username.toLowerCase().includes(input)).slice(0, 5);
+
+    filtered.forEach(user => {
+      const li = document.createElement('li');
+      li.innerHTML = `<a href="${user.url}">${user.username}</a>`;
+      resultsList.appendChild(li);
+    });
+  }
+</script>
+
 </body>
+
 </html>

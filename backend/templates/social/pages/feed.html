@@ -12,6 +12,7 @@
 {% endif %}
 {% for post in posts %}
 <div class="post mb-3">
+  <div class="post-user"><strong>{{ post.user.username }}</strong></div>
   {% if post.image %}
   <div class="post-image">
     <img src="{{ post.image.url }}" alt="">
@@ -20,7 +21,6 @@
   {% endif %}
   <div class="post-header d-flex justify-content-between">
     <div class="post-title">
-      <strong>{{ post.user.username }}</strong>
       <div class="post-categories">
         {% for cat in post.categories.all %}
         <span class="badge bg-secondary me-1">{{ cat.name }}</span>

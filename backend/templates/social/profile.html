@@ -17,11 +17,12 @@
   {% if post.image %}
   <img src="{{ post.image.url }}" alt="">
   {% endif %}
+  <hr class="post-divider">
   <div class="post-footer">
     <div class="post-title">{{ post.caption }}</div>
     <div class="post-stats">
-      <span>🥄 {{ post.postlike_set.count }}</span>
-      <span>💬 {{ post.postcomment_set.count }}</span>
+      <span>{{ post.postlike_set.count }} 🥄</span>
+      <span>{{ post.postcomment_set.count }}💬</span>
     </div>
   </div>
 </div>

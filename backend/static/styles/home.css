@@ -921,7 +921,6 @@ body.profile-page .nav-tabs .nav-link {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
-<<<<<<< HEAD
 /* Chat specific layout overrides */
 .main-content:has(.spoon-chat-container) {
     padding: 0;
@@ -1114,7 +1113,6 @@ body:has(.spoon-chat-container) .rightbar {
 .spoon-home-btn:focus {
     outline: 3px solid rgba(212, 138, 193, 0.5);
     outline-offset: 2px;
-=======
 /* Stories Styles */
 .stories-container {
     display: flex;
@@ -1243,5 +1241,4 @@ body:has(.spoon-chat-container) .rightbar {
 .story-modal-user {
     color: #fff;
     margin-bottom: 8px;
->>>>>>> df5e46062e7b47dcc0cfe3149564bc0702122371
 }

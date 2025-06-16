@@ -1,8 +1,10 @@
 {% extends "social/layouts/base.html" %}
+{% load tz %}
 
 {% block title %}SpoonApp Messages{% endblock %}
 
 {% block content %}
+{% timezone "Europe/London" %}
 <div class="spoon-chat-container">
     <div class="row h-100 g-0">
         <div class="col-md-4 col-lg-4">
@@ -17,9 +19,17 @@
                         <div class="spoon-chat-item d-flex align-items-center">
                             <div class="spoon-avatar-container">
                                 {% if data.other_user.profile.profile_picture %}
-                                <img src="{{ data.other_user.profile.profile_picture.url }}" alt="Profile" class="spoon-avatar">
+                                <img src="{{ data.other_user.profile.profile_picture.url }}" 
+                                     alt="Profile" 
+                                     class="spoon-avatar"
+                                     onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{% url 'profile' data.other_user.username %}';"
+                                     title="View {{ data.other_user.username }}'s profile">
                                 {% else %}
-                                <img src="https://i.imgur.com/jNNT4LE.png" alt="Default" class="spoon-avatar">
+                                <img src="https://i.imgur.com/jNNT4LE.png" 
+                                     alt="Default" 
+                                     class="spoon-avatar"
+                                     onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{% url 'profile' data.other_user.username %}';"
+                                     title="View {{ data.other_user.username }}'s profile">
                                 {% endif %}
                                 
                                 {% if data.other_user.profile.online %}
@@ -31,7 +41,7 @@
                                 <div class="d-flex justify-content-between align-items-start mb-1">
                                     <div class="spoon-chat-name">{{ data.other_user.username }}</div>
                                     {% if data.last_message %}
-                                    <div class="spoon-time-badge">{{ data.last_message.sent_at|date:"H:i" }}</div>
+                                    <div class="spoon-time-badge">{{ data.last_message.sent_at|localtime|date:"H:i" }}</div>
                                     {% endif %}
                                 </div>
                                 
@@ -77,4 +87,5 @@
         </div>
     </div>
 </div>
+{% endtimezone %}
 {% endblock %}

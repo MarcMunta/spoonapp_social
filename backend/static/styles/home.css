@@ -110,6 +110,19 @@ body {
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
 }
 
+/* Chat specific layout overrides */
+.main-content:has(.spoon-chat-container) {
+    padding: 0;
+    margin-right: 0;
+    overflow: hidden;
+    border-right: none;
+}
+
+/* Hide rightbar when chat is active */
+body:has(.spoon-chat-container) .rightbar {
+    display: none;
+}
+
 .input-bar {
     display: flex;
     flex-direction: column;
@@ -908,6 +921,200 @@ body.profile-page .nav-tabs .nav-link {
     background-color: rgba(0, 0, 0, 0.8);
 }
 
+<<<<<<< HEAD
+/* Chat specific layout overrides */
+.main-content:has(.spoon-chat-container) {
+    padding: 0;
+    margin-right: 0;
+    overflow: hidden;
+    border-right: none;
+}
+
+/* Hide rightbar when chat is active */
+body:has(.spoon-chat-container) .rightbar {
+    display: none;
+}
+
+/* Profile Avatar Click Enhancement for Chat */
+.spoon-avatar {
+    cursor: pointer;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.spoon-avatar:hover {
+    transform: scale(1.05);
+    border-color: #b86ba3;
+    box-shadow: 0 6px 20px rgba(212, 138, 193, 0.5);
+}
+
+.spoon-avatar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(212, 138, 193, 0.2);
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.spoon-avatar:hover::after {
+    opacity: 1;
+}
+
+/* Button Icon Enhancements for Chat */
+.spoon-send-button i,
+.spoon-back-btn i,
+.spoon-home-btn i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+.spoon-send-button:hover i {
+    transform: translateX(2px);
+}
+
+.spoon-back-btn:hover i {
+    transform: translateX(-2px);
+}
+
+.spoon-home-btn:hover i {
+    transform: scale(1.1);
+}
+
+/* Enhanced Chat Header */
+.spoon-chat-header-detail {
+    min-height: 80px;
+    padding: 15px 20px;
+}
+
+/* Message Area Full Height */
+.spoon-messages-area {
+    height: calc(100vh - 240px);
+    min-height: 300px;
+}
+
+/* Input Area Fixed Height */
+.spoon-input-area {
+    min-height: 80px;
+    padding: 15px 20px;
+}
+
+/* Responsive Chat Layout */
+@media (max-width: 1200px) {
+    .main-content:has(.spoon-chat-container) {
+        margin-right: 0;
+    }
+    
+    .rightbar {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content:has(.spoon-chat-container) {
+        margin-left: 0;
+        margin-top: 60px;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+    
+    .spoon-chat-container {
+        height: calc(100vh - 60px);
+    }
+    
+    .spoon-messages-area {
+        height: calc(100vh - 200px);
+    }
+    
+    .spoon-chat-header-detail {
+        padding: 10px 15px;
+        min-height: 70px;
+    }
+    
+    .spoon-input-area {
+        padding: 10px 15px;
+        min-height: 70px;
+    }
+    
+    .spoon-avatar {
+        width: 40px !important;
+        height: 40px !important;
+    }
+    
+    .spoon-back-btn,
+    .spoon-home-btn {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .spoon-send-button {
+        width: 45px;
+        height: 45px;
+    }
+}
+
+/* Chat List Mobile Adjustments */
+@media (max-width: 576px) {
+    .spoon-chat-sidebar .col-md-4 {
+        width: 100%;
+    }
+    
+    .spoon-empty-state {
+        display: none;
+    }
+}
+
+/* Enhanced scrollbar for better UX */
+.spoon-messages-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.spoon-messages-area::-webkit-scrollbar-track {
+    background: rgba(232, 213, 240, 0.3);
+    border-radius: 3px;
+}
+
+.spoon-messages-area::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+    border-radius: 3px;
+}
+
+.spoon-messages-area::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%);
+}
+
+/* Profile Picture Click Feedback for Chat */
+@keyframes profile-click {
+    0% { transform: scale(1); }
+    50% { transform: scale(0.95); }
+    100% { transform: scale(1); }
+}
+
+.spoon-avatar:active {
+    animation: profile-click 0.2s ease;
+}
+
+/* Button Active States for Chat */
+.spoon-send-button:active,
+.spoon-back-btn:active,
+.spoon-home-btn:active {
+    transform: scale(0.95);
+}
+
+/* Enhanced focus states for accessibility in Chat */
+.spoon-avatar:focus,
+.spoon-send-button:focus,
+.spoon-back-btn:focus,
+.spoon-home-btn:focus {
+    outline: 3px solid rgba(212, 138, 193, 0.5);
+    outline-offset: 2px;
+=======
 /* Stories Styles */
 .stories-container {
     display: flex;
@@ -1036,4 +1243,5 @@ body.profile-page .nav-tabs .nav-link {
 .story-modal-user {
     color: #fff;
     margin-bottom: 8px;
+>>>>>>> df5e46062e7b47dcc0cfe3149564bc0702122371
 }

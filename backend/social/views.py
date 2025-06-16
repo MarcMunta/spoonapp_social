@@ -71,6 +71,7 @@ def home(request):
     context['show_form'] = False
 
     if request.user.is_authenticated:
+        Story.objects.filter(expires_at__lte=timezone.now()).delete()
         context['friends'] = get_friends(request.user)  # ✅ Solo si el usuario está logueado
         active_stories = Story.objects.filter(expires_at__gt=timezone.now())
         context['user_story'] = active_stories.filter(user=request.user).first()

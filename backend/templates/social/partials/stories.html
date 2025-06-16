@@ -16,7 +16,7 @@
   </div>
   {% for st in friend_stories %}
   <div class="story-item">
-    <div class="story-thumb open-story" data-url="{{ st.media_file.url }}" data-user="{{ st.user.username }}">
+    <div class="story-thumb open-story" data-url="{{ st.media_file.url }}" data-user="{{ st.user.username }}" data-expires="{{ st.expires_at|date:'c' }}">
       {% if st.user.profile.profile_picture %}
       <img src="{{ st.user.profile.profile_picture.url }}" class="story-img" alt="{{ st.user.username }}">
       {% else %}
@@ -30,6 +30,8 @@
 
 <div id="storyModal" class="story-modal">
   <div class="story-modal-content">
+    <div class="story-progress"><div class="story-progress-bar"></div></div>
+    <div class="story-countdown"></div>
     <span class="story-modal-close">&times;</span>
     <div class="story-modal-user text-white mb-2"></div>
     <img id="storyImage" class="w-100 d-none" />

@@ -1,89 +1,111 @@
-{% extends "social/base.html" %}
+{% extends "social/layouts/base.html" %}
 
-{% block title %}Chat with {{ other_user.username }}{% endblock %}
+{% block title %}SpoonChat with {{ other_user.username }}{% endblock %}
 
 {% block content %}
-<div class="container-fluid h-100">
-    <div class="row h-100">
+<div class="spoon-chat-container">
+    <div class="row h-100 g-0">
         <div class="col-12">
-            <!-- Chat Header -->
-            <div class="chat-header bg-light p-3 border-bottom d-flex align-items-center">
-                <a href="{% url 'chat_list' %}" class="btn btn-outline-secondary btn-sm me-3">← Back</a>
-                
-                {% if other_user.profile.profile_picture %}
-                <img src="{{ other_user.profile.profile_picture.url }}" alt="Profile" 
-                     style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-                {% else %}
-                <img src="https://i.imgur.com/jNNT4LE.png" alt="Default" 
-                     style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-                {% endif %}
-                
-                <div>
-                    <h5 class="mb-0">{{ other_user.username }}</h5>
-                    {% if other_user.profile.online %}
-                    <small class="text-success">Online</small>
-                    {% else %}
-                    <small class="text-muted">Last seen {{ other_user.profile.last_seen|timesince }} ago</small>
-                    {% endif %}
-                </div>
-            </div>
-            
-            <!-- Messages Container -->
-            <div id="messages-container" class="messages-container p-3" style="height: 400px; overflow-y: auto;">
-                {% for message in messages %}
-                <div class="message mb-3 {% if message.sender == user %}text-end{% endif %}">
-                    <div class="message-bubble {% if message.sender == user %}bg-primary text-white ms-auto{% else %}bg-light{% endif %} p-2 rounded" style="max-width: 70%; display: inline-block;">
-                        <div>{{ message.content }}</div>
-                        <small class="message-time {% if message.sender == user %}text-light{% else %}text-muted{% endif %}">
-                            {{ message.sent_at|date:"H:i" }}
-                        </small>
+            <div class="spoon-chat-detail">
+                <!-- Chat Header -->
+                <div class="spoon-chat-header-detail">
+                    <a href="{% url 'chat_list' %}" class="spoon-back-btn text-white text-decoration-none">
+                        <i class="fas fa-arrow-left"></i>
+                    </a>
+                    
+                    <div class="spoon-avatar-container me-3">
+                        {% if other_user.profile.profile_picture %}
+                        <img src="{{ other_user.profile.profile_picture.url }}" alt="Profile" class="spoon-avatar" style="width: 50px; height: 50px;">
+                        {% else %}
+                        <img src="https://i.imgur.com/jNNT4LE.png" alt="Default" class="spoon-avatar" style="width: 50px; height: 50px;">
+                        {% endif %}
+                        
+                        {% if other_user.profile.online %}
+                        <div class="spoon-online-badge"></div>
+                        {% endif %}
+                    </div>
+                    
+                    <div>
+                        <div class="fw-bold fs-5">{{ other_user.username }}</div>
+                        {% if other_user.profile.online %}
+                        <div class="spoon-status-indicator">Online now</div>
+                        {% else %}
+                        <small class="opacity-75">Last seen {{ other_user.profile.last_seen|timesince }} ago</small>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="ms-auto">
+                        <span style="font-size: 1.5rem;">🍴</span>
                     </div>
                 </div>
-                {% endfor %}
-            </div>
-            
-            <!-- Message Input -->
-            <div class="message-input-container border-top p-3">
-                <form method="post" id="message-form" class="d-flex">
-                    {% csrf_token %}
-                    <input type="text" name="content" id="message-input" 
-                           class="form-control me-2" placeholder="Type a message..." required>
-                    <button type="submit" class="btn btn-primary">Send</button>
-                </form>
+                
+                <!-- Messages Area -->
+                <div id="spoon-messages-area" class="spoon-messages-area">
+                    {% for message in messages %}
+                    <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3">
+                        <div class="spoon-message-bubble {% if message.sender == user %}spoon-message-sent{% else %}spoon-message-received{% endif %}">
+                            <div>{{ message.content }}</div>
+                            <div class="spoon-message-time">{{ message.sent_at|date:"H:i" }}</div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                
+                <!-- Message Input -->
+                <div class="spoon-input-area">
+                    <form method="post" id="spoon-message-form" class="d-flex w-100 align-items-center gap-3">
+                        {% csrf_token %}
+                        <input type="text" name="content" id="spoon-message-input" 
+                               class="spoon-message-input" placeholder="Share your food thoughts... 🍽️" required>
+                        <button type="submit" class="spoon-send-button">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<style>
-.messages-container {
-    background-color: #f8f9fa;
-}
-
-.message-bubble {
-    word-wrap: break-word;
-}
-
-.message-time {
-    font-size: 0.75rem;
-}
-</style>
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const messagesContainer = document.getElementById('messages-container');
-    const messageForm = document.getElementById('message-form');
-    const messageInput = document.getElementById('message-input');
+    const messagesArea = document.getElementById('spoon-messages-area');
+    const messageForm = document.getElementById('spoon-message-form');
+    const messageInput = document.getElementById('spoon-message-input');
     
-    // Scroll to bottom
-    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+    // Scroll to bottom with smooth animation
+    function scrollToBottom() {
+        messagesArea.scrollTo({
+            top: messagesArea.scrollHeight,
+            behavior: 'smooth'
+        });
+    }
+    
+    scrollToBottom();
     
     // Handle form submission
     messageForm.addEventListener('submit', function(e) {
         e.preventDefault();
         
+        const content = messageInput.value.trim();
+        if (!content) return;
+        
         const formData = new FormData(messageForm);
         
+        // Add message to UI immediately with animation
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'd-flex justify-content-end mb-3';
+        messageDiv.innerHTML = `
+            <div class="spoon-message-bubble spoon-message-sent">
+                <div>${content}</div>
+                <div class="spoon-message-time">${new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: false})}</div>
+            </div>
+        `;
+        messagesArea.appendChild(messageDiv);
+        scrollToBottom();
+        messageInput.value = '';
+        
+        // Send to server
         fetch('', {
             method: 'POST',
             body: formData,
@@ -93,36 +115,111 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(response => response.json())
         .then(data => {
-            if (data.success) {
-                messageInput.value = '';
-                loadMessages();
+            if (!data.success) {
+                messageDiv.remove();
+                messageInput.value = content;
+                showErrorMessage('Failed to send message. Try again!');
             }
+        })
+        .catch(error => {
+            messageDiv.remove();
+            messageInput.value = content;
+            console.error('Error:', error);
+            showErrorMessage('Connection error. Please check your internet!');
         });
     });
     
-    // Load messages periodically
-    function loadMessages() {
+    // Show typing indicator simulation
+    let typingTimeout;
+    messageInput.addEventListener('input', function() {
+        clearTimeout(typingTimeout);
+        showTypingIndicator();
+        
+        typingTimeout = setTimeout(() => {
+            hideTypingIndicator();
+        }, 1000);
+    });
+    
+    function showTypingIndicator() {
+        if (!document.getElementById('typing-indicator')) {
+            const typingDiv = document.createElement('div');
+            typingDiv.id = 'typing-indicator';
+            typingDiv.className = 'spoon-typing-indicator';
+            typingDiv.innerHTML = `
+                <div class="spoon-typing-dot"></div>
+                <div class="spoon-typing-dot"></div>
+                <div class="spoon-typing-dot"></div>
+                <small class="ms-2 text-muted">Typing...</small>
+            `;
+            messagesArea.appendChild(typingDiv);
+            scrollToBottom();
+        }
+    }
+    
+    function hideTypingIndicator() {
+        const indicator = document.getElementById('typing-indicator');
+        if (indicator) {
+            indicator.remove();
+        }
+    }
+    
+    function showErrorMessage(message) {
+        const errorDiv = document.createElement('div');
+        errorDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed';
+        errorDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 300px;';
+        errorDiv.innerHTML = `
+            ${message}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        `;
+        document.body.appendChild(errorDiv);
+        
+        setTimeout(() => {
+            if (errorDiv.parentNode) {
+                errorDiv.remove();
+            }
+        }, 5000);
+    }
+    
+    // Load new messages periodically
+    function loadNewMessages() {
         fetch('{% url "load_messages" chat.id %}')
         .then(response => response.json())
         .then(data => {
-            messagesContainer.innerHTML = '';
-            data.messages.forEach(msg => {
-                const messageDiv = document.createElement('div');
-                messageDiv.className = `message mb-3 ${msg.is_mine ? 'text-end' : ''}`;
-                messageDiv.innerHTML = `
-                    <div class="message-bubble ${msg.is_mine ? 'bg-primary text-white ms-auto' : 'bg-light'} p-2 rounded" style="max-width: 70%; display: inline-block;">
-                        <div>${msg.content}</div>
-                        <small class="message-time ${msg.is_mine ? 'text-light' : 'text-muted'}">${msg.sent_at}</small>
-                    </div>
-                `;
-                messagesContainer.appendChild(messageDiv);
-            });
-            messagesContainer.scrollTop = messagesContainer.scrollHeight;
-        });
+            const currentMessageCount = messagesArea.querySelectorAll('.spoon-message-bubble').length;
+            if (data.messages.length > currentMessageCount) {
+                const newMessages = data.messages.slice(currentMessageCount);
+                newMessages.forEach(msg => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `d-flex ${msg.is_mine ? 'justify-content-end' : ''} mb-3`;
+                    messageDiv.innerHTML = `
+                        <div class="spoon-message-bubble ${msg.is_mine ? 'spoon-message-sent' : 'spoon-message-received'}">
+                            <div>${msg.content}</div>
+                            <div class="spoon-message-time">${msg.sent_at}</div>
+                        </div>
+                    `;
+                    messagesArea.appendChild(messageDiv);
+                });
+                scrollToBottom();
+            }
+        })
+        .catch(error => console.error('Error loading messages:', error));
     }
     
-    // Refresh messages every 3 seconds
-    setInterval(loadMessages, 3000);
+    // Check for new messages every 3 seconds
+    setInterval(loadNewMessages, 3000);
+    
+    // Auto-focus input with delay for better UX
+    setTimeout(() => {
+        messageInput.focus();
+    }, 500);
+    
+    // Add Enter key support
+    messageInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+            e.preventDefault();
+            messageForm.dispatchEvent(new Event('submit'));
+        }
+    });
 });
 </script>
 {% endblock %}

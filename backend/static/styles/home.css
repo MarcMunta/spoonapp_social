@@ -100,13 +100,24 @@ body {
     margin-left: 240px;
     margin-top: 80px;
     margin-right: 300px;
-    /* prevent overlap with right sidebar */
     padding: 1rem;
     flex: 1;
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     border-right: 1px solid rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+    min-height: calc(100vh - 80px);
+}
+
+/* SpoonApp Chat Container Adaptations */
+.spoon-chat-container {
+    max-width: 100%;
+    margin: -1rem;
+    height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #f8e8f5 0%, #e8d5f0 50%, #d4b8e0 100%);
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
 }
 
 .input-bar {
@@ -771,4 +782,378 @@ body.profile-page .nav-tabs .nav-link {
     border: 1px solid #e0e0e0;
     border-radius: 12px;
     margin-top: 2rem;
+}
+
+/* SpoonApp Chat Enhancements */
+.spoon-chat-item {
+    position: relative;
+    overflow: hidden;
+}
+
+.spoon-chat-item::after {
+    content: '🍴';
+    position: absolute;
+    top: 10px;
+    right: 15px;
+    font-size: 1.2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.spoon-chat-item:hover::after {
+    opacity: 0.3;
+}
+
+.spoon-message-bubble {
+    position: relative;
+}
+
+.spoon-message-sent::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    right: -5px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-left: 10px solid;
+    border-left-color: inherit;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+.spoon-message-received::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: -5px;
+    transform: translateY(-50%);
+    width: 0;
+    height: 0;
+    border-right: 10px solid;
+    border-right-color: inherit;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+}
+
+/* Enhanced SpoonApp Layout Adaptations */
+.main-content {
+    margin-left: 240px;
+    margin-top: 80px;
+    margin-right: 300px;
+    padding: 1rem;
+    flex: 1;
+    border-left: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    overflow-y: auto;
+    box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
+    min-height: calc(100vh - 80px);
+}
+
+/* SpoonApp Chat Container Adaptations */
+.spoon-chat-container {
+    max-width: 100%;
+    margin: -1rem;
+    height: calc(100vh - 80px);
+    background: linear-gradient(135deg, #f8e8f5 0%, #e8d5f0 50%, #d4b8e0 100%);
+    border-radius: 0;
+    overflow: hidden;
+    box-shadow: none;
+}
+
+/* Responsive Layout Adjustments */
+@media (max-width: 1200px) {
+    .main-content {
+        margin-right: 0;
+    }
+    
+    .rightbar {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        margin-left: 0;
+        margin-top: 60px;
+        padding: 0.5rem;
+    }
+    
+    .sidebar {
+        display: none;
+    }
+    
+    .spoon-chat-container {
+        height: calc(100vh - 60px);
+        border-radius: 0;
+    }
+    
+    .spoon-section-header {
+        padding: 20px;
+        margin: 0 -0.5rem 1rem -0.5rem;
+        border-radius: 0;
+    }
+    
+    .container-fluid {
+        padding-left: 0.5rem !important;
+        padding-right: 0.5rem !important;
+    }
+}
+
+/* Enhanced Chat Sidebar for Layout Integration */
+.spoon-chat-sidebar {
+    background: linear-gradient(180deg, #ffffff 0%, #fdf7fc 100%);
+    border-right: 2px solid #e8d5f0;
+    height: 100%;
+    overflow-y: auto;
+    box-shadow: none;
+}
+
+/* Better Chat Detail Integration */
+.spoon-chat-detail {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #fdf2f9 0%, #f3e8ff 100%);
+    position: relative;
+    overflow: hidden;
+}
+
+/* Section Headers for Better Visual Hierarchy */
+.spoon-section-header {
+    background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
+    border-radius: 20px;
+    padding: 25px;
+    border: 2px solid #e8d5f0;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.1);
+    margin-bottom: 2rem;
+}
+
+.spoon-header-icon {
+    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+    flex-shrink: 0;
+}
+
+.spoon-section-title {
+    color: #6b21a8;
+    font-weight: 700;
+    font-size: 1.8rem;
+    margin: 0;
+}
+
+.spoon-section-subtitle {
+    color: #8b5a96;
+    font-size: 1rem;
+    margin: 0;
+}
+
+/* Improved Empty States */
+.spoon-empty-state-container {
+    background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
+    border-radius: 20px;
+    border: 2px solid #e8d5f0;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.1);
+    padding: 0;
+}
+
+.spoon-empty-icon {
+    font-size: 4rem;
+    opacity: 0.7;
+    animation: float-icon 3s ease-in-out infinite;
+    margin-bottom: 1rem;
+}
+
+.spoon-empty-title {
+    color: #6b21a8;
+    font-weight: 700;
+    font-size: 1.5rem;
+    margin-bottom: 15px;
+}
+
+.spoon-empty-text {
+    color: #8b5a96;
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0;
+}
+
+/* Scrollbar Improvements for All SpoonApp Components */
+.spoon-chat-sidebar::-webkit-scrollbar,
+.spoon-messages-area::-webkit-scrollbar,
+.spoon-notifications-container::-webkit-scrollbar {
+    width: 8px;
+}
+
+.spoon-chat-sidebar::-webkit-scrollbar-track,
+.spoon-messages-area::-webkit-scrollbar-track,
+.spoon-notifications-container::-webkit-scrollbar-track {
+    background: rgba(232, 213, 240, 0.3);
+    border-radius: 10px;
+}
+
+.spoon-chat-sidebar::-webkit-scrollbar-thumb,
+.spoon-messages-area::-webkit-scrollbar-thumb,
+.spoon-notifications-container::-webkit-scrollbar-thumb {
+    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+    border-radius: 10px;
+}
+
+.spoon-chat-sidebar::-webkit-scrollbar-thumb:hover,
+.spoon-messages-area::-webkit-scrollbar-thumb:hover,
+.spoon-notifications-container::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%);
+}
+
+/* Card Hover Effects */
+.spoon-friend-card,
+.spoon-notification-card {
+    position: relative;
+    overflow: hidden;
+}
+
+.spoon-friend-card::before,
+.spoon-notification-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(212, 138, 193, 0.1), transparent);
+    transition: left 0.5s;
+    z-index: 0;
+}
+
+.spoon-friend-card:hover::before,
+.spoon-notification-card:hover::before {
+    left: 100%;
+}
+
+.spoon-friend-card > *,
+.spoon-notification-card > * {
+    position: relative;
+    z-index: 1;
+}
+
+/* Button Enhancements */
+.spoon-btn-primary,
+.spoon-btn-accept,
+.spoon-btn-decline,
+.spoon-action-btn {
+    position: relative;
+    overflow: hidden;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.spoon-btn-primary::before,
+.spoon-btn-accept::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+}
+
+.spoon-btn-primary:hover::before,
+.spoon-btn-accept:hover::before {
+    left: 100%;
+}
+
+/* Layout Fixes for Different Screen Sizes */
+@media (min-width: 1400px) {
+    .spoon-chat-container {
+        max-width: calc(100vw - 520px);
+        border-radius: 20px;
+        margin: 0;
+        height: calc(100vh - 100px);
+        box-shadow: 0 10px 30px rgba(212, 138, 193, 0.3);
+    }
+}
+
+@media (max-width: 992px) {
+    .spoon-section-header {
+        padding: 20px;
+    }
+    
+    .spoon-header-icon {
+        width: 50px;
+        height: 50px;
+    }
+    
+    .spoon-section-title {
+        font-size: 1.5rem;
+    }
+    
+    .spoon-section-subtitle {
+        font-size: 0.9rem;
+    }
+}
+
+/* Animation Improvements */
+@keyframes float-icon {
+    0%, 100% { 
+        transform: translateY(0px) rotate(0deg); 
+    }
+    50% { 
+        transform: translateY(-10px) rotate(5deg); 
+    }
+}
+
+@keyframes pulse-online {
+    0%, 100% { 
+        transform: scale(1); 
+        opacity: 1; 
+    }
+    50% { 
+        transform: scale(1.1); 
+        opacity: 0.8; 
+    }
+}
+
+/* Focus States for Accessibility */
+.spoon-btn-primary:focus,
+.spoon-btn-accept:focus,
+.spoon-btn-decline:focus,
+.spoon-action-btn:focus {
+    outline: 3px solid rgba(212, 138, 193, 0.5);
+    outline-offset: 2px;
+}
+
+/* Dark Mode Considerations (for future implementation) */
+@media (prefers-color-scheme: dark) {
+    .spoon-section-header,
+    .spoon-friend-card,
+    .spoon-notification-card,
+    .spoon-empty-state-container {
+        background: linear-gradient(135deg, #2d1b2e 0%, #1f1320 100%);
+        border-color: #4a2c54;
+        color: #e8d5f0;
+    }
+    
+    .spoon-section-title,
+    .spoon-friend-name,
+    .spoon-notification-title,
+    .spoon-empty-title {
+        color: #e8d5f0;
+    }
+    
+    .spoon-section-subtitle,
+    .spoon-friend-meta,
+    .spoon-notification-message,
+    .spoon-notification-time,
+    .spoon-empty-text {
+        color: #b89cc7;
+    }
 }

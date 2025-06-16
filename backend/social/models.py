@@ -72,13 +72,68 @@ class Follow(models.Model):
     followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
     followed_at = models.DateTimeField(auto_now_add=True)
 
+class Chat(models.Model):
+    participants = models.ManyToManyField(User, related_name='chats')
+    created_at = models.DateTimeField(auto_now_add=True)
+    last_message_at = models.DateTimeField(auto_now=True)
+    
+    class Meta:
+        ordering = ['-last_message_at']
+    
+    def get_other_participant(self, user):
+        return self.participants.exclude(id=user.id).first()
+    
+    def last_message(self):
+        return self.messages.order_by('-sent_at').first()
+
+class Notification(models.Model):
+    NOTIFICATION_TYPES = [
+        ('message', 'New Message'),
+        ('friend_request', 'Friend Request'),
+        ('friend_accepted', 'Friend Request Accepted'),
+    ]
+    
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
+    notification_type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
+    title = models.CharField(max_length=100)
+    message = models.TextField()
+    is_read = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    related_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='related_notifications')
+    related_chat = models.ForeignKey('Chat', on_delete=models.CASCADE, null=True, blank=True)
+    
+    class Meta:
+        ordering = ['-created_at']
+    
+    def __str__(self):
+        return f"{self.user.username} - {self.title}"
+
 class Message(models.Model):
+    chat = models.ForeignKey(Chat, on_delete=models.CASCADE, related_name='messages')
     sender = models.ForeignKey(User, on_delete=models.CASCADE, related_name='sent_messages')
-    receiver = models.ForeignKey(User, on_delete=models.CASCADE, related_name='received_messages')
     content = models.TextField()
-    liked = models.BooleanField(default=False)
-    disliked = models.BooleanField(default=False)
     sent_at = models.DateTimeField(auto_now_add=True)
+    read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['sent_at']
+    
+    def save(self, *args, **kwargs):
+        is_new = self.pk is None
+        super().save(*args, **kwargs)
+        
+        if is_new:
+            # Create notification for other chat participants
+            other_participants = self.chat.participants.exclude(id=self.sender.id)
+            for participant in other_participants:
+                Notification.objects.create(
+                    user=participant,
+                    notification_type='message',
+                    title=f'New message from {self.sender.username}',
+                    message=self.content[:50] + ('...' if len(self.content) > 50 else ''),
+                    related_user=self.sender,
+                    related_chat=self.chat
+                )
 
 class FriendRequest(models.Model):
     from_user = models.ForeignKey(User, related_name='sent_requests', on_delete=models.CASCADE)

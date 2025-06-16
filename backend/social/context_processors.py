@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import FriendRequest
+from .models import FriendRequest, Notification
 from django.db.models import Q
 
 
@@ -8,6 +8,13 @@ def friend_requests_processor(request):
     if request.user.is_authenticated:
         requests = FriendRequest.objects.filter(to_user=request.user, accepted=False)
         all_users = User.objects.exclude(id=request.user.id)
+        
+        # Add notifications - ordered by created_at descending
+        unread_notifications = Notification.objects.filter(
+            user=request.user, 
+            is_read=False
+        ).order_by('-created_at')
+        notification_count = unread_notifications.count()
 
         friend_status_list = []
         for user in all_users:
@@ -30,6 +37,8 @@ def friend_requests_processor(request):
 
         context = {
             'pending_requests': requests,
-            'all_users': friend_status_list
+            'all_users': friend_status_list,
+            'unread_notifications': unread_notifications,
+            'notification_count': notification_count
         }
     return context

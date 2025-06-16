@@ -17,8 +17,38 @@
       <a href="{% url 'home' %}">🏠</a>
       {% if user.is_authenticated %}
       <a href="{% url 'subir_publicacion' %}">➕</a>
-      {% endif %}
+      <a href="{% url 'chat_list' %}">💬</a>
+      <div class="notification-dropdown">
+        <a href="#" class="notification-bell" onclick="toggleNotifications(event)">
+          🔔
+          {% if notification_count > 0 %}
+          <span class="notification-badge" id="notificationBadge">{{ notification_count }}</span>
+          {% endif %}
+        </a>
+        <div class="notification-dropdown-content" id="notificationDropdown">
+          <div class="notification-header">
+            <h4>Notifications</h4>
+            <a href="{% url 'notifications' %}" class="see-all">See All</a>
+          </div>
+          <div class="notification-list" id="notificationList">
+            {% for notification in unread_notifications|slice:":5" %}
+            <div class="notification-item" data-id="{{ notification.id }}">
+              <div class="notification-content">
+                <strong>{{ notification.title }}</strong>
+                <p>{{ notification.message }}</p>
+                <small>{{ notification.created_at|timesince }} ago</small>
+              </div>
+              <button class="mark-read-btn" onclick="markAsRead({{ notification.id }})">✓</button>
+            </div>
+            {% empty %}
+            <div class="no-notifications">No new notifications</div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% else %}
       <span>💬</span>
+      {% endif %}
       <span>🍴</span>
       <span>⚙️</span>
     </div>
@@ -102,7 +132,7 @@
               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% endif %}
 
-            <div>
+            <div class="flex-grow-1">
               <strong>{{ f.username }}</strong><br>
               {% if f.profile.online %}
               <small style="color: green;">Online</small>
@@ -110,6 +140,8 @@
               <small class="text-muted">Last seen: {{ f.profile.last_seen|naturaltime }}</small>
               {% endif %}
             </div>
+            
+            <a href="{% url 'start_chat' f.id %}" class="btn btn-sm btn-outline-primary">💬</a>
           </div>
           {% endfor %}
         </div>
@@ -182,10 +214,74 @@
       const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
       return cookie ? cookie.split('=')[1] : '';
     }
-  </script>
-  <script src="{% static 'feed.js' %}"></script>
 
-  <script>
+    function toggleNotifications(event) {
+      event.preventDefault();
+      const dropdown = document.getElementById('notificationDropdown');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function markAsRead(notificationId) {
+      fetch(`/mark-notification-read/${notificationId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCSRFToken(),
+          'X-Requested-With': 'XMLHttpRequest'
+        }
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          // Remove notification from dropdown
+          const notificationItem = document.querySelector(`[data-id="${notificationId}"]`);
+          if (notificationItem) {
+            notificationItem.remove();
+          }
+          
+          // Update badge count
+          const badge = document.getElementById('notificationBadge');
+          if (badge) {
+            const newCount = data.unread_count;
+            if (newCount > 0) {
+              badge.textContent = newCount;
+            } else {
+              badge.style.display = 'none';
+            }
+          }
+        }
+      });
+    }
+
+    // Check for new notifications every 30 seconds
+    setInterval(() => {
+      if (document.querySelector('.notification-bell')) {
+        fetch('/api/notifications-count/', {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+          const badge = document.getElementById('notificationBadge');
+          if (data.unread_count > 0) {
+            if (badge) {
+              badge.textContent = data.unread_count;
+              badge.style.display = 'inline';
+            }
+          } else if (badge) {
+            badge.style.display = 'none';
+          }
+        });
+      }
+    }, 30000);
+
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      const dropdown = document.getElementById('notificationDropdown');
+      const bell = document.querySelector('.notification-bell');
+      if (dropdown && !bell.contains(event.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
+
     function switchTab(tab) {
       document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
       document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
@@ -194,6 +290,7 @@
       event.target.classList.add('active');
     }
   </script>
+  <script src="{% static 'feed.js' %}"></script>
 
 </body>
 

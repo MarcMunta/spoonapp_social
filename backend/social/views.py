@@ -10,25 +10,39 @@ from django.db.models import Q
 import json
 
 
-def _build_feed_context():
-    posts = Post.objects.all().order_by('-created_at')
+def _build_feed_context(show_posts=True):
+    """Return context for feed-related views.
+
+    Parameters
+    ----------
+    show_posts: bool, optional
+        Whether to include the queryset of posts. On the page for creating a
+        publication we only want to display the form, not the posts
+        themselves.
+    """
+
+    posts = (
+        Post.objects.all().order_by("-created_at") if show_posts else Post.objects.none()
+    )
     post_form = PostForm()
     comment_form = CommentForm()
     return {
-        'posts': posts,
-        'post_form': post_form,
-        'comment_form': comment_form,
+        "posts": posts,
+        "post_form": post_form,
+        "comment_form": comment_form,
     }
 
 
 def home(request):
+    # Display the main feed with all posts and without the form
     context = _build_feed_context()
     context['show_form'] = False
     return render(request, 'social/feed.html', context)
 
 
 def feed(request):
-    context = _build_feed_context()
+    # Page for creating a post; only show the form, not existing posts
+    context = _build_feed_context(show_posts=False)
     context['show_form'] = True
     return render(request, 'social/feed.html', context)
 

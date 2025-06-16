@@ -1113,6 +1113,8 @@ body:has(.spoon-chat-container) .rightbar {
 .spoon-home-btn:focus {
     outline: 3px solid rgba(212, 138, 193, 0.5);
     outline-offset: 2px;
+}
+
 /* Stories Styles */
 .stories-container {
     display: flex;
@@ -1141,13 +1143,13 @@ body:has(.spoon-chat-container) .rightbar {
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #d48ac1;
+    border: 2px solid #0d6efd;
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .story-thumb:hover .story-img {
     transform: scale(1.05);
-    box-shadow: 0 0 0 2px #b86ba3;
+    box-shadow: 0 0 0 2px #0a58ca;
 }
 
 .story-add {

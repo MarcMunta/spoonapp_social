@@ -14,9 +14,9 @@
     </form>
     <div class="story-username">{{ user.username }}</div>
   </div>
-  {% for friend, urls in friend_stories.items %}
+{% for friend, data in friend_stories.items %}
   <div class="story-item">
-    <div class="story-thumb open-story" data-urls="{{ urls|join:'|' }}" data-user="{{ friend.username }}">
+    <div class="story-thumb open-story" data-urls="{{ data.urls|join:'|' }}" data-expires="{{ data.expires|join:'|' }}" data-user="{{ friend.username }}">
       {% if friend.profile.profile_picture %}
       <img src="{{ friend.profile.profile_picture.url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
       {% else %}
@@ -25,7 +25,7 @@
     </div>
     <div class="story-username">{{ friend.username }}</div>
   </div>
-  {% endfor %}
+{% endfor %}
 </div>
 
 <div id="storyModal" class="story-modal">

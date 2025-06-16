@@ -39,14 +39,31 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let currentUrls = [];
+  let currentExpires = [];
   let currentIndex = 0;
   let progressTimeout;
+  let countdownInterval;
 
   const modal = document.getElementById('storyModal');
   const img = document.getElementById('storyImage');
   const video = document.getElementById('storyVideo');
   const progressBar = document.querySelector('.story-progress-bar');
   const modalContent = modal.querySelector('.story-modal-content');
+
+  const countdownEl = document.querySelector('.story-countdown');
+
+  function updateCountdown(expireIso) {
+    if (!countdownEl) return;
+    const diff = new Date(expireIso) - Date.now();
+    if (diff <= 0) {
+      countdownEl.textContent = '0m';
+      return;
+    }
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(minutes / 60);
+    const mins = minutes % 60;
+    countdownEl.textContent = `${hours}h ${mins}m`;
+  }
 
   function showStory(idx) {
     const url = currentUrls[idx];
@@ -69,11 +86,15 @@ document.addEventListener('DOMContentLoaded', () => {
       });
     }
     clearTimeout(progressTimeout);
+    clearInterval(countdownInterval);
+    updateCountdown(currentExpires[idx]);
+    countdownInterval = setInterval(() => updateCountdown(currentExpires[idx]), 1000);
     progressTimeout = setTimeout(nextStory, 5000);
   }
 
-  function openStories(urls, user) {
+  function openStories(urls, expires, user) {
     currentUrls = urls;
+    currentExpires = expires;
     currentIndex = 0;
     document.querySelector('.story-modal-user').textContent = user;
     modal.style.display = 'flex';
@@ -85,7 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     modal.style.display = 'none';
     modalContent.classList.remove('open-anim');
     clearTimeout(progressTimeout);
+    clearInterval(countdownInterval);
     if (progressBar) progressBar.style.width = '0%';
+    if (countdownEl) countdownEl.textContent = '';
   }
 
   function nextStory() {
@@ -107,8 +130,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.querySelectorAll('.open-story').forEach(el => {
     el.addEventListener('click', () => {
       const urls = el.dataset.urls.split('|');
+      const expires = el.dataset.expires.split('|');
       const user = el.dataset.user;
-      openStories(urls, user);
+      openStories(urls, expires, user);
     });
   });
 

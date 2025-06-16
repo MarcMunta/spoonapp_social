@@ -78,7 +78,9 @@ def home(request):
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            friend_story_map.setdefault(st.user, []).append(st.media_file.url)
+            entry = friend_story_map.setdefault(st.user, {'urls': [], 'expires': []})
+            entry['urls'].append(st.media_file.url)
+            entry['expires'].append(st.expires_at.isoformat())
         context['friend_stories'] = friend_story_map
 
         context['story_form'] = StoryForm()

@@ -38,63 +38,83 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  let currentUrls = [];
+  let currentIndex = 0;
+  let progressTimeout;
+
+  const modal = document.getElementById('storyModal');
+  const img = document.getElementById('storyImage');
+  const video = document.getElementById('storyVideo');
+  const progressBar = document.querySelector('.story-progress-bar');
+  const modalContent = modal.querySelector('.story-modal-content');
+
+  function showStory(idx) {
+    const url = currentUrls[idx];
+    if (/\.(mp4|webm|ogg)$/i.test(url)) {
+      video.src = url;
+      video.classList.remove('d-none');
+      img.classList.add('d-none');
+    } else {
+      img.src = url;
+      img.classList.remove('d-none');
+      video.classList.add('d-none');
+      video.pause();
+    }
+    if (progressBar) {
+      progressBar.style.transition = 'none';
+      progressBar.style.width = '0%';
+      requestAnimationFrame(() => {
+        progressBar.style.transition = 'width 5s linear';
+        progressBar.style.width = '100%';
+      });
+    }
+    clearTimeout(progressTimeout);
+    progressTimeout = setTimeout(nextStory, 5000);
+  }
+
+  function openStories(urls, user) {
+    currentUrls = urls;
+    currentIndex = 0;
+    document.querySelector('.story-modal-user').textContent = user;
+    modal.style.display = 'flex';
+    modalContent.classList.add('open-anim');
+    showStory(currentIndex);
+  }
+
+  function closeStories() {
+    modal.style.display = 'none';
+    modalContent.classList.remove('open-anim');
+    clearTimeout(progressTimeout);
+    if (progressBar) progressBar.style.width = '0%';
+  }
+
+  function nextStory() {
+    if (currentIndex < currentUrls.length - 1) {
+      currentIndex++;
+      showStory(currentIndex);
+    } else {
+      closeStories();
+    }
+  }
+
+  function prevStory() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showStory(currentIndex);
+    }
+  }
+
   document.querySelectorAll('.open-story').forEach(el => {
     el.addEventListener('click', () => {
-      const url = el.dataset.url;
+      const urls = el.dataset.urls.split('|');
       const user = el.dataset.user;
-      const expires = el.dataset.expires ? new Date(el.dataset.expires) : null;
-      const modal = document.getElementById('storyModal');
-      const img = document.getElementById('storyImage');
-      const video = document.getElementById('storyVideo');
-      const progressBar = document.querySelector('.story-progress-bar');
-      const countdown = document.querySelector('.story-countdown');
-      const modalContent = modal.querySelector('.story-modal-content');
-      document.querySelector('.story-modal-user').textContent = user;
-      if (/\.(mp4|webm|ogg)$/i.test(url)) {
-        video.src = url;
-        video.classList.remove('d-none');
-        img.classList.add('d-none');
-      } else {
-        img.src = url;
-        img.classList.remove('d-none');
-        video.classList.add('d-none');
-        video.pause();
-      }
-      if (expires && countdown) {
-        const diff = expires - Date.now();
-        let minutes = Math.ceil(diff / 60000);
-        if (minutes < 60) {
-          if (minutes < 1) minutes = 1;
-          countdown.textContent = minutes + 'm';
-        } else {
-          let hours = Math.ceil(minutes / 60);
-          if (hours < 1) hours = 1;
-          countdown.textContent = hours + 'h';
-        }
-      }
-      if (progressBar) {
-        progressBar.style.transition = 'none';
-        progressBar.style.width = '0%';
-      }
-      modal.style.display = 'flex';
-      modalContent.classList.add('open-anim');
-      requestAnimationFrame(() => {
-        if (progressBar) {
-          progressBar.style.transition = 'width 5s linear';
-          progressBar.style.width = '100%';
-        }
-      });
-      setTimeout(() => {
-        modal.style.display = 'none';
-        if (progressBar) progressBar.style.width = '0%';
-        modalContent.classList.remove('open-anim');
-      }, 5000);
+      openStories(urls, user);
     });
   });
 
-  document.querySelector('.story-modal-close')?.addEventListener('click', () => {
-    document.getElementById('storyModal').style.display = 'none';
-  });
+  document.querySelector('.story-next')?.addEventListener('click', nextStory);
+  document.querySelector('.story-prev')?.addEventListener('click', prevStory);
+  document.querySelector('.story-modal-close')?.addEventListener('click', closeStories);
 
   document.querySelectorAll('.like-post').forEach(btn => {
     btn.addEventListener('click', e => {

@@ -34,7 +34,7 @@
       <span><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</span>
       {% endif %}
       <span class="comment-count-wrapper" data-post-id="{{ post.id }}"><span class="comment-count">{{ post.postcomment_set.count }}</span>💬</span>
-      <a href="{% url 'share_post' post.id %}" class="share-btn">📤</a>
+      <span class="share-btn">📤</span>
       <span class="bookmark-btn">🔖</span>
     </div>
   </div>
@@ -45,7 +45,7 @@
   <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
     {% csrf_token %}
     {{ comment_form.content }}
-    <button type="submit" class="btn btn-sm btn-success">Comentar</button>
+    <button type="submit" class="comment-btn">Comentar</button>
   </form>
   {% endif %}
   {% with comments=post.postcomment_set.all %}

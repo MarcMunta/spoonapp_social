@@ -10,7 +10,7 @@
   <link rel="stylesheet" href="{% static 'css/home.css' %}">
 </head>
 
-<body>
+<body class="{% block body_class %}{% endblock %}">
   <div class="topbar">
     <div class="app-title"><a href="{% url 'home' %}">SpoonApp SOCIAL</a></div>
     <div class="topbar-icons">
@@ -38,7 +38,7 @@
                 <p>{{ notification.message }}</p>
                 <small>{{ notification.created_at|timesince }} ago</small>
               </div>
-              <button class="mark-read-btn" onclick="markAsRead({{ notification.id }})">✓</button>
+              <button class="mark-read-btn" onclick="markAsRead('{{ notification.id }}')">✓</button>
             </div>
             {% empty %}
             <div class="no-notifications">No new notifications</div>

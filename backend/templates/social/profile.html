@@ -1,32 +1,103 @@
 {% extends 'social/base.html' %}
-{% block title %}Perfil{% endblock %}
+{% block title %}{{ profile_user.username }} | Perfil{% endblock %}
+{% block body_class %}profile-page{% endblock %}
+{% load static %}
+
 {% block content %}
-<h2 class="mb-3">{{ profile_user.username }}</h2>
-{% if user_profile and user_profile.profile_picture %}
-<img src="{{ user_profile.profile_picture.url }}" class="img-thumbnail mb-3" width="150">
-{% endif %}
-{% if user == profile_user %}
-<form method="post" enctype="multipart/form-data">
-  {% csrf_token %}
-  {{ form.profile_picture }}
-  <button type="submit" class="btn btn-primary btn-sm mt-2">Actualizar foto</button>
-</form>
-{% endif %}
-{% for post in posts %}
-<div class="post mb-3">
-  {% if post.image %}
-  <img src="{{ post.image.url }}" alt="">
-  {% endif %}
-  <hr class="post-divider">
-  <div class="post-footer">
-    <div class="post-title">{{ post.caption }}</div>
-    <div class="post-stats">
-      <span>{{ post.postlike_set.count }} 🥄</span>
-      <span>{{ post.postcomment_set.count }}💬</span>
+<div class="container mt-5">
+  <div class="row align-items-center mb-4">
+    <!-- FOTO PERFIL -->
+    <div class="col-md-3 text-center position-relative">
+      <div class="profile-img-container">
+        {% if user_profile.profile_picture %}
+        <img src="{{ user_profile.profile_picture.url }}" class="rounded-circle img-fluid profile-picture"
+          style="width: 150px; height: 150px; object-fit: cover;">
+        {% else %}
+        <img src="https://i.imgur.com/jNNT4LE.png" class="rounded-circle img-fluid profile-picture"
+          style="width: 150px; height: 150px; object-fit: cover;">
+        {% endif %}
+
+
+        {% if user == profile_user %}
+        <form method="post" enctype="multipart/form-data" class="upload-form" id="photoUploadForm">
+          {% csrf_token %}
+          {{ form.profile_picture }}
+          <label for="id_profile_picture" class="edit-icon" title="Actualizar foto">
+            📷
+          </label>
+        </form>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- NOMBRE, BOTONES Y BIO -->
+    <div class="col-md-9">
+      <div class="d-flex justify-content-between align-items-center mb-2">
+        <h2>{{ profile_user.username }}</h2>
+
+        {% if user != profile_user %}
+        {% if is_following %}
+        <a href="{% url 'unfollow' profile_user.username %}" class="btn btn-outline-danger btn-sm">Unfollow</a>
+        {% else %}
+        <a href="{% url 'follow' profile_user.username %}" class="btn btn-outline-primary btn-sm">Follow</a>
+        {% endif %}
+        {% else %}
+        <button class="btn btn-sm btn-outline-secondary">Editar</button>
+        {% endif %}
+      </div>
+
+      <!-- ESTADÍSTICAS -->
+      <div class="d-flex gap-4 mb-2">
+        <div><strong>{{ total_matches }}</strong> Matches</div>
+        <div><strong>{{ total_friends }}</strong> Friends</div>
+        <div><strong>{{ posts|length }}</strong> Posts</div>
+      </div>
+
+      <!-- BIO -->
+      {% if user == profile_user %}
+      <form method="post" class="mt-1">
+        {% csrf_token %}
+        {{ form.bio }}
+        <button type="submit" class="btn btn-sm btn-outline-dark">Actualizar bio</button>
+      </form>
+      {% else %}
+      <p>{{ user_profile.bio|default:"Sin biografía" }}</p>
+      {% endif %}
     </div>
   </div>
+
+  <hr>
+
+  <!-- TABS -->
+  <ul class="nav nav-tabs mb-4">
+    <li class="nav-item"><a class="nav-link active" href="#">Starter</a></li>
+    <li class="nav-item"><a class="nav-link" href="#">Meals</a></li>
+    <li class="nav-item"><a class="nav-link" href="#">Dessert</a></li>
+    <li class="nav-item"><a class="nav-link" href="#">Drinks</a></li>
+  </ul>
+
+  <!-- PUBLICACIONES -->
+  <div class="row g-3">
+    {% for post in posts %}
+    <div class="col-6 col-md-4 col-lg-3">
+      <div class="card h-100">
+        {% if post.image %}
+        <img src="{{ post.image.url }}" class="card-img-top" alt="Post Image">
+        {% endif %}
+        <div class="card-body p-2">
+          <p class="card-text mb-1 text-truncate">{{ post.caption }}</p>
+          <div class="d-flex justify-content-between small text-muted">
+            <span>{{ post.postlike_set.count }} 🥄</span>
+            <span>{{ post.postcomment_set.count }} 💬</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% empty %}
+    <div class="text-center text-muted">
+      <p>Este usuario no tiene publicaciones aún.</p>
+    </div>
+    {% endfor %}
+  </div>
 </div>
-{% empty %}
-<p>Este usuario no tiene publicaciones.</p>
-{% endfor %}
 {% endblock %}

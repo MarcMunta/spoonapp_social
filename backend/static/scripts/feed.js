@@ -42,9 +42,13 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('click', () => {
       const url = el.dataset.url;
       const user = el.dataset.user;
+      const expires = el.dataset.expires ? new Date(el.dataset.expires) : null;
       const modal = document.getElementById('storyModal');
       const img = document.getElementById('storyImage');
       const video = document.getElementById('storyVideo');
+      const progressBar = document.querySelector('.story-progress-bar');
+      const countdown = document.querySelector('.story-countdown');
+      const modalContent = modal.querySelector('.story-modal-content');
       document.querySelector('.story-modal-user').textContent = user;
       if (/\.(mp4|webm|ogg)$/i.test(url)) {
         video.src = url;
@@ -56,8 +60,35 @@ document.addEventListener('DOMContentLoaded', () => {
         video.classList.add('d-none');
         video.pause();
       }
+      if (expires && countdown) {
+        const diff = expires - Date.now();
+        let minutes = Math.ceil(diff / 60000);
+        if (minutes < 60) {
+          if (minutes < 1) minutes = 1;
+          countdown.textContent = minutes + 'm';
+        } else {
+          let hours = Math.ceil(minutes / 60);
+          if (hours < 1) hours = 1;
+          countdown.textContent = hours + 'h';
+        }
+      }
+      if (progressBar) {
+        progressBar.style.transition = 'none';
+        progressBar.style.width = '0%';
+      }
       modal.style.display = 'flex';
-      setTimeout(() => { modal.style.display = 'none'; }, 5000);
+      modalContent.classList.add('open-anim');
+      requestAnimationFrame(() => {
+        if (progressBar) {
+          progressBar.style.transition = 'width 5s linear';
+          progressBar.style.width = '100%';
+        }
+      });
+      setTimeout(() => {
+        modal.style.display = 'none';
+        if (progressBar) progressBar.style.width = '0%';
+        modalContent.classList.remove('open-anim');
+      }, 5000);
     });
   });
 

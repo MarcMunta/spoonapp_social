@@ -5,6 +5,12 @@ from datetime import timedelta
 
 class PostCategory(models.Model):
     name = models.CharField(max_length=100)
+    slug = models.SlugField(max_length=100, blank=True, null=True)  # <-- permite nulo
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.name

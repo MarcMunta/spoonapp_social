@@ -23,7 +23,18 @@ def _build_feed_context(show_posts=True):
         themselves.
     """
 
-    posts = Post.objects.all().order_by("-created_at") if show_posts else Post.objects.none()
+    posts = (
+        Post.objects.all()
+        .annotate(
+            comment_count=Count(
+                "postcomment",
+                filter=Q(postcomment__parent__isnull=True),
+            )
+        )
+        .order_by("-created_at")
+        if show_posts
+        else Post.objects.none()
+    )
     if show_posts:
         posts = posts.prefetch_related(
             Prefetch(

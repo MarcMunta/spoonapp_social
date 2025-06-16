@@ -12,8 +12,8 @@ Write-Host "Entorno virtual creado."
 & .\env\Scripts\Activate.ps1
 
 # Instala requirements si existe
-if (Test-Path "requirements.txt") {
-    pip install -r requirements.txt
+if (Test-Path ".\backend\requirements.txt") {
+    pip install -r .\backend\requirements.txt
     Write-Host "Dependencias instaladas desde requirements.txt"
 } else {
     Write-Host "No se encontró requirements.txt"

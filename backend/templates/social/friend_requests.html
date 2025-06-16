@@ -1,15 +1,22 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+
 {% block content %}
-<h2>Friend Requests</h2>
-<ul>
-  {% for req in requests %}
-    <li>
-      {{ req.from_user.username }} te ha enviado una solicitud.
-      <a href="{% url 'accept_friend_request' req.id %}">Aceptar</a> |
-      <a href="{% url 'reject_friend_request' req.id %}">Rechazar</a>
-    </li>
-  {% empty %}
-    <li>No tienes solicitudes pendientes.</li>
-  {% endfor %}
-</ul>
+<div class="container mt-4">
+    <h2>Friend Requests</h2>
+    {% if requests %}
+    <ul class="list-group">
+        {% for req in requests %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+            {{ req.from_user.username }}
+            <span>
+                <a href="{% url 'accept_friend_request' req.id %}" class="btn btn-success btn-sm">Accept</a>
+                <a href="{% url 'reject_friend_request' req.id %}" class="btn btn-danger btn-sm">Remove</a>
+            </span>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <p>No pending requests</p>
+    {% endif %}
+</div>
 {% endblock %}

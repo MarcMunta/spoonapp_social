@@ -76,9 +76,10 @@
       <h3>Friends</h3>
 
       <div class="search-friends-container">
-<input type="text" id="searchFriendInput" placeholder="Search users..." onkeyup="filterUsers()" />
-        <ul id="searchResults"></ul>
+        <input type="text" id="searchFriendInput" placeholder="Search users..." autocomplete="off" />
+        <ul id="searchResults" class="autocomplete-list"></ul>
       </div>
+
 
       {% if pending_requests %}
       {% for req in pending_requests %}
@@ -95,31 +96,57 @@
       {% endif %}
     </div>
   </div>
-
-
+  
   <script>
-  const allUsers = [
-    {% for user in all_users %}
-      { "username": "{{ user.username }}", "url": "{% url 'profile' user.username %}" }{% if not forloop.last %},{% endif %}
-    {% endfor %}
-  ];
+document.getElementById("searchFriendInput").addEventListener("input", function() {
+    const query = this.value.trim();
+    const resultsList = document.getElementById("searchResults");
+    resultsList.innerHTML = "";
 
-  function filterUsers() {
-    const input = document.getElementById('searchFriendInput').value.toLowerCase();
-    const resultsList = document.getElementById('searchResults');
-    resultsList.innerHTML = '';
+    if (query.length === 0) return;
 
-    if (input.length === 0) return;
+    fetch(`/api/search-users/?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(users => {
+            users.forEach(user => {
+                const li = document.createElement("li");
+                li.innerHTML = `
+                    <div class="user-suggestion">
+                        <img src="${user.avatar || 'https://via.placeholder.com/40'}" alt="avatar" width="32" height="32" />
+                        <span>${user.username} (${user.email})</span>
+                        <button onclick="sendFriendRequest(${user.id}, this)">Add</button>
+                    </div>
+                `;
+                resultsList.appendChild(li);
+            });
+        });
+});
 
-    const filtered = allUsers.filter(u => u.username.toLowerCase().includes(input)).slice(0, 5);
-
-    filtered.forEach(user => {
-      const li = document.createElement('li');
-      li.innerHTML = `<a href="${user.url}">${user.username}</a>`;
-      resultsList.appendChild(li);
+function sendFriendRequest(userId, button) {
+    fetch('/send-friend-request/', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCSRFToken(),
+        },
+        body: JSON.stringify({ user_id: userId })
+    })
+    .then(response => {
+        if (response.ok) {
+            button.textContent = "Sent";
+            button.disabled = true;
+        } else {
+            alert("Error sending friend request.");
+        }
     });
-  }
+}
+
+function getCSRFToken() {
+    const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
+    return cookie ? cookie.split('=')[1] : '';
+}
 </script>
+
 
 </body>
 

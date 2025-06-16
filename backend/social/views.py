@@ -216,7 +216,7 @@ def profile(request, username):
         'total_friends': get_friends(profile_user).count(),  # si usas tu función get_friends()
     }
 
-    return render(request, 'social/profile.html', context)
+    return render(request, 'social/pages/profile.html', context)
 
 
 @login_required

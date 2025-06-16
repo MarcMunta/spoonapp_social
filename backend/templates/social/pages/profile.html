@@ -1,4 +1,4 @@
-{% extends 'social/base.html' %}
+{% extends 'social/layouts/base.html' %}
 {% block title %}{{ profile_user.username }} | Perfil{% endblock %}
 {% block body_class %}profile-page{% endblock %}
 {% load static %}
@@ -8,7 +8,7 @@
   <div class="row align-items-center mb-4">
     <!-- FOTO PERFIL -->
     <div class="col-md-3 text-center position-relative">
-      <div class="profile-img-container">
+      <div class="profile-img-container profile-avatar-wrapper">
         {% if user_profile.profile_picture %}
         <img src="{{ user_profile.profile_picture.url }}" class="rounded-circle img-fluid profile-picture"
           style="width: 150px; height: 150px; object-fit: cover;">
@@ -21,7 +21,8 @@
         {% if user == profile_user %}
         <form method="post" enctype="multipart/form-data" class="upload-form" id="photoUploadForm">
           {% csrf_token %}
-          {{ form.profile_picture }}
+          <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*"
+            onchange="this.form.submit()">
           <label for="id_profile_picture" class="edit-icon" title="Actualizar foto">
             📷
           </label>

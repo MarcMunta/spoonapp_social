@@ -158,6 +158,17 @@ body {
     background-color: #ffffff;
 }
 
+/* Smooth highlighting for category options */
+.category-select option {
+    transition: background-color 0.2s ease, transform 0.2s ease;
+}
+
+.category-select option:hover {
+    background-color: #f7e6f2;
+    transform: translateX(3px);
+    cursor: pointer;
+}
+
 .publish-btn {
     align-self: flex-end;
     background-color: #d48ac1;
@@ -167,12 +178,13 @@ body {
     border-radius: 20px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .publish-btn:hover {
     background-color: #b86ba3;
     transform: scale(1.05);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .post {

@@ -1,4 +1,36 @@
 document.addEventListener('DOMContentLoaded', () => {
+  const updateRelativeTimes = () => {
+    document.querySelectorAll('.post-relative').forEach(el => {
+      const created = new Date(el.dataset.created);
+      let minutes = Math.floor((Date.now() - created) / 60000);
+      if (minutes < 1) minutes = 1;
+      let text;
+      if (minutes < 60) {
+        text = minutes + 'm';
+      } else {
+        let hours = Math.floor(minutes / 60);
+        if (hours < 24) {
+          text = hours + 'h';
+        } else {
+          let days = Math.floor(hours / 24);
+          if (days < 31) {
+            text = days + 'd';
+          } else {
+            let months = Math.floor(days / 30);
+            if (months < 12) {
+              text = months + 'mo';
+            } else {
+              let years = Math.floor(months / 12);
+              text = years + 'y';
+            }
+          }
+        }
+      }
+      el.textContent = text;
+    });
+  };
+  updateRelativeTimes();
+  setInterval(updateRelativeTimes, 60000);
   document.querySelectorAll('.like-post').forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();

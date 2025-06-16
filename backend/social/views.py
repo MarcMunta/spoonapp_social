@@ -2,11 +2,11 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike
 from .forms import PostForm, CommentForm, ProfileForm
 from .models import FriendRequest
 from django.db.models import Q, Prefetch, Count
+from django.template.loader import render_to_string
 import json
 
 
@@ -201,3 +201,23 @@ def send_friend_request(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid method"}, status=405)
+
+
+def load_comments(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    offset = int(request.GET.get("offset", 0))
+    limit = int(request.GET.get("limit", 10))
+    comments_qs = (
+        post.postcomment_set.filter(parent__isnull=True)
+        .annotate(num_likes=Count("postcommentlike"))
+        .order_by("-num_likes", "-created_at")[offset : offset + limit]
+        .prefetch_related("replies")
+    )
+    html = render_to_string(
+        "social/comments_partial.html",
+        {"comments": comments_qs, "user": request.user},
+    )
+    total = post.postcomment_set.filter(parent__isnull=True).count()
+    has_more = offset + limit < total
+    return JsonResponse({"html": html, "has_more": has_more})
+

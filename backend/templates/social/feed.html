@@ -32,7 +32,7 @@
       {% else %}
       <span>🥄 <span class="like-count">{{ post.postlike_set.count }}</span></span>
       {% endif %}
-      <span class="comment-toggle" data-post-id="{{ post.id }}">💬 <span class="comment-count">{{ post.postcomment_set.count }}</span></span>
+      <span class="comment-count-wrapper" data-post-id="{{ post.id }}">💬 <span class="comment-count">{{ post.postcomment_set.count }}</span></span>
       <a href="{% url 'share_post' post.id %}">📤</a>
       <span>🔖</span>
     </div>
@@ -47,10 +47,11 @@
     <button type="submit" class="btn btn-sm btn-success">Comentar</button>
   </form>
   {% endif %}
-  {% if post.postcomment_set.exists %}
+  {% with comments=post.postcomment_set.all %}
+  {% if comments %}
   <ul id="comments-{{ post.id }}" class="list-group list-group-flush mt-2 comment-list">
-    {% for comment in post.postcomment_set.all %}
-    <li class="list-group-item {% if forloop.counter > 3 %}extra-comment{% endif %}">
+    {% for comment in comments|slice:":5" %}
+    <li class="list-group-item">
       <div class="d-flex justify-content-between align-items-center">
         <div><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</div>
         {% if user.is_authenticated %}
@@ -78,7 +79,11 @@
     </li>
     {% endfor %}
   </ul>
+  {% if comments|length > 5 %}
+  <button class="btn btn-link load-more-comments" data-post-id="{{ post.id }}">Cargar más</button>
   {% endif %}
+  {% endif %}
+  {% endwith %}
 </div>
 {% endfor %}
 {% endblock %}

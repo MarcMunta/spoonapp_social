@@ -208,6 +208,11 @@ body {
     object-fit: cover;
 }
 
+.post-user {
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+}
+
 .post-footer {
     display: flex;
     justify-content: space-between;

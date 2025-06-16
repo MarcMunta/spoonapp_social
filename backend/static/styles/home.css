@@ -209,8 +209,26 @@ body {
 }
 
 .post-user {
-    font-weight: bold;
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0f5ff;
+    padding: 0.3rem 0.6rem;
+    border-radius: 30px;
     margin-bottom: 0.5rem;
+    text-decoration: none;
+}
+
+.post-user img.post-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.4rem;
+}
+
+.post-user strong {
+    font-size: 1.3rem;
+    color: #333;
 }
 
 .post-footer {

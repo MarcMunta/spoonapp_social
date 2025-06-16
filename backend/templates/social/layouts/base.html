@@ -228,27 +228,27 @@
           'X-Requested-With': 'XMLHttpRequest'
         }
       })
-      .then(response => response.json())
-      .then(data => {
-        if (data.success) {
-          // Remove notification from dropdown
-          const notificationItem = document.querySelector(`[data-id="${notificationId}"]`);
-          if (notificationItem) {
-            notificationItem.remove();
-          }
-          
-          // Update badge count
-          const badge = document.getElementById('notificationBadge');
-          if (badge) {
-            const newCount = data.unread_count;
-            if (newCount > 0) {
-              badge.textContent = newCount;
-            } else {
-              badge.style.display = 'none';
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Remove notification from dropdown
+            const notificationItem = document.querySelector(`[data-id="${notificationId}"]`);
+            if (notificationItem) {
+              notificationItem.remove();
+            }
+
+            // Update badge count
+            const badge = document.getElementById('notificationBadge');
+            if (badge) {
+              const newCount = data.unread_count;
+              if (newCount > 0) {
+                badge.textContent = newCount;
+              } else {
+                badge.style.display = 'none';
+              }
             }
           }
-        }
-      });
+        });
     }
 
     // Check for new notifications every 30 seconds
@@ -257,23 +257,23 @@
         fetch('/api/notifications-count/', {
           headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
-        .then(response => response.json())
-        .then(data => {
-          const badge = document.getElementById('notificationBadge');
-          if (data.unread_count > 0) {
-            if (badge) {
-              badge.textContent = data.unread_count;
-              badge.style.display = 'inline';
+          .then(response => response.json())
+          .then(data => {
+            const badge = document.getElementById('notificationBadge');
+            if (data.unread_count > 0) {
+              if (badge) {
+                badge.textContent = data.unread_count;
+                badge.style.display = 'inline';
+              }
+            } else if (badge) {
+              badge.style.display = 'none';
             }
-          } else if (badge) {
-            badge.style.display = 'none';
-          }
-        });
+          });
       }
     }, 30000);
 
     // Close notification dropdown when clicking outside
-    document.addEventListener('click', function(event) {
+    document.addEventListener('click', function (event) {
       const dropdown = document.getElementById('notificationDropdown');
       const bell = document.querySelector('.notification-bell');
       if (dropdown && !bell.contains(event.target)) {
@@ -290,6 +290,11 @@
     }
   </script>
   <script src="{% static 'scripts/feed.js' %}"></script>
+  <script>
+    document.getElementById('id_profile_picture')?.addEventListener('change', function () {
+      document.getElementById('photoUploadForm').submit();
+    });
+  </script>
 
 </body>
 

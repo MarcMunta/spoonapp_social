@@ -1,0 +1,38 @@
+<!-- post_card.html -->
+<div class="post-card border rounded-2xl p-4 mb-6 bg-white shadow-sm">
+    <!-- Usuario -->
+    <div class="flex items-center mb-3">
+        <img src="{{ post.user.profile.avatar.url }}" alt="Avatar" class="w-10 h-10 rounded-full object-cover mr-3">
+        <div>
+            <p class="font-semibold text-sm">{{ post.user.username }}</p>
+            <p class="text-xs text-gray-500">{{ post.created_at|date:"d M Y · H:i" }}</p>
+        </div>
+    </div>
+
+    <!-- Imagen principal -->
+    {% if post.image %}
+    <div class="w-full h-auto rounded-xl overflow-hidden mb-3">
+        <img src="{{ post.image.url }}" alt="Post image" class="w-full object-cover rounded-xl max-h-[500px]">
+    </div>
+    {% endif %}
+
+    <!-- Descripción -->
+    {% if post.description %}
+    <div class="text-sm text-gray-800 mb-2 whitespace-pre-line">
+        {{ post.description }}
+    </div>
+    {% endif %}
+
+    <!-- Categoría -->
+    {% if post.category %}
+    <span class="inline-block text-xs px-3 py-1 rounded-full bg-blue-100 text-blue-600 mb-2">
+        {{ post.category.name }}
+    </span>
+    {% endif %}
+
+    <!-- Likes y comentarios -->
+    <div class="flex items-center justify-between mt-2 text-sm text-gray-600">
+        <span>{{ post.likes.count }} ❤️ Likes</span>
+        <a href="{% url 'post_detail' post.id %}" class="text-blue-500 hover:underline">Ver comentarios</a>
+    </div>
+</div>

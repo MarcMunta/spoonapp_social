@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from .models import FriendRequest, Notification
 from django.db.models import Q
 
-
 def friend_requests_processor(request):
     context = {}
     if request.user.is_authenticated:
@@ -16,11 +15,17 @@ def friend_requests_processor(request):
         ).order_by('-created_at')
         notification_count = unread_notifications.count()
 
+        # ✅ Agrega la lista de amigos
+        try:
+            friends = request.user.profile.friends.all()
+        except Exception:
+            friends = []
+
         friend_status_list = []
         for user in all_users:
             sent = FriendRequest.objects.filter(from_user=request.user, to_user=user, accepted=False).exists()
             received = FriendRequest.objects.filter(from_user=user, to_user=request.user, accepted=False).exists()
-            friends = FriendRequest.objects.filter(
+            friends_check = FriendRequest.objects.filter(
                 ((Q(from_user=request.user) & Q(to_user=user)) |
                 (Q(from_user=user) & Q(to_user=request.user))) & Q(accepted=True)
             ).exists()
@@ -28,7 +33,7 @@ def friend_requests_processor(request):
                 "id": user.id,
                 "username": user.username,
                 "status": (
-                    "friends" if friends else
+                    "friends" if friends_check else
                     "request_sent" if sent else
                     "request_received" if received else
                     "none"
@@ -39,6 +44,7 @@ def friend_requests_processor(request):
             'pending_requests': requests,
             'all_users': friend_status_list,
             'unread_notifications': unread_notifications,
-            'notification_count': notification_count
+            'notification_count': notification_count,
+            'friends': friends,  # ✅ Aquí se añade
         }
     return context

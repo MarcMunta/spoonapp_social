@@ -80,74 +80,100 @@
         <ul id="searchResults" class="autocomplete-list"></ul>
       </div>
 
-
-      {% if pending_requests %}
-      {% for req in pending_requests %}
-      <div class="friend-status">
-        {{ req.from_user.username }}
-        <span>
-          <a href="{% url 'accept_friend_request' req.id %}">Accept</a> |
-          <a href="{% url 'reject_friend_request' req.id %}">Remove</a>
-        </span>
+      <!-- Tabs -->
+      <div class="friend-tabs">
+        <button class="tab-button active" onclick="switchTab('online')">Amigos</button>
+        <button class="tab-button" onclick="switchTab('requests')">
+          Solicitudes <span id="requestCount">{{ pending_requests|length }}</span>
+        </button>
       </div>
-      {% endfor %}
-      {% else %}
-      <div class="friend-status">No pending friend requests</div>
-      {% endif %}
+
+      <!-- Tab content -->
+      <div id="tab-online" class="tab-content">
+        <ul class="friend-list">
+          <li>No friends online</li> <!-- Aquí puedes añadir lógica real -->
+        </ul>
+      </div>
+
+      <div id="tab-requests" class="tab-content" style="display: none;">
+        {% if pending_requests %}
+        {% for req in pending_requests %}
+        <div class="request-item">
+          <strong>{{ req.from_user.username }}</strong>
+          <div class="request-actions">
+            <a href="{% url 'accept_friend_request' req.id %}" class="btn btn-sm btn-success">✔</a>
+            <a href="{% url 'reject_friend_request' req.id %}" class="btn btn-sm btn-danger">✖</a>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No pending friend requests</p>
+        {% endif %}
+      </div>
     </div>
+
   </div>
-  
-<script>
-document.getElementById("searchFriendInput").addEventListener("input", function() {
-    const query = this.value.trim();
-    const resultsList = document.getElementById("searchResults");
-    resultsList.innerHTML = "";
 
-    if (query.length === 0) return;
+  <script>
+    document.getElementById("searchFriendInput").addEventListener("input", function () {
+      const query = this.value.trim();
+      const resultsList = document.getElementById("searchResults");
+      resultsList.innerHTML = "";
 
-    fetch(`/api/search-users/?q=${encodeURIComponent(query)}`)
+      if (query.length === 0) return;
+
+      fetch(`/api/search-users/?q=${encodeURIComponent(query)}`)
         .then(res => res.json())
         .then(users => {
-            users.forEach(user => {
-                const li = document.createElement("li");
-                li.innerHTML = `
+          users.forEach(user => {
+            const li = document.createElement("li");
+            li.innerHTML = `
                     <div class="user-suggestion">
                         <img src="${user.avatar || 'https://via.placeholder.com/40'}" alt="avatar" width="32" height="32" />
                         <span>${user.username} (${user.email})</span>
                         <button onclick="sendFriendRequest(${user.id}, this)">Add</button>
                     </div>
                 `;
-                resultsList.appendChild(li);
-            });
+            resultsList.appendChild(li);
+          });
         });
-});
+    });
 
-function sendFriendRequest(userId, button) {
-    fetch('/send-friend-request/', {
+    function sendFriendRequest(userId, button) {
+      fetch('/send-friend-request/', {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCSRFToken(),
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken(),
         },
         body: JSON.stringify({ user_id: userId })
-    })
-    .then(response => {
-        if (response.ok) {
+      })
+        .then(response => {
+          if (response.ok) {
             button.textContent = "Sent";
             button.disabled = true;
-        } else {
+          } else {
             alert("Error sending friend request.");
-        }
-    });
-}
+          }
+        });
+    }
 
-function getCSRFToken() {
-    const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
-    return cookie ? cookie.split('=')[1] : '';
-}
-</script>
-<script src="{% static 'feed.js' %}"></script>
+    function getCSRFToken() {
+      const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
+      return cookie ? cookie.split('=')[1] : '';
+    }
+  </script>
+  <script src="{% static 'feed.js' %}"></script>
 
+  <script>
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
+
+      document.getElementById('tab-' + tab).style.display = 'block';
+      event.target.classList.add('active');
+    }
+  </script>
 
 </body>
 

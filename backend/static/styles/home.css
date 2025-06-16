@@ -1242,3 +1242,18 @@ body:has(.spoon-chat-container) .rightbar {
     color: #fff;
     margin-bottom: 8px;
 }
+
+.story-prev,
+.story-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    font-size: 2rem;
+    cursor: pointer;
+    padding: 0 10px;
+    user-select: none;
+}
+
+.story-prev { left: 5px; }
+.story-next { right: 5px; }

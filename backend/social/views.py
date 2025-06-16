@@ -72,10 +72,15 @@ def home(request):
 
     if request.user.is_authenticated:
         Story.objects.filter(expires_at__lte=timezone.now()).delete()
-        context['friends'] = get_friends(request.user)  # ✅ Solo si el usuario está logueado
-        active_stories = Story.objects.filter(expires_at__gt=timezone.now())
+        context['friends'] = get_friends(request.user)
+        active_stories = Story.objects.filter(expires_at__gt=timezone.now()).select_related('user').order_by('created_at')
         context['user_story'] = active_stories.filter(user=request.user).first()
-        context['friend_stories'] = active_stories.filter(user__in=context['friends']).exclude(user=request.user)
+
+        friend_story_map = {}
+        for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
+            friend_story_map.setdefault(st.user, []).append(st.media_file.url)
+        context['friend_stories'] = friend_story_map
+
         context['story_form'] = StoryForm()
 
     return render(request, 'social/pages/feed.html', context)

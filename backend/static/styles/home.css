@@ -1189,11 +1189,12 @@ body:has(.spoon-chat-container) .rightbar {
 
 .story-modal-content {
     position: relative;
-    max-width: 600px;
-    width: 90%;
+    max-width: 500px;
+    width: 85%;
     background: #000;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 25px;
+    overflow: hidden;
     transform: scale(1);
 }
 

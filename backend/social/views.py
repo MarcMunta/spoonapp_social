@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
-from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike
+from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification
 from .forms import PostForm, CommentForm, ProfileForm
 from .models import FriendRequest
 from django.db.models import Q, Prefetch, Count
@@ -130,7 +130,16 @@ def accept_friend_request(request, req_id):
     req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
     req.accepted = True
     req.save()
-    # Aquí podrías añadir una tabla de amistad real
+    
+    # Create notification for the friend request sender
+    Notification.objects.create(
+        user=req.from_user,
+        notification_type='friend_accepted',
+        title=f'{request.user.username} accepted your friend request',
+        message=f'You are now friends with {request.user.username}',
+        related_user=request.user
+    )
+    
     return redirect('friend_requests')
 
 @login_required
@@ -256,4 +265,133 @@ def friends_list_view(request):
     return render(request, 'social/friends_panel.html', {
         'friends': all_friends
     })
+
+@login_required
+def chat_list(request):
+    """Display list of all chats for the current user"""
+    user_chats = Chat.objects.filter(participants=request.user).prefetch_related('participants', 'messages')
+    
+    chat_data = []
+    for chat in user_chats:
+        other_user = chat.get_other_participant(request.user)
+        last_msg = chat.last_message()
+        unread_count = chat.messages.filter(read=False).exclude(sender=request.user).count()
+        
+        chat_data.append({
+            'chat': chat,
+            'other_user': other_user,
+            'last_message': last_msg,
+            'unread_count': unread_count
+        })
+    
+    return render(request, 'social/chat_list.html', {'chat_data': chat_data})
+
+@login_required
+def chat_detail(request, chat_id):
+    """Display messages in a specific chat"""
+    chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
+    other_user = chat.get_other_participant(request.user)
+    
+    # Mark messages as read
+    chat.messages.filter(read=False).exclude(sender=request.user).update(read=True)
+    
+    messages = chat.messages.all()
+    
+    if request.method == 'POST':
+        content = request.POST.get('content', '').strip()
+        if content:
+            Message.objects.create(
+                chat=chat,
+                sender=request.user,
+                content=content
+            )
+            chat.last_message_at = now()
+            chat.save()
+            
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({'success': True})
+            return redirect('chat_detail', chat_id=chat.id)
+    
+    return render(request, 'social/chat_detail.html', {
+        'chat': chat,
+        'other_user': other_user,
+        'messages': messages
+    })
+
+@login_required
+def start_chat(request, user_id):
+    """Start or continue a chat with a friend"""
+    other_user = get_object_or_404(User, id=user_id)
+    
+    # Check if they are friends
+    are_friends = FriendRequest.objects.filter(
+        ((Q(from_user=request.user) & Q(to_user=other_user)) |
+         (Q(from_user=other_user) & Q(to_user=request.user))) & Q(accepted=True)
+    ).exists()
+    
+    if not are_friends:
+        return redirect('home')
+    
+    # Find existing chat or create new one
+    existing_chat = Chat.objects.filter(
+        participants=request.user
+    ).filter(
+        participants=other_user
+    ).first()
+    
+    if existing_chat:
+        return redirect('chat_detail', chat_id=existing_chat.id)
+    else:
+        new_chat = Chat.objects.create()
+        new_chat.participants.add(request.user, other_user)
+        return redirect('chat_detail', chat_id=new_chat.id)
+
+@login_required
+def load_messages(request, chat_id):
+    """Load messages for AJAX requests"""
+    chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
+    messages = chat.messages.all()
+    
+    messages_data = []
+    for msg in messages:
+        messages_data.append({
+            'id': msg.id,
+            'sender': msg.sender.username,
+            'content': msg.content,
+            'sent_at': msg.sent_at.strftime('%H:%M'),
+            'is_mine': msg.sender == request.user
+        })
+    
+    return JsonResponse({'messages': messages_data})
+
+@login_required
+def notifications_view(request):
+    """Display all notifications for the current user"""
+    notifications = Notification.objects.filter(user=request.user)
+    
+    # Mark all as read when viewing
+    Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
+    
+    return render(request, 'social/notifications.html', {'notifications': notifications})
+
+@login_required
+def mark_notification_read(request, notification_id):
+    """Mark a specific notification as read via AJAX"""
+    notification = get_object_or_404(Notification, id=notification_id, user=request.user)
+    notification.is_read = True
+    notification.save()
+    
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        unread_count = Notification.objects.filter(user=request.user, is_read=False).count()
+        return JsonResponse({'success': True, 'unread_count': unread_count})
+    
+    return redirect('notifications')
+
+@login_required
+def get_notifications_count(request):
+    """Get unread notifications count via AJAX"""
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        count = Notification.objects.filter(user=request.user, is_read=False).count()
+        return JsonResponse({'unread_count': count})
+    return JsonResponse({'error': 'Invalid request'}, status=400)
 

@@ -13,29 +13,33 @@
 {% for post in posts %}
 <div class="post mb-3">
   {% if post.image %}
-  <img src="{{ post.image.url }}" alt="">
-  {% endif %}
-  {% if post.caption %}
-  <p class="post-caption">{{ post.caption }}</p>
-  {% endif %}
-  <div class="post-categories mb-2">
-    {% for cat in post.categories.all %}
-    <span class="badge bg-secondary me-1">{{ cat.name }}</span>
-    {% endfor %}
+  <div class="post-image">
+    <img src="{{ post.image.url }}" alt="">
   </div>
-  <div class="post-footer">
-    <div class="post-title">{{ post.user.username }}</div>
+  {% endif %}
+  <div class="post-header d-flex justify-content-between">
+    <div class="post-title">
+      <strong>{{ post.user.username }}</strong>
+      <div class="post-categories">
+        {% for cat in post.categories.all %}
+        <span class="badge bg-secondary me-1">{{ cat.name }}</span>
+        {% endfor %}
+      </div>
+    </div>
     <div class="post-stats">
       {% if user.is_authenticated %}
-      <a href="{% url 'like_post' post.id %}" class="spoon-like">🥄 {{ post.postlike_set.count }}</a>
+      <a href="{% url 'like_post' post.id %}" data-url="{% url 'like_post' post.id %}" class="spoon-like like-post">🥄 <span class="like-count">{{ post.postlike_set.count }}</span></a>
       {% else %}
-      <span>🥄 {{ post.postlike_set.count }}</span>
+      <span>🥄 <span class="like-count">{{ post.postlike_set.count }}</span></span>
       {% endif %}
-      <span>💬 {{ post.postcomment_set.count }}</span>
+      <span class="comment-count-wrapper" data-post-id="{{ post.id }}">💬 <span class="comment-count">{{ post.postcomment_set.count }}</span></span>
       <a href="{% url 'share_post' post.id %}">📤</a>
       <span>🔖</span>
     </div>
   </div>
+  {% if post.caption %}
+  <p class="post-caption">{{ post.caption }}</p>
+  {% endif %}
   {% if user.is_authenticated %}
   <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
     {% csrf_token %}
@@ -43,20 +47,43 @@
     <button type="submit" class="btn btn-sm btn-success">Comentar</button>
   </form>
   {% endif %}
-  {% if post.postcomment_set.exists %}
-  <ul class="list-group list-group-flush mt-2">
-    {% for comment in post.postcomment_set.all %}
-    <li class="list-group-item d-flex justify-content-between align-items-center">
-      <div><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</div>
-      {% if user.is_authenticated %}
-      <a href="{% url 'like_comment' comment.id %}" class="spoon-like">🥄 {{ comment.postcommentlike_set.count }}</a>
-      {% else %}
-      <span>🥄 {{ comment.postcommentlike_set.count }}</span>
+  {% with comments=post.postcomment_set.all %}
+  {% if comments %}
+  <ul id="comments-{{ post.id }}" class="list-group list-group-flush mt-2 comment-list">
+    {% for comment in comments|slice:":5" %}
+    <li class="list-group-item">
+      <div class="d-flex justify-content-between align-items-center">
+        <div><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</div>
+        {% if user.is_authenticated %}
+        <a href="{% url 'like_comment' comment.id %}" data-url="{% url 'like_comment' comment.id %}" class="spoon-like like-comment">🥄 <span class="like-count">{{ comment.num_likes }}</span></a>
+        {% else %}
+        <span>🥄 <span class="like-count">{{ comment.num_likes }}</span></span>
+        {% endif %}
+      </div>
+      {% if comment.replies.all %}
+      <ul class="list-group mt-1">
+        {% for reply in comment.replies.all %}
+        <li class="list-group-item">
+          <div class="d-flex justify-content-between align-items-center">
+            <div><strong>{{ reply.user.username }}:</strong> {{ reply.content }}</div>
+            {% if user.is_authenticated %}
+            <a href="{% url 'like_comment' reply.id %}" data-url="{% url 'like_comment' reply.id %}" class="spoon-like like-comment">🥄 <span class="like-count">{{ reply.num_likes }}</span></a>
+            {% else %}
+            <span>🥄 <span class="like-count">{{ reply.num_likes }}</span></span>
+            {% endif %}
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
       {% endif %}
     </li>
     {% endfor %}
   </ul>
+  {% if comments|length > 5 %}
+  <button class="btn btn-link load-more-comments" data-post-id="{{ post.id }}">Cargar más</button>
   {% endif %}
+  {% endif %}
+  {% endwith %}
 </div>
 {% endfor %}
 {% endblock %}

@@ -2,11 +2,11 @@ from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from django.shortcuts import render
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike
 from .forms import PostForm, CommentForm, ProfileForm
 from .models import FriendRequest
-from django.db.models import Q
+from django.db.models import Q, Prefetch, Count
+from django.template.loader import render_to_string
 import json
 
 
@@ -21,9 +21,23 @@ def _build_feed_context(show_posts=True):
         themselves.
     """
 
-    posts = (
-        Post.objects.all().order_by("-created_at") if show_posts else Post.objects.none()
-    )
+    posts = Post.objects.all().order_by("-created_at") if show_posts else Post.objects.none()
+    if show_posts:
+        posts = posts.prefetch_related(
+            Prefetch(
+                "postcomment_set",
+                queryset=PostComment.objects.filter(parent__isnull=True)
+                .annotate(num_likes=Count("postcommentlike"))
+                .order_by("-num_likes", "-created_at")
+                .prefetch_related(
+                    Prefetch(
+                        "replies",
+                        queryset=PostComment.objects.annotate(num_likes=Count("postcommentlike"))
+                        .order_by("-num_likes", "-created_at"),
+                    )
+                ),
+            )
+        )
     post_form = PostForm()
     comment_form = CommentForm()
     return {
@@ -65,6 +79,8 @@ def like_post(request, post_id):
     like, created = PostLike.objects.get_or_create(user=request.user, post=post)
     if not created:
         like.delete()
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"likes": post.postlike_set.count()})
     return redirect('home')
 
 
@@ -118,6 +134,8 @@ def like_comment(request, comment_id):
     like, created = PostCommentLike.objects.get_or_create(user=request.user, comment=comment)
     if not created:
         like.delete()
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({"likes": comment.postcommentlike_set.count()})
     return redirect('home')
 
 
@@ -183,3 +201,23 @@ def send_friend_request(request):
             return JsonResponse({"error": str(e)}, status=500)
 
     return JsonResponse({"error": "Invalid method"}, status=405)
+
+
+def load_comments(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    offset = int(request.GET.get("offset", 0))
+    limit = int(request.GET.get("limit", 10))
+    comments_qs = (
+        post.postcomment_set.filter(parent__isnull=True)
+        .annotate(num_likes=Count("postcommentlike"))
+        .order_by("-num_likes", "-created_at")[offset : offset + limit]
+        .prefetch_related("replies")
+    )
+    html = render_to_string(
+        "social/comments_partial.html",
+        {"comments": comments_qs, "user": request.user},
+    )
+    total = post.postcomment_set.filter(parent__isnull=True).count()
+    has_more = offset + limit < total
+    return JsonResponse({"html": html, "has_more": has_more})
+

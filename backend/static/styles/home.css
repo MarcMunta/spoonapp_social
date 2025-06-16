@@ -1226,7 +1226,7 @@ body:has(.spoon-chat-container) .rightbar {
 .story-countdown {
     position: absolute;
     top: 6px;
-    right: 10px;
+    right: 50px;
     color: #fff;
     font-size: 0.9rem;
 }

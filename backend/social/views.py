@@ -74,7 +74,12 @@ def home(request):
         Story.objects.filter(expires_at__lte=timezone.now()).delete()
         context['friends'] = get_friends(request.user)
         active_stories = Story.objects.filter(expires_at__gt=timezone.now()).select_related('user').order_by('created_at')
-        context['user_story'] = active_stories.filter(user=request.user).first()
+
+        user_story_list = active_stories.filter(user=request.user)
+        context['user_story_data'] = {
+            'urls': [st.media_file.url for st in user_story_list],
+            'expires': [st.expires_at.isoformat() for st in user_story_list],
+        }
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):

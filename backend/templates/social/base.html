@@ -93,15 +93,25 @@
       <div id="tab-online" class="tab-content">
         <div class="friends-list">
           {% for f in friends %}
-          <div class="friend-item">
-            <span class="status-dot {% if f.online %}online{% else %}offline{% endif %}"></span>
-            {{ f.user.username }}
-            {% if not f.online %}
-            <small>Last seen: {{ f.last_seen|naturaltime }}</small>
+          <div class="friend-item d-flex align-items-center mb-2">
+            {% if f.user.profile.profile_picture %}
+            <img src="{{ f.user.profile.profile_picture.url }}" alt="Foto perfil"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+            {% else %}
+            <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% endif %}
+
+            <div>
+              <strong>{{ f.user.username }}</strong><br>
+              {% if f.online %}
+              <small style="color: green;">Online</small>
+              {% elif f.last_seen %}
+              <small class="text-muted">Last seen: {{ f.last_seen|naturaltime }}</small>
+              {% endif %}
+            </div>
           </div>
           {% endfor %}
-
         </div>
       </div>
 

@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
-from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification
-from .forms import PostForm, CommentForm, ProfileForm
+from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
+from .forms import PostForm, CommentForm, ProfileForm, StoryForm
 from .models import FriendRequest
+from .models import PostCategory  # asegúrate de importar esto
+from django.utils import timezone
 from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 import json
@@ -70,15 +72,23 @@ def home(request):
 
     if request.user.is_authenticated:
         context['friends'] = get_friends(request.user)  # ✅ Solo si el usuario está logueado
+        active_stories = Story.objects.filter(expires_at__gt=timezone.now())
+        context['user_story'] = active_stories.filter(user=request.user).first()
+        context['friend_stories'] = active_stories.filter(user__in=context['friends']).exclude(user=request.user)
+        context['story_form'] = StoryForm()
 
     return render(request, 'social/pages/feed.html', context)
 
 
 def feed(request):
-    # Page for creating a post; only show the form, not existing posts
     context = _build_feed_context(show_posts=False)
     context['show_form'] = True
+
+    if request.user.is_authenticated:
+        context['friends'] = get_friends(request.user)  # ✅ Añade esto como en home
+
     return render(request, 'social/pages/feed.html', context)
+
 
 
 @login_required
@@ -90,6 +100,17 @@ def create_post(request):
             new_post.user = request.user
             new_post.save()
             form.save_m2m()
+    return redirect('home')
+
+
+@login_required
+def upload_story(request):
+    if request.method == 'POST':
+        form = StoryForm(request.POST, request.FILES)
+        if form.is_valid():
+            story = form.save(commit=False)
+            story.user = request.user
+            story.save()
     return redirect('home')
 
 
@@ -183,11 +204,22 @@ def unfollow_user(request, username):
     request.user.profile.friends.remove(target_user)
     return redirect('profile', username=username)
 
+def post_detail(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    return render(request, 'social/pages/post_detail.html', {'post': post})
 
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
     posts = Post.objects.filter(user=profile_user).order_by('-created_at')
     user_profile, _ = Profile.objects.get_or_create(user=profile_user)
+    categories = PostCategory.objects.all()
+    posts_by_category = {
+        "all": list(posts),  # Todos los posts sin filtro
+        **{
+            category.slug: list(posts.filter(categories=category))
+            for category in categories
+        }
+    }
 
     is_following = False
     if request.user.is_authenticated and request.user != profile_user:
@@ -205,16 +237,22 @@ def profile(request, username):
     else:
         form = ProfileForm(instance=user_profile)
 
+    for category in categories:
+        posts_by_category[category.name] = posts.filter(categories=category)
 
+    
     context = {
         'profile_user': profile_user,
         'user_profile': user_profile,
         'posts': posts,
         'form': form,
         'is_following': is_following,
-        'total_matches': PostLike.objects.filter(post__user=profile_user).count(),  # ejemplo
-        'total_friends': get_friends(profile_user).count(),  # si usas tu función get_friends()
-    }
+        'total_matches': PostLike.objects.filter(post__user=profile_user).count(),
+        'total_friends': get_friends(profile_user).count(),
+        'friends': get_friends(request.user), 
+        'categories': categories, 
+        "posts_by_category": posts_by_category,
+}
 
     return render(request, 'social/pages/profile.html', context)
 

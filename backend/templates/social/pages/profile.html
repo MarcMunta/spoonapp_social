@@ -1,4 +1,5 @@
 {% extends 'social/layouts/base.html' %}
+{% load custom_filters %}
 {% block title %}{{ profile_user.username }} | Perfil{% endblock %}
 {% block body_class %}profile-page{% endblock %}
 {% load static %}
@@ -69,36 +70,40 @@
 
   <hr>
 
-  <!-- TABS -->
-  <ul class="nav nav-tabs mb-4">
-    <li class="nav-item"><a class="nav-link active" href="#">Starter</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Meals</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Dessert</a></li>
-    <li class="nav-item"><a class="nav-link" href="#">Drinks</a></li>
+  <!-- TABS DINÁMICAS -->
+  <ul class="nav nav-tabs mb-4" id="categoryTabs">
+    <li class="nav-item">
+      <a class="nav-link active" data-category="all" href="#">All Posts</a>
+    </li>
+    {% for cat in categories %}
+    <li class="nav-item">
+      <a class="nav-link" data-category="{{ cat.slug }}" href="#">{{ cat.name }}</a>
+    </li>
+    {% endfor %}
   </ul>
+
+
 
   <!-- PUBLICACIONES -->
   <div class="row g-3">
-    {% for post in posts %}
-    <div class="col-6 col-md-4 col-lg-3">
-      <div class="card h-100">
-        {% if post.image %}
-        <img src="{{ post.image.url }}" class="card-img-top" alt="Post Image">
-        {% endif %}
-        <div class="card-body p-2">
-          <p class="card-text mb-1 text-truncate">{{ post.caption }}</p>
-          <div class="d-flex justify-content-between small text-muted">
-            <span>{{ post.postlike_set.count }} 🥄</span>
-            <span>{{ post.postcomment_set.count }} 💬</span>
-          </div>
-        </div>
-      </div>
-    </div>
+  {% for cat in categories %}
+  <div class="category-group" data-category="{{ cat.slug }}" style="display: none;">
+    {% for post in posts_by_category|get_item:cat.slug %}
+    <!-- tu tarjeta de post como antes -->
+    {% include 'social/partials/post_card.html' with post=post %}
     {% empty %}
-    <div class="text-center text-muted">
-      <p>Este usuario no tiene publicaciones aún.</p>
-    </div>
+    <div class="text-muted">No hay publicaciones en esta categoría.</div>
     {% endfor %}
   </div>
+  {% endfor %}
+
+  <!-- ALL POSTS -->
+  <div class="category-group" data-category="all">
+    {% for post in posts_by_category|get_item:"all" %}
+    {% include 'social/partials/post_card.html' with post=post %}
+    {% endfor %}
+  </div>
+</div>
+
 </div>
 {% endblock %}

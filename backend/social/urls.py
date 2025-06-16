@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('subir-publicacion/', views.feed, name='subir_publicacion'),
     path('post/new/', views.create_post, name='create_post'),
+    path('story/upload/', views.upload_story, name='upload_story'),
     path('post/<int:post_id>/like/', views.like_post, name='like_post'),
     path('post/<int:post_id>/share/', views.share_post, name='share_post'),
     path('post/<int:post_id>/comment/', views.comment_post, name='comment_post'),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('notifications/', views.notifications_view, name='notifications'),
     path('mark-notification-read/<int:notification_id>/', views.mark_notification_read, name='mark_notification_read'),
     path('api/notifications-count/', views.get_notifications_count, name='notifications_count'),
+    path('post/<int:post_id>/', views.post_detail, name='post_detail')
 ]

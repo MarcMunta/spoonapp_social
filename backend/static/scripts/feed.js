@@ -50,6 +50,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentIndex = 0;
   let progressTimeout;
   let countdownInterval;
+  let storyStart = 0;
+  let remainingTime = 5000;
+  let progressPaused = false;
 
   const modal = document.getElementById('storyModal');
   const img = document.getElementById('storyImage');
@@ -61,6 +64,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const replyContainer = document.querySelector('.story-reply');
   const deleteBtn = document.querySelector('.story-delete');
   const replyInput = document.getElementById('storyReplyInput');
+  const optionsBtn = document.querySelector('.story-options-btn');
+  const optionsMenu = storyOptions ? storyOptions.querySelector('.dropdown-menu') : null;
   const currentUsername = document.body.dataset.currentUser || '';
 
   const countdownEl = document.querySelector('.story-countdown');
@@ -85,6 +90,33 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function pauseProgress() {
+    if (progressPaused) return;
+    progressPaused = true;
+    clearTimeout(progressTimeout);
+    const elapsed = Date.now() - storyStart;
+    remainingTime = Math.max(0, 5000 - elapsed);
+    if (progressBar) {
+      const percent = Math.min(100, (elapsed / 5000) * 100);
+      progressBar.style.transition = 'none';
+      progressBar.style.width = `${percent}%`;
+    }
+  }
+
+  function resumeProgress() {
+    if (!progressPaused) return;
+    progressPaused = false;
+    storyStart = Date.now();
+    if (progressBar) {
+      requestAnimationFrame(() => {
+        progressBar.style.transition = `width ${remainingTime / 1000}s linear`;
+        progressBar.style.width = '100%';
+      });
+    }
+    clearTimeout(progressTimeout);
+    progressTimeout = setTimeout(nextStory, remainingTime);
+  }
+
   function showStory(idx) {
     const url = currentUrls[idx];
     if (/\.(mp4|webm|ogg)$/i.test(url)) {
@@ -105,14 +137,21 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBar.style.width = '100%';
       });
     }
+    storyStart = Date.now();
+    remainingTime = 5000;
+    progressPaused = false;
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
     updateCountdown(currentExpires[idx]);
     countdownInterval = setInterval(() => updateCountdown(currentExpires[idx]), 1000);
-    progressTimeout = setTimeout(nextStory, 5000);
+    progressTimeout = setTimeout(nextStory, remainingTime);
     const replyBtn = document.getElementById('storyReplySend');
     if (replyBtn && currentStoryElIndex != null) {
-      replyBtn.dataset.storyId = currentStoryIds[idx];
+      replyBtn.dataset.storyId = currentIsOwn ? '' : currentStoryIds[idx];
+      replyBtn.disabled = currentIsOwn;
+    }
+    if (replyInput) {
+      replyInput.disabled = currentIsOwn;
     }
     if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[idx];
     fetch(`/story/${currentStoryIds[idx]}/view/`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
@@ -140,7 +179,11 @@ document.addEventListener('DOMContentLoaded', () => {
         `<a href="${el.dataset.profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
     }
     const replyBtn = document.getElementById('storyReplySend');
-    if (replyBtn) replyBtn.dataset.storyId = currentStoryIds[currentIndex];
+    if (replyBtn) {
+      replyBtn.dataset.storyId = currentIsOwn ? '' : currentStoryIds[currentIndex];
+      replyBtn.disabled = currentIsOwn;
+    }
+    if (replyInput) replyInput.disabled = currentIsOwn;
     if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
     if (storyViews) storyViews.style.display = currentIsOwn ? 'block' : 'none';
     if (replyContainer) replyContainer.style.display = currentIsOwn ? 'none' : 'flex';
@@ -213,23 +256,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     if (replyInput) {
-      replyInput.addEventListener('focus', () => {
-        clearTimeout(progressTimeout);
-      });
-      replyInput.addEventListener('input', () => {
-        clearTimeout(progressTimeout);
-      });
-      replyInput.addEventListener('blur', () => {
-        progressTimeout = setTimeout(nextStory, 5000);
-        if (progressBar) {
-          progressBar.style.transition = 'none';
-          progressBar.style.width = '0%';
-          requestAnimationFrame(() => {
-            progressBar.style.transition = 'width 5s linear';
-            progressBar.style.width = '100%';
-          });
-        }
-      });
+      replyInput.addEventListener('focus', pauseProgress);
+      replyInput.addEventListener('input', pauseProgress);
+      replyInput.addEventListener('blur', resumeProgress);
     }
   }
 
@@ -246,6 +275,27 @@ document.addEventListener('DOMContentLoaded', () => {
           window.location.reload();
         }
       });
+    });
+  }
+
+  if (optionsBtn && optionsMenu) {
+    optionsBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = optionsMenu.classList.contains('show');
+      if (open) {
+        optionsMenu.classList.remove('show');
+        resumeProgress();
+      } else {
+        optionsMenu.classList.add('show');
+        pauseProgress();
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!storyOptions.contains(e.target) && optionsMenu.classList.contains('show')) {
+        optionsMenu.classList.remove('show');
+        resumeProgress();
+      }
     });
   }
 

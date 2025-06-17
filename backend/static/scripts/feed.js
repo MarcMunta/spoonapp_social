@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const storyViews = document.querySelector('.story-views');
   const replyContainer = document.querySelector('.story-reply');
   const deleteBtn = document.querySelector('.story-delete');
+  const replyInput = document.getElementById('storyReplyInput');
   const currentUsername = document.body.dataset.currentUser || '';
 
   const countdownEl = document.querySelector('.story-countdown');
@@ -210,6 +211,26 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         });
     });
+
+    if (replyInput) {
+      replyInput.addEventListener('focus', () => {
+        clearTimeout(progressTimeout);
+      });
+      replyInput.addEventListener('input', () => {
+        clearTimeout(progressTimeout);
+      });
+      replyInput.addEventListener('blur', () => {
+        progressTimeout = setTimeout(nextStory, 5000);
+        if (progressBar) {
+          progressBar.style.transition = 'none';
+          progressBar.style.width = '0%';
+          requestAnimationFrame(() => {
+            progressBar.style.transition = 'width 5s linear';
+            progressBar.style.width = '100%';
+          });
+        }
+      });
+    }
   }
 
   if (deleteBtn) {

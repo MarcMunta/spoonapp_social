@@ -1230,6 +1230,12 @@ body:has(.spoon-chat-container) .rightbar {
     font-size: 14px;
 }
 
+.profile-story-add {
+    width: 32px;
+    height: 32px;
+    font-size: 24px;
+}
+
 .story-username {
     margin-top: 4px;
     font-size: 0.85rem;

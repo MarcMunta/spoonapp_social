@@ -26,6 +26,11 @@
             📷
           </label>
         </form>
+        <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}" class="story-upload-form">
+          {% csrf_token %}
+          {{ story_form.media_file }}
+          <span class="story-add profile-story-add" onclick="event.stopPropagation(); document.getElementById('id_media_file').click();">+</span>
+        </form>
         {% endif %}
       </div>
     </div>

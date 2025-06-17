@@ -287,6 +287,9 @@ def profile(request, username):
         'posts_by_category': posts_by_category,
     }
 
+    if request.user == profile_user:
+        context['story_form'] = StoryForm()
+
     return render(request, 'social/pages/profile.html', context)
 
 

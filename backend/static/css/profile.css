@@ -1,0 +1,41 @@
+/* Solo aplica al perfil */
+body.profile-page {
+    background: linear-gradient(to right, #f9fafb, #eef1f5);
+    color: #2d3436;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body.profile-page .container {
+    background: white;
+    border-radius: 15px;
+    padding: 2rem;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.05);
+    margin-top: 3rem;
+}
+
+body.profile-page h1,
+body.profile-page h2 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 0.3rem;
+    margin-bottom: 1rem;
+}
+
+body.profile-page img.rounded-circle {
+    border: 4px solid #3498db;
+    transition: transform 0.3s ease;
+}
+
+body.profile-page img.rounded-circle:hover {
+    transform: scale(1.05);
+}
+
+body.profile-page form {
+    margin-top: 1rem;
+}
+
+body.profile-page .btn-outline-primary {
+    border-radius: 20px;
+    padding: 0.3rem 1.2rem;
+    font-weight: bold;
+}

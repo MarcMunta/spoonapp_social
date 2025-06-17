@@ -223,25 +223,21 @@ def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'social/pages/post_detail.html', {'post': post})
 
-def profile(request, username):
+def profile(request, username): 
     profile_user = get_object_or_404(User, username=username)
-    posts = Post.objects.filter(user=profile_user).order_by('-created_at')
+    posts = Post.objects.filter(user=profile_user).order_by('-created_at').prefetch_related('categories')
     user_profile, _ = Profile.objects.get_or_create(user=profile_user)
-    categories = PostCategory.objects.all()
-    posts_by_category = {
-        "all": list(posts),  # Todos los posts sin filtro
-        **{
-            category.slug: list(posts.filter(categories=category))
-            for category in categories
-        }
-    }
+    categories = PostCategory.objects.exclude(slug__isnull=True)  # Excluir categorías sin slug
+
+    posts_by_category = {'all': list(posts)}
+    for category in categories:
+        posts_by_category[category.slug] = list(posts.filter(categories=category))
 
     is_following = False
     if request.user.is_authenticated and request.user != profile_user:
         is_following = FriendRequest.objects.filter(
-            from_user=request.user, to_user=profile_user, accepted=True
-        ).exists() or FriendRequest.objects.filter(
-            from_user=profile_user, to_user=request.user, accepted=True
+            Q(from_user=request.user, to_user=profile_user, accepted=True) |
+            Q(from_user=profile_user, to_user=request.user, accepted=True)
         ).exists()
 
     if request.method == 'POST' and request.user == profile_user:
@@ -252,10 +248,6 @@ def profile(request, username):
     else:
         form = ProfileForm(instance=user_profile)
 
-    for category in categories:
-        posts_by_category[category.name] = posts.filter(categories=category)
-
-    
     context = {
         'profile_user': profile_user,
         'user_profile': user_profile,
@@ -264,10 +256,10 @@ def profile(request, username):
         'is_following': is_following,
         'total_matches': PostLike.objects.filter(post__user=profile_user).count(),
         'total_friends': get_friends(profile_user).count(),
-        'friends': get_friends(request.user), 
-        'categories': categories, 
-        "posts_by_category": posts_by_category,
-}
+        'friends': get_friends(request.user),
+        'categories': categories,
+        'posts_by_category': posts_by_category,
+    }
 
     return render(request, 'social/pages/profile.html', context)
 

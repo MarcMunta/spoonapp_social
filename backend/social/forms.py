@@ -1,6 +1,7 @@
 from django import forms
 from django.db.models import Case, When, IntegerField
 from .models import Post, PostComment, Profile, PostCategory, Story
+from django.utils.text import slugify
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -22,7 +23,7 @@ class PostForm(forms.ModelForm):
         when_statements = [When(name=name, then=idx) for idx, name in enumerate(order)]
         queryset = PostCategory.objects.annotate(
             order_priority=Case(*when_statements, default=len(order), output_field=IntegerField())
-        ).order_by('order_priority', 'name')
+        ).order_by('order_priority', 'name').exclude(slug__isnull=True)
         self.fields['categories'].queryset = queryset
 
     def clean_categories(self):
@@ -46,12 +47,10 @@ class CommentForm(forms.ModelForm):
             })
         }
 
-
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['profile_picture']
-
 
 class StoryForm(forms.ModelForm):
     class Meta:

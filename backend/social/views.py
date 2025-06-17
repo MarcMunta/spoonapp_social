@@ -484,6 +484,10 @@ def view_story(request, story_id):
 def reply_story(request, story_id):
     """Send a chat message in reply to a story."""
     story = get_object_or_404(Story, id=story_id)
+    if request.user == story.user:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'error': 'Cannot reply to own story.'}, status=403)
+        return redirect('home')
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
         chat = Chat.objects.filter(participants=request.user).filter(participants=story.user).first()

@@ -1154,7 +1154,11 @@ body:has(.spoon-chat-container) .rightbar {
 
 /* Stories Styles */
 .stories-wrapper {
-    position: relative;
+    position: sticky;
+    top: 0;
+    z-index: 900;
+    background-color: #fffafc;
+    padding: 0.5rem 0;
 }
 
 .stories-container {

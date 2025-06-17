@@ -56,8 +56,16 @@ document.addEventListener('DOMContentLoaded', () => {
   const video = document.getElementById('storyVideo');
   const progressBar = document.querySelector('.story-progress-bar');
   const modalContent = modal.querySelector('.story-modal-content');
+  const storyOptions = document.querySelector('.story-options');
+  const storyViews = document.querySelector('.story-views');
+  const replyContainer = document.querySelector('.story-reply');
+  const deleteBtn = document.querySelector('.story-delete');
+  const currentUsername = document.body.dataset.currentUser || '';
 
   const countdownEl = document.querySelector('.story-countdown');
+
+  let currentStoryIds = [];
+  let currentIsOwn = false;
 
   function updateCountdown(expireIso) {
     if (!countdownEl) return;
@@ -103,9 +111,16 @@ document.addEventListener('DOMContentLoaded', () => {
     progressTimeout = setTimeout(nextStory, 5000);
     const replyBtn = document.getElementById('storyReplySend');
     if (replyBtn && currentStoryElIndex != null) {
-      const storyIds = storyEls[currentStoryElIndex].dataset.storyId.split('|');
-      replyBtn.dataset.storyId = storyIds[idx];
+      replyBtn.dataset.storyId = currentStoryIds[idx];
     }
+    if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[idx];
+    fetch(`/story/${currentStoryIds[idx]}/view/`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(res => res.json())
+      .then(data => {
+        if (currentIsOwn && storyViews) {
+          storyViews.textContent = `${data.views} views`;
+        }
+      });
   }
 
   const storyEls = Array.from(document.querySelectorAll('.open-story'));
@@ -114,15 +129,21 @@ document.addEventListener('DOMContentLoaded', () => {
   function openStories(el, idx) {
     currentUrls = el.dataset.urls.split('|');
     currentExpires = el.dataset.expires.split('|');
+    currentStoryIds = el.dataset.storyId.split('|');
     currentIndex = 0;
     currentStoryElIndex = idx;
+    currentIsOwn = el.dataset.user === currentUsername;
     const userContainer = document.querySelector('.story-modal-user');
     if (userContainer) {
       userContainer.innerHTML = `<img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40">` +
         `<a href="${el.dataset.profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
     }
     const replyBtn = document.getElementById('storyReplySend');
-    if (replyBtn) replyBtn.dataset.storyId = el.dataset.storyId.split('|')[currentIndex];
+    if (replyBtn) replyBtn.dataset.storyId = currentStoryIds[currentIndex];
+    if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
+    if (storyViews) storyViews.style.display = currentIsOwn ? 'block' : 'none';
+    if (replyContainer) replyContainer.style.display = currentIsOwn ? 'none' : 'flex';
+    if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[currentIndex];
     modal.style.display = 'flex';
     modalContent.classList.add('open-anim');
     showStory(currentIndex);
@@ -188,6 +209,22 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = `/chat/${data.chat_id}/`;
           }
         });
+    });
+  }
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', e => {
+      e.preventDefault();
+      const storyId = deleteBtn.dataset.storyId;
+      if (!storyId) return;
+      fetch(`/story/${storyId}/delete/`, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
+      }).then(res => res.json()).then(data => {
+        if (data.success) {
+          window.location.reload();
+        }
+      });
     });
   }
 

@@ -545,6 +545,7 @@
       <span>🍴</span>
       <span>⚙️</span>
     </div>
+    {% if not hide_profile_icon %}
     <div class="profile-icon">
       {% if user.is_authenticated %}
       {% if user.profile.profile_picture %}
@@ -565,6 +566,7 @@
       </a>
       {% endif %}
     </div>
+    {% endif %}
 
   </div>
 

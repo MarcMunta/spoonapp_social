@@ -102,6 +102,8 @@ def feed(request):
     if request.user.is_authenticated:
         context['friends'] = get_friends(request.user)  # ✅ Añade esto como en home
 
+    context['hide_profile_icon'] = True
+
     return render(request, 'social/pages/feed.html', context)
 
 

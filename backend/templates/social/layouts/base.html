@@ -552,8 +552,8 @@
     <div class="app-title"><a href="{% url 'home' %}">SpoonApp SOCIAL</a></div>
     <div class="topbar-icons{% if hide_profile_icon %} center{% endif %}">
       <a href="{% url 'home' %}">🏠</a>
-      {% if user.is_authenticated %}
       <a href="{% url 'subir_publicacion' %}">➕</a>
+      {% if user.is_authenticated %}
       <a href="{% url 'chat_list' %}">💬</a>
       <div class="notification-dropdown">
         <a href="#" class="notification-bell" onclick="toggleNotifications(event)">

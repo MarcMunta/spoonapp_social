@@ -234,7 +234,7 @@ def profile(request, username):
 
     posts_by_category = {'all': list(posts)}
     for category in categories:
-        posts_by_category[category.slug] = list(posts.filter(categories=category))
+        posts_by_category[category.slug] = list(posts.filter(categories__slug=category.slug))
 
     is_following = False
     if request.user.is_authenticated and request.user != profile_user:

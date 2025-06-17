@@ -36,34 +36,160 @@ document.addEventListener('DOMContentLoaded', () => {
     storyInput.addEventListener('change', () => {
       document.getElementById('storyForm').submit();
     });
+    const addBtn = document.querySelector('.story-add');
+    if (addBtn) {
+      addBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        storyInput.click();
+      });
+    }
   }
 
-  document.querySelectorAll('.open-story').forEach(el => {
-    el.addEventListener('click', () => {
-      const url = el.dataset.url;
-      const user = el.dataset.user;
-      const modal = document.getElementById('storyModal');
-      const img = document.getElementById('storyImage');
-      const video = document.getElementById('storyVideo');
-      document.querySelector('.story-modal-user').textContent = user;
-      if (/\.(mp4|webm|ogg)$/i.test(url)) {
-        video.src = url;
-        video.classList.remove('d-none');
-        img.classList.add('d-none');
+  let currentUrls = [];
+  let currentExpires = [];
+  let currentIndex = 0;
+  let progressTimeout;
+  let countdownInterval;
+
+  const modal = document.getElementById('storyModal');
+  const img = document.getElementById('storyImage');
+  const video = document.getElementById('storyVideo');
+  const progressBar = document.querySelector('.story-progress-bar');
+  const modalContent = modal.querySelector('.story-modal-content');
+
+  const countdownEl = document.querySelector('.story-countdown');
+
+  function updateCountdown(expireIso) {
+    if (!countdownEl) return;
+    const created = new Date(new Date(expireIso).getTime() - 24 * 60 * 60 * 1000);
+    const diff = Date.now() - created.getTime();
+    if (diff <= 0) {
+      countdownEl.textContent = '0m';
+      return;
+    }
+    const minutes = Math.floor(diff / 60000);
+    if (minutes < 60) {
+      countdownEl.textContent = `${minutes}m`;
+    } else {
+      const hours = Math.floor(minutes / 60);
+      countdownEl.textContent = `${hours}h`;
+    }
+  }
+
+  function showStory(idx) {
+    const url = currentUrls[idx];
+    if (/\.(mp4|webm|ogg)$/i.test(url)) {
+      video.src = url;
+      video.classList.remove('d-none');
+      img.classList.add('d-none');
+    } else {
+      img.src = url;
+      img.classList.remove('d-none');
+      video.classList.add('d-none');
+      video.pause();
+    }
+    if (progressBar) {
+      progressBar.style.transition = 'none';
+      progressBar.style.width = '0%';
+      requestAnimationFrame(() => {
+        progressBar.style.transition = 'width 5s linear';
+        progressBar.style.width = '100%';
+      });
+    }
+    clearTimeout(progressTimeout);
+    clearInterval(countdownInterval);
+    updateCountdown(currentExpires[idx]);
+    countdownInterval = setInterval(() => updateCountdown(currentExpires[idx]), 1000);
+    progressTimeout = setTimeout(nextStory, 5000);
+    const replyBtn = document.getElementById('storyReplySend');
+    if (replyBtn && currentStoryElIndex != null) {
+      const storyIds = storyEls[currentStoryElIndex].dataset.storyId.split('|');
+      replyBtn.dataset.storyId = storyIds[idx];
+    }
+  }
+
+  const storyEls = Array.from(document.querySelectorAll('.open-story'));
+  let currentStoryElIndex = 0;
+
+  function openStories(el, idx) {
+    currentUrls = el.dataset.urls.split('|');
+    currentExpires = el.dataset.expires.split('|');
+    currentIndex = 0;
+    currentStoryElIndex = idx;
+    const userContainer = document.querySelector('.story-modal-user');
+    if (userContainer) {
+      userContainer.innerHTML = `<img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40">` +
+        `<a href="${el.dataset.profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
+    }
+    const replyBtn = document.getElementById('storyReplySend');
+    if (replyBtn) replyBtn.dataset.storyId = el.dataset.storyId.split('|')[currentIndex];
+    modal.style.display = 'flex';
+    modalContent.classList.add('open-anim');
+    showStory(currentIndex);
+  }
+
+  function closeStories() {
+    modal.style.display = 'none';
+    modalContent.classList.remove('open-anim');
+    clearTimeout(progressTimeout);
+    clearInterval(countdownInterval);
+    if (progressBar) progressBar.style.width = '0%';
+    if (countdownEl) countdownEl.textContent = '';
+  }
+
+  function nextStory() {
+    if (currentIndex < currentUrls.length - 1) {
+      currentIndex++;
+      showStory(currentIndex);
+    } else {
+      const nextEl = storyEls[currentStoryElIndex + 1];
+      if (nextEl) {
+        openStories(nextEl, currentStoryElIndex + 1);
       } else {
-        img.src = url;
-        img.classList.remove('d-none');
-        video.classList.add('d-none');
-        video.pause();
+        closeStories();
       }
-      modal.style.display = 'flex';
-      setTimeout(() => { modal.style.display = 'none'; }, 5000);
+    }
+  }
+
+  function prevStory() {
+    if (currentIndex > 0) {
+      currentIndex--;
+      showStory(currentIndex);
+    }
+  }
+
+  storyEls.forEach((el, idx) => {
+    el.addEventListener('click', () => {
+      openStories(el, idx);
     });
   });
 
-  document.querySelector('.story-modal-close')?.addEventListener('click', () => {
-    document.getElementById('storyModal').style.display = 'none';
-  });
+  document.querySelector('.story-next')?.addEventListener('click', nextStory);
+  document.querySelector('.story-prev')?.addEventListener('click', prevStory);
+  document.querySelector('.story-modal-close')?.addEventListener('click', closeStories);
+
+  const replyBtnEl = document.getElementById('storyReplySend');
+  if (replyBtnEl) {
+    replyBtnEl.addEventListener('click', () => {
+      const storyId = replyBtnEl.dataset.storyId;
+      const input = document.getElementById('storyReplyInput');
+      const content = input ? input.value.trim() : '';
+      if (!storyId) return;
+      const formData = new FormData();
+      formData.append('content', content);
+      fetch(`/story/${storyId}/reply/`, {
+        method: 'POST',
+        body: formData,
+        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+      })
+        .then(res => res.json())
+        .then(data => {
+          if (data.chat_id) {
+            window.location.href = `/chat/${data.chat_id}/`;
+          }
+        });
+    });
+  }
 
   document.querySelectorAll('.like-post').forEach(btn => {
     btn.addEventListener('click', e => {

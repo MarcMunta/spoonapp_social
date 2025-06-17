@@ -3,36 +3,58 @@
     <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}">
       {% csrf_token %}
       {{ story_form.media_file }}
-      <div class="story-thumb user-story" onclick="document.getElementById('id_media_file').click()">
+      <div class="story-thumb user-story{% if user_story_data.urls %} open-story{% endif %}"
+           {% if user_story_data.urls %}
+             data-urls="{{ user_story_data.urls|join:'|' }}"
+             data-expires="{{ user_story_data.expires|join:'|' }}"
+             data-user="{{ user.username }}"
+             data-profile-url="{% url 'profile' user.username %}"
+             data-avatar-url="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.imgur.com/jNNT4LE.png{% endif %}"
+             data-story-id="{{ user_story_data.ids|join:'|' }}"
+           {% endif %}>
         {% if user.profile.profile_picture %}
-        <img src="{{ user.profile.profile_picture.url }}" class="story-img" alt="{{ user.username }}">
+        <img src="{{ user.profile.profile_picture.url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% else %}
-        <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ user.username }}">
+        <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% endif %}
-        <span class="story-add">+</span>
+        <span class="story-add" onclick="event.stopPropagation(); document.getElementById('id_media_file').click();">+</span>
       </div>
     </form>
     <div class="story-username">{{ user.username }}</div>
   </div>
-  {% for st in friend_stories %}
+{% for friend, data in friend_stories.items %}
   <div class="story-item">
-    <div class="story-thumb open-story" data-url="{{ st.media_file.url }}" data-user="{{ st.user.username }}">
-      {% if st.user.profile.profile_picture %}
-      <img src="{{ st.user.profile.profile_picture.url }}" class="story-img" alt="{{ st.user.username }}">
+    <div class="story-thumb open-story"
+         data-urls="{{ data.urls|join:'|' }}"
+         data-expires="{{ data.expires|join:'|' }}"
+         data-user="{{ friend.username }}"
+         data-profile-url="{% url 'profile' friend.username %}"
+         data-avatar-url="{% if friend.profile.profile_picture %}{{ friend.profile.profile_picture.url }}{% else %}https://i.imgur.com/jNNT4LE.png{% endif %}"
+         data-story-id="{{ data.ids|join:'|' }}">
+      {% if friend.profile.profile_picture %}
+      <img src="{{ friend.profile.profile_picture.url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
       {% else %}
-      <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ st.user.username }}">
+      <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ friend.username }}" width="50" height="50">
       {% endif %}
     </div>
-    <div class="story-username">{{ st.user.username }}</div>
+    <div class="story-username">{{ friend.username }}</div>
   </div>
-  {% endfor %}
+{% endfor %}
 </div>
 
 <div id="storyModal" class="story-modal">
   <div class="story-modal-content">
+    <div class="story-progress"><div class="story-progress-bar"></div></div>
+    <div class="story-countdown"></div>
     <span class="story-modal-close">&times;</span>
+    <span class="story-prev">&#10094;</span>
+    <span class="story-next">&#10095;</span>
     <div class="story-modal-user text-white mb-2"></div>
     <img id="storyImage" class="w-100 d-none" />
     <video id="storyVideo" class="w-100 d-none" controls></video>
+    <div class="story-reply mt-2 d-flex">
+      <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="Responder...">
+      <button id="storyReplySend" class="btn btn-primary" data-story-id="">Enviar</button>
+    </div>
   </div>
 </div>

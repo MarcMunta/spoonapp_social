@@ -71,10 +71,25 @@ def home(request):
     context['show_form'] = False
 
     if request.user.is_authenticated:
-        context['friends'] = get_friends(request.user)  # ✅ Solo si el usuario está logueado
-        active_stories = Story.objects.filter(expires_at__gt=timezone.now())
-        context['user_story'] = active_stories.filter(user=request.user).first()
-        context['friend_stories'] = active_stories.filter(user__in=context['friends']).exclude(user=request.user)
+        Story.objects.filter(expires_at__lte=timezone.now()).delete()
+        context['friends'] = get_friends(request.user)
+        active_stories = Story.objects.filter(expires_at__gt=timezone.now()).select_related('user').order_by('created_at')
+
+        user_story_list = active_stories.filter(user=request.user)
+        context['user_story_data'] = {
+            'urls': [st.media_file.url for st in user_story_list],
+            'expires': [st.expires_at.isoformat() for st in user_story_list],
+            'ids': [st.id for st in user_story_list],
+        }
+
+        friend_story_map = {}
+        for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
+            entry = friend_story_map.setdefault(st.user, {'urls': [], 'expires': [], 'ids': []})
+            entry['urls'].append(st.media_file.url)
+            entry['expires'].append(st.expires_at.isoformat())
+            entry['ids'].append(st.id)
+        context['friend_stories'] = friend_story_map
+
         context['story_form'] = StoryForm()
 
     return render(request, 'social/pages/feed.html', context)
@@ -391,7 +406,8 @@ def chat_detail(request, chat_id):
     return render(request, 'social/chat_detail.html', {
         'chat': chat,
         'other_user': other_user,
-        'messages': messages
+        'messages': messages,
+        'now': timezone.now(),
     })
 
 @login_required
@@ -439,6 +455,25 @@ def load_messages(request, chat_id):
         })
     
     return JsonResponse({'messages': messages_data})
+
+
+@login_required
+def reply_story(request, story_id):
+    """Send a chat message in reply to a story."""
+    story = get_object_or_404(Story, id=story_id)
+    if request.method == 'POST':
+        content = request.POST.get('content', '').strip()
+        chat = Chat.objects.filter(participants=request.user).filter(participants=story.user).first()
+        if not chat:
+            chat = Chat.objects.create()
+            chat.participants.add(request.user, story.user)
+        Message.objects.create(chat=chat, sender=request.user, content=content, story=story)
+        chat.last_message_at = now()
+        chat.save()
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'success': True, 'chat_id': chat.id})
+        return redirect('chat_detail', chat_id=chat.id)
+    return redirect('home')
 
 @login_required
 def notifications_view(request):

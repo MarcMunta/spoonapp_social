@@ -220,6 +220,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentIndex > 0) {
       currentIndex--;
       showStory(currentIndex);
+    } else {
+      const prevEl = storyEls[currentStoryElIndex - 1];
+      if (prevEl) {
+        openStories(prevEl, currentStoryElIndex - 1);
+      } else {
+        closeStories();
+      }
     }
   }
 
@@ -227,6 +234,27 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('click', () => {
       openStories(el, idx);
     });
+  });
+
+  // allow clicking on the content to navigate left/right
+  modalContent.addEventListener('click', e => {
+    if (e.target === modalContent || e.target === img || e.target === video) {
+      const rect = modalContent.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      if (clickX > rect.width / 2) {
+        nextStory();
+      } else {
+        prevStory();
+      }
+    }
+  });
+
+  // navigate using keyboard arrows
+  document.addEventListener('keydown', e => {
+    if (modal.style.display === 'flex') {
+      if (e.key === 'ArrowRight') nextStory();
+      if (e.key === 'ArrowLeft') prevStory();
+    }
   });
 
   document.querySelector('.story-next')?.addEventListener('click', nextStory);

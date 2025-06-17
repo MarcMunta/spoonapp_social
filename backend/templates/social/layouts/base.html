@@ -500,7 +500,7 @@
   </style>
 </head>
 
-<body class="{% block body_class %}{% endblock %}">
+<body data-current-user="{% if user.is_authenticated %}{{ user.username }}{% endif %}" class="{% block body_class %}{% endblock %}">
   <div class="topbar">
     <div class="app-title"><a href="{% url 'home' %}">SpoonApp SOCIAL</a></div>
     <div class="topbar-icons">

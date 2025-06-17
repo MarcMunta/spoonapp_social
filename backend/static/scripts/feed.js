@@ -267,6 +267,10 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const storyId = deleteBtn.dataset.storyId;
       if (!storyId) return;
+      if (!confirm('¿Eliminar definitivamente esta historia?')) {
+        resumeProgress();
+        return;
+      }
       fetch(`/story/${storyId}/delete/`, {
         method: 'POST',
         headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }

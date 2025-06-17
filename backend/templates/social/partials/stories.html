@@ -1,4 +1,6 @@
-<div class="stories-container mb-3">
+<div class="stories-wrapper position-relative mb-3">
+  <span class="stories-prev">&#10094;</span>
+  <div class="stories-container">
   <div class="story-item">
     <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}">
       {% csrf_token %}
@@ -41,6 +43,8 @@
     <div class="story-username">{{ friend.username }}</div>
   </div>
 {% endfor %}
+  </div>
+  <span class="stories-next">&#10095;</span>
 </div>
 
 <div id="storyModal" class="story-modal">

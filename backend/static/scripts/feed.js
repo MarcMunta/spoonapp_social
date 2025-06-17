@@ -45,6 +45,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  const storiesContainer = document.querySelector('.stories-container');
+  const prevStories = document.querySelector('.stories-prev');
+  const nextStories = document.querySelector('.stories-next');
+  if (storiesContainer && (prevStories || nextStories)) {
+    const itemWidth = storiesContainer.querySelector('.story-item')?.offsetWidth || 120;
+    const gap = parseInt(getComputedStyle(storiesContainer).gap) || 0;
+    const scrollAmount = itemWidth + gap;
+    prevStories?.addEventListener('click', () => {
+      storiesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+    });
+    nextStories?.addEventListener('click', () => {
+      storiesContainer.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    });
+  }
+
   let currentUrls = [];
   let currentExpires = [];
   let currentIndex = 0;

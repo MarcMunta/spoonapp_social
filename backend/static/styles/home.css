@@ -1153,12 +1153,37 @@ body:has(.spoon-chat-container) .rightbar {
 }
 
 /* Stories Styles */
+.stories-wrapper {
+    position: relative;
+}
+
 .stories-container {
     display: flex;
     gap: 12px;
     overflow-x: auto;
     padding-bottom: 10px;
 }
+
+.stories-prev,
+.stories-next {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #fff;
+    background: rgba(0, 0, 0, 0.4);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
+}
+
+.stories-prev { left: 5px; }
+.stories-next { right: 5px; }
 
 .story-item {
     text-align: center;

@@ -61,7 +61,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateCountdown(expireIso) {
     if (!countdownEl) return;
-    const diff = new Date(expireIso) - Date.now();
+    const created = new Date(new Date(expireIso).getTime() - 24 * 60 * 60 * 1000);
+    const diff = Date.now() - created.getTime();
     if (diff <= 0) {
       countdownEl.textContent = '0m';
       return;

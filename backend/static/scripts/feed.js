@@ -50,14 +50,28 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentIndex = 0;
   let progressTimeout;
   let countdownInterval;
+  let storyStart = 0;
+  let remainingTime = 5000;
+  let progressPaused = false;
 
   const modal = document.getElementById('storyModal');
   const img = document.getElementById('storyImage');
   const video = document.getElementById('storyVideo');
   const progressBar = document.querySelector('.story-progress-bar');
   const modalContent = modal.querySelector('.story-modal-content');
+  const storyOptions = document.querySelector('.story-options');
+  const storyViews = document.querySelector('.story-views');
+  const replyContainer = document.querySelector('.story-reply');
+  const deleteBtn = document.querySelector('.story-delete');
+  const replyInput = document.getElementById('storyReplyInput');
+  const optionsBtn = document.querySelector('.story-options-btn');
+  const optionsMenu = storyOptions ? storyOptions.querySelector('.dropdown-menu') : null;
+  const currentUsername = document.body.dataset.currentUser || '';
 
   const countdownEl = document.querySelector('.story-countdown');
+
+  let currentStoryIds = [];
+  let currentIsOwn = false;
 
   function updateCountdown(expireIso) {
     if (!countdownEl) return;
@@ -74,6 +88,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const hours = Math.floor(minutes / 60);
       countdownEl.textContent = `${hours}h`;
     }
+  }
+
+  function pauseProgress() {
+    if (progressPaused) return;
+    progressPaused = true;
+    clearTimeout(progressTimeout);
+    const elapsed = Date.now() - storyStart;
+    remainingTime = Math.max(0, 5000 - elapsed);
+    if (progressBar) {
+      const percent = Math.min(100, (elapsed / 5000) * 100);
+      progressBar.style.transition = 'none';
+      progressBar.style.width = `${percent}%`;
+    }
+  }
+
+  function resumeProgress() {
+    if (!progressPaused) return;
+    progressPaused = false;
+    storyStart = Date.now();
+    if (progressBar) {
+      requestAnimationFrame(() => {
+        progressBar.style.transition = `width ${remainingTime / 1000}s linear`;
+        progressBar.style.width = '100%';
+      });
+    }
+    clearTimeout(progressTimeout);
+    progressTimeout = setTimeout(nextStory, remainingTime);
   }
 
   function showStory(idx) {
@@ -96,16 +137,30 @@ document.addEventListener('DOMContentLoaded', () => {
         progressBar.style.width = '100%';
       });
     }
+    storyStart = Date.now();
+    remainingTime = 5000;
+    progressPaused = false;
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
     updateCountdown(currentExpires[idx]);
     countdownInterval = setInterval(() => updateCountdown(currentExpires[idx]), 1000);
-    progressTimeout = setTimeout(nextStory, 5000);
+    progressTimeout = setTimeout(nextStory, remainingTime);
     const replyBtn = document.getElementById('storyReplySend');
     if (replyBtn && currentStoryElIndex != null) {
-      const storyIds = storyEls[currentStoryElIndex].dataset.storyId.split('|');
-      replyBtn.dataset.storyId = storyIds[idx];
+      replyBtn.dataset.storyId = currentIsOwn ? '' : currentStoryIds[idx];
+      replyBtn.disabled = currentIsOwn;
     }
+    if (replyInput) {
+      replyInput.disabled = currentIsOwn;
+    }
+    if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[idx];
+    fetch(`/story/${currentStoryIds[idx]}/view/`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      .then(res => res.json())
+      .then(data => {
+        if (currentIsOwn && storyViews) {
+          storyViews.textContent = `${data.views} views`;
+        }
+      });
   }
 
   const storyEls = Array.from(document.querySelectorAll('.open-story'));
@@ -114,15 +169,25 @@ document.addEventListener('DOMContentLoaded', () => {
   function openStories(el, idx) {
     currentUrls = el.dataset.urls.split('|');
     currentExpires = el.dataset.expires.split('|');
+    currentStoryIds = el.dataset.storyId.split('|');
     currentIndex = 0;
     currentStoryElIndex = idx;
+    currentIsOwn = el.dataset.user === currentUsername;
     const userContainer = document.querySelector('.story-modal-user');
     if (userContainer) {
       userContainer.innerHTML = `<img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40">` +
         `<a href="${el.dataset.profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
     }
     const replyBtn = document.getElementById('storyReplySend');
-    if (replyBtn) replyBtn.dataset.storyId = el.dataset.storyId.split('|')[currentIndex];
+    if (replyBtn) {
+      replyBtn.dataset.storyId = currentIsOwn ? '' : currentStoryIds[currentIndex];
+      replyBtn.disabled = currentIsOwn;
+    }
+    if (replyInput) replyInput.disabled = currentIsOwn;
+    if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
+    if (storyViews) storyViews.style.display = currentIsOwn ? 'block' : 'none';
+    if (replyContainer) replyContainer.style.display = currentIsOwn ? 'none' : 'flex';
+    if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[currentIndex];
     modal.style.display = 'flex';
     modalContent.classList.add('open-anim');
     showStory(currentIndex);
@@ -155,6 +220,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentIndex > 0) {
       currentIndex--;
       showStory(currentIndex);
+    } else {
+      const prevEl = storyEls[currentStoryElIndex - 1];
+      if (prevEl) {
+        openStories(prevEl, currentStoryElIndex - 1);
+      } else {
+        closeStories();
+      }
     }
   }
 
@@ -162,6 +234,27 @@ document.addEventListener('DOMContentLoaded', () => {
     el.addEventListener('click', () => {
       openStories(el, idx);
     });
+  });
+
+  // allow clicking on the content to navigate left/right
+  modalContent.addEventListener('click', e => {
+    if (e.target === modalContent || e.target === img || e.target === video) {
+      const rect = modalContent.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      if (clickX > rect.width / 2) {
+        nextStory();
+      } else {
+        prevStory();
+      }
+    }
+  });
+
+  // navigate using keyboard arrows
+  document.addEventListener('keydown', e => {
+    if (modal.style.display === 'flex') {
+      if (e.key === 'ArrowRight') nextStory();
+      if (e.key === 'ArrowLeft') prevStory();
+    }
   });
 
   document.querySelector('.story-next')?.addEventListener('click', nextStory);
@@ -188,6 +281,53 @@ document.addEventListener('DOMContentLoaded', () => {
             window.location.href = `/chat/${data.chat_id}/`;
           }
         });
+    });
+
+    if (replyInput) {
+      replyInput.addEventListener('focus', pauseProgress);
+      replyInput.addEventListener('input', pauseProgress);
+      replyInput.addEventListener('blur', resumeProgress);
+    }
+  }
+
+  if (deleteBtn) {
+    deleteBtn.addEventListener('click', e => {
+      e.preventDefault();
+      const storyId = deleteBtn.dataset.storyId;
+      if (!storyId) return;
+      if (!confirm('¿Eliminar definitivamente esta historia?')) {
+        resumeProgress();
+        return;
+      }
+      fetch(`/story/${storyId}/delete/`, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
+      }).then(res => res.json()).then(data => {
+        if (data.success) {
+          window.location.reload();
+        }
+      });
+    });
+  }
+
+  if (optionsBtn && optionsMenu) {
+    optionsBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      const open = optionsMenu.classList.contains('show');
+      if (open) {
+        optionsMenu.classList.remove('show');
+        resumeProgress();
+      } else {
+        optionsMenu.classList.add('show');
+        pauseProgress();
+      }
+    });
+
+    document.addEventListener('click', e => {
+      if (!storyOptions.contains(e.target) && optionsMenu.classList.contains('show')) {
+        optionsMenu.classList.remove('show');
+        resumeProgress();
+      }
     });
   }
 

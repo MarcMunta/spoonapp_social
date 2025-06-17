@@ -6,7 +6,7 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import now
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm
-from .models import FriendRequest
+from .models import FriendRequest, StoryView
 from .models import PostCategory  # asegúrate de importar esto
 from django.utils import timezone
 from django.db.models import Q, Prefetch, Count
@@ -101,6 +101,9 @@ def feed(request):
 
     if request.user.is_authenticated:
         context['friends'] = get_friends(request.user)  # ✅ Añade esto como en home
+
+    # Show profile icon in the top bar on the post creation page
+    context['hide_profile_icon'] = False
 
     return render(request, 'social/pages/feed.html', context)
 
@@ -450,9 +453,36 @@ def load_messages(request, chat_id):
 
 
 @login_required
+def delete_story(request, story_id):
+    """Delete a story owned by the current user"""
+    story = get_object_or_404(Story, id=story_id, user=request.user)
+    if request.method == 'POST':
+        story.delete()
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'success': True})
+    return redirect('home')
+
+
+@login_required
+def view_story(request, story_id):
+    """Register a view and return total views"""
+    story = get_object_or_404(Story, id=story_id)
+    if request.user != story.user:
+        StoryView.objects.get_or_create(story=story, viewer=request.user)
+    views = StoryView.objects.filter(story=story).values('viewer').distinct().count()
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({'views': views})
+    return JsonResponse({'views': views})
+
+
+@login_required
 def reply_story(request, story_id):
     """Send a chat message in reply to a story."""
     story = get_object_or_404(Story, id=story_id)
+    if request.user == story.user:
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'error': 'Cannot reply to own story.'}, status=403)
+        return redirect('home')
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
         chat = Chat.objects.filter(participants=request.user).filter(participants=story.user).first()

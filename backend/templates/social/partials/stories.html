@@ -11,6 +11,7 @@
              data-profile-url="{% url 'profile' user.username %}"
              data-avatar-url="{% if user.profile.profile_picture %}{{ user.profile.profile_picture.url }}{% else %}https://i.imgur.com/jNNT4LE.png{% endif %}"
              data-story-id="{{ user_story_data.ids|join:'|' }}"
+             data-own="true"
            {% endif %}>
         {% if user.profile.profile_picture %}
         <img src="{{ user.profile.profile_picture.url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
@@ -46,6 +47,13 @@
   <div class="story-modal-content">
     <div class="story-progress"><div class="story-progress-bar"></div></div>
     <div class="story-countdown"></div>
+    <div class="dropup dropdown story-options position-absolute" style="bottom:5px; right:5px; display:none;">
+      <button class="btn btn-sm btn-dark story-options-btn" data-bs-toggle="dropdown" aria-expanded="false">&#8942;</button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item text-danger story-delete" href="#" data-story-id="">Eliminar</a></li>
+      </ul>
+    </div>
+    <div class="story-views text-white position-absolute" style="bottom:8px; left:10px; display:none;"></div>
     <span class="story-modal-close">&times;</span>
     <span class="story-prev">&#10094;</span>
     <span class="story-next">&#10095;</span>

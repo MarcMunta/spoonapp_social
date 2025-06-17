@@ -6,7 +6,7 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import now
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm
-from .models import FriendRequest
+from .models import FriendRequest, StoryView
 from .models import PostCategory  # asegúrate de importar esto
 from django.utils import timezone
 from django.db.models import Q, Prefetch, Count
@@ -455,6 +455,29 @@ def load_messages(request, chat_id):
         })
     
     return JsonResponse({'messages': messages_data})
+
+
+@login_required
+def delete_story(request, story_id):
+    """Delete a story owned by the current user"""
+    story = get_object_or_404(Story, id=story_id, user=request.user)
+    if request.method == 'POST':
+        story.delete()
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'success': True})
+    return redirect('home')
+
+
+@login_required
+def view_story(request, story_id):
+    """Register a view and return total views"""
+    story = get_object_or_404(Story, id=story_id)
+    if request.user != story.user:
+        StoryView.objects.get_or_create(story=story, viewer=request.user)
+    views = StoryView.objects.filter(story=story).values('viewer').distinct().count()
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return JsonResponse({'views': views})
+    return JsonResponse({'views': views})
 
 
 @login_required

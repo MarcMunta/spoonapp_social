@@ -92,7 +92,18 @@ def home(request):
 
         context['story_form'] = StoryForm()
 
+    # Ensure profile icon is visible on the home page
+    context['hide_profile_icon'] = False
+
     return render(request, 'social/pages/feed.html', context)
+
+def base_context(request):
+    context = {}
+    if request.user.is_authenticated:
+        context['unread_notifications'] = Notification.objects.filter(
+            user=request.user, is_read=False
+        ).order_by('-created_at')[:5]
+    return context
 
 
 def feed(request):
@@ -100,32 +111,9 @@ def feed(request):
     context['show_form'] = True
 
     if request.user.is_authenticated:
-        Story.objects.filter(expires_at__lte=timezone.now()).delete()
         context['friends'] = get_friends(request.user)
-        active_stories = (
-            Story.objects.filter(expires_at__gt=timezone.now())
-            .select_related('user')
-            .order_by('created_at')
-        )
 
-        user_story_list = active_stories.filter(user=request.user)
-        context['user_story_data'] = {
-            'urls': [st.media_file.url for st in user_story_list],
-            'expires': [st.expires_at.isoformat() for st in user_story_list],
-            'ids': [st.id for st in user_story_list],
-        }
-
-        friend_story_map = {}
-        for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'expires': [], 'ids': []})
-            entry['urls'].append(st.media_file.url)
-            entry['expires'].append(st.expires_at.isoformat())
-            entry['ids'].append(st.id)
-        context['friend_stories'] = friend_story_map
-
-        context['story_form'] = StoryForm()
-
-    # Show profile icon in the top bar on the post creation page
+    # Show profile icon on the post creation page
     context['hide_profile_icon'] = False
 
     return render(request, 'social/pages/feed.html', context)
@@ -400,21 +388,19 @@ def chat_list(request):
 
 @login_required
 def chat_detail(request, chat_id):
-    """Display messages in a specific chat with enhanced functionality"""
+    """Display messages in a specific chat"""
     chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
     other_user = chat.get_other_participant(request.user)
     
     # Mark messages as read
     chat.messages.filter(read=False).exclude(sender=request.user).update(read=True)
     
-    # Get most recent messages (latest 30 for initial load)
-    messages = chat.messages.order_by('-sent_at')[:30]
-    messages = reversed(messages)  # Show in chronological order
+    messages = chat.messages.all()
     
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
         if content:
-            message = Message.objects.create(
+            Message.objects.create(
                 chat=chat,
                 sender=request.user,
                 content=content
@@ -423,10 +409,7 @@ def chat_detail(request, chat_id):
             chat.save()
             
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse({
-                    'success': True,
-                    'message_id': message.id
-                })
+                return JsonResponse({'success': True})
             return redirect('chat_detail', chat_id=chat.id)
     
     return render(request, 'social/chat_detail.html', {
@@ -466,46 +449,9 @@ def start_chat(request, user_id):
 
 @login_required
 def load_messages(request, chat_id):
-    """Load messages for AJAX requests with pagination support"""
+    """Load messages for AJAX requests"""
     chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
-    
-    # Get pagination parameters
-    before_id = request.GET.get('before')
-    after_id = request.GET.get('after')
-    limit = int(request.GET.get('limit', 20))
-    
-    # Base queryset
-    messages_qs = chat.messages.all().order_by('-sent_at')
-    
-    # Filter messages before a specific ID if provided (for loading older messages)
-    if before_id:
-        try:
-            before_message = chat.messages.get(id=before_id)
-            messages_qs = messages_qs.filter(sent_at__lt=before_message.sent_at)
-        except Message.DoesNotExist:
-            pass
-    
-    # Filter messages after a specific ID if provided (for loading newer messages)
-    if after_id:
-        try:
-            after_message = chat.messages.get(id=after_id)
-            messages_qs = messages_qs.filter(sent_at__gt=after_message.sent_at).order_by('sent_at')
-        except Message.DoesNotExist:
-            pass
-    
-    # Get messages with limit
-    messages = list(messages_qs[:limit])
-    
-    # Check if there are more messages
-    if before_id:
-        has_more = messages_qs.count() > limit
-        # Reverse to get chronological order for older messages
-        messages.reverse()
-    elif after_id:
-        has_more = False  # We don't need pagination for newer messages
-    else:
-        has_more = messages_qs.count() > limit
-        messages.reverse()
+    messages = chat.messages.all()
     
     messages_data = []
     for msg in messages:
@@ -517,11 +463,8 @@ def load_messages(request, chat_id):
             'is_mine': msg.sender == request.user
         })
     
-    return JsonResponse({
-        'messages': messages_data,
-        'has_more': has_more,
-        'count': len(messages_data)
-    })
+    return JsonResponse({'messages': messages_data})
+
 
 @login_required
 def delete_story(request, story_id):

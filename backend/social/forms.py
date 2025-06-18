@@ -22,7 +22,7 @@ class PostForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         img = self.cleaned_data.get('image')
-        if img:
+        if img and hasattr(img, "read"):
             instance.image = img.read()
             instance.image_mime = img.content_type
         if commit:
@@ -81,7 +81,7 @@ class ProfileForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         pic = self.cleaned_data.get('profile_picture')
-        if pic:
+        if pic and hasattr(pic, "read"):
             instance.profile_picture = pic.read()
             instance.profile_picture_mime = pic.content_type
         if commit:
@@ -101,7 +101,7 @@ class StoryForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         media = self.cleaned_data.get('media_file')
-        if media:
+        if media and hasattr(media, "read"):
             instance.media_data = media.read()
             instance.media_mime = media.content_type
         if commit:

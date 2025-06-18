@@ -135,6 +135,8 @@ def delete_post(request, post_id):
         return HttpResponseForbidden("No tienes permiso para eliminar esta publicación.")
     if request.method == 'POST':
         post.delete()
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'success': True})
         return redirect('home')
 
 @login_required

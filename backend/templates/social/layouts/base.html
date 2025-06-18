@@ -741,25 +741,171 @@
       background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%);
     }
 
-    /* Loading indicator for older messages */
+    /* FIXED: Enhanced scrollbar styling and scroll indicators */
+    .spoon-scroll-indicator {
+      position: absolute !important;
+      left: 50% !important;
+      transform: translateX(-50%) !important;
+      background: linear-gradient(135deg, rgba(212, 138, 193, 0.95) 0%, rgba(184, 107, 163, 0.95) 100%) !important;
+      color: white !important;
+      padding: 15px 25px !important;
+      border-radius: 30px !important;
+      display: none !important; /* Hidden by default */
+      align-items: center !important;
+      gap: 10px !important;
+      cursor: pointer !important;
+      font-size: 0.9rem !important;
+      font-weight: 700 !important;
+      box-shadow: 0 6px 20px rgba(212, 138, 193, 0.5) !important;
+      backdrop-filter: blur(15px) !important;
+      -webkit-backdrop-filter: blur(15px) !important;
+      border: 3px solid rgba(255, 255, 255, 0.3) !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      z-index: 50 !important;
+      user-select: none !important;
+      animation: scrollIndicatorPulse 3s ease-in-out infinite !important;
+      min-width: 200px !important;
+      text-align: center !important;
+    }
+
+    .spoon-scroll-indicator:hover {
+      transform: translateX(-50%) scale(1.08) !important;
+      box-shadow: 0 8px 25px rgba(212, 138, 193, 0.7) !important;
+      background: linear-gradient(135deg, rgba(184, 107, 163, 0.98) 0%, rgba(168, 85, 160, 0.98) 100%) !important;
+    }
+
+    .spoon-scroll-top {
+      top: 25px !important;
+    }
+
+    .spoon-scroll-bottom {
+      bottom: 25px !important;
+    }
+
+    .spoon-scroll-text {
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      justify-content: center !important;
+    }
+
+    .spoon-scroll-text i {
+      font-size: 1.1rem !important;
+      animation: scrollArrowBounce 2s ease-in-out infinite !important;
+    }
+
+    @keyframes scrollIndicatorPulse {
+      0%, 100% {
+        opacity: 0.9;
+        transform: translateX(-50%) scale(1);
+        box-shadow: 0 6px 20px rgba(212, 138, 193, 0.5);
+      }
+      50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.03);
+        box-shadow: 0 8px 25px rgba(212, 138, 193, 0.7);
+      }
+    }
+
+    @keyframes scrollArrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-3px); }
+    }
+
+    /* FIXED: Floating scroll button */
+    .spoon-floating-scroll-btn {
+      position: fixed !important;
+      bottom: 140px !important;
+      right: 30px !important;
+      z-index: 1000 !important;
+      background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%) !important;
+      border: none !important;
+      color: white !important;
+      width: 65px !important;
+      height: 65px !important;
+      border-radius: 35px !important;
+      box-shadow: 0 6px 20px rgba(212, 138, 193, 0.5) !important;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+      display: flex !important;
+      flex-direction: column !important;
+      align-items: center !important;
+      justify-content: center !important;
+      cursor: pointer !important;
+      animation: floatingBounce 3s ease-in-out infinite !important;
+      border: 3px solid rgba(255, 255, 255, 0.2) !important;
+      backdrop-filter: blur(10px) !important;
+      -webkit-backdrop-filter: blur(10px) !important;
+    }
+
+    .spoon-floating-scroll-btn:hover {
+      transform: scale(1.15) !important;
+      box-shadow: 0 8px 25px rgba(212, 138, 193, 0.7) !important;
+      background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%) !important;
+      animation-play-state: paused !important;
+    }
+
+    .spoon-floating-scroll-btn i {
+      font-size: 1.3rem !important;
+      margin-bottom: 2px !important;
+      animation: arrowBounce 2s ease-in-out infinite !important;
+    }
+
+    .spoon-scroll-label {
+      font-size: 0.75rem !important;
+      font-weight: 700 !important;
+      text-transform: uppercase !important;
+      letter-spacing: 0.5px !important;
+    }
+
+    @keyframes floatingBounce {
+      0%, 100% {
+        transform: translateY(0) scale(1);
+      }
+      50% {
+        transform: translateY(-5px) scale(1.02);
+      }
+    }
+
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-2px); }
+    }
+
+    /* Loading indicator improvements */
     .spoon-loading-messages {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 15px;
-      opacity: 0.7;
+      user-select: none !important;
+      pointer-events: none !important;
+      display: flex !important;
+      justify-content: center !important;
+      align-items: center !important;
+      padding: 25px !important;
+      animation: loadingPulse 2s ease-in-out infinite !important;
     }
 
     .spoon-loading-messages .spoon-typing-indicator {
-      background: linear-gradient(135deg, #e8eaf0 0%, #d4d8e0 100%);
-      border: 2px solid #c0c4cc;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      padding: 8px 15px;
+      background: linear-gradient(135deg, #e8eaf0 0%, #d4d8e0 100%) !important;
+      border: 3px solid #c0c4cc !important;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15) !important;
+      padding: 15px 25px !important;
+      border-radius: 30px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      font-weight: 600 !important;
     }
 
-    /* Improved message bubble animations with data attributes */
+    @keyframes loadingPulse {
+      0%, 100% {
+        opacity: 0.6;
+      }
+      50% {
+        opacity: 1;
+      }
+    }
+
+    /* Enhanced message animations */
     .spoon-message-bubble[data-new="true"] {
-      animation: messageSlideIn 0.4s ease-out;
+      animation: messageSlideIn 0.4s ease-out !important;
     }
 
     @keyframes messageSlideIn {
@@ -770,6 +916,23 @@
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
+      }
+    }
+
+    .spoon-message-loaded {
+      opacity: 0 !important;
+      transform: translateX(-30px) scale(0.95) !important;
+      animation: messageLoadIn 0.6s ease-out forwards !important;
+    }
+
+    @keyframes messageLoadIn {
+      from {
+        opacity: 0;
+        transform: translateX(-30px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0) scale(1);
       }
     }
 

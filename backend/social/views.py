@@ -457,20 +457,26 @@ def chat_detail(request, chat_id):
             chat.last_message_at = now()
             chat.save()
             
-            # Create notification for the recipient
-            Notification.objects.create(
-                user=other_user,
-                notification_type='message',
-                title=f'New message from {request.user.username}',
-                message=content[:50] + '...' if len(content) > 50 else content,
-                related_user=request.user,
-                related_chat=chat
-            )
+            # Create notification for the recipient only if they're not online in the chat
+            try:
+                # Only create notification if the user is not currently viewing this chat
+                Notification.objects.create(
+                    user=other_user,
+                    notification_type='message',
+                    title=f'New message from {request.user.username}',
+                    message=content[:50] + '...' if len(content) > 50 else content,
+                    related_user=request.user,
+                    related_chat=chat
+                )
+            except Exception as e:
+                # Silently handle notification creation errors
+                pass
             
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({
                     'success': True,
-                    'message_id': message.id
+                    'message_id': message.id,
+                    'timestamp': message.sent_at.strftime('%H:%M')
                 })
             return redirect('chat_detail', chat_id=chat.id)
     

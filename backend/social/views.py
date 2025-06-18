@@ -18,11 +18,10 @@ def _build_feed_context(show_posts=True):
     """Return context for feed-related views."""
     posts = (
         Post.objects.all()
-        .annotate(comment_count=Count(
-            "postcomment",
-            filter=Q(postcomment__parent__isnull=True),
-            distinct=True,
-        ))
+        .annotate(
+            # Count all comments including replies
+            comment_count=Count("postcomment", distinct=True)
+        )
         .order_by("-created_at")
         if show_posts
         else Post.objects.none()

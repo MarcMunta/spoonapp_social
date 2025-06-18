@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
 from datetime import timedelta
+import base64
 
 class PostCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -18,10 +19,20 @@ class PostCategory(models.Model):
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='posts/')
+    image = models.BinaryField(null=True, blank=True, editable=True)
+    image_mime = models.CharField(max_length=100, null=True, blank=True)
     caption = models.TextField(blank=True)
     categories = models.ManyToManyField(PostCategory, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def image_data_url(self):
+        if self.image and self.image_mime:
+            return "data:%s;base64,%s" % (
+                self.image_mime,
+                base64.b64encode(self.image).decode(),
+            )
+        return ""
 
 class PostLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -64,9 +75,19 @@ def default_expiration():
 
 class Story(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    media_file = models.FileField(upload_to='stories/')
+    media_data = models.BinaryField(null=True, blank=True, editable=True)
+    media_mime = models.CharField(max_length=100, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(default=default_expiration)
+
+    @property
+    def media_data_url(self):
+        if self.media_data and self.media_mime:
+            return "data:%s;base64,%s" % (
+                self.media_mime,
+                base64.b64encode(self.media_data).decode(),
+            )
+        return ""
 
 class StoryView(models.Model):
     story = models.ForeignKey(Story, on_delete=models.CASCADE)
@@ -159,7 +180,8 @@ class FriendRequest(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_private = models.BooleanField(default=False)
-    profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
+    profile_picture = models.BinaryField(null=True, blank=True, editable=True)
+    profile_picture_mime = models.CharField(max_length=100, null=True, blank=True)
     last_seen = models.DateTimeField(auto_now=True)
     friends = models.ManyToManyField('self', symmetrical=False, blank=True)
     bio = models.TextField(blank=True, null=True)
@@ -169,9 +191,18 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.username
-    
+
     @property
     def online(self):
         from django.utils import timezone
         from datetime import timedelta
         return timezone.now() - self.last_seen < timedelta(minutes=5)
+
+    @property
+    def profile_picture_data_url(self):
+        if self.profile_picture and self.profile_picture_mime:
+            return "data:%s;base64,%s" % (
+                self.profile_picture_mime,
+                base64.b64encode(self.profile_picture).decode(),
+            )
+        return ""

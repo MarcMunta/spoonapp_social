@@ -1039,7 +1039,7 @@
       {% if user.is_authenticated %}
       {% if user.profile.profile_picture %}
       <a href="{% url 'profile' user.username %}">
-        <img src="{{ user.profile.profile_picture.url }}" alt="Foto de perfil"
+        <img src="{{ user.profile.profile_picture_data_url }}" alt="Foto de perfil"
           style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
       </a>
       {% else %}
@@ -1109,7 +1109,7 @@
           {% for f in friends %}
           <div class="friend-item d-flex align-items-center mb-2">
             {% if f.profile.profile_picture %}
-            <img src="{{ f.profile.profile_picture.url }}" alt="Foto perfil"
+            <img src="{{ f.profile.profile_picture_data_url }}" alt="Foto perfil"
               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% else %}
             <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"

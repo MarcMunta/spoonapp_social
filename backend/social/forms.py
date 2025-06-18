@@ -5,11 +5,12 @@ from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 class PostForm(forms.ModelForm):
+    image = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'class': 'file-input'}))
+
     class Meta:
         model = Post
         fields = ['image', 'caption', 'categories']
         widgets = {
-            'image': forms.ClearableFileInput(attrs={'class': 'file-input'}),
             'caption': forms.Textarea(attrs={
                 'rows': 3,
                 'placeholder': '¿Qué tienes en tu cuchara?',
@@ -17,6 +18,17 @@ class PostForm(forms.ModelForm):
             }),
             'categories': forms.SelectMultiple(attrs={'class': 'category-select'}),
         }
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        img = self.cleaned_data.get('image')
+        if img:
+            instance.image = img.read()
+            instance.image_mime = img.content_type
+        if commit:
+            instance.save()
+            self.save_m2m()
+        return instance
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -54,6 +66,8 @@ class UserForm(forms.ModelForm):
         fields = ['username'] 
 
 class ProfileForm(forms.ModelForm):
+    profile_picture = forms.ImageField(required=False)
+
     class Meta:
         model = Profile
         fields = ['profile_picture', 'bio', 'website', 'location', 'gender']
@@ -64,13 +78,32 @@ class ProfileForm(forms.ModelForm):
             'gender': forms.Select(choices=[('', 'Seleccione'), ('Hombre', 'Hombre'), ('Mujer', 'Mujer'), ('Otro', 'Otro')])
         }
 
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        pic = self.cleaned_data.get('profile_picture')
+        if pic:
+            instance.profile_picture = pic.read()
+            instance.profile_picture_mime = pic.content_type
+        if commit:
+            instance.save()
+        return instance
+
 class StoryForm(forms.ModelForm):
+    media_file = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={
+        'accept': 'image/*,video/*',
+        'hidden': True,
+    }))
+
     class Meta:
         model = Story
         fields = ['media_file']
-        widgets = {
-            'media_file': forms.ClearableFileInput(attrs={
-                'accept': 'image/*,video/*',
-                'hidden': True,
-            })
-        }
+
+    def save(self, commit=True):
+        instance = super().save(commit=False)
+        media = self.cleaned_data.get('media_file')
+        if media:
+            instance.media_data = media.read()
+            instance.media_mime = media.content_type
+        if commit:
+            instance.save()
+        return instance

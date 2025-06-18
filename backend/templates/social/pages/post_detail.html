@@ -4,7 +4,7 @@
 <div class="max-w-xl mx-auto p-4">
     <h1 class="text-xl font-bold mb-2">{{ post.user.username }}</h1>
     {% if post.image %}
-        <img src="{{ post.image.url }}" alt="Imagen del post" class="rounded mb-4">
+        <img src="{{ post.image_data_url }}" alt="Imagen del post" class="rounded mb-4">
     {% endif %}
     <p class="mb-4">{{ post.description }}</p>
     <p class="text-gray-600 text-sm">Publicado: {{ post.created_at }}</p>

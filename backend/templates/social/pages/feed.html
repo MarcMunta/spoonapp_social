@@ -10,8 +10,7 @@
   <button type="submit" class="publish-btn">📤 Publicar</button>
 </form>
 {% endif %}
-{# Only show stories when not creating a post #}
-{% if user.is_authenticated and not show_form %}
+{% if user.is_authenticated %}
 {% include 'social/partials/stories.html' %}
 {% endif %}
 {% for post in posts %}

@@ -125,8 +125,8 @@ def feed(request):
 
         context['story_form'] = StoryForm()
 
-    # Show profile icon in the top bar on the post creation page
-    context['hide_profile_icon'] = False
+    # Hide profile icon on the post creation page
+    context['hide_profile_icon'] = True
 
     return render(request, 'social/pages/feed.html', context)
 

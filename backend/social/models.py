@@ -161,6 +161,7 @@ class Profile(models.Model):
     is_private = models.BooleanField(default=False)
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     last_seen = models.DateTimeField(auto_now=True)
+    friends = models.ManyToManyField('self', symmetrical=False, blank=True)
 
     @property
     def online(self):

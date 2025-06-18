@@ -1070,13 +1070,13 @@
       </a>
       {% else %}
       <a href="{% url 'profile' user.username %}">
-        <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"
+        <img src="{{ default_avatar_data_url }}" alt="Por defecto"
           style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
       </a>
       {% endif %}
       {% else %}
       <a href="{% url 'home' %}">
-        <img src="https://i.imgur.com/jNNT4LE.png" alt="Invitado"
+        <img src="{{ default_avatar_data_url }}" alt="Invitado"
           style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
       </a>
       {% endif %}
@@ -1138,7 +1138,7 @@
             <img src="{{ f.profile.profile_picture_data_url }}" alt="Foto perfil"
               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% else %}
-            <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"
+            <img src="{{ default_avatar_data_url }}" alt="Por defecto"
               style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
             {% endif %}
 

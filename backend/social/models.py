@@ -81,6 +81,10 @@ class Story(models.Model):
     expires_at = models.DateTimeField(default=default_expiration)
 
     @property
+    def is_video(self):
+        return self.media_mime and self.media_mime.startswith('video')
+    
+    @property
     def media_data_url(self):
         if self.media_data and self.media_mime:
             return "data:%s;base64,%s" % (

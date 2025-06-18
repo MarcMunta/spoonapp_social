@@ -11,6 +11,7 @@ urlpatterns = [
     path('post/<int:post_id>/comment/', views.comment_post, name='comment_post'),
     path('post/<int:post_id>/comments/', views.load_comments, name='load_comments'),
     path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
+    path('profile/edit/', views.edit_profile, name='edit_profile'),
     path('profile/<str:username>/', views.profile, name='profile'),
     path('friend-requests/', views.friend_requests_view, name='friend_requests'),
     path('friend-requests/accept/<int:req_id>/', views.accept_friend_request, name='accept_friend_request'),

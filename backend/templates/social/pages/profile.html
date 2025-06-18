@@ -18,18 +18,12 @@
           style="width: 150px; height: 150px; object-fit: cover;">
         {% endif %}
         {% if user == profile_user %}
-        <form method="post" enctype="multipart/form-data" class="upload-form" id="photoUploadForm">
-          {% csrf_token %}
-          <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*"
-            onchange="this.form.submit()">
-          <label for="id_profile_picture" class="edit-icon" title="Actualizar foto">
-            📷
-          </label>
-        </form>
-        <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}" class="story-upload-form">
+        <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}"
+          class="story-upload-form">
           {% csrf_token %}
           {{ story_form.media_file }}
-          <span class="story-add profile-story-add" onclick="event.stopPropagation(); document.getElementById('id_media_file').click();">+</span>
+          <span class="story-add profile-story-add"
+            onclick="event.stopPropagation(); document.getElementById('id_media_file').click();">+</span>
         </form>
         {% endif %}
       </div>
@@ -46,7 +40,7 @@
         <a href="{% url 'follow' profile_user.username %}" class="btn btn-outline-primary btn-sm">Follow</a>
         {% endif %}
         {% else %}
-        <button class="btn btn-sm btn-outline-secondary">Editar</button>
+        <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">Editar perfil</a>
         {% endif %}
       </div>
 
@@ -57,16 +51,8 @@
         <div><strong>{{ posts|length }}</strong> Posts</div>
       </div>
 
-      <!-- BIO -->
-      {% if user == profile_user %}
-      <form method="post" class="mt-1">
-        {% csrf_token %}
-        {{ form.bio }}
-        <button type="submit" class="btn btn-sm btn-outline-dark">Actualizar bio</button>
-      </form>
-      {% else %}
+      <!-- BIO SOLO PARA VISUALIZAR -->
       <p>{{ user_profile.bio|default:"Sin biografía" }}</p>
-      {% endif %}
     </div>
   </div>
 

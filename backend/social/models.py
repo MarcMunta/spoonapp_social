@@ -162,7 +162,14 @@ class Profile(models.Model):
     profile_picture = models.ImageField(upload_to='profile_pictures/', null=True, blank=True)
     last_seen = models.DateTimeField(auto_now=True)
     friends = models.ManyToManyField('self', symmetrical=False, blank=True)
+    bio = models.TextField(blank=True, null=True)
+    website = models.URLField(blank=True, null=True)
+    location = models.CharField(max_length=100, blank=True, null=True)
+    gender = models.CharField(max_length=20, blank=True, null=True)
 
+    def __str__(self):
+        return self.user.username
+    
     @property
     def online(self):
         from django.utils import timezone

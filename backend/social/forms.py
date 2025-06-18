@@ -2,6 +2,7 @@ from django import forms
 from django.db.models import Case, When, IntegerField
 from .models import Post, PostComment, Profile, PostCategory, Story
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 class PostForm(forms.ModelForm):
     class Meta:
@@ -47,10 +48,21 @@ class CommentForm(forms.ModelForm):
             })
         }
 
+class UserForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['username'] 
+
 class ProfileForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ['profile_picture']
+        fields = ['profile_picture', 'bio', 'website', 'location', 'gender']
+        widgets = {
+            'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Cuéntanos algo sobre ti...'}),
+            'website': forms.URLInput(attrs={'placeholder': 'https://'}),
+            'location': forms.TextInput(attrs={'placeholder': 'Tu ciudad'}),
+            'gender': forms.Select(choices=[('', 'Seleccione'), ('Hombre', 'Hombre'), ('Mujer', 'Mujer'), ('Otro', 'Otro')])
+        }
 
 class StoryForm(forms.ModelForm):
     class Meta:

@@ -52,7 +52,7 @@
                 <!-- Messages Area -->
                 <div id="spoon-messages-area" class="spoon-messages-area">
                     {% for message in messages %}
-                    <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3">
+                    <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3" data-message-id="{{ message.id }}">
                         <div class="spoon-message-bubble {% if message.sender == user %}spoon-message-sent{% else %}spoon-message-received{% endif %}">
                             {% if message.story %}
                                 {% if message.story.expires_at > now %}
@@ -78,10 +78,124 @@
                         {% csrf_token %}
                         <input type="text" name="content" id="spoon-message-input" 
                                class="spoon-message-input" placeholder="Share your food thoughts... 🍽️" required>
+                        
+                        <button type="button" class="spoon-emoji-btn" id="emoji-btn" title="Add emoji">
+                            😊
+                        </button>
+                        
                         <button type="submit" class="spoon-send-button" title="Send message">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>
+                    
+                    <div class="spoon-emoji-picker" id="emoji-picker">
+                        <div class="emoji-grid">
+                            <div class="emoji-item" data-emoji="😀">😀</div>
+                            <div class="emoji-item" data-emoji="😃">😃</div>
+                            <div class="emoji-item" data-emoji="😄">😄</div>
+                            <div class="emoji-item" data-emoji="😁">😁</div>
+                            <div class="emoji-item" data-emoji="😊">😊</div>
+                            <div class="emoji-item" data-emoji="😍">😍</div>
+                            <div class="emoji-item" data-emoji="🥰">🥰</div>
+                            <div class="emoji-item" data-emoji="😘">😘</div>
+                            <div class="emoji-item" data-emoji="😋">😋</div>
+                            <div class="emoji-item" data-emoji="😎">😎</div>
+                            <div class="emoji-item" data-emoji="🤔">🤔</div>
+                            <div class="emoji-item" data-emoji="😮">😮</div>
+                            <div class="emoji-item" data-emoji="😢">😢</div>
+                            <div class="emoji-item" data-emoji="😭">😭</div>
+                            <div class="emoji-item" data-emoji="😂">😂</div>
+                            <div class="emoji-item" data-emoji="🤣">🤣</div>
+                            <div class="emoji-item" data-emoji="🍕">🍕</div>
+                            <div class="emoji-item" data-emoji="🍔">🍔</div>
+                            <div class="emoji-item" data-emoji="🍟">🍟</div>
+                            <div class="emoji-item" data-emoji="🌭">🌭</div>
+                            <div class="emoji-item" data-emoji="🥪">🥪</div>
+                            <div class="emoji-item" data-emoji="🌮">🌮</div>
+                            <div class="emoji-item" data-emoji="🌯">🌯</div>
+                            <div class="emoji-item" data-emoji="🥙">🥙</div>
+                            <div class="emoji-item" data-emoji="🧆">🧆</div>
+                            <div class="emoji-item" data-emoji="🥚">🥚</div>
+                            <div class="emoji-item" data-emoji="🍳">🍳</div>
+                            <div class="emoji-item" data-emoji="🥘">🥘</div>
+                            <div class="emoji-item" data-emoji="🍲">🍲</div>
+                            <div class="emoji-item" data-emoji="🥗">🥗</div>
+                            <div class="emoji-item" data-emoji="🍿">🍿</div>
+                            <div class="emoji-item" data-emoji="🧈">🧈</div>
+                            <div class="emoji-item" data-emoji="🍞">🍞</div>
+                            <div class="emoji-item" data-emoji="🥖">🥖</div>
+                            <div class="emoji-item" data-emoji="🥨">🥨</div>
+                            <div class="emoji-item" data-emoji="🧀">🧀</div>
+                            <div class="emoji-item" data-emoji="🥞">🥞</div>
+                            <div class="emoji-item" data-emoji="🧇">🧇</div>
+                            <div class="emoji-item" data-emoji="🥓">🥓</div>
+                            <div class="emoji-item" data-emoji="🍖">🍖</div>
+                            <div class="emoji-item" data-emoji="🍗">🍗</div>
+                            <div class="emoji-item" data-emoji="🥩">🥩</div>
+                            <div class="emoji-item" data-emoji="🥟">🥟</div>
+                            <div class="emoji-item" data-emoji="🦪">🦪</div>
+                            <div class="emoji-item" data-emoji="🍤">🍤</div>
+                            <div class="emoji-item" data-emoji="🍱">🍱</div>
+                            <div class="emoji-item" data-emoji="🍘">🍘</div>
+                            <div class="emoji-item" data-emoji="🍙">🍙</div>
+                            <div class="emoji-item" data-emoji="🍚">🍚</div>
+                            <div class="emoji-item" data-emoji="🍛">🍛</div>
+                            <div class="emoji-item" data-emoji="🍜">🍜</div>
+                            <div class="emoji-item" data-emoji="🍝">🍝</div>
+                            <div class="emoji-item" data-emoji="🍠">🍠</div>
+                            <div class="emoji-item" data-emoji="🍢">🍢</div>
+                            <div class="emoji-item" data-emoji="🍣">🍣</div>
+                            <div class="emoji-item" data-emoji="🍤">🍤</div>
+                            <div class="emoji-item" data-emoji="🍥">🍥</div>
+                            <div class="emoji-item" data-emoji="🥮">🥮</div>
+                            <div class="emoji-item" data-emoji="🍡">🍡</div>
+                            <div class="emoji-item" data-emoji="🥠">🥠</div>
+                            <div class="emoji-item" data-emoji="🥡">🥡</div>
+                            <div class="emoji-item" data-emoji="🍦">🍦</div>
+                            <div class="emoji-item" data-emoji="🍧">🍧</div>
+                            <div class="emoji-item" data-emoji="🍨">🍨</div>
+                            <div class="emoji-item" data-emoji="🍩">🍩</div>
+                            <div class="emoji-item" data-emoji="🍪">🍪</div>
+                            <div class="emoji-item" data-emoji="🎂">🎂</div>
+                            <div class="emoji-item" data-emoji="🍰">🍰</div>
+                            <div class="emoji-item" data-emoji="🧁">🧁</div>
+                            <div class="emoji-item" data-emoji="🥧">🥧</div>
+                            <div class="emoji-item" data-emoji="🍫">🍫</div>
+                            <div class="emoji-item" data-emoji="🍬">🍬</div>
+                            <div class="emoji-item" data-emoji="🍭">🍭</div>
+                            <div class="emoji-item" data-emoji="🍮">🍮</div>
+                            <div class="emoji-item" data-emoji="🍯">🍯</div>
+                            <div class="emoji-item" data-emoji="🍼">🍼</div>
+                            <div class="emoji-item" data-emoji="🥛">🥛</div>
+                            <div class="emoji-item" data-emoji="☕">☕</div>
+                            <div class="emoji-item" data-emoji="🍵">🍵</div>
+                            <div class="emoji-item" data-emoji="🍶">🍶</div>
+                            <div class="emoji-item" data-emoji="🍾">🍾</div>
+                            <div class="emoji-item" data-emoji="🍷">🍷</div>
+                            <div class="emoji-item" data-emoji="🍸">🍸</div>
+                            <div class="emoji-item" data-emoji="🍹">🍹</div>
+                            <div class="emoji-item" data-emoji="🍺">🍺</div>
+                            <div class="emoji-item" data-emoji="🍻">🍻</div>
+                            <div class="emoji-item" data-emoji="🥂">🥂</div>
+                            <div class="emoji-item" data-emoji="🥃">🥃</div>
+                            <div class="emoji-item" data-emoji="🥤">🥤</div>
+                            <div class="emoji-item" data-emoji="🧃">🧃</div>
+                            <div class="emoji-item" data-emoji="🧉">🧉</div>
+                            <div class="emoji-item" data-emoji="🧊">🧊</div>
+                            <div class="emoji-item" data-emoji="🥄">🥄</div>
+                            <div class="emoji-item" data-emoji="🍴">🍴</div>
+                            <div class="emoji-item" data-emoji="🥢">🥢</div>
+                            <div class="emoji-item" data-emoji="🔥">🔥</div>
+                            <div class="emoji-item" data-emoji="💯">💯</div>
+                            <div class="emoji-item" data-emoji="❤️">❤️</div>
+                            <div class="emoji-item" data-emoji="👍">👍</div>
+                            <div class="emoji-item" data-emoji="👎">👎</div>
+                            <div class="emoji-item" data-emoji="👌">👌</div>
+                            <div class="emoji-item" data-emoji="✨">✨</div>
+                            <div class="emoji-item" data-emoji="🎉">🎉</div>
+                            <div class="emoji-item" data-emoji="🎊">🎊</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -93,103 +207,403 @@ document.addEventListener('DOMContentLoaded', function() {
     const messagesArea = document.getElementById('spoon-messages-area');
     const messageForm = document.getElementById('spoon-message-form');
     const messageInput = document.getElementById('spoon-message-input');
+    const emojiBtn = document.getElementById('emoji-btn');
+    const emojiPicker = document.getElementById('emoji-picker');
+    
+    let isLoadingMessages = false;
+    let hasMoreMessages = true;
+    let oldestMessageId = null;
+    let newestMessageId = null;
+    let initialLoad = true;
+    let chatId = '{{ chat.id }}';
+    
+    // Initialize message IDs from existing messages
+    function initializeMessageIds() {
+        const messageElements = messagesArea.querySelectorAll('[data-message-id]');
+        if (messageElements.length > 0) {
+            oldestMessageId = messageElements[0].dataset.messageId;
+            newestMessageId = messageElements[messageElements.length - 1].dataset.messageId;
+        }
+    }
+    
+    initializeMessageIds();
     
     // Scroll to bottom with smooth animation
     function scrollToBottom() {
-        messagesArea.scrollTo({
-            top: messagesArea.scrollHeight,
-            behavior: 'smooth'
-        });
+        if (messagesArea) {
+            messagesArea.scrollTo({
+                top: messagesArea.scrollHeight,
+                behavior: initialLoad ? 'auto' : 'smooth'
+            });
+            initialLoad = false;
+        }
     }
     
+    // Scroll to bottom on initial load
     scrollToBottom();
     
-    // Handle form submission
-    messageForm.addEventListener('submit', function(e) {
-        e.preventDefault();
+    // Load older messages when scrolling to top
+    function loadOlderMessages() {
+        if (isLoadingMessages || !hasMoreMessages) return;
         
-        const content = messageInput.value.trim();
-        if (!content) return;
+        isLoadingMessages = true;
         
-        const formData = new FormData(messageForm);
-        
-        // Add message to UI immediately with animation
-        const messageDiv = document.createElement('div');
-        messageDiv.className = 'd-flex justify-content-end mb-3';
-        messageDiv.innerHTML = `
-            <div class="spoon-message-bubble spoon-message-sent">
-                <div>${content}</div>
-                <div class="spoon-message-time">${new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: false})}</div>
+        // Show loading indicator
+        const loadingDiv = document.createElement('div');
+        loadingDiv.className = 'spoon-loading-messages';
+        loadingDiv.id = 'loading-older-messages';
+        loadingDiv.innerHTML = `
+            <div class="spoon-typing-indicator">
+                <div class="spoon-typing-dot"></div>
+                <div class="spoon-typing-dot"></div>
+                <div class="spoon-typing-dot"></div>
+                <small class="ms-2 text-muted">Loading older messages...</small>
             </div>
         `;
-        messagesArea.appendChild(messageDiv);
-        scrollToBottom();
-        messageInput.value = '';
+        messagesArea.insertBefore(loadingDiv, messagesArea.firstChild);
         
-        // Send to server
-        fetch('', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'X-Requested-With': 'XMLHttpRequest',
-            }
+        const url = `/chat/${chatId}/messages/?before=${oldestMessageId}&limit=20`;
+            
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
         .then(response => response.json())
         .then(data => {
-            if (!data.success) {
-                messageDiv.remove();
-                messageInput.value = content;
-                showErrorMessage('Failed to send message. Try again!');
+            // Remove loading indicator
+            const loadingIndicator = document.getElementById('loading-older-messages');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
             }
+            
+            if (data.messages && data.messages.length > 0) {
+                const scrollHeight = messagesArea.scrollHeight;
+                const scrollTop = messagesArea.scrollTop;
+                
+                // Add new messages to the top
+                data.messages.reverse().forEach(msg => {
+                    const messageWrapper = document.createElement('div');
+                    messageWrapper.className = `d-flex ${msg.is_mine ? 'justify-content-end' : ''} mb-3`;
+                    messageWrapper.dataset.messageId = msg.id;
+                    messageWrapper.innerHTML = `
+                        <div class="spoon-message-bubble ${msg.is_mine ? 'spoon-message-sent' : 'spoon-message-received'}">
+                            <div>${escapeHtml(msg.content)}</div>
+                            <div class="spoon-message-time">${msg.sent_at}</div>
+                        </div>
+                    `;
+                    messagesArea.insertBefore(messageWrapper, messagesArea.firstChild);
+                });
+                
+                // Update oldest message ID
+                oldestMessageId = data.messages[0].id;
+                hasMoreMessages = data.has_more;
+                
+                // Maintain scroll position
+                const newScrollHeight = messagesArea.scrollHeight;
+                messagesArea.scrollTop = scrollTop + (newScrollHeight - scrollHeight);
+            } else {
+                hasMoreMessages = false;
+            }
+            
+            isLoadingMessages = false;
         })
         .catch(error => {
-            messageDiv.remove();
-            messageInput.value = content;
-            console.error('Error:', error);
-            showErrorMessage('Connection error. Please check your internet!');
+            console.error('Error loading older messages:', error);
+            const loadingIndicator = document.getElementById('loading-older-messages');
+            if (loadingIndicator) {
+                loadingIndicator.remove();
+            }
+            isLoadingMessages = false;
         });
-    });
+    }
     
-    // Show typing indicator simulation
-    let typingTimeout;
-    messageInput.addEventListener('input', function() {
-        clearTimeout(typingTimeout);
-        showTypingIndicator();
+    // Load newer messages when scrolling to bottom
+    function loadNewerMessages() {
+        if (isLoadingMessages) return;
         
-        typingTimeout = setTimeout(() => {
+        isLoadingMessages = true;
+        
+        const url = `/chat/${chatId}/messages/?after=${newestMessageId}&limit=20`;
+        
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.messages && data.messages.length > 0) {
+                // Add new messages to the bottom
+                data.messages.forEach(msg => {
+                    const messageWrapper = document.createElement('div');
+                    messageWrapper.className = `d-flex ${msg.is_mine ? 'justify-content-end' : ''} mb-3`;
+                    messageWrapper.dataset.messageId = msg.id;
+                    messageWrapper.innerHTML = `
+                        <div class="spoon-message-bubble ${msg.is_mine ? 'spoon-message-sent' : 'spoon-message-received'}" data-new="true">
+                            <div>${escapeHtml(msg.content)}</div>
+                            <div class="spoon-message-time">${msg.sent_at}</div>
+                        </div>
+                    `;
+                    messagesArea.appendChild(messageWrapper);
+                });
+                
+                // Update newest message ID
+                newestMessageId = data.messages[data.messages.length - 1].id;
+                
+                // Auto-scroll to bottom for new messages
+                scrollToBottom();
+            }
+            
+            isLoadingMessages = false;
+        })
+        .catch(error => {
+            console.error('Error loading newer messages:', error);
+            isLoadingMessages = false;
+        });
+    }
+    
+    // Handle scroll events for loading messages
+    if (messagesArea) {
+        let scrollTimeout;
+        messagesArea.addEventListener('scroll', function() {
+            clearTimeout(scrollTimeout);
+            scrollTimeout = setTimeout(() => {
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const clientHeight = this.clientHeight;
+                
+                // Load more messages when user scrolls to top (within 100px)
+                if (scrollTop <= 100 && hasMoreMessages && !isLoadingMessages) {
+                    loadOlderMessages();
+                }
+                
+                // Load newer messages when scrolled to bottom (within 100px)
+                if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoadingMessages) {
+                    loadNewerMessages();
+                }
+            }, 150);
+        });
+        
+        // Add scroll to bottom button when scrolled up
+        let scrollBottomBtn = null;
+        messagesArea.addEventListener('scroll', function() {
+            const isScrolledUp = this.scrollTop < this.scrollHeight - this.clientHeight - 200;
+            
+            if (isScrolledUp && !scrollBottomBtn) {
+                scrollBottomBtn = document.createElement('button');
+                scrollBottomBtn.className = 'scroll-to-bottom';
+                scrollBottomBtn.style.cssText = `
+                    position: fixed;
+                    bottom: 120px;
+                    right: 30px;
+                    z-index: 1000;
+                    border-radius: 50%;
+                    width: 50px;
+                    height: 50px;
+                    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+                    border: none;
+                    color: white;
+                    box-shadow: 0 4px 12px rgba(212, 138, 193, 0.4);
+                    transition: all 0.3s ease;
+                    opacity: 0.9;
+                `;
+                scrollBottomBtn.innerHTML = '<i class="fas fa-arrow-down"></i>';
+                scrollBottomBtn.title = 'Scroll to bottom';
+                scrollBottomBtn.onclick = () => scrollToBottom();
+                document.body.appendChild(scrollBottomBtn);
+            } else if (!isScrolledUp && scrollBottomBtn) {
+                scrollBottomBtn.remove();
+                scrollBottomBtn = null;
+            }
+        });
+    }
+    
+    // Enhanced emoji picker functionality
+    if (emojiBtn && emojiPicker) {
+        emojiBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const isVisible = emojiPicker.classList.contains('show');
+            if (isVisible) {
+                emojiPicker.classList.remove('show');
+            } else {
+                positionEmojiPicker();
+                emojiPicker.classList.add('show');
+            }
+        });
+        
+        function positionEmojiPicker() {
+            const inputArea = document.querySelector('.spoon-input-area');
+            const inputRect = inputArea.getBoundingClientRect();
+            const viewportWidth = window.innerWidth;
+            const pickerWidth = 320;
+            
+            // Reset positioning
+            emojiPicker.style.right = '0';
+            emojiPicker.style.left = 'auto';
+            
+            // Check if picker would overflow on the right
+            if (inputRect.right < pickerWidth + 20) {
+                emojiPicker.style.right = 'auto';
+                emojiPicker.style.left = '0';
+            }
+        }
+        
+        document.addEventListener('click', function(e) {
+            if (emojiPicker && !emojiBtn.contains(e.target) && !emojiPicker.contains(e.target)) {
+                emojiPicker.classList.remove('show');
+            }
+        });
+        
+        emojiPicker.addEventListener('click', function(e) {
+            if (e.target.classList.contains('emoji-item')) {
+                e.preventDefault();
+                const emoji = e.target.dataset.emoji;
+                if (emoji && messageInput) {
+                    const currentValue = messageInput.value;
+                    const cursorPos = messageInput.selectionStart || 0;
+                    const newValue = currentValue.slice(0, cursorPos) + emoji + currentValue.slice(cursorPos);
+                    messageInput.value = newValue;
+                    messageInput.focus();
+                    
+                    const newCursorPos = cursorPos + emoji.length;
+                    messageInput.setSelectionRange(newCursorPos, newCursorPos);
+                    
+                    emojiPicker.classList.remove('show');
+                    messageInput.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+            }
+        });
+    }
+    
+    // Enhanced form submission
+    if (messageForm) {
+        messageForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const content = messageInput.value.trim();
+            if (!content) return;
+            
+            if (emojiPicker) {
+                emojiPicker.classList.remove('show');
+            }
+            
             hideTypingIndicator();
-        }, 1000);
-    });
+            
+            const formData = new FormData(messageForm);
+            const tempId = 'temp_' + Date.now();
+            
+            // Add message to UI immediately
+            const messageWrapper = document.createElement('div');
+            messageWrapper.className = 'd-flex justify-content-end mb-3';
+            messageWrapper.dataset.messageId = tempId;
+            messageWrapper.innerHTML = `
+                <div class="spoon-message-bubble spoon-message-sent" data-new="true">
+                    <div>${escapeHtml(content)}</div>
+                    <div class="spoon-message-time">${new Date().toLocaleTimeString('en-US', {hour: '2-digit', minute:'2-digit', hour12: false})}</div>
+                </div>
+            `;
+            
+            if (messagesArea) {
+                messagesArea.appendChild(messageWrapper);
+                scrollToBottom();
+            }
+            messageInput.value = '';
+            
+            // Send to server
+            fetch('', {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (!data.success) {
+                    messageWrapper.remove();
+                    messageInput.value = content;
+                    showErrorMessage('Failed to send message. Try again!');
+                } else {
+                    // Update with real message ID if provided
+                    if (data.message_id) {
+                        messageWrapper.dataset.messageId = data.message_id;
+                        newestMessageId = data.message_id;
+                    }
+                }
+            })
+            .catch(error => {
+                messageWrapper.remove();
+                messageInput.value = content;
+                console.error('Error:', error);
+                showErrorMessage('Connection error. Please check your internet!');
+            });
+        });
+    }
+    
+    // Enhanced typing indicator
+    let typingTimeout;
+    let isTypingShown = false;
+    
+    if (messageInput) {
+        messageInput.addEventListener('input', function() {
+            clearTimeout(typingTimeout);
+            
+            if (this.value.trim() && !isTypingShown) {
+                showTypingIndicator();
+            }
+            
+            typingTimeout = setTimeout(() => {
+                hideTypingIndicator();
+            }, 1000);
+        });
+        
+        messageInput.addEventListener('blur', function() {
+            clearTimeout(typingTimeout);
+            setTimeout(() => hideTypingIndicator(), 500);
+        });
+    }
     
     function showTypingIndicator() {
-        if (!document.getElementById('typing-indicator')) {
-            const typingDiv = document.createElement('div');
-            typingDiv.id = 'typing-indicator';
-            typingDiv.className = 'spoon-typing-indicator';
-            typingDiv.innerHTML = `
+        if (isTypingShown || !messagesArea) return;
+        
+        const existingIndicator = document.getElementById('typing-indicator');
+        if (existingIndicator) return;
+        
+        const typingDiv = document.createElement('div');
+        typingDiv.id = 'typing-indicator';
+        typingDiv.className = 'd-flex mb-3';
+        typingDiv.innerHTML = `
+            <div class="spoon-typing-indicator">
                 <div class="spoon-typing-dot"></div>
                 <div class="spoon-typing-dot"></div>
                 <div class="spoon-typing-dot"></div>
-                <small class="ms-2 text-muted">Typing...</small>
-            `;
-            messagesArea.appendChild(typingDiv);
-            scrollToBottom();
-        }
+            </div>
+        `;
+        
+        messagesArea.appendChild(typingDiv);
+        scrollToBottom();
+        isTypingShown = true;
     }
     
     function hideTypingIndicator() {
         const indicator = document.getElementById('typing-indicator');
         if (indicator) {
-            indicator.remove();
+            indicator.style.animation = 'slideOut 0.3s ease-out forwards';
+            setTimeout(() => {
+                if (indicator.parentNode) {
+                    indicator.remove();
+                }
+            }, 300);
         }
+        isTypingShown = false;
     }
     
+    // Utility functions
     function showErrorMessage(message) {
         const errorDiv = document.createElement('div');
         errorDiv.className = 'alert alert-danger alert-dismissible fade show position-fixed';
-        errorDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; max-width: 300px;';
+        errorDiv.style.cssText = 'top: 90px; right: 20px; z-index: 9999; max-width: 300px;';
         errorDiv.innerHTML = `
-            ${message}
+            ${escapeHtml(message)}
             <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
         `;
         document.body.appendChild(errorDiv);
@@ -201,46 +615,81 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 5000);
     }
     
-    // Load new messages periodically
-    function loadNewMessages() {
-        fetch('{% url "load_messages" chat.id %}')
-        .then(response => response.json())
-        .then(data => {
-            const currentMessageCount = messagesArea.querySelectorAll('.spoon-message-bubble').length;
-            if (data.messages.length > currentMessageCount) {
-                const newMessages = data.messages.slice(currentMessageCount);
-                newMessages.forEach(msg => {
-                    const messageDiv = document.createElement('div');
-                    messageDiv.className = `d-flex ${msg.is_mine ? 'justify-content-end' : ''} mb-3`;
-                    messageDiv.innerHTML = `
-                        <div class="spoon-message-bubble ${msg.is_mine ? 'spoon-message-sent' : 'spoon-message-received'}">
-                            <div>${msg.content}</div>
-                            <div class="spoon-message-time">${msg.sent_at}</div>
-                        </div>
-                    `;
-                    messagesArea.appendChild(messageDiv);
-                });
-                scrollToBottom();
-            }
-        })
-        .catch(error => console.error('Error loading messages:', error));
+    function escapeHtml(text) {
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
     
-    // Check for new messages every 3 seconds
-    setInterval(loadNewMessages, 3000);
-    
-    // Auto-focus input with delay for better UX
+    // Auto-focus input
     setTimeout(() => {
-        messageInput.focus();
+        if (messageInput) {
+            messageInput.focus();
+        }
     }, 500);
     
-    // Add Enter key support
-    messageInput.addEventListener('keypress', function(e) {
-        if (e.key === 'Enter' && !e.shiftKey) {
-            e.preventDefault();
-            messageForm.dispatchEvent(new Event('submit'));
+    // Enter key support
+    if (messageInput) {
+        messageInput.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && !e.shiftKey) {
+                e.preventDefault();
+                if (messageForm) {
+                    messageForm.dispatchEvent(new Event('submit'));
+                }
+            }
+        });
+    }
+    
+    // Handle window resize
+    window.addEventListener('resize', function() {
+        if (emojiPicker && emojiPicker.classList.contains('show')) {
+            positionEmojiPicker();
         }
     });
+    
+    // Add slideOut animation CSS
+    const style = document.createElement('style');
+    style.textContent = `
+        @keyframes slideOut {
+            from {
+                opacity: 1;
+                transform: translateY(0);
+            }
+            to {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+        }
+        
+        .spoon-message-bubble[data-new="true"] {
+            animation: messageSlideIn 0.4s ease-out;
+        }
+        
+        @keyframes messageSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+        
+        .scroll-to-bottom:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 15px rgba(212, 138, 193, 0.6);
+            opacity: 1;
+        }
+    `;
+    document.head.appendChild(style);
+    
+    // Periodic check for new messages
+    setInterval(() => {
+        if (!isLoadingMessages) {
+            loadNewerMessages();
+        }
+    }, 5000);
 });
 </script>
 {% endblock %}

@@ -14,29 +14,67 @@
     .spoon-chat-container {
       width: 100%;
       height: calc(100vh - 80px);
-      background: linear-gradient(135deg, #f8e8f5 0%, #e8d5f0 50%, #d4b8e0 100%);
-      border-radius: 0;
+      background: linear-gradient(135deg, #f1f3f4 0%, #e8eaf0 50%, #d4d8e0 100%);
+      border-radius: 12px;
       overflow: hidden;
-      box-shadow: none;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
       margin: -1rem;
       margin-top: -1rem;
+      border: 3px solid #c0c4cc;
+      position: relative;
+    }
+
+    .spoon-chat-container::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #d48ac1 0%, #b86ba3 50%, #a855a0 100%);
+      z-index: 10;
+    }
+
+    .spoon-chat-container::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, #d48ac1 0%, #b86ba3 50%, #a855a0 100%);
+      z-index: 10;
     }
 
     .spoon-chat-sidebar {
-      background: linear-gradient(180deg, #ffffff 0%, #fdf7fc 100%);
-      border-right: 2px solid #e8d5f0;
+      background: linear-gradient(180deg, #ffffff 0%, #f8f9fc 100%);
+      border-right: 4px solid #c0c4cc;
       height: 100%;
       overflow-y: auto;
-      box-shadow: 5px 0 15px rgba(212, 138, 193, 0.1);
+      box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+      position: relative;
+      border-top: 2px solid rgba(212, 138, 193, 0.3);
+      border-bottom: 2px solid rgba(212, 138, 193, 0.3);
+    }
+
+    .spoon-chat-sidebar::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, #d48ac1 0%, #b86ba3 100%);
     }
 
     .spoon-chat-header {
       background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
       padding: 20px;
       text-align: center;
-      border-bottom: 3px solid #a855a0;
+      border-bottom: 4px solid #a855a0;
       position: relative;
       overflow: hidden;
+      box-shadow: 0 4px 15px rgba(168, 85, 160, 0.3);
     }
 
     .spoon-chat-header::before {
@@ -48,17 +86,25 @@
       height: 200%;
       background: repeating-linear-gradient(45deg,
           transparent,
-          transparent 10px,
-          rgba(255, 255, 255, 0.1) 10px,
-          rgba(255, 255, 255, 0.1) 20px);
-      animation: float 20s linear infinite;
+          transparent 15px,
+          rgba(255, 255, 255, 0.1) 15px,
+          rgba(255, 255, 255, 0.1) 30px);
+      animation: float-enhanced 25s linear infinite;
     }
 
-    @keyframes float {
+    @keyframes float-enhanced {
       0% {
         transform: translate(-50%, -50%) rotate(0deg);
       }
-
+      25% {
+        transform: translate(-45%, -55%) rotate(90deg);
+      }
+      50% {
+        transform: translate(-50%, -50%) rotate(180deg);
+      }
+      75% {
+        transform: translate(-55%, -45%) rotate(270deg);
+      }
       100% {
         transform: translate(-50%, -50%) rotate(360deg);
       }
@@ -71,53 +117,57 @@
       margin: 0;
       position: relative;
       z-index: 1;
-      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+      text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      animation: title-pulse 3s ease-in-out infinite;
+    }
+
+    @keyframes title-pulse {
+      0%, 100% {
+        transform: scale(1);
+        text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
+      }
+      50% {
+        transform: scale(1.02);
+        text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
+      }
     }
 
     .spoon-chat-title::after {
       content: '🍴💬';
       margin-left: 10px;
       font-size: 1.2rem;
+      animation: emoji-bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes emoji-bounce {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-3px); }
     }
 
     .spoon-chat-item {
-      background: linear-gradient(135deg, #ffffff 0%, #fdf2f9 100%);
-      margin: 15px;
-      border-radius: 20px;
-      padding: 15px;
+      background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
+      margin: 12px;
+      border-radius: 16px;
+      padding: 16px;
       cursor: pointer;
       transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      border: 2px solid transparent;
-      box-shadow: 0 4px 15px rgba(212, 138, 193, 0.2);
+      border: 2px solid #e2e6ea;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
       position: relative;
       overflow: hidden;
     }
 
-    .spoon-chat-item::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: -100%;
-      width: 100%;
-      height: 100%;
-      background: linear-gradient(90deg, transparent, rgba(212, 138, 193, 0.2), transparent);
-      transition: left 0.5s;
-    }
-
     .spoon-chat-item:hover {
-      transform: translateY(-3px) scale(1.02);
+      transform: translateY(-2px);
       border-color: #d48ac1;
-      box-shadow: 0 8px 25px rgba(212, 138, 193, 0.4);
-    }
-
-    .spoon-chat-item:hover::before {
-      left: 100%;
+      box-shadow: 0 6px 20px rgba(212, 138, 193, 0.2);
     }
 
     .spoon-chat-item.active {
       background: linear-gradient(135deg, #e8d5f0 0%, #d4b8e0 100%);
       border-color: #b86ba3;
       transform: scale(1.05);
+      box-shadow: 0 8px 25px rgba(184, 107, 163, 0.4);
     }
 
     .spoon-avatar {
@@ -126,16 +176,16 @@
       border-radius: 50%;
       object-fit: cover;
       border: 3px solid #d48ac1;
-      box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+      box-shadow: 0 4px 12px rgba(212, 138, 193, 0.3);
       position: relative;
       cursor: pointer;
       transition: all 0.3s ease;
     }
 
     .spoon-avatar:hover {
-      transform: scale(1.05);
+      transform: scale(1.02);
       border-color: #b86ba3;
-      box-shadow: 0 6px 20px rgba(212, 138, 193, 0.5);
+      box-shadow: 0 6px 15px rgba(212, 138, 193, 0.4);
     }
 
     .spoon-avatar-container {
@@ -239,9 +289,13 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      background: linear-gradient(180deg, #fdf2f9 0%, #f3e8ff 100%);
+      background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
       position: relative;
       overflow: hidden;
+      border-left: 4px solid #c0c4cc;
+      border-top: 2px solid rgba(212, 138, 193, 0.3);
+      border-bottom: 2px solid rgba(212, 138, 193, 0.3);
+      box-shadow: inset 2px 0 10px rgba(0, 0, 0, 0.05);
     }
 
     .spoon-chat-detail::before {
@@ -249,89 +303,102 @@
       position: absolute;
       top: 0;
       left: 0;
-      right: 0;
-      bottom: 0;
-      background-image:
-        radial-gradient(circle at 20% 80%, rgba(212, 138, 193, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 20%, rgba(168, 85, 160, 0.1) 0%, transparent 50%);
-      pointer-events: none;
-      z-index: 0;
+      width: 3px;
+      height: 100%;
+      background: linear-gradient(180deg, #d48ac1 0%, #b86ba3 100%);
+      z-index: 1;
     }
 
     .spoon-chat-header-detail {
       background: linear-gradient(135deg, #8b5a96 0%, #6b21a8 100%);
       color: white;
-      padding: 20px;
+      padding: 18px 20px;
       display: flex;
       align-items: center;
-      box-shadow: 0 4px 20px rgba(107, 33, 168, 0.3);
+      box-shadow: 0 4px 15px rgba(107, 33, 168, 0.3);
       border-bottom: 3px solid #581c87;
-      position: relative;
-      z-index: 1;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      min-height: 80px;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .spoon-back-btn {
       background: rgba(255, 255, 255, 0.2);
       border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
-      width: 45px;
-      height: 45px;
+      width: 42px;
+      height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-right: 15px;
-      transition: all 0.3s ease;
-      backdrop-filter: blur(10px);
+      transition: all 0.2s ease;
+      backdrop-filter: blur(8px);
       text-decoration: none;
       color: white;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      flex-shrink: 0;
     }
 
     .spoon-back-btn:hover {
       background: rgba(255, 255, 255, 0.3);
-      transform: scale(1.1);
+      transform: scale(1.05);
       color: white;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
     }
 
     .spoon-home-btn {
       background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
       border: 2px solid rgba(255, 255, 255, 0.3);
       border-radius: 50%;
-      width: 45px;
-      height: 45px;
+      width: 42px;
+      height: 42px;
       display: flex;
       align-items: center;
       justify-content: center;
       margin-left: 15px;
-      transition: all 0.3s ease;
+      transition: all 0.2s ease;
       text-decoration: none;
       color: white;
-      box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+      box-shadow: 0 4px 12px rgba(212, 138, 193, 0.3);
+      flex-shrink: 0;
     }
 
     .spoon-home-btn:hover {
       background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%);
-      transform: scale(1.1);
+      transform: scale(1.05);
       color: white;
-      box-shadow: 0 6px 20px rgba(212, 138, 193, 0.5);
+      box-shadow: 0 6px 15px rgba(212, 138, 193, 0.4);
     }
 
     .spoon-messages-area {
       flex: 1;
       overflow-y: auto;
+      overflow-x: hidden;
       padding: 20px;
       position: relative;
       z-index: 1;
+      background: linear-gradient(180deg, #fafbfc 0%, #f1f3f6 100%);
+      margin: 0 2px;
+      height: calc(100vh - 240px);
+      min-height: 300px;
+      scroll-behavior: smooth;
+      scroll-padding-top: 20px;
     }
 
     .spoon-message-bubble {
       max-width: 75%;
-      padding: 12px 18px;
-      border-radius: 25px;
+      padding: 12px 16px;
+      border-radius: 20px;
       margin-bottom: 15px;
       position: relative;
       word-wrap: break-word;
       animation: slideIn 0.3s ease-out;
-      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+      box-shadow: 0 3px 12px rgba(0, 0, 0, 0.1);
+      border: 1px solid transparent;
     }
 
     @keyframes slideIn {
@@ -352,84 +419,175 @@
       margin-left: auto;
       margin-right: 0;
       border-bottom-right-radius: 8px;
-      box-shadow: 0 3px 15px rgba(212, 138, 193, 0.4);
+      box-shadow: 0 4px 20px rgba(212, 138, 193, 0.5);
+      border-color: rgba(255, 255, 255, 0.3);
     }
 
     .spoon-message-sent::after {
       content: '';
       position: absolute;
       bottom: 0;
-      right: -8px;
+      right: -10px;
       width: 0;
       height: 0;
-      border-left: 8px solid #b86ba3;
-      border-bottom: 8px solid transparent;
+      border-left: 10px solid #b86ba3;
+      border-bottom: 10px solid transparent;
     }
 
     .spoon-message-received {
       background: linear-gradient(135deg, #ffffff 0%, #f8fafc 100%);
-      color: #374151;
+      color: #2d3748;
       margin-left: 0;
       margin-right: auto;
       border-bottom-left-radius: 8px;
-      border: 1px solid #e5e7eb;
+      border: 2px solid #e2e8f0;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
     }
 
     .spoon-message-received::after {
       content: '';
       position: absolute;
       bottom: 0;
-      left: -8px;
+      left: -10px;
       width: 0;
       height: 0;
-      border-right: 8px solid #ffffff;
-      border-bottom: 8px solid transparent;
+      border-right: 10px solid #ffffff;
+      border-bottom: 10px solid transparent;
     }
 
     .spoon-message-time {
       font-size: 0.75rem;
-      margin-top: 5px;
+      margin-top: 8px;
       opacity: 0.8;
+      font-weight: 500;
     }
 
     .spoon-message-sent .spoon-message-time {
-      color: rgba(255, 255, 255, 0.8);
+      color: rgba(255, 255, 255, 0.9);
       text-align: right;
     }
 
     .spoon-message-received .spoon-message-time {
-      color: #9ca3af;
+      color: #718096;
       text-align: left;
     }
 
     .spoon-input-area {
-      background: linear-gradient(135deg, #ffffff 0%, #fdf2f9 100%);
-      padding: 20px;
+      background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+      padding: 18px 20px;
       display: flex;
       align-items: center;
-      gap: 15px;
-      box-shadow: 0 -4px 20px rgba(212, 138, 193, 0.2);
-      border-top: 2px solid #e8d5f0;
-      position: relative;
-      z-index: 1;
+      gap: 12px;
+      box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08);
+      border-top: 3px solid #e2e8f0;
+      position: sticky;
+      bottom: 0;
+      z-index: 100;
+      min-height: 80px;
+      margin: 0 2px;
+      border-bottom: 3px solid rgba(212, 138, 193, 0.4);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
     }
 
     .spoon-message-input {
       flex: 1;
-      border: 2px solid #e8d5f0;
-      border-radius: 30px;
+      border: 3px solid #e2e8f0;
+      border-radius: 25px;
       padding: 12px 20px;
       outline: none;
       font-size: 0.95rem;
       background: white;
       transition: all 0.3s ease;
-      box-shadow: inset 0 2px 5px rgba(212, 138, 193, 0.1);
+      box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.08), 0 4px 15px rgba(212, 138, 193, 0.1);
+      position: relative;
     }
 
     .spoon-message-input:focus {
       border-color: #d48ac1;
-      box-shadow: 0 0 0 3px rgba(212, 138, 193, 0.2);
-      transform: scale(1.01);
+      box-shadow: 0 0 0 4px rgba(212, 138, 193, 0.3), inset 0 2px 8px rgba(0, 0, 0, 0.1);
+      transform: scale(1.02);
+      background: linear-gradient(135deg, #ffffff 0%, #fdf2f9 100%);
+    }
+
+    .spoon-emoji-btn {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 42px;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(251, 191, 36, 0.4);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .spoon-emoji-btn:hover {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      transform: scale(1.05) rotate(10deg);
+      box-shadow: 0 6px 15px rgba(251, 191, 36, 0.5);
+    }
+
+    .spoon-emoji-btn:active {
+      transform: scale(0.98);
+    }
+
+    .spoon-emoji-picker {
+      position: absolute;
+      bottom: 100%;
+      right: 80px;
+      background: white;
+      border: 3px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 15px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      display: none;
+      z-index: 1000;
+      width: 300px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .spoon-emoji-picker.show {
+      display: block;
+      animation: emoji-popup 0.3s ease-out;
+    }
+
+    @keyframes emoji-popup {
+      from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .emoji-grid {
+      display: grid;
+      grid-template-columns: repeat(8, 1fr);
+      gap: 8px;
+    }
+
+    .emoji-item {
+      padding: 8px;
+      text-align: center;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+      font-size: 1.2rem;
+    }
+
+    .emoji-item:hover {
+      background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
+      transform: scale(1.2);
     }
 
     .spoon-send-button {
@@ -437,25 +595,46 @@
       color: white;
       border: none;
       border-radius: 50%;
-      width: 50px;
-      height: 50px;
+      width: 48px;
+      height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-      box-shadow: 0 4px 15px rgba(212, 138, 193, 0.4);
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 12px rgba(212, 138, 193, 0.4);
       font-size: 1.1rem;
+      flex-shrink: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .spoon-send-button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.3);
+      border-radius: 50%;
+      transition: all 0.3s ease;
+      transform: translate(-50%, -50%);
+    }
+
+    .spoon-send-button:hover::before {
+      width: 100%;
+      height: 100%;
     }
 
     .spoon-send-button:hover {
       background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%);
-      transform: scale(1.1) rotate(15deg);
-      box-shadow: 0 6px 25px rgba(212, 138, 193, 0.6);
+      transform: scale(1.05) rotate(15deg);
+      box-shadow: 0 6px 15px rgba(212, 138, 193, 0.5);
     }
 
     .spoon-send-button:active {
-      transform: scale(0.95);
+      transform: scale(0.98);
     }
 
     .spoon-empty-state {
@@ -465,27 +644,22 @@
       justify-content: center;
       height: 100%;
       text-align: center;
-      color: #8b5a96;
-      background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
+      color: #4a5568;
+      background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+      border-left: 4px solid #c0c4cc;
+      border-radius: 0 12px 12px 0;
+      margin: 2px 2px 2px 0;
+      position: relative;
     }
 
-    .spoon-empty-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-      opacity: 0.7;
-      animation: float-icon 3s ease-in-out infinite;
-    }
-
-    @keyframes float-icon {
-
-      0%,
-      100% {
-        transform: translateY(0px);
-      }
-
-      50% {
-        transform: translateY(-10px);
-      }
+    .spoon-empty-state::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 3px;
+      background: linear-gradient(180deg, #d48ac1 0%, #b86ba3 100%);
     }
 
     .spoon-status-indicator {
@@ -508,9 +682,11 @@
       align-items: center;
       gap: 4px;
       padding: 10px 15px;
-      background: #f3f4f6;
-      border-radius: 20px;
+      background: linear-gradient(135deg, #f1f3f4 0%, #e8eaf0 100%);
+      border-radius: 18px;
       margin-bottom: 10px;
+      border: 2px solid #d4d8e0;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
     }
 
     .spoon-typing-dot {
@@ -543,6 +719,88 @@
         opacity: 1;
       }
     }
+
+    /* Enhanced scrollbar for messages area */
+    .spoon-messages-area::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .spoon-messages-area::-webkit-scrollbar-track {
+      background: rgba(232, 213, 240, 0.3);
+      border-radius: 4px;
+      margin: 10px 0;
+    }
+
+    .spoon-messages-area::-webkit-scrollbar-thumb {
+      background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+      border-radius: 4px;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .spoon-messages-area::-webkit-scrollbar-thumb:hover {
+      background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%);
+    }
+
+    /* Loading indicator for older messages */
+    .spoon-loading-messages {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+      opacity: 0.7;
+    }
+
+    .spoon-loading-messages .spoon-typing-indicator {
+      background: linear-gradient(135deg, #e8eaf0 0%, #d4d8e0 100%);
+      border: 2px solid #c0c4cc;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      padding: 8px 15px;
+    }
+
+    /* Improved message bubble animations with data attributes */
+    .spoon-message-bubble[data-new="true"] {
+      animation: messageSlideIn 0.4s ease-out;
+    }
+
+    @keyframes messageSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.95);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    /* Responsive adjustments */
+    @media (max-width: 768px) {
+      .spoon-chat-header-detail {
+        padding: 12px 15px;
+        min-height: 70px;
+        position: -webkit-sticky;
+        position: sticky;
+      }
+      
+      .spoon-input-area {
+        padding: 12px 15px;
+        min-height: 70px;
+        position: -webkit-sticky;
+        position: sticky;
+      }
+      
+      .spoon-messages-area {
+        padding: 15px;
+        height: calc(100vh - 210px);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .spoon-messages-area {
+        height: calc(100vh - 190px);
+        padding: 12px;
+      }
+    }
   </style>
 </head>
 
@@ -568,12 +826,11 @@
             <a href="{% url 'notifications' %}" class="see-all">See All</a>
           </div>
           <div class="notification-list" id="notificationList">
-            {% if unread_notifications %}
-            {% for notification in unread_notifications %}
+            {% for notification in unread_notifications|slice:":5" %}
             <div class="notification-item" data-id="{{ notification.id }}" {% if
               notification.notification_type=='message' and notification.related_chat %}
-              data-notification-type="message" {% if notification.related_chat %}
-              data-chat-url="{% url 'chat_detail' notification.related_chat.id %}" {% endif %}>
+              data-notification-type="message" data-chat-url="{% url 'chat_detail' notification.related_chat.id %}" {%
+              endif %}>
               <div class="notification-content">
                 <strong>{{ notification.title }}</strong>
                 <p>{{ notification.message }}</p>
@@ -581,262 +838,263 @@
               </div>
               <button class="mark-read-btn" onclick="markAsRead('{{ notification.id }}')">✓</button>
             </div>
-            {% endfor %}
-            {% else %}
+            {% empty %}
             <div class="no-notifications">No new notifications</div>
-            {% endif %}
-          </div>
-          {% else %}
-          <span>💬</span>
-          {% endif %}
-          <span>🍴</span>
-          <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener">
-            ⚙️
-          </a>
-        </div>
-        {% if not hide_profile_icon %}
-        <div class="profile-icon">
-          {% if user.is_authenticated %}
-          {% if user.profile.profile_picture %}
-          <a href="{% url 'profile' user.username %}">
-            <img src="{{ user.profile.profile_picture.url }}" alt="Foto de perfil"
-              style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-          </a>
-          {% else %}
-          <a href="{% url 'profile' user.username %}">
-            <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"
-              style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-          </a>
-          {% endif %}
-          {% else %}
-          <a href="{% url 'home' %}">
-            <img src="https://i.imgur.com/jNNT4LE.png" alt="Invitado"
-              style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-          </a>
-          {% endif %}
-        </div>
-        {% endif %}
-
-      </div>
-
-      <div class="sidebar">
-        <div class="menu-item">Streams</div>
-        <div class="menu-item">Events</div>
-        <div class="menu-item">Friends</div>
-        <div class="menu-item">Memories</div>
-        <div class="menu-item">Games</div>
-        <div class="restaurants-section">
-          <h3>Restaurants</h3>
-          <div class="restaurant-item">Luigi's Kitchen - <a href="#">Go To Site</a></div>
-          <div class="restaurant-item">Restaurant 2 - <a href="#">Go To Site</a></div>
-          <div class="restaurant-item">Restaurant 3 - <a href="#">Go To Site</a></div>
-          <div class="restaurant-item">Restaurant 4 - <a href="#">Go To Site</a></div>
-          <button class="see-more">See More</button>
-        </div>
-      </div>
-
-      <div class="main-content">
-        {% block content %}{% endblock %}
-      </div>
-
-      <div class="rightbar">
-        <div class="sponsored">
-          <h3>Sponsored</h3>
-          <div class="sponsored-item">
-            <img src="https://via.placeholder.com/250" alt="Sponsored Image">
-            <div>Pizza with Pepperoni<br>Lorem ipsum dolor sit amet. -30%</div>
-          </div>
-        </div>
-        <div class="friends">
-          <h3>Friends</h3>
-
-          <div class="search-friends-container">
-            <input type="text" id="searchFriendInput" placeholder="Search users..." autocomplete="off" />
-            <ul id="searchResults" class="autocomplete-list"></ul>
-          </div>
-
-          <!-- Tabs -->
-          <div class="friend-tabs">
-            <button class="tab-button active" onclick="switchTab('online')">Amigos</button>
-            <button class="tab-button" onclick="switchTab('requests')">
-              Solicitudes <span id="requestCount">{{ pending_requests|length }}</span>
-            </button>
-          </div>
-
-          <!-- Tab content -->
-          <div id="tab-online" class="tab-content">
-            <div class="friends-list">
-              {% for f in friends %}
-              <div class="friend-item d-flex align-items-center mb-2">
-                {% if f.profile.profile_picture %}
-                <img src="{{ f.profile.profile_picture.url }}" alt="Foto perfil"
-                  style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-                {% else %}
-                <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"
-                  style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
-                {% endif %}
-
-                <div class="flex-grow-1">
-                  <strong>{{ f.username }}</strong><br>
-                  {% if f.profile.online %}
-                  <small style="color: green;">Online</small>
-                  {% elif f.profile.last_seen %}
-                  <small class="text-muted">Last seen: {{ f.profile.last_seen|naturaltime }}</small>
-                  {% endif %}
-                </div>
-                <a href="{% url 'start_chat' f.id %}" class="btn btn-sm btn-outline-primary">💬</a>
-              </div>
-              {% endfor %}
-            </div>
-          </div>
-
-          <div id="tab-requests" class="tab-content" style="display: none;">
-            {% if pending_requests %}
-            {% for req in pending_requests %}
-            <div class="request-item">
-              <strong>{{ req.from_user.username }}</strong>
-              <div class="request-actions">
-                <a href="{% url 'accept_friend_request' req.id %}" class="btn btn-sm btn-success">✔</a>
-                <a href="{% url 'reject_friend_request' req.id %}" class="btn btn-sm btn-danger">✖</a>
-              </div>
-            </div>
             {% endfor %}
-            {% else %}
-            <p>No pending friend requests</p>
-            {% endif %}
           </div>
         </div>
+      </div>
+      {% else %}
+      <span>💬</span>
+      {% endif %}
+      <span>🍴</span>
+      <a href="http://127.0.0.1:8000/admin/" target="_blank" rel="noopener">
+        ⚙️
+      </a>
+    </div>
+    {% if not hide_profile_icon %}
+    <div class="profile-icon">
+      {% if user.is_authenticated %}
+      {% if user.profile.profile_picture %}
+      <a href="{% url 'profile' user.username %}">
+        <img src="{{ user.profile.profile_picture.url }}" alt="Foto de perfil"
+          style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+      </a>
+      {% else %}
+      <a href="{% url 'profile' user.username %}">
+        <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"
+          style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+      </a>
+      {% endif %}
+      {% else %}
+      <a href="{% url 'home' %}">
+        <img src="https://i.imgur.com/jNNT4LE.png" alt="Invitado"
+          style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+      </a>
+      {% endif %}
+    </div>
+    {% endif %}
 
+  </div>
+
+  <div class="sidebar">
+    <div class="menu-item">Streams</div>
+    <div class="menu-item">Events</div>
+    <div class="menu-item">Friends</div>
+    <div class="menu-item">Memories</div>
+    <div class="menu-item">Games</div>
+    <div class="restaurants-section">
+      <h3>Restaurants</h3>
+      <div class="restaurant-item">Luigi's Kitchen - <a href="#">Go To Site</a></div>
+      <div class="restaurant-item">Restaurant 2 - <a href="#">Go To Site</a></div>
+      <div class="restaurant-item">Restaurant 3 - <a href="#">Go To Site</a></div>
+      <div class="restaurant-item">Restaurant 4 - <a href="#">Go To Site</a></div>
+      <button class="see-more">See More</button>
+    </div>
+  </div>
+
+  <div class="main-content">
+    {% block content %}{% endblock %}
+  </div>
+
+  <div class="rightbar">
+    <div class="sponsored">
+      <h3>Sponsored</h3>
+      <div class="sponsored-item">
+        <img src="https://via.placeholder.com/250" alt="Sponsored Image">
+        <div>Pizza with Pepperoni<br>Lorem ipsum dolor sit amet. -30%</div>
+      </div>
+    </div>
+    <div class="friends">
+      <h3>Friends</h3>
+
+      <div class="search-friends-container">
+        <input type="text" id="searchFriendInput" placeholder="Search users..." autocomplete="off" />
+        <ul id="searchResults" class="autocomplete-list"></ul>
       </div>
 
-      <script>
-        document.getElementById("searchFriendInput").addEventListener("input", function () {
-          const query = this.value.trim();
-          const resultsList = document.getElementById("searchResults");
-          resultsList.innerHTML = "";
+      <!-- Tabs -->
+      <div class="friend-tabs">
+        <button class="tab-button active" onclick="switchTab('online')">Amigos</button>
+        <button class="tab-button" onclick="switchTab('requests')">
+          Solicitudes <span id="requestCount">{{ pending_requests|length }}</span>
+        </button>
+      </div>
 
-          if (query.length === 0) return;
+      <!-- Tab content -->
+      <div id="tab-online" class="tab-content">
+        <div class="friends-list">
+          {% for f in friends %}
+          <div class="friend-item d-flex align-items-center mb-2">
+            {% if f.profile.profile_picture %}
+            <img src="{{ f.profile.profile_picture.url }}" alt="Foto perfil"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+            {% else %}
+            <img src="https://i.imgur.com/jNNT4LE.png" alt="Por defecto"
+              style="width: 40px; height: 40px; border-radius: 50%; object-fit: cover; margin-right: 10px;">
+            {% endif %}
 
-          fetch(`/api/search-users/?q=${encodeURIComponent(query)}`)
-            .then(res => res.json())
-            .then(users => {
-              users.forEach(user => {
-                const li = document.createElement("li");
-                li.innerHTML = `
+            <div class="flex-grow-1">
+              <strong>{{ f.username }}</strong><br>
+              {% if f.profile.online %}
+              <small style="color: green;">Online</small>
+              {% elif f.profile.last_seen %}
+              <small class="text-muted">Last seen: {{ f.profile.last_seen|naturaltime }}</small>
+              {% endif %}
+            </div>
+            <a href="{% url 'start_chat' f.id %}" class="btn btn-sm btn-outline-primary">💬</a>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div id="tab-requests" class="tab-content" style="display: none;">
+        {% if pending_requests %}
+        {% for req in pending_requests %}
+        <div class="request-item">
+          <strong>{{ req.from_user.username }}</strong>
+          <div class="request-actions">
+            <a href="{% url 'accept_friend_request' req.id %}" class="btn btn-sm btn-success">✔</a>
+            <a href="{% url 'reject_friend_request' req.id %}" class="btn btn-sm btn-danger">✖</a>
+          </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <p>No pending friend requests</p>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+
+  <script>
+    document.getElementById("searchFriendInput").addEventListener("input", function () {
+      const query = this.value.trim();
+      const resultsList = document.getElementById("searchResults");
+      resultsList.innerHTML = "";
+
+      if (query.length === 0) return;
+
+      fetch(`/api/search-users/?q=${encodeURIComponent(query)}`)
+        .then(res => res.json())
+        .then(users => {
+          users.forEach(user => {
+            const li = document.createElement("li");
+            li.innerHTML = `
                     <div class="user-suggestion">
                         <img src="${user.avatar || 'https://via.placeholder.com/40'}" alt="avatar" width="32" height="32" />
                         <span>${user.username} (${user.email})</span>
                         <button onclick="sendFriendRequest(${user.id}, this)">Add</button>
                     </div>
                 `;
-                resultsList.appendChild(li);
-              });
-            });
+            resultsList.appendChild(li);
+          });
         });
+    });
 
-        function sendFriendRequest(userId, button) {
-          fetch('/send-friend-request/', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'X-CSRFToken': getCSRFToken(),
-            },
-            body: JSON.stringify({ user_id: userId })
-          })
-            .then(response => {
-              if (response.ok) {
-                button.textContent = "Sent";
-                button.disabled = true;
-              } else {
-                alert("Error sending friend request.");
-              }
-            });
+    function sendFriendRequest(userId, button) {
+      fetch('/send-friend-request/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCSRFToken(),
+        },
+        body: JSON.stringify({ user_id: userId })
+      })
+        .then(response => {
+          if (response.ok) {
+            button.textContent = "Sent";
+            button.disabled = true;
+          } else {
+            alert("Error sending friend request.");
+          }
+        });
+    }
+
+    function getCSRFToken() {
+      const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
+      return cookie ? cookie.split('=')[1] : '';
+    }
+
+    function toggleNotifications(event) {
+      event.preventDefault();
+      const dropdown = document.getElementById('notificationDropdown');
+      dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
+    }
+
+    function markAsRead(notificationId) {
+      fetch(`/mark-notification-read/${notificationId}/`, {
+        method: 'POST',
+        headers: {
+          'X-CSRFToken': getCSRFToken(),
+          'X-Requested-With': 'XMLHttpRequest'
         }
-
-        function getCSRFToken() {
-          const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
-          return cookie ? cookie.split('=')[1] : '';
-        }
-
-        function toggleNotifications(event) {
-          event.preventDefault();
-          const dropdown = document.getElementById('notificationDropdown');
-          dropdown.style.display = dropdown.style.display === 'block' ? 'none' : 'block';
-        }
-
-        function markAsRead(notificationId) {
-          fetch(`/mark-notification-read/${notificationId}/`, {
-            method: 'POST',
-            headers: {
-              'X-CSRFToken': getCSRFToken(),
-              'X-Requested-With': 'XMLHttpRequest'
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            // Remove notification from dropdown
+            const notificationItem = document.querySelector(`[data-id="${notificationId}"]`);
+            if (notificationItem) {
+              notificationItem.remove();
             }
-          })
-            .then(response => response.json())
-            .then(data => {
-              if (data.success) {
-                // Remove notification from dropdown
-                const notificationItem = document.querySelector(`[data-id="${notificationId}"]`);
-                if (notificationItem) {
-                  notificationItem.remove();
-                }
 
-                // Update badge count
-                const badge = document.getElementById('notificationBadge');
-                if (badge) {
-                  const newCount = data.unread_count;
-                  if (newCount > 0) {
-                    badge.textContent = newCount;
-                  } else {
-                    badge.style.display = 'none';
-                  }
-                }
+            // Update badge count
+            const badge = document.getElementById('notificationBadge');
+            if (badge) {
+              const newCount = data.unread_count;
+              if (newCount > 0) {
+                badge.textContent = newCount;
+              } else {
+                badge.style.display = 'none';
               }
-            });
-        }
-
-        // Check for new notifications every 30 seconds
-        setInterval(() => {
-          if (document.querySelector('.notification-bell')) {
-            fetch('/api/notifications-count/', {
-              headers: { 'X-Requested-With': 'XMLHttpRequest' }
-            })
-              .then(response => response.json())
-              .then(data => {
-                const badge = document.getElementById('notificationBadge');
-                if (data.unread_count > 0) {
-                  if (badge) {
-                    badge.textContent = data.unread_count;
-                    badge.style.display = 'inline';
-                  }
-                } else if (badge) {
-                  badge.style.display = 'none';
-                }
-              });
-          }
-        }, 30000);
-
-        // Close notification dropdown when clicking outside
-        document.addEventListener('click', function (event) {
-          const dropdown = document.getElementById('notificationDropdown');
-          const bell = document.querySelector('.notification-bell');
-          if (dropdown && !bell.contains(event.target)) {
-            dropdown.style.display = 'none';
+            }
           }
         });
+    }
 
-        function switchTab(tab) {
-          document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-          document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
+    // Check for new notifications every 30 seconds
+    setInterval(() => {
+      if (document.querySelector('.notification-bell')) {
+        fetch('/api/notifications-count/', {
+          headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        })
+          .then(response => response.json())
+          .then(data => {
+            const badge = document.getElementById('notificationBadge');
+            if (data.unread_count > 0) {
+              if (badge) {
+                badge.textContent = data.unread_count;
+                badge.style.display = 'inline';
+              }
+            } else if (badge) {
+              badge.style.display = 'none';
+            }
+          });
+      }
+    }, 30000);
 
-          document.getElementById('tab-' + tab).style.display = 'block';
-          event.target.classList.add('active');
-        }
+    // Close notification dropdown when clicking outside
+    document.addEventListener('click', function (event) {
+      const dropdown = document.getElementById('notificationDropdown');
+      const bell = document.querySelector('.notification-bell');
+      if (dropdown && !bell.contains(event.target)) {
+        dropdown.style.display = 'none';
+      }
+    });
 
-        // Enhanced notification badge styling
-        const notificationBadge = document.getElementById('notificationBadge');
-        if (notificationBadge) {
-          notificationBadge.style.cssText = `
+    function switchTab(tab) {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(div => div.style.display = 'none');
+
+      document.getElementById('tab-' + tab).style.display = 'block';
+      event.target.classList.add('active');
+    }
+
+    // Enhanced notification badge styling
+    const notificationBadge = document.getElementById('notificationBadge');
+    if (notificationBadge) {
+      notificationBadge.style.cssText = `
         position: absolute;
         top: -10px;
         right: -10px;
@@ -855,11 +1113,11 @@
         animation: notification-pulse 2s infinite;
         z-index: 10;
       `;
-        }
+    }
 
-        // Add CSS animation for notification pulse
-        const style = document.createElement('style');
-        style.textContent = `
+    // Add CSS animation for notification pulse
+    const style = document.createElement('style');
+    style.textContent = `
       @keyframes notification-pulse {
         0%, 100% { 
           transform: scale(1); 
@@ -878,46 +1136,46 @@
         background-color: #f0f9ff;
       }
     `;
-        document.head.appendChild(style);
+    document.head.appendChild(style);
 
-        // Handle notification clicks for messages
-        document.addEventListener('click', function (e) {
-          const notificationItem = e.target.closest('.notification-item[data-notification-type="message"]');
-          if (notificationItem && notificationItem.hasAttribute('data-chat-url')) {
-            const chatUrl = notificationItem.getAttribute('data-chat-url');
-            if (chatUrl) {
-              // Mark as read first
-              const notificationId = notificationItem.getAttribute('data-id');
-              markAsRead(notificationId);
-              // Then navigate to chat
-              window.location.href = chatUrl;
-            }
-          }
-        });
+    // Handle notification clicks for messages
+    document.addEventListener('click', function (e) {
+      const notificationItem = e.target.closest('.notification-item[data-notification-type="message"]');
+      if (notificationItem && notificationItem.hasAttribute('data-chat-url')) {
+        const chatUrl = notificationItem.getAttribute('data-chat-url');
+        if (chatUrl) {
+          // Mark as read first
+          const notificationId = notificationItem.getAttribute('data-id');
+          markAsRead(notificationId);
+          // Then navigate to chat
+          window.location.href = chatUrl;
+        }
+      }
+    });
 
-        document.getElementById('id_profile_picture')?.addEventListener('change', function () {
-          document.getElementById('photoUploadForm').submit();
-        });
-      </script>
-      <script>
-        document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
-          tab.addEventListener('click', function (e) {
-            e.preventDefault();
-            const selected = this.getAttribute('data-category');
+    document.getElementById('id_profile_picture')?.addEventListener('change', function () {
+      document.getElementById('photoUploadForm').submit();
+    });
+  </script>
+  <script>
+    document.querySelectorAll('#categoryTabs .nav-link').forEach(tab => {
+      tab.addEventListener('click', function (e) {
+        e.preventDefault();
+        const selected = this.getAttribute('data-category');
 
-            // Desactivar todos los tabs y ocultar grupos
-            document.querySelectorAll('#categoryTabs .nav-link').forEach(link => link.classList.remove('active'));
-            document.querySelectorAll('.category-group').forEach(group => group.style.display = 'none');
+        // Desactivar todos los tabs y ocultar grupos
+        document.querySelectorAll('#categoryTabs .nav-link').forEach(link => link.classList.remove('active'));
+        document.querySelectorAll('.category-group').forEach(group => group.style.display = 'none');
 
-            // Activar tab seleccionado y mostrar grupo correspondiente
-            this.classList.add('active');
-            const activeGroup = document.querySelector(`.category-group[data-category="${selected}"]`);
-            if (activeGroup) activeGroup.style.display = 'flex';
-          });
-        });
-      </script>
-      <script src="{% static 'scripts/feed.js' %}"></script>
-      <script type="module" src="{% static 'scripts/main.js' %}"></script>
+        // Activar tab seleccionado y mostrar grupo correspondiente
+        this.classList.add('active');
+        const activeGroup = document.querySelector(`.category-group[data-category="${selected}"]`);
+        if (activeGroup) activeGroup.style.display = 'flex';
+      });
+    });
+  </script>
+  <script src="{% static 'scripts/feed.js' %}"></script>
+  <script type="module" src="{% static 'scripts/main.js' %}"></script>
 
 
 </body>

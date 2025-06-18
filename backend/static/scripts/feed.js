@@ -219,7 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (replyInput) replyInput.disabled = currentIsOwn;
     if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
     if (storyViews) storyViews.style.display = currentIsOwn ? 'block' : 'none';
-    if (replyContainer) replyContainer.style.display = currentIsOwn ? 'none' : 'flex';
+    if (replyContainer) {
+      if (currentIsOwn) {
+        replyContainer.classList.add('d-none');
+      } else {
+        replyContainer.classList.remove('d-none');
+      }
+    }
     if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[currentIndex];
     modal.style.display = 'flex';
     modalContent.classList.add('open-anim');

@@ -204,8 +204,12 @@ document.addEventListener('DOMContentLoaded', () => {
     currentIsOwn = el.dataset.user === currentUsername;
     const userContainer = document.querySelector('.story-modal-user');
     if (userContainer) {
-      userContainer.innerHTML = `<img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40">` +
-        `<a href="${el.dataset.profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
+      const profileUrl = el.dataset.profileUrl;
+      const avatarHtml =
+        `<a href="${profileUrl}"><img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40" alt="${el.dataset.user}"></a>`;
+      const nameHtml =
+        `<a href="${profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
+      userContainer.innerHTML = avatarHtml + nameHtml;
     }
     const replyBtn = document.getElementById('storyReplySend');
     if (replyBtn) {

@@ -94,6 +94,14 @@ def home(request):
 
     return render(request, 'social/pages/feed.html', context)
 
+def base_context(request):
+    context = {}
+    if request.user.is_authenticated:
+        context['unread_notifications'] = Notification.objects.filter(
+            user=request.user, is_read=False
+        ).order_by('-created_at')[:5]
+    return context
+
 
 def feed(request):
     context = _build_feed_context(show_posts=False)

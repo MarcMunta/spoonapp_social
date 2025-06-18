@@ -9,6 +9,7 @@ from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
 from .models import FriendRequest, StoryView
 from .models import PostCategory
 from django.utils import timezone
+from django.http import HttpResponseForbidden
 from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 import json
@@ -124,6 +125,14 @@ def create_post(request):
             form.save_m2m()
     return redirect('home')
 
+@login_required
+def delete_post(request, post_id):
+    post = get_object_or_404(Post, id=post_id)
+    if request.user != post.user:
+        return HttpResponseForbidden("No tienes permiso para eliminar esta publicación.")
+    if request.method == 'POST':
+        post.delete()
+        return redirect('home')
 
 @login_required
 def upload_story(request):

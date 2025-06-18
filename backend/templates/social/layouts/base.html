@@ -808,7 +808,7 @@
   class="{% block body_class %}{% endblock %}">
   <div class="topbar">
     <div class="app-title"><a href="{% url 'home' %}">SpoonApp SOCIAL</a></div>
-    <div class="topbar-icons{% if hide_profile_icon %} center{% endif %}">
+    <div class="topbar-icons center">
       <a href="{% url 'home' %}">🏠</a>
       <a href="{% url 'subir_publicacion' %}">➕</a>
       {% if user.is_authenticated %}

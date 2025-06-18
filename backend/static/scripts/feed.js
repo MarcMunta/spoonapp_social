@@ -76,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let currentUrls = [];
   let currentExpires = [];
+  let currentTypes = [];
   let currentIndex = 0;
   let progressTimeout;
   let countdownInterval;
@@ -148,7 +149,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showStory(idx) {
     const url = currentUrls[idx];
-    if (/\.(mp4|webm|ogg)$/i.test(url)) {
+    const type = currentTypes[idx] || '';
+    if (type.startsWith('video')) {
       video.src = url;
       video.classList.remove('d-none');
       img.classList.add('d-none');
@@ -197,6 +199,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function openStories(el, idx) {
     currentUrls = el.dataset.urls.split('|');
+    currentTypes = el.dataset.types.split('|');
     currentExpires = el.dataset.expires.split('|');
     currentStoryIds = el.dataset.storyId.split('|');
     currentIndex = 0;

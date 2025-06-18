@@ -19,8 +19,8 @@
                         <div class="spoon-chat-item d-flex align-items-center">
                             <div class="spoon-avatar-container">
                                 {% if data.other_user.profile.profile_picture %}
-                                <img src="{{ data.other_user.profile.profile_picture.url }}" 
-                                     alt="Profile" 
+                                <img src="{{ data.other_user.profile.profile_picture_data_url }}"
+                                     alt="Profile"
                                      class="spoon-avatar"
                                      onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{% url 'profile' data.other_user.username %}';"
                                      title="View {{ data.other_user.username }}'s profile">

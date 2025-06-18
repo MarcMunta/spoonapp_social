@@ -319,23 +319,47 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  if (deleteBtn) {
+  const deleteConfirm = document.getElementById('deleteConfirm');
+  const confirmDeleteBtn = document.getElementById('confirmDeleteStory');
+  const cancelDeleteBtn = document.getElementById('cancelDeleteStory');
+  let pendingDeleteId = null;
+
+  if (deleteBtn && deleteConfirm && confirmDeleteBtn && cancelDeleteBtn) {
     deleteBtn.addEventListener('click', e => {
       e.preventDefault();
-      const storyId = deleteBtn.dataset.storyId;
-      if (!storyId) return;
-      if (!confirm('¿Eliminar definitivamente esta historia?')) {
+      pendingDeleteId = deleteBtn.dataset.storyId;
+      if (!pendingDeleteId) {
         resumeProgress();
         return;
       }
-      fetch(`/story/${storyId}/delete/`, {
+      deleteConfirm.style.display = 'flex';
+      pauseProgress();
+    });
+
+    confirmDeleteBtn.addEventListener('click', () => {
+      if (!pendingDeleteId) return;
+      fetch(`/story/${pendingDeleteId}/delete/`, {
         method: 'POST',
         headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
       }).then(res => res.json()).then(data => {
+        deleteConfirm.style.display = 'none';
+        pendingDeleteId = null;
+        resumeProgress();
         if (data.success) {
           window.location.reload();
         }
       });
+    });
+
+    const hideDeleteModal = () => {
+      deleteConfirm.style.display = 'none';
+      pendingDeleteId = null;
+      resumeProgress();
+    };
+
+    cancelDeleteBtn.addEventListener('click', hideDeleteModal);
+    deleteConfirm.addEventListener('click', e => {
+      if (e.target === deleteConfirm) hideDeleteModal();
     });
   }
 

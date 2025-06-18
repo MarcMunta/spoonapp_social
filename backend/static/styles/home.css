@@ -1308,8 +1308,13 @@ body.profile-page .nav-tabs .nav-link {
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px solid #0d6efd;
+    border: 2px dashed #ccc;
     transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.open-story .story-img {
+    border-style: solid;
+    border-color: #0d6efd;
 }
 
 .story-thumb:hover .story-img {
@@ -1424,3 +1429,30 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-prev { left: 5px; }
 .story-next { right: 5px; }
+
+.story-options {
+    bottom: 70px !important;
+    right: 5px;
+}
+
+.delete-confirm-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    align-items: center;
+    justify-content: center;
+    z-index: 2100;
+}
+
+.delete-confirm-content {
+    background: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 320px;
+    width: 90%;
+    text-align: center;
+}

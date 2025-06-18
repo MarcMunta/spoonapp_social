@@ -1194,7 +1194,7 @@ body:has(.spoon-chat-container) .rightbar {
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    overflow: visible;
+    overflow: hidden;
     position: relative;
     cursor: pointer;
 }

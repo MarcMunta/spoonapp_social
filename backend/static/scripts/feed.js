@@ -380,6 +380,46 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Post deletion modal
+  const postDeleteConfirm = document.getElementById('postDeleteConfirm');
+  const confirmDeletePostBtn = document.getElementById('confirmDeletePost');
+  const cancelDeletePostBtn = document.getElementById('cancelDeletePost');
+  let pendingPostDeleteId = null;
+
+  document.querySelectorAll('.delete-post-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      pendingPostDeleteId = btn.dataset.postId;
+      if (postDeleteConfirm) postDeleteConfirm.style.display = 'flex';
+    });
+  });
+
+  if (postDeleteConfirm && confirmDeletePostBtn && cancelDeletePostBtn) {
+    confirmDeletePostBtn.addEventListener('click', () => {
+      if (!pendingPostDeleteId) return;
+      fetch(`/post/${pendingPostDeleteId}/delete/`, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
+      }).then(res => res.json()).then(data => {
+        postDeleteConfirm.style.display = 'none';
+        pendingPostDeleteId = null;
+        if (data.success) {
+          window.location.reload();
+        }
+      });
+    });
+
+    const hidePostDeleteModal = () => {
+      postDeleteConfirm.style.display = 'none';
+      pendingPostDeleteId = null;
+    };
+
+    cancelDeletePostBtn.addEventListener('click', hidePostDeleteModal);
+    postDeleteConfirm.addEventListener('click', e => {
+      if (e.target === postDeleteConfirm) hidePostDeleteModal();
+    });
+  }
+
   if (optionsBtn && optionsMenu) {
     optionsBtn.addEventListener('click', e => {
       e.stopPropagation();

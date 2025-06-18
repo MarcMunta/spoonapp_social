@@ -24,6 +24,23 @@
       {% endif %}
       <strong>{{ post.user.username }}</strong>
     </a>
+    {% if post.user == request.user %}
+    <div class="dropdown">
+      <button class="dropdown-toggle btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+        ⋯
+      </button>
+      <ul class="dropdown-menu">
+        <li>
+          <form method="post" action="{% url 'delete_post' post.id %}"
+            onsubmit="return confirm('¿Eliminar esta publicación?')">
+            {% csrf_token %}
+            <button type="submit" class="dropdown-item text-danger">Eliminar</button>
+          </form>
+        </li>
+      </ul>
+    </div>
+    {% endif %}
+
     <div class="post-time text-muted text-end">
       <span class="post-relative me-1" data-created="{{ post.created_at|date:'c' }}"></span>
       <span class="post-date">{{ post.created_at|date:"H:i d/m/Y" }}</span>

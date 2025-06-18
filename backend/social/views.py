@@ -63,15 +63,17 @@ def home(request):
 
         user_story_list = active_stories.filter(user=request.user)
         context['user_story_data'] = {
-            'urls': [st.media_file.url for st in user_story_list],
+            'urls': [st.media_data_url for st in user_story_list],
+            'types': [st.media_mime or '' for st in user_story_list],
             'expires': [st.expires_at.isoformat() for st in user_story_list],
             'ids': [st.id for st in user_story_list],
         }
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'expires': [], 'ids': []})
-            entry['urls'].append(st.media_file.url)
+            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'ids': []})
+            entry['urls'].append(st.media_data_url)
+            entry['types'].append(st.media_mime or '')
             entry['expires'].append(st.expires_at.isoformat())
             entry['ids'].append(st.id)
         context['friend_stories'] = friend_story_map
@@ -90,15 +92,17 @@ def feed(request):
 
         user_story_list = active_stories.filter(user=request.user)
         context['user_story_data'] = {
-            'urls': [st.media_file.url for st in user_story_list],
+            'urls': [st.media_data_url for st in user_story_list],
+            'types': [st.media_mime or '' for st in user_story_list],
             'expires': [st.expires_at.isoformat() for st in user_story_list],
             'ids': [st.id for st in user_story_list],
         }
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'expires': [], 'ids': []})
-            entry['urls'].append(st.media_file.url)
+            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'ids': []})
+            entry['urls'].append(st.media_data_url)
+            entry['types'].append(st.media_mime or '')
             entry['expires'].append(st.expires_at.isoformat())
             entry['ids'].append(st.id)
         context['friend_stories'] = friend_story_map
@@ -280,11 +284,14 @@ def search_users(request):
 
         results = []
         for user in users:
+            avatar = ""
+            if hasattr(user, "profile") and user.profile.profile_picture:
+                avatar = user.profile.profile_picture_data_url
             results.append({
                 "id": user.id,
                 "username": user.username,
                 "email": user.email,
-                "avatar": user.profile.profile_picture.url if hasattr(user, "profile") and user.profile.profile_picture else "",
+                "avatar": avatar,
             })
 
         return JsonResponse(results, safe=False)

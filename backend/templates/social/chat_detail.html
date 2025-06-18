@@ -15,8 +15,8 @@
                     
                     <div class="spoon-avatar-container me-3">
                         {% if other_user.profile.profile_picture %}
-                        <img src="{{ other_user.profile.profile_picture.url }}" 
-                             alt="Profile" 
+                        <img src="{{ other_user.profile.profile_picture_data_url }}"
+                             alt="Profile"
                              class="spoon-avatar" 
                              style="width: 50px; height: 50px;"
                              onclick="window.location.href='{% url 'profile' other_user.username %}';"
@@ -64,10 +64,10 @@
                         <div class="spoon-message-bubble {% if message.sender == user %}spoon-message-sent{% else %}spoon-message-received{% endif %}">
                             {% if message.story %}
                                 {% if message.story.expires_at > now %}
-                                    {% if '.mp4' in message.story.media_file.url or '.webm' in message.story.media_file.url or '.ogg' in message.story.media_file.url %}
-                                    <video src="{{ message.story.media_file.url }}" class="w-100 mb-1" controls></video>
+                                {% if message.story.media_mime and message.story.media_mime.startswith('video') %}
+                                    <video src="{{ message.story.media_data_url }}" class="w-100 mb-1" controls></video>
                                     {% else %}
-                                    <img src="{{ message.story.media_file.url }}" class="w-100 mb-1" />
+                                    <img src="{{ message.story.media_data_url }}" class="w-100 mb-1" />
                                     {% endif %}
                                 {% else %}
                                     <div class="text-muted small fst-italic mb-1">Historia no disponible</div>

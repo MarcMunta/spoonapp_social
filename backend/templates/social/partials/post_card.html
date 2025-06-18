@@ -3,7 +3,7 @@
     <!-- Usuario -->
     <div class="d-flex align-items-center mb-3">
         {% if post.user.profile.profile_picture %}
-        <img src="{{ post.user.profile.profile_picture.url }}" alt="Avatar"
+        <img src="{{ post.user.profile.profile_picture_data_url }}" alt="Avatar"
              class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
         {% else %}
         <img src="https://i.imgur.com/jNNT4LE.png" alt="Avatar"
@@ -18,7 +18,7 @@
     <!-- Imagen principal -->
     {% if post.image %}
     <div class="mb-3">
-        <img src="{{ post.image.url }}" alt="Post image" class="img-fluid rounded-3" style="max-height:500px;object-fit:cover;">
+        <img src="{{ post.image_data_url }}" alt="Post image" class="img-fluid rounded-3" style="max-height:500px;object-fit:cover;">
     </div>
     {% endif %}
 

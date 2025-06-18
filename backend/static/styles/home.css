@@ -988,12 +988,161 @@ body.profile-page .nav-tabs .nav-link {
     scroll-padding-bottom: 20px;
     overscroll-behavior: contain;
     position: relative;
+    scroll-behavior: smooth;
 }
 
-/* Message wrapper for better scrolling */
-.spoon-message-wrapper {
-    scroll-margin-top: 20px;
-    scroll-margin-bottom: 20px;
+/* Enhanced scroll indicators */
+.spoon-scroll-indicator {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    background: linear-gradient(135deg, rgba(212, 138, 193, 0.95) 0%, rgba(184, 107, 163, 0.95) 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 25px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.4);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+    z-index: 10;
+    user-select: none;
+    animation: scrollIndicatorPulse 2s ease-in-out infinite;
+}
+
+.spoon-scroll-indicator:hover {
+    transform: translateX(-50%) scale(1.05);
+    box-shadow: 0 6px 20px rgba(212, 138, 193, 0.6);
+    background: linear-gradient(135deg, rgba(184, 107, 163, 0.95) 0%, rgba(168, 85, 160, 0.95) 100%);
+}
+
+.spoon-scroll-top {
+    top: 20px;
+}
+
+.spoon-scroll-bottom {
+    bottom: 20px;
+}
+
+.spoon-scroll-text {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+@keyframes scrollIndicatorPulse {
+    0%, 100% {
+        opacity: 0.9;
+        transform: translateX(-50%) scale(1);
+    }
+    50% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1.02);
+    }
+}
+
+/* Enhanced floating scroll button */
+.spoon-floating-scroll-btn {
+    position: fixed;
+    bottom: 140px;
+    right: 30px;
+    z-index: 1000;
+    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+    border: none;
+    color: white;
+    width: 60px;
+    height: 60px;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.4);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    animation: floatingBounce 2s ease-in-out infinite;
+}
+
+.spoon-floating-scroll-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 20px rgba(212, 138, 193, 0.6);
+    background: linear-gradient(135deg, #b86ba3 0%, #a855a0 100%);
+}
+
+.spoon-floating-scroll-btn i {
+    font-size: 1.2rem;
+    margin-bottom: 2px;
+}
+
+.spoon-scroll-label {
+    font-size: 0.7rem;
+    font-weight: 600;
+}
+
+@keyframes floatingBounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-3px);
+    }
+}
+
+/* Enhanced scrollbar styling */
+.spoon-messages-area::-webkit-scrollbar {
+    width: 12px;
+}
+
+.spoon-messages-area::-webkit-scrollbar-track {
+    background: linear-gradient(180deg, rgba(232, 213, 240, 0.3) 0%, rgba(212, 189, 224, 0.3) 100%);
+    border-radius: 6px;
+    margin: 10px 0;
+    border: 1px solid rgba(212, 138, 193, 0.1);
+}
+
+.spoon-messages-area::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #d48ac1 0%, #b86ba3 100%);
+    border-radius: 6px;
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.spoon-messages-area::-webkit-scrollbar-thumb:hover {
+    background: linear-gradient(180deg, #b86ba3 0%, #a855a0 100%);
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.spoon-messages-area::-webkit-scrollbar-thumb:active {
+    background: linear-gradient(180deg, #a855a0 0%, #9333ea 100%);
+}
+
+.spoon-messages-area::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
+/* Enhanced message loading animation */
+.spoon-message-loaded {
+    opacity: 0;
+    transform: translateX(-20px);
+    animation: messageLoadIn 0.5s ease-out forwards;
+}
+
+@keyframes messageLoadIn {
+    from {
+        opacity: 0;
+        transform: translateX(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }
 
 /* Loading indicator improvements */
@@ -1003,7 +1152,7 @@ body.profile-page .nav-tabs .nav-link {
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: 15px;
+    padding: 20px;
     animation: loadingPulse 1.5s ease-in-out infinite;
 }
 
@@ -1011,155 +1160,87 @@ body.profile-page .nav-tabs .nav-link {
     background: linear-gradient(135deg, #e8eaf0 0%, #d4d8e0 100%);
     border: 2px solid #c0c4cc;
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    padding: 8px 15px;
-    border-radius: 18px;
-}
-
-/* Scroll to bottom button */
-.scroll-to-bottom {
-    position: fixed;
-    bottom: 120px;
-    right: 30px;
-    z-index: 1000;
-    border-radius: 50%;
-    width: 50px;
-    height: 50px;
-    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
-    border: none;
-    color: white;
-    box-shadow: 0 4px 12px rgba(212, 138, 193, 0.4);
-    transition: all 0.3s ease;
-    opacity: 0.9;
+    padding: 12px 20px;
+    border-radius: 25px;
     display: flex;
     align-items: center;
-    justify-content: center;
-    font-size: 1rem;
+    gap: 8px;
 }
 
-.scroll-to-bottom:hover {
-    transform: scale(1.1);
-    box-shadow: 0 6px 15px rgba(212, 138, 193, 0.6);
-    opacity: 1;
-}
-
-/* Enhanced message animations */
-.spoon-message-bubble[data-new="true"] {
-    animation: messageSlideIn 0.4s ease-out;
-}
-
-@keyframes messageSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(15px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-}
-
-/* Improved scroll indicators */
-.spoon-messages-area::-webkit-scrollbar-corner {
-    background: transparent;
-}
-
-/* Loading animation improvements */
-@keyframes loadingPulse {
-    0%, 100% {
-        opacity: 0.6;
-    }
-    50% {
-        opacity: 1;
-    }
-}
-
-/* Better message positioning */
+/* Enhanced message positioning with scroll margin */
 .spoon-message-bubble {
     position: relative;
-    scroll-margin: 20px 0;
+    scroll-margin: 30px 0;
+    transition: all 0.3s ease;
 }
 
-/* Message date separators */
-.message-date-separator {
-    text-align: center;
-    padding: 10px 0;
-    color: #666;
-    font-size: 0.85rem;
-    position: relative;
+.spoon-message-bubble:hover {
+    transform: scale(1.01);
 }
 
-.message-date-separator::before,
-.message-date-separator::after {
-    content: '';
-    position: absolute;
-    top: 50%;
-    width: 40%;
-    height: 1px;
-    background: linear-gradient(to right, transparent, #d4d8e0, transparent);
+/* Scroll snap for better message navigation */
+.spoon-messages-area {
+    scroll-snap-type: y proximity;
 }
 
-.message-date-separator::before {
-    left: 0;
-}
-
-.message-date-separator::after {
-    right: 0;
+.spoon-message-bubble {
+    scroll-snap-align: start;
 }
 
 /* Enhanced responsive design */
 @media (max-width: 768px) {
-    .spoon-chat-header-detail,
-    .spoon-input-area {
-        position: -webkit-sticky;
-        position: sticky;
+    .spoon-scroll-indicator {
+        padding: 10px 16px;
+        font-size: 0.8rem;
+    }
+    
+    .spoon-floating-scroll-btn {
+        width: 50px;
+        height: 50px;
+        bottom: 110px;
+        right: 20px;
+    }
+    
+    .spoon-floating-scroll-btn i {
+        font-size: 1rem;
+    }
+    
+    .spoon-scroll-label {
+        font-size: 0.65rem;
+    }
+    
+    .spoon-messages-area::-webkit-scrollbar {
+        width: 8px;
     }
     
     .spoon-messages-area {
         height: calc(100vh - 210px);
-        padding: 10px;
-    }
-    
-    .scroll-to-bottom {
-        bottom: 100px;
-        right: 20px;
-        width: 45px;
-        height: 45px;
-    }
-    
-    .spoon-loading-messages {
-        padding: 10px;
+        padding: 15px;
     }
 }
 
 @media (max-width: 480px) {
+    .spoon-scroll-indicator {
+        padding: 8px 12px;
+        font-size: 0.75rem;
+    }
+    
+    .spoon-floating-scroll-btn {
+        width: 45px;
+        height: 45px;
+    }
+    
     .spoon-messages-area {
         height: calc(100vh - 190px);
-        padding: 8px;
-    }
-    
-    .spoon-chat-header-detail {
-        padding: 10px 12px;
-        min-height: 65px;
-    }
-    
-    .spoon-input-area {
-        padding: 10px 12px;
-        min-height: 65px;
-    }
-    
-    .scroll-to-bottom {
-        width: 40px;
-        height: 40px;
-        font-size: 0.9rem;
+        padding: 12px;
     }
 }
 
-/* Safari-specific fixes */
-@supports (-webkit-appearance: none) {
-    .spoon-chat-header-detail,
-    .spoon-input-area {
-        position: -webkit-sticky;
-        position: sticky;
+/* Enhanced touch scrolling for mobile */
+@media (max-width: 768px) {
+    .spoon-messages-area {
+        -webkit-overflow-scrolling: touch;
+        overscroll-behavior-y: contain;
     }
 }
 
@@ -1168,18 +1249,27 @@ body.profile-page .nav-tabs .nav-link {
     scroll-behavior: smooth;
 }
 
-/* Message loading states */
-.message-sending {
-    opacity: 0.7;
+/* Visual feedback for scroll boundaries */
+.spoon-messages-area::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(212, 138, 193, 0.3), transparent);
     pointer-events: none;
+    z-index: 5;
 }
 
-.message-sent {
-    opacity: 1;
-    pointer-events: auto;
-}
-
-.message-failed {
-    opacity: 0.5;
-    border-left: 3px solid #ef4444;
+.spoon-messages-area::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(212, 138, 193, 0.3), transparent);
+    pointer-events: none;
+    z-index: 5;
 }

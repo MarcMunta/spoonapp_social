@@ -51,6 +51,14 @@
                 
                 <!-- Messages Area -->
                 <div id="spoon-messages-area" class="spoon-messages-area">
+                    <!-- Scroll to top indicator -->
+                    <div id="scroll-top-indicator" class="spoon-scroll-indicator spoon-scroll-top" style="display: none;">
+                        <div class="spoon-scroll-text">
+                            <i class="fas fa-chevron-up"></i>
+                            <span>Scroll up for older messages</span>
+                        </div>
+                    </div>
+                    
                     {% for message in messages %}
                     <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3" data-message-id="{{ message.id }}">
                         <div class="spoon-message-bubble {% if message.sender == user %}spoon-message-sent{% else %}spoon-message-received{% endif %}">
@@ -70,6 +78,14 @@
                         </div>
                     </div>
                     {% endfor %}
+                    
+                    <!-- Scroll to bottom indicator -->
+                    <div id="scroll-bottom-indicator" class="spoon-scroll-indicator spoon-scroll-bottom" style="display: none;">
+                        <div class="spoon-scroll-text">
+                            <span>Scroll down for newer messages</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                    </div>
                 </div>
                 
                 <!-- Message Input -->
@@ -209,13 +225,18 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageInput = document.getElementById('spoon-message-input');
     const emojiBtn = document.getElementById('emoji-btn');
     const emojiPicker = document.getElementById('emoji-picker');
+    const scrollTopIndicator = document.getElementById('scroll-top-indicator');
+    const scrollBottomIndicator = document.getElementById('scroll-bottom-indicator');
     
     let isLoadingMessages = false;
     let hasMoreMessages = true;
+    let hasNewerMessages = false;
     let oldestMessageId = null;
     let newestMessageId = null;
     let initialLoad = true;
     let chatId = '{{ chat.id }}';
+    let isUserScrolling = false;
+    let scrollTimer = null;
     
     // Initialize message IDs from existing messages
     function initializeMessageIds() {
@@ -228,25 +249,128 @@ document.addEventListener('DOMContentLoaded', function() {
     
     initializeMessageIds();
     
-    // Scroll to bottom with smooth animation
-    function scrollToBottom() {
-        if (messagesArea) {
+    // Enhanced scroll indicators
+    function updateScrollIndicators() {
+        if (!messagesArea) return;
+        
+        const scrollTop = messagesArea.scrollTop;
+        const scrollHeight = messagesArea.scrollHeight;
+        const clientHeight = messagesArea.clientHeight;
+        const scrollBottom = scrollHeight - scrollTop - clientHeight;
+        
+        // Show top indicator if we can scroll up and have more messages
+        const showTopIndicator = scrollTop > 50 && hasMoreMessages && !isLoadingMessages;
+        scrollTopIndicator.style.display = showTopIndicator ? 'flex' : 'none';
+        
+        // Show bottom indicator if we can scroll down and have newer messages
+        const showBottomIndicator = scrollBottom > 50 && hasNewerMessages && !isLoadingMessages;
+        scrollBottomIndicator.style.display = showBottomIndicator ? 'flex' : 'none';
+    }
+    
+    // Enhanced smooth scrolling
+    function scrollToBottom(force = false) {
+        if (messagesArea && (!isUserScrolling || force)) {
             messagesArea.scrollTo({
                 top: messagesArea.scrollHeight,
                 behavior: initialLoad ? 'auto' : 'smooth'
             });
             initialLoad = false;
+            hasNewerMessages = false;
+            updateScrollIndicators();
+        }
+    }
+    
+    function scrollToTop() {
+        if (messagesArea) {
+            messagesArea.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
         }
     }
     
     // Scroll to bottom on initial load
-    scrollToBottom();
+    scrollToBottom(true);
     
-    // Load older messages when scrolling to top
+    // Enhanced mouse wheel scrolling
+    messagesArea.addEventListener('wheel', function(e) {
+        isUserScrolling = true;
+        clearTimeout(scrollTimer);
+        
+        // Prevent default only if we're trying to scroll beyond boundaries
+        const scrollTop = this.scrollTop;
+        const scrollHeight = this.scrollHeight;
+        const clientHeight = this.clientHeight;
+        
+        // Enhanced smooth scrolling
+        const delta = e.deltaY;
+        const scrollAmount = Math.abs(delta) > 100 ? delta : delta * 2;
+        
+        this.scrollBy({
+            top: scrollAmount,
+            behavior: 'smooth'
+        });
+        
+        // Auto-load when near boundaries
+        if (scrollTop <= 100 && delta < 0 && hasMoreMessages && !isLoadingMessages) {
+            e.preventDefault();
+            loadOlderMessages();
+        }
+        
+        if (scrollTop + clientHeight >= scrollHeight - 100 && delta > 0 && hasNewerMessages && !isLoadingMessages) {
+            e.preventDefault();
+            loadNewerMessages();
+        }
+        
+        scrollTimer = setTimeout(() => {
+            isUserScrolling = false;
+        }, 1000);
+        
+        updateScrollIndicators();
+    }, { passive: false });
+    
+    // Enhanced scroll event handling
+    messagesArea.addEventListener('scroll', function() {
+        const scrollTop = this.scrollTop;
+        const scrollHeight = this.scrollHeight;
+        const clientHeight = this.clientHeight;
+        
+        // Auto-load older messages when scrolled to top
+        if (scrollTop <= 50 && hasMoreMessages && !isLoadingMessages) {
+            loadOlderMessages();
+        }
+        
+        // Auto-load newer messages when scrolled to bottom
+        if (scrollTop + clientHeight >= scrollHeight - 50 && hasNewerMessages && !isLoadingMessages) {
+            loadNewerMessages();
+        }
+        
+        updateScrollIndicators();
+    });
+    
+    // Click handlers for scroll indicators
+    scrollTopIndicator.addEventListener('click', function() {
+        if (hasMoreMessages) {
+            loadOlderMessages();
+        } else {
+            scrollToTop();
+        }
+    });
+    
+    scrollBottomIndicator.addEventListener('click', function() {
+        if (hasNewerMessages) {
+            loadNewerMessages();
+        } else {
+            scrollToBottom(true);
+        }
+    });
+    
+    // Load older messages function
     function loadOlderMessages() {
         if (isLoadingMessages || !hasMoreMessages) return;
         
         isLoadingMessages = true;
+        updateScrollIndicators();
         
         // Show loading indicator
         const loadingDiv = document.createElement('div');
@@ -285,7 +409,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     messageWrapper.className = `d-flex ${msg.is_mine ? 'justify-content-end' : ''} mb-3`;
                     messageWrapper.dataset.messageId = msg.id;
                     messageWrapper.innerHTML = `
-                        <div class="spoon-message-bubble ${msg.is_mine ? 'spoon-message-sent' : 'spoon-message-received'}">
+                        <div class="spoon-message-bubble ${msg.is_mine ? 'spoon-message-sent' : 'spoon-message-received'} spoon-message-loaded">
                             <div>${escapeHtml(msg.content)}</div>
                             <div class="spoon-message-time">${msg.sent_at}</div>
                         </div>
@@ -300,11 +424,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Maintain scroll position
                 const newScrollHeight = messagesArea.scrollHeight;
                 messagesArea.scrollTop = scrollTop + (newScrollHeight - scrollHeight);
+                
+                // Add fade-in animation to new messages
+                setTimeout(() => {
+                    messagesArea.querySelectorAll('.spoon-message-loaded').forEach(msg => {
+                        msg.classList.remove('spoon-message-loaded');
+                    });
+                }, 100);
             } else {
                 hasMoreMessages = false;
             }
             
             isLoadingMessages = false;
+            updateScrollIndicators();
         })
         .catch(error => {
             console.error('Error loading older messages:', error);
@@ -313,14 +445,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 loadingIndicator.remove();
             }
             isLoadingMessages = false;
+            updateScrollIndicators();
         });
     }
     
-    // Load newer messages when scrolling to bottom
+    // Load newer messages function
     function loadNewerMessages() {
         if (isLoadingMessages) return;
         
         isLoadingMessages = true;
+        updateScrollIndicators();
         
         const url = `/chat/${chatId}/messages/?after=${newestMessageId}&limit=20`;
         
@@ -346,106 +480,56 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 // Update newest message ID
                 newestMessageId = data.messages[data.messages.length - 1].id;
-                
-                // Auto-scroll to bottom for new messages
-                scrollToBottom();
+                hasNewerMessages = data.has_more || false;
+            } else {
+                hasNewerMessages = false;
             }
             
             isLoadingMessages = false;
+            updateScrollIndicators();
         })
         .catch(error => {
             console.error('Error loading newer messages:', error);
             isLoadingMessages = false;
+            updateScrollIndicators();
         });
     }
     
-    // Handle scroll events for loading messages
-    if (messagesArea) {
-        let scrollTimeout;
-        messagesArea.addEventListener('scroll', function() {
-            clearTimeout(scrollTimeout);
-            scrollTimeout = setTimeout(() => {
-                const scrollTop = this.scrollTop;
-                const scrollHeight = this.scrollHeight;
-                const clientHeight = this.clientHeight;
-                
-                // Load more messages when user scrolls to top (within 100px)
-                if (scrollTop <= 100 && hasMoreMessages && !isLoadingMessages) {
-                    loadOlderMessages();
-                }
-                
-                // Load newer messages when scrolled to bottom (within 100px)
-                if (scrollTop + clientHeight >= scrollHeight - 100 && !isLoadingMessages) {
-                    loadNewerMessages();
-                }
-            }, 150);
-        });
+    // Enhanced floating scroll button
+    let scrollFloatingBtn = null;
+    
+    function updateFloatingScrollButton() {
+        const scrollTop = messagesArea.scrollTop;
+        const scrollHeight = messagesArea.scrollHeight;
+        const clientHeight = messagesArea.clientHeight;
+        const isScrolledUp = scrollTop < scrollHeight - clientHeight - 200;
         
-        // Add scroll to bottom button when scrolled up
-        let scrollBottomBtn = null;
-        messagesArea.addEventListener('scroll', function() {
-            const isScrolledUp = this.scrollTop < this.scrollHeight - this.clientHeight - 200;
-            
-            if (isScrolledUp && !scrollBottomBtn) {
-                scrollBottomBtn = document.createElement('button');
-                scrollBottomBtn.className = 'scroll-to-bottom';
-                scrollBottomBtn.style.cssText = `
-                    position: fixed;
-                    bottom: 120px;
-                    right: 30px;
-                    z-index: 1000;
-                    border-radius: 50%;
-                    width: 50px;
-                    height: 50px;
-                    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
-                    border: none;
-                    color: white;
-                    box-shadow: 0 4px 12px rgba(212, 138, 193, 0.4);
-                    transition: all 0.3s ease;
-                    opacity: 0.9;
-                `;
-                scrollBottomBtn.innerHTML = '<i class="fas fa-arrow-down"></i>';
-                scrollBottomBtn.title = 'Scroll to bottom';
-                scrollBottomBtn.onclick = () => scrollToBottom();
-                document.body.appendChild(scrollBottomBtn);
-            } else if (!isScrolledUp && scrollBottomBtn) {
-                scrollBottomBtn.remove();
-                scrollBottomBtn = null;
-            }
-        });
+        if (isScrolledUp && !scrollFloatingBtn) {
+            scrollFloatingBtn = document.createElement('button');
+            scrollFloatingBtn.className = 'spoon-floating-scroll-btn';
+            scrollFloatingBtn.innerHTML = `
+                <i class="fas fa-arrow-down"></i>
+                <span class="spoon-scroll-label">Latest</span>
+            `;
+            scrollFloatingBtn.title = 'Scroll to latest messages';
+            scrollFloatingBtn.onclick = () => scrollToBottom(true);
+            document.body.appendChild(scrollFloatingBtn);
+        } else if (!isScrolledUp && scrollFloatingBtn) {
+            scrollFloatingBtn.remove();
+            scrollFloatingBtn = null;
+        }
     }
+    
+    // Update floating button on scroll
+    messagesArea.addEventListener('scroll', updateFloatingScrollButton);
     
     // Enhanced emoji picker functionality
     if (emojiBtn && emojiPicker) {
         emojiBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            
-            const isVisible = emojiPicker.classList.contains('show');
-            if (isVisible) {
-                emojiPicker.classList.remove('show');
-            } else {
-                positionEmojiPicker();
-                emojiPicker.classList.add('show');
-            }
+            emojiPicker.classList.toggle('show');
         });
-        
-        function positionEmojiPicker() {
-            const inputArea = document.querySelector('.spoon-input-area');
-            const inputRect = inputArea.getBoundingClientRect();
-            const viewportWidth = window.innerWidth;
-            const pickerWidth = 320;
-            
-            // Reset positioning
-            emojiPicker.style.right = '0';
-            emojiPicker.style.left = 'auto';
-            
-            // Check if picker would overflow on the right
-            if (inputRect.right < pickerWidth + 20) {
-                emojiPicker.style.right = 'auto';
-                emojiPicker.style.left = '0';
-            }
-        }
         
         document.addEventListener('click', function(e) {
             if (emojiPicker && !emojiBtn.contains(e.target) && !emojiPicker.contains(e.target)) {
@@ -468,7 +552,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     messageInput.setSelectionRange(newCursorPos, newCursorPos);
                     
                     emojiPicker.classList.remove('show');
-                    messageInput.dispatchEvent(new Event('input', { bubbles: true }));
                 }
             }
         });
@@ -486,8 +569,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 emojiPicker.classList.remove('show');
             }
             
-            hideTypingIndicator();
-            
             const formData = new FormData(messageForm);
             const tempId = 'temp_' + Date.now();
             
@@ -504,9 +585,11 @@ document.addEventListener('DOMContentLoaded', function() {
             
             if (messagesArea) {
                 messagesArea.appendChild(messageWrapper);
-                scrollToBottom();
+                scrollToBottom(true);
+                hasNewerMessages = false;
             }
             messageInput.value = '';
+            updateScrollIndicators();
             
             // Send to server
             fetch('', {
@@ -537,64 +620,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 showErrorMessage('Connection error. Please check your internet!');
             });
         });
-    }
-    
-    // Enhanced typing indicator
-    let typingTimeout;
-    let isTypingShown = false;
-    
-    if (messageInput) {
-        messageInput.addEventListener('input', function() {
-            clearTimeout(typingTimeout);
-            
-            if (this.value.trim() && !isTypingShown) {
-                showTypingIndicator();
-            }
-            
-            typingTimeout = setTimeout(() => {
-                hideTypingIndicator();
-            }, 1000);
-        });
-        
-        messageInput.addEventListener('blur', function() {
-            clearTimeout(typingTimeout);
-            setTimeout(() => hideTypingIndicator(), 500);
-        });
-    }
-    
-    function showTypingIndicator() {
-        if (isTypingShown || !messagesArea) return;
-        
-        const existingIndicator = document.getElementById('typing-indicator');
-        if (existingIndicator) return;
-        
-        const typingDiv = document.createElement('div');
-        typingDiv.id = 'typing-indicator';
-        typingDiv.className = 'd-flex mb-3';
-        typingDiv.innerHTML = `
-            <div class="spoon-typing-indicator">
-                <div class="spoon-typing-dot"></div>
-                <div class="spoon-typing-dot"></div>
-                <div class="spoon-typing-dot"></div>
-            </div>
-        `;
-        
-        messagesArea.appendChild(typingDiv);
-        scrollToBottom();
-        isTypingShown = true;
-    }
-    
-    function hideTypingIndicator() {
-        const indicator = document.getElementById('typing-indicator');
-        if (indicator) {
-            indicator.style.animation = 'slideOut 0.3s ease-out forwards';
-            setTimeout(() => {
-                if (indicator.parentNode) {
-                    indicator.remove();
-                }
-            }, 300);
-        }
-        isTypingShown = false;
     }
     
     // Utility functions
@@ -640,56 +665,48 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Handle window resize
-    window.addEventListener('resize', function() {
-        if (emojiPicker && emojiPicker.classList.contains('show')) {
-            positionEmojiPicker();
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (e.target === messageInput) return; // Don't interfere with typing
+        
+        if (e.key === 'PageUp' || (e.key === 'ArrowUp' && e.ctrlKey)) {
+            e.preventDefault();
+            if (hasMoreMessages && !isLoadingMessages) {
+                loadOlderMessages();
+            } else {
+                messagesArea.scrollBy({ top: -200, behavior: 'smooth' });
+            }
+        }
+        
+        if (e.key === 'PageDown' || (e.key === 'ArrowDown' && e.ctrlKey)) {
+            e.preventDefault();
+            if (hasNewerMessages && !isLoadingMessages) {
+                loadNewerMessages();
+            } else {
+                messagesArea.scrollBy({ top: 200, behavior: 'smooth' });
+            }
+        }
+        
+        if (e.key === 'Home' && e.ctrlKey) {
+            e.preventDefault();
+            scrollToTop();
+        }
+        
+        if (e.key === 'End' && e.ctrlKey) {
+            e.preventDefault();
+            scrollToBottom(true);
         }
     });
     
-    // Add slideOut animation CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideOut {
-            from {
-                opacity: 1;
-                transform: translateY(0);
-            }
-            to {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-        }
-        
-        .spoon-message-bubble[data-new="true"] {
-            animation: messageSlideIn 0.4s ease-out;
-        }
-        
-        @keyframes messageSlideIn {
-            from {
-                opacity: 0;
-                transform: translateY(15px) scale(0.95);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0) scale(1);
-            }
-        }
-        
-        .scroll-to-bottom:hover {
-            transform: scale(1.1);
-            box-shadow: 0 6px 15px rgba(212, 138, 193, 0.6);
-            opacity: 1;
-        }
-    `;
-    document.head.appendChild(style);
-    
     // Periodic check for new messages
     setInterval(() => {
-        if (!isLoadingMessages) {
+        if (!isLoadingMessages && !isUserScrolling) {
             loadNewerMessages();
         }
     }, 5000);
+    
+    // Initialize indicators
+    updateScrollIndicators();
 });
 </script>
 {% endblock %}

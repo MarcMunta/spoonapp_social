@@ -7,30 +7,17 @@ from django.utils.timezone import now
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm
 from .models import FriendRequest, StoryView
-from .models import PostCategory  # asegúrate de importar esto
+from .models import PostCategory
 from django.utils import timezone
 from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 import json
 
-
 def _build_feed_context(show_posts=True):
-    """Return context for feed-related views.
-
-    Parameters
-    ----------
-    show_posts: bool, optional
-        Whether to include the queryset of posts. On the page for creating a
-        publication we only want to display the form, not the posts
-        themselves.
-    """
-
+    """Return context for feed-related views."""
     posts = (
         Post.objects.all()
-        .annotate(
-            # Count all comments including replies
-            comment_count=Count("postcomment", distinct=True)
-        )
+        .annotate(comment_count=Count("postcomment", distinct=True))
         .order_by("-created_at")
         if show_posts
         else Post.objects.none()
@@ -66,7 +53,6 @@ def get_friends(user):
     return User.objects.filter(id__in=all_friend_ids)
 
 def home(request):
-    # Display the main feed with all posts and without the form
     context = _build_feed_context()
     context['show_form'] = False
 
@@ -89,11 +75,9 @@ def home(request):
             entry['expires'].append(st.expires_at.isoformat())
             entry['ids'].append(st.id)
         context['friend_stories'] = friend_story_map
-
         context['story_form'] = StoryForm()
 
     return render(request, 'social/pages/feed.html', context)
-
 
 def feed(request):
     context = _build_feed_context(show_posts=False)
@@ -102,11 +86,7 @@ def feed(request):
     if request.user.is_authenticated:
         Story.objects.filter(expires_at__lte=timezone.now()).delete()
         context['friends'] = get_friends(request.user)
-        active_stories = (
-            Story.objects.filter(expires_at__gt=timezone.now())
-            .select_related('user')
-            .order_by('created_at')
-        )
+        active_stories = Story.objects.filter(expires_at__gt=timezone.now()).select_related('user').order_by('created_at')
 
         user_story_list = active_stories.filter(user=request.user)
         context['user_story_data'] = {
@@ -122,12 +102,9 @@ def feed(request):
             entry['expires'].append(st.expires_at.isoformat())
             entry['ids'].append(st.id)
         context['friend_stories'] = friend_story_map
-
         context['story_form'] = StoryForm()
 
-    # Show profile icon in the top bar on the post creation page
     context['hide_profile_icon'] = False
-
     return render(request, 'social/pages/feed.html', context)
 
 
@@ -399,6 +376,64 @@ def chat_list(request):
     return render(request, 'social/chat_list.html', {'chat_data': chat_data})
 
 @login_required
+def load_messages(request, chat_id):
+    """Load messages for AJAX requests with pagination support"""
+    chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
+    
+    # Get pagination parameters
+    before_id = request.GET.get('before')
+    after_id = request.GET.get('after')
+    limit = int(request.GET.get('limit', 20))
+    
+    # Base queryset
+    messages_qs = chat.messages.all().order_by('-sent_at')
+    
+    # Filter messages before a specific ID (for loading older messages)
+    if before_id:
+        try:
+            before_message = chat.messages.get(id=before_id)
+            messages_qs = messages_qs.filter(sent_at__lt=before_message.sent_at)
+        except Message.DoesNotExist:
+            pass
+    
+    # Filter messages after a specific ID (for loading newer messages)
+    if after_id:
+        try:
+            after_message = chat.messages.get(id=after_id)
+            messages_qs = messages_qs.filter(sent_at__gt=after_message.sent_at).order_by('sent_at')
+        except Message.DoesNotExist:
+            pass
+    
+    # Get messages with limit + 1 to check if there are more
+    messages = list(messages_qs[:limit + 1])
+    
+    # Check if there are more messages
+    has_more = len(messages) > limit
+    if has_more:
+        messages = messages[:limit]  # Remove the extra message
+    
+    # Reverse to get chronological order for older messages
+    if before_id or not after_id:
+        messages.reverse()
+    
+    messages_data = []
+    for msg in messages:
+        messages_data.append({
+            'id': msg.id,
+            'sender': msg.sender.username,
+            'content': msg.content,
+            'sent_at': msg.sent_at.strftime('%H:%M'),
+            'is_mine': msg.sender == request.user
+        })
+    
+    return JsonResponse({
+        'messages': messages_data,
+        'has_more': has_more,
+        'count': len(messages_data),
+        'direction': 'before' if before_id else 'after' if after_id else 'initial'
+    })
+
+@login_required
 def chat_detail(request, chat_id):
     """Display messages in a specific chat with enhanced functionality"""
     chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
@@ -407,8 +442,8 @@ def chat_detail(request, chat_id):
     # Mark messages as read
     chat.messages.filter(read=False).exclude(sender=request.user).update(read=True)
     
-    # Get most recent messages (latest 30 for initial load)
-    messages = chat.messages.order_by('-sent_at')[:30]
+    # Get most recent messages (latest 25 for initial load to allow for smooth scrolling)
+    messages = chat.messages.order_by('-sent_at')[:25]
     messages = reversed(messages)  # Show in chronological order
     
     if request.method == 'POST':
@@ -421,6 +456,16 @@ def chat_detail(request, chat_id):
             )
             chat.last_message_at = now()
             chat.save()
+            
+            # Create notification for the recipient
+            Notification.objects.create(
+                user=other_user,
+                notification_type='message',
+                title=f'New message from {request.user.username}',
+                message=content[:50] + '...' if len(content) > 50 else content,
+                related_user=request.user,
+                related_chat=chat
+            )
             
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 return JsonResponse({
@@ -463,65 +508,6 @@ def start_chat(request, user_id):
         new_chat = Chat.objects.create()
         new_chat.participants.add(request.user, other_user)
         return redirect('chat_detail', chat_id=new_chat.id)
-
-@login_required
-def load_messages(request, chat_id):
-    """Load messages for AJAX requests with pagination support"""
-    chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
-    
-    # Get pagination parameters
-    before_id = request.GET.get('before')
-    after_id = request.GET.get('after')
-    limit = int(request.GET.get('limit', 20))
-    
-    # Base queryset
-    messages_qs = chat.messages.all().order_by('-sent_at')
-    
-    # Filter messages before a specific ID if provided (for loading older messages)
-    if before_id:
-        try:
-            before_message = chat.messages.get(id=before_id)
-            messages_qs = messages_qs.filter(sent_at__lt=before_message.sent_at)
-        except Message.DoesNotExist:
-            pass
-    
-    # Filter messages after a specific ID if provided (for loading newer messages)
-    if after_id:
-        try:
-            after_message = chat.messages.get(id=after_id)
-            messages_qs = messages_qs.filter(sent_at__gt=after_message.sent_at).order_by('sent_at')
-        except Message.DoesNotExist:
-            pass
-    
-    # Get messages with limit
-    messages = list(messages_qs[:limit])
-    
-    # Check if there are more messages
-    if before_id:
-        has_more = messages_qs.count() > limit
-        # Reverse to get chronological order for older messages
-        messages.reverse()
-    elif after_id:
-        has_more = False  # We don't need pagination for newer messages
-    else:
-        has_more = messages_qs.count() > limit
-        messages.reverse()
-    
-    messages_data = []
-    for msg in messages:
-        messages_data.append({
-            'id': msg.id,
-            'sender': msg.sender.username,
-            'content': msg.content,
-            'sent_at': msg.sent_at.strftime('%H:%M'),
-            'is_mine': msg.sender == request.user
-        })
-    
-    return JsonResponse({
-        'messages': messages_data,
-        'has_more': has_more,
-        'count': len(messages_data)
-    })
 
 @login_required
 def delete_story(request, story_id):

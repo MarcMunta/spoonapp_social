@@ -204,8 +204,12 @@ document.addEventListener('DOMContentLoaded', () => {
     currentIsOwn = el.dataset.user === currentUsername;
     const userContainer = document.querySelector('.story-modal-user');
     if (userContainer) {
-      userContainer.innerHTML = `<img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40">` +
-        `<a href="${el.dataset.profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
+      const profileUrl = el.dataset.profileUrl;
+      const avatarHtml =
+        `<a href="${profileUrl}"><img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40" alt="${el.dataset.user}"></a>`;
+      const nameHtml =
+        `<a href="${profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
+      userContainer.innerHTML = avatarHtml + nameHtml;
     }
     const replyBtn = document.getElementById('storyReplySend');
     if (replyBtn) {
@@ -215,7 +219,13 @@ document.addEventListener('DOMContentLoaded', () => {
     if (replyInput) replyInput.disabled = currentIsOwn;
     if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
     if (storyViews) storyViews.style.display = currentIsOwn ? 'block' : 'none';
-    if (replyContainer) replyContainer.style.display = currentIsOwn ? 'none' : 'flex';
+    if (replyContainer) {
+      if (currentIsOwn) {
+        replyContainer.classList.add('d-none');
+      } else {
+        replyContainer.classList.remove('d-none');
+      }
+    }
     if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[currentIndex];
     modal.style.display = 'flex';
     modalContent.classList.add('open-anim');
@@ -302,10 +312,14 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch(`/story/${storyId}/reply/`, {
         method: 'POST',
         body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': getCSRFToken()
+        }
       })
         .then(res => res.json())
         .then(data => {
+          if (input) input.value = '';
           if (data.chat_id) {
             window.location.href = `/chat/${data.chat_id}/`;
           }

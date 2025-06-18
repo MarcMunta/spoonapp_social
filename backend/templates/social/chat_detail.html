@@ -238,6 +238,53 @@ document.addEventListener('DOMContentLoaded', function() {
     let isUserScrolling = false;
     let scrollTimer = null;
     
+    console.log('🚀 Chat system initializing...');
+    
+    // Assicura che l'area input sia sempre visibile
+    function ensureInputAreaVisible() {
+        const inputArea = document.querySelector('.spoon-input-area');
+        if (inputArea) {
+            inputArea.style.cssText += `
+                position: fixed !important;
+                bottom: 0 !important;
+                left: 240px !important;
+                right: 0 !important;
+                z-index: 1000 !important;
+                background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%) !important;
+                border-top: 3px solid #e2e8f0 !important;
+                box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.08) !important;
+                margin: 0 !important;
+                padding: 18px 20px !important;
+            `;
+            console.log('✅ Input area fixed to bottom');
+        }
+    }
+    
+    // Assicura che l'area messaggi abbia l'altezza corretta
+    function ensureMessagesAreaHeight() {
+        if (messagesArea) {
+            messagesArea.style.cssText += `
+                height: calc(100vh - 240px) !important;
+                overflow-y: auto !important;
+                overflow-x: hidden !important;
+                padding: 20px !important;
+                margin-bottom: 100px !important;
+                scroll-behavior: smooth !important;
+            `;
+            console.log('✅ Messages area height set correctly');
+        }
+    }
+    
+    // Applica le correzioni
+    ensureInputAreaVisible();
+    ensureMessagesAreaHeight();
+    
+    // Funzione per ottenere il token CSRF
+    function getCSRFToken() {
+        const cookie = document.cookie.split('; ').find(row => row.startsWith('csrftoken='));
+        return cookie ? cookie.split('=')[1] : '';
+    }
+    
     // Initialize message IDs from existing messages
     function initializeMessageIds() {
         const messageElements = messagesArea.querySelectorAll('[data-message-id]');
@@ -245,6 +292,7 @@ document.addEventListener('DOMContentLoaded', function() {
             oldestMessageId = messageElements[0].dataset.messageId;
             newestMessageId = messageElements[messageElements.length - 1].dataset.messageId;
         }
+        console.log('📨 Initialized message IDs:', { oldestMessageId, newestMessageId, total: messageElements.length });
     }
     
     initializeMessageIds();
@@ -259,12 +307,25 @@ document.addEventListener('DOMContentLoaded', function() {
         const scrollBottom = scrollHeight - scrollTop - clientHeight;
         
         // Show top indicator if we can scroll up and have more messages
-        const showTopIndicator = scrollTop > 50 && hasMoreMessages && !isLoadingMessages;
-        scrollTopIndicator.style.display = showTopIndicator ? 'flex' : 'none';
+        const showTopIndicator = scrollTop > 100 && hasMoreMessages && !isLoadingMessages;
+        if (scrollTopIndicator) {
+            scrollTopIndicator.style.display = showTopIndicator ? 'flex' : 'none';
+        }
         
         // Show bottom indicator if we can scroll down and have newer messages
-        const showBottomIndicator = scrollBottom > 50 && hasNewerMessages && !isLoadingMessages;
-        scrollBottomIndicator.style.display = showBottomIndicator ? 'flex' : 'none';
+        const showBottomIndicator = scrollBottom > 100 && hasNewerMessages && !isLoadingMessages;
+        if (scrollBottomIndicator) {
+            scrollBottomIndicator.style.display = showBottomIndicator ? 'flex' : 'none';
+        }
+        
+        console.log('📊 Scroll indicators updated:', { 
+            scrollTop, 
+            scrollBottom, 
+            hasMoreMessages, 
+            hasNewerMessages, 
+            showTopIndicator, 
+            showBottomIndicator 
+        });
     }
     
     // Enhanced smooth scrolling
@@ -277,6 +338,7 @@ document.addEventListener('DOMContentLoaded', function() {
             initialLoad = false;
             hasNewerMessages = false;
             updateScrollIndicators();
+            console.log('⬇️ Scrolled to bottom');
         }
     }
     
@@ -286,90 +348,116 @@ document.addEventListener('DOMContentLoaded', function() {
                 top: 0,
                 behavior: 'smooth'
             });
+            console.log('⬆️ Scrolled to top');
         }
     }
     
     // Scroll to bottom on initial load
-    scrollToBottom(true);
+    setTimeout(() => {
+        scrollToBottom(true);
+        console.log('🎯 Initial scroll to bottom completed');
+    }, 500);
     
-    // Enhanced mouse wheel scrolling
-    messagesArea.addEventListener('wheel', function(e) {
-        isUserScrolling = true;
-        clearTimeout(scrollTimer);
-        
-        // Prevent default only if we're trying to scroll beyond boundaries
-        const scrollTop = this.scrollTop;
-        const scrollHeight = this.scrollHeight;
-        const clientHeight = this.clientHeight;
-        
-        // Enhanced smooth scrolling
-        const delta = e.deltaY;
-        const scrollAmount = Math.abs(delta) > 100 ? delta : delta * 2;
-        
-        this.scrollBy({
-            top: scrollAmount,
-            behavior: 'smooth'
+    // Enhanced mouse wheel scrolling con throttling migliorato
+    let wheelTimeout;
+    if (messagesArea) {
+        messagesArea.addEventListener('wheel', function(e) {
+            isUserScrolling = true;
+            clearTimeout(scrollTimer);
+            clearTimeout(wheelTimeout);
+            
+            const scrollTop = this.scrollTop;
+            const scrollHeight = this.scrollHeight;
+            const clientHeight = this.clientHeight;
+            const delta = e.deltaY;
+            
+            console.log('🎡 Wheel event:', { scrollTop, delta, hasMoreMessages, hasNewerMessages });
+            
+            // Throttle wheel events per migliori performance
+            wheelTimeout = setTimeout(() => {
+                // Auto-load when near boundaries
+                if (scrollTop <= 150 && delta < 0 && hasMoreMessages && !isLoadingMessages) {
+                    console.log('🔄 Triggering load older messages from wheel');
+                    loadOlderMessages();
+                }
+                
+                if (scrollTop + clientHeight >= scrollHeight - 150 && delta > 0 && hasNewerMessages && !isLoadingMessages) {
+                    console.log('🔄 Triggering load newer messages from wheel');
+                    loadNewerMessages();
+                }
+            }, 100);
+            
+            scrollTimer = setTimeout(() => {
+                isUserScrolling = false;
+                console.log('🛑 User stopped scrolling');
+            }, 1500);
+            
+            updateScrollIndicators();
+        }, { passive: true });
+    }
+    
+    // Enhanced scroll event handling con debouncing
+    let scrollTimeout;
+    if (messagesArea) {
+        messagesArea.addEventListener('scroll', function() {
+            clearTimeout(scrollTimeout);
+            
+            scrollTimeout = setTimeout(() => {
+                const scrollTop = this.scrollTop;
+                const scrollHeight = this.scrollHeight;
+                const clientHeight = this.clientHeight;
+                
+                console.log('📜 Scroll event:', { scrollTop, scrollHeight, clientHeight });
+                
+                // Auto-load older messages when scrolled to top
+                if (scrollTop <= 100 && hasMoreMessages && !isLoadingMessages) {
+                    console.log('📤 Auto-loading older messages');
+                    loadOlderMessages();
+                }
+                
+                // Auto-load newer messages when scrolled to bottom
+                if (scrollTop + clientHeight >= scrollHeight - 100 && hasNewerMessages && !isLoadingMessages) {
+                    console.log('📥 Auto-loading newer messages');
+                    loadNewerMessages();
+                }
+                
+                updateScrollIndicators();
+            }, 150);
         });
-        
-        // Auto-load when near boundaries
-        if (scrollTop <= 100 && delta < 0 && hasMoreMessages && !isLoadingMessages) {
-            e.preventDefault();
-            loadOlderMessages();
-        }
-        
-        if (scrollTop + clientHeight >= scrollHeight - 100 && delta > 0 && hasNewerMessages && !isLoadingMessages) {
-            e.preventDefault();
-            loadNewerMessages();
-        }
-        
-        scrollTimer = setTimeout(() => {
-            isUserScrolling = false;
-        }, 1000);
-        
-        updateScrollIndicators();
-    }, { passive: false });
-    
-    // Enhanced scroll event handling
-    messagesArea.addEventListener('scroll', function() {
-        const scrollTop = this.scrollTop;
-        const scrollHeight = this.scrollHeight;
-        const clientHeight = this.clientHeight;
-        
-        // Auto-load older messages when scrolled to top
-        if (scrollTop <= 50 && hasMoreMessages && !isLoadingMessages) {
-            loadOlderMessages();
-        }
-        
-        // Auto-load newer messages when scrolled to bottom
-        if (scrollTop + clientHeight >= scrollHeight - 50 && hasNewerMessages && !isLoadingMessages) {
-            loadNewerMessages();
-        }
-        
-        updateScrollIndicators();
-    });
+    }
     
     // Click handlers for scroll indicators
-    scrollTopIndicator.addEventListener('click', function() {
-        if (hasMoreMessages) {
-            loadOlderMessages();
-        } else {
-            scrollToTop();
-        }
-    });
+    if (scrollTopIndicator) {
+        scrollTopIndicator.addEventListener('click', function() {
+            console.log('🔝 Top indicator clicked');
+            if (hasMoreMessages) {
+                loadOlderMessages();
+            } else {
+                scrollToTop();
+            }
+        });
+    }
     
-    scrollBottomIndicator.addEventListener('click', function() {
-        if (hasNewerMessages) {
-            loadNewerMessages();
-        } else {
-            scrollToBottom(true);
-        }
-    });
+    if (scrollBottomIndicator) {
+        scrollBottomIndicator.addEventListener('click', function() {
+            console.log('🔻 Bottom indicator clicked');
+            if (hasNewerMessages) {
+                loadNewerMessages();
+            } else {
+                scrollToBottom(true);
+            }
+        });
+    }
     
-    // Load older messages function
+    // Load older messages function con logging migliorato
     function loadOlderMessages() {
-        if (isLoadingMessages || !hasMoreMessages) return;
+        if (isLoadingMessages || !hasMoreMessages || !oldestMessageId) {
+            console.log('❌ Cannot load older messages:', { isLoadingMessages, hasMoreMessages, oldestMessageId });
+            return;
+        }
         
         isLoadingMessages = true;
+        console.log('📤 Loading older messages before ID:', oldestMessageId);
         updateScrollIndicators();
         
         // Show loading indicator
@@ -387,12 +475,21 @@ document.addEventListener('DOMContentLoaded', function() {
         messagesArea.insertBefore(loadingDiv, messagesArea.firstChild);
         
         const url = `/chat/${chatId}/messages/?before=${oldestMessageId}&limit=20`;
+        console.log('🌐 Fetching URL:', url);
             
         fetch(url, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('📡 Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('📦 Loaded older messages:', data);
+            
             // Remove loading indicator
             const loadingIndicator = document.getElementById('loading-older-messages');
             if (loadingIndicator) {
@@ -403,8 +500,9 @@ document.addEventListener('DOMContentLoaded', function() {
                 const scrollHeight = messagesArea.scrollHeight;
                 const scrollTop = messagesArea.scrollTop;
                 
-                // Add new messages to the top
-                data.messages.reverse().forEach(msg => {
+                // Add new messages to the top in reverse order
+                const messagesToAdd = [...data.messages].reverse();
+                messagesToAdd.forEach(msg => {
                     const messageWrapper = document.createElement('div');
                     messageWrapper.className = `d-flex ${msg.is_mine ? 'justify-content-end' : ''} mb-3`;
                     messageWrapper.dataset.messageId = msg.id;
@@ -420,6 +518,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update oldest message ID
                 oldestMessageId = data.messages[0].id;
                 hasMoreMessages = data.has_more;
+                console.log('✅ Updated oldestMessageId:', oldestMessageId, 'hasMoreMessages:', hasMoreMessages);
                 
                 // Maintain scroll position
                 const newScrollHeight = messagesArea.scrollHeight;
@@ -433,36 +532,51 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 100);
             } else {
                 hasMoreMessages = false;
+                console.log('🚫 No more older messages available');
             }
             
             isLoadingMessages = false;
             updateScrollIndicators();
         })
         .catch(error => {
-            console.error('Error loading older messages:', error);
+            console.error('💥 Error loading older messages:', error);
             const loadingIndicator = document.getElementById('loading-older-messages');
             if (loadingIndicator) {
                 loadingIndicator.remove();
             }
             isLoadingMessages = false;
             updateScrollIndicators();
+            showErrorMessage('Failed to load older messages. Please try again.');
         });
     }
     
-    // Load newer messages function
+    // Load newer messages function con logging migliorato
     function loadNewerMessages() {
-        if (isLoadingMessages) return;
+        if (isLoadingMessages || !newestMessageId) {
+            console.log('❌ Cannot load newer messages:', { isLoadingMessages, newestMessageId });
+            return;
+        }
         
         isLoadingMessages = true;
+        console.log('📥 Loading newer messages after ID:', newestMessageId);
         updateScrollIndicators();
         
         const url = `/chat/${chatId}/messages/?after=${newestMessageId}&limit=20`;
+        console.log('🌐 Fetching URL:', url);
         
         fetch(url, {
             headers: { 'X-Requested-With': 'XMLHttpRequest' }
         })
-        .then(response => response.json())
+        .then(response => {
+            console.log('📡 Response status:', response.status);
+            if (!response.ok) {
+                throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+            }
+            return response.json();
+        })
         .then(data => {
+            console.log('📦 Loaded newer messages:', data);
+            
             if (data.messages && data.messages.length > 0) {
                 // Add new messages to the bottom
                 data.messages.forEach(msg => {
@@ -481,15 +595,17 @@ document.addEventListener('DOMContentLoaded', function() {
                 // Update newest message ID
                 newestMessageId = data.messages[data.messages.length - 1].id;
                 hasNewerMessages = data.has_more || false;
+                console.log('✅ Updated newestMessageId:', newestMessageId, 'hasNewerMessages:', hasNewerMessages);
             } else {
                 hasNewerMessages = false;
+                console.log('🚫 No newer messages available');
             }
             
             isLoadingMessages = false;
             updateScrollIndicators();
         })
         .catch(error => {
-            console.error('Error loading newer messages:', error);
+            console.error('💥 Error loading newer messages:', error);
             isLoadingMessages = false;
             updateScrollIndicators();
         });
@@ -499,6 +615,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let scrollFloatingBtn = null;
     
     function updateFloatingScrollButton() {
+        if (!messagesArea) return;
+        
         const scrollTop = messagesArea.scrollTop;
         const scrollHeight = messagesArea.scrollHeight;
         const clientHeight = messagesArea.clientHeight;
@@ -514,45 +632,81 @@ document.addEventListener('DOMContentLoaded', function() {
             scrollFloatingBtn.title = 'Scroll to latest messages';
             scrollFloatingBtn.onclick = () => scrollToBottom(true);
             document.body.appendChild(scrollFloatingBtn);
+            console.log('🎈 Floating scroll button added');
         } else if (!isScrolledUp && scrollFloatingBtn) {
             scrollFloatingBtn.remove();
             scrollFloatingBtn = null;
+            console.log('🎈 Floating scroll button removed');
         }
     }
     
     // Update floating button on scroll
-    messagesArea.addEventListener('scroll', updateFloatingScrollButton);
+    if (messagesArea) {
+        messagesArea.addEventListener('scroll', updateFloatingScrollButton);
+    }
     
-    // Enhanced emoji picker functionality
+    // FIXED: Enhanced emoji picker functionality - risolve il bug della scomparsa
     if (emojiBtn && emojiPicker) {
         emojiBtn.addEventListener('click', function(e) {
             e.preventDefault();
             e.stopPropagation();
-            emojiPicker.classList.toggle('show');
+            const isVisible = emojiPicker.classList.contains('show');
+            emojiPicker.classList.toggle('show', !isVisible);
+            console.log('😊 Emoji picker toggled:', !isVisible);
         });
         
+        // Close picker when clicking outside
         document.addEventListener('click', function(e) {
-            if (emojiPicker && !emojiBtn.contains(e.target) && !emojiPicker.contains(e.target)) {
+            if (emojiPicker && 
+                !emojiBtn.contains(e.target) && 
+                !emojiPicker.contains(e.target)) {
                 emojiPicker.classList.remove('show');
+                console.log('😊 Emoji picker closed - clicked outside');
             }
         });
         
+        // Handle emoji selection
         emojiPicker.addEventListener('click', function(e) {
             if (e.target.classList.contains('emoji-item')) {
                 e.preventDefault();
+                e.stopPropagation(); // Prevent event bubbling
+                
                 const emoji = e.target.dataset.emoji;
                 if (emoji && messageInput) {
                     const currentValue = messageInput.value;
                     const cursorPos = messageInput.selectionStart || 0;
                     const newValue = currentValue.slice(0, cursorPos) + emoji + currentValue.slice(cursorPos);
+                    
                     messageInput.value = newValue;
                     messageInput.focus();
                     
+                    // Set cursor position after the emoji
                     const newCursorPos = cursorPos + emoji.length;
-                    messageInput.setSelectionRange(newCursorPos, newCursorPos);
+                    setTimeout(() => {
+                        messageInput.setSelectionRange(newCursorPos, newCursorPos);
+                    }, 0);
                     
-                    emojiPicker.classList.remove('show');
+                    console.log('😊 Emoji added:', emoji);
+                    
+                    // DON'T close the picker immediately - let user select multiple emojis
+                    // emojiPicker.classList.remove('show');
                 }
+            }
+        });
+        
+        // Close picker when user starts typing or presses Escape
+        messageInput.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                emojiPicker.classList.remove('show');
+                console.log('😊 Emoji picker closed - Escape pressed');
+            }
+        });
+        
+        messageInput.addEventListener('input', function() {
+            // Only close if user is actively typing (not just from emoji insertion)
+            if (document.activeElement === messageInput) {
+                emojiPicker.classList.remove('show');
+                console.log('😊 Emoji picker closed - user typing');
             }
         });
     }
@@ -565,8 +719,10 @@ document.addEventListener('DOMContentLoaded', function() {
             const content = messageInput.value.trim();
             if (!content) return;
             
+            // Close emoji picker when sending message
             if (emojiPicker) {
                 emojiPicker.classList.remove('show');
+                console.log('😊 Emoji picker closed - message sent');
             }
             
             const formData = new FormData(messageForm);
@@ -591,16 +747,25 @@ document.addEventListener('DOMContentLoaded', function() {
             messageInput.value = '';
             updateScrollIndicators();
             
+            console.log('📤 Message sent to UI, sending to server...');
+            
             // Send to server
             fetch('', {
                 method: 'POST',
                 body: formData,
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRFToken': getCSRFToken()
                 }
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                return response.json();
+            })
             .then(data => {
+                console.log('✅ Server response:', data);
                 if (!data.success) {
                     messageWrapper.remove();
                     messageInput.value = content;
@@ -610,13 +775,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (data.message_id) {
                         messageWrapper.dataset.messageId = data.message_id;
                         newestMessageId = data.message_id;
+                        console.log('🆔 Message ID updated:', data.message_id);
                     }
                 }
             })
             .catch(error => {
                 messageWrapper.remove();
                 messageInput.value = content;
-                console.error('Error:', error);
+                console.error('💥 Error:', error);
                 showErrorMessage('Connection error. Please check your internet!');
             });
         });
@@ -650,8 +816,9 @@ document.addEventListener('DOMContentLoaded', function() {
     setTimeout(() => {
         if (messageInput) {
             messageInput.focus();
+            console.log('🎯 Input focused');
         }
-    }, 500);
+    }, 1000);
     
     // Enter key support
     if (messageInput) {
@@ -665,9 +832,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
     
-    // Keyboard navigation
+    // Keyboard navigation migliorata
     document.addEventListener('keydown', function(e) {
-        if (e.target === messageInput) return; // Don't interfere with typing
+        if (e.target === messageInput || (emojiPicker && emojiPicker.classList.contains('show'))) return; // Don't interfere with typing or emoji selection
         
         if (e.key === 'PageUp' || (e.key === 'ArrowUp' && e.ctrlKey)) {
             e.preventDefault();
@@ -698,15 +865,23 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     
-    // Periodic check for new messages
+    // Periodic check for new messages con intervallo ottimizzato
     setInterval(() => {
         if (!isLoadingMessages && !isUserScrolling) {
             loadNewerMessages();
         }
+    }, 3000); // Ridotto a 3 secondi per migliore responsività
+    
+    // Re-apply fixes periodically to ensure stability
+    setInterval(() => {
+        ensureInputAreaVisible();
+        ensureMessagesAreaHeight();
     }, 5000);
     
     // Initialize indicators
     updateScrollIndicators();
+    
+    console.log('✅ Chat initialized successfully with enhanced scrolling and persistent input bar');
 });
 </script>
 {% endblock %}

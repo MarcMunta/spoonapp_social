@@ -1,3 +1,4 @@
+{% load static %}
 <!-- post_card.html -->
 <div class="post-card border rounded-3 p-4 mb-4 bg-white shadow-sm">
     <!-- Usuario -->
@@ -6,7 +7,7 @@
         <img src="{{ post.user.profile.profile_picture_data_url }}" alt="Avatar"
              class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
         {% else %}
-        <img src="https://i.imgur.com/jNNT4LE.png" alt="Avatar"
+        <img src="{{ default_avatar_data_url }}" alt="Avatar"
              class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
         {% endif %}
         <div>

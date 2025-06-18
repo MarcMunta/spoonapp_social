@@ -1,5 +1,6 @@
 from django.contrib.auth.models import User
 from .models import FriendRequest, Notification
+from .default_avatar import DEFAULT_AVATAR_DATA_URL
 from django.db.models import Q
 
 def get_friends(user):
@@ -57,7 +58,9 @@ def base_context(request):
     """
     Add common context variables to all templates
     """
-    context = {}
+    context = {
+        'default_avatar_data_url': DEFAULT_AVATAR_DATA_URL,
+    }
     
     if request.user.is_authenticated:
         # Get unread notifications count

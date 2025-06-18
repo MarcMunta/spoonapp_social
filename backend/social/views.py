@@ -610,9 +610,13 @@ def get_notifications_count(request):
 def edit_profile(request):
     profile = request.user.profile
     if request.method == 'POST':
-        user_form = UserForm(request.POST, instance=request.user)
+        user_form = UserForm(request.POST or None, instance=request.user)
         profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if user_form.is_valid() and profile_form.is_valid():
+        if 'profile_picture' in request.FILES and not request.POST.get('username'):
+            if profile_form.is_valid():
+                profile_form.save()
+                return redirect('edit_profile')
+        elif user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
             return redirect('profile', request.user.username)

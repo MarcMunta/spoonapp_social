@@ -1,5 +1,6 @@
 from django.utils import timezone
 from .models import Profile
+from .default_avatar import DEFAULT_AVATAR_BYTES
 
 class UpdateLastSeenMiddleware:
     def __init__(self, get_response):
@@ -9,8 +10,11 @@ class UpdateLastSeenMiddleware:
         if request.user.is_authenticated:
             try:
                 profile, created = Profile.objects.get_or_create(user=request.user)
+                if created or not profile.profile_picture:
+                    profile.profile_picture = DEFAULT_AVATAR_BYTES
+                    profile.profile_picture_mime = 'image/png'
                 profile.last_seen = timezone.now()
-                profile.save(update_fields=['last_seen'])
+                profile.save()
             except Exception:
                 pass  # Silently handle any errors
         

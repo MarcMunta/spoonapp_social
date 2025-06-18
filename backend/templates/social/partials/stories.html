@@ -20,7 +20,7 @@
         {% else %}
         <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% endif %}
-        <span class="story-add" onclick="event.stopPropagation(); document.getElementById('id_media_file').click();">+</span>
+        <span class="story-add">+</span>
       </div>
     </form>
     <div class="story-username">{{ user.username }}</div>
@@ -51,7 +51,7 @@
   <div class="story-modal-content">
     <div class="story-progress"><div class="story-progress-bar"></div></div>
     <div class="story-countdown"></div>
-    <div class="dropup dropdown story-options position-absolute" style="bottom:5px; right:5px; display:none;">
+    <div class="dropup dropdown story-options position-absolute" style="display:none;">
       <button class="btn btn-sm btn-dark story-options-btn" data-bs-toggle="dropdown" aria-expanded="false">&#8942;</button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item text-danger story-delete" href="#" data-story-id="">Eliminar</a></li>
@@ -67,6 +67,13 @@
     <div class="story-reply mt-2 d-flex">
       <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="Responder...">
       <button id="storyReplySend" class="btn btn-primary" data-story-id="">Enviar</button>
-    </div>
+</div>
+</div>
+</div>
+<div id="deleteConfirm" class="delete-confirm-modal">
+  <div class="delete-confirm-content">
+    <p class="mb-3">¿Eliminar definitivamente esta historia?</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteStory">Cancelar</button>
+    <button type="button" class="btn btn-danger" id="confirmDeleteStory">Eliminar</button>
   </div>
 </div>

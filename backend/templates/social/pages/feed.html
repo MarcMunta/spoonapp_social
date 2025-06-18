@@ -10,7 +10,7 @@
   <button type="submit" class="publish-btn">📤 Publicar</button>
 </form>
 {% endif %}
-{% if user.is_authenticated %}
+{% if user.is_authenticated and not show_form %}
 {% include 'social/partials/stories.html' %}
 {% endif %}
 {% for post in posts %}

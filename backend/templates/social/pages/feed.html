@@ -50,7 +50,8 @@
       {% else %}
       <span><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</span>
       {% endif %}
-      <span class="comment-count-wrapper" data-post-id="{{ post.id }}"><span class="comment-count">{{ post.comment_count }}</span>💬</span>
+      <span class="comment-count-wrapper" data-post-id="{{ post.id }}"><span class="comment-count">{{ post.comment_count
+          }}</span>💬</span>
       <span class="share-btn">📤</span>
       <span class="bookmark-btn">🔖</span>
     </div>

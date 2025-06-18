@@ -16,7 +16,7 @@
                     </div>
                 </div>
             </div>
-            
+
             {% if requests %}
             <div class="row g-4">
                 {% for req in requests %}
@@ -25,26 +25,25 @@
                         <div class="text-center mb-3">
                             <div class="spoon-friend-avatar-container">
                                 {% if req.from_user.profile.profile_picture %}
-                                <img src="{{ req.from_user.profile.profile_picture.url }}" alt="Profile" 
-                                     class="spoon-friend-avatar">
+                                <img src="{{ req.from_user.profile.profile_picture.url }}" alt="Profile"
+                                    class="spoon-friend-avatar">
                                 {% else %}
-                                <img src="https://i.imgur.com/jNNT4LE.png" alt="Default" 
-                                     class="spoon-friend-avatar">
+                                <img src="https://i.imgur.com/jNNT4LE.png" alt="Default" class="spoon-friend-avatar">
                                 {% endif %}
-                                
+
                                 {% if req.from_user.profile.online %}
                                 <div class="spoon-friend-online-badge"></div>
                                 {% endif %}
                             </div>
                         </div>
-                        
+
                         <div class="text-center">
                             <h5 class="spoon-friend-name mb-2">{{ req.from_user.username }}</h5>
                             <p class="spoon-friend-meta mb-3">
                                 <i class="fas fa-clock me-1"></i>
                                 {{ req.timestamp|timesince }} ago
                             </p>
-                            
+
                             <div class="spoon-friend-actions">
                                 <a href="{% url 'accept_friend_request' req.id %}" class="spoon-btn-accept">
                                     <i class="fas fa-check me-2"></i>Accept
@@ -63,7 +62,8 @@
                 <div class="text-center py-5">
                     <div class="spoon-empty-icon mb-4">👥🍴</div>
                     <h4 class="spoon-empty-title">No friend requests</h4>
-                    <p class="spoon-empty-text">When someone wants to connect with you on SpoonApp, you'll see their request here!</p>
+                    <p class="spoon-empty-text">When someone wants to connect with you on SpoonApp, you'll see their
+                        request here!</p>
                     <a href="{% url 'home' %}" class="spoon-btn-primary mt-3">
                         <i class="fas fa-home me-2"></i>Back to Feed
                     </a>
@@ -75,208 +75,222 @@
 </div>
 
 <style>
-.spoon-section-header {
-    background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
-    border-radius: 20px;
-    padding: 25px;
-    border: 2px solid #e8d5f0;
-    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.1);
-}
+    .spoon-section-header {
+        background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
+        border-radius: 20px;
+        padding: 25px;
+        border: 2px solid #e8d5f0;
+        box-shadow: 0 4px 15px rgba(212, 138, 193, 0.1);
+    }
 
-.spoon-header-icon {
-    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
-}
+    .spoon-header-icon {
+        background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+    }
 
-.spoon-section-title {
-    color: #6b21a8;
-    font-weight: 700;
-    margin: 0;
-}
+    .spoon-section-title {
+        color: #6b21a8;
+        font-weight: 700;
+        margin: 0;
+    }
 
-.spoon-section-subtitle {
-    color: #8b5a96;
-    font-size: 0.95rem;
-}
+    .spoon-section-subtitle {
+        color: #8b5a96;
+        font-size: 0.95rem;
+    }
 
-.spoon-friend-card {
-    background: linear-gradient(135deg, #ffffff 0%, #fdf2f9 100%);
-    border-radius: 20px;
-    padding: 25px;
-    border: 2px solid #e8d5f0;
-    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.2);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    position: relative;
-    overflow: hidden;
-    height: 100%;
-}
+    .spoon-friend-card {
+        background: linear-gradient(135deg, #ffffff 0%, #fdf2f9 100%);
+        border-radius: 20px;
+        padding: 25px;
+        border: 2px solid #e8d5f0;
+        box-shadow: 0 4px 15px rgba(212, 138, 193, 0.2);
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        position: relative;
+        overflow: hidden;
+        height: 100%;
+    }
 
-.spoon-friend-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: -100%;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(212, 138, 193, 0.1), transparent);
-    transition: left 0.5s;
-}
+    .spoon-friend-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(212, 138, 193, 0.1), transparent);
+        transition: left 0.5s;
+    }
 
-.spoon-friend-card:hover {
-    transform: translateY(-5px);
-    border-color: #d48ac1;
-    box-shadow: 0 8px 30px rgba(212, 138, 193, 0.3);
-}
+    .spoon-friend-card:hover {
+        transform: translateY(-5px);
+        border-color: #d48ac1;
+        box-shadow: 0 8px 30px rgba(212, 138, 193, 0.3);
+    }
 
-.spoon-friend-card:hover::before {
-    left: 100%;
-}
+    .spoon-friend-card:hover::before {
+        left: 100%;
+    }
 
-.spoon-friend-avatar-container {
-    position: relative;
-    display: inline-block;
-    margin-bottom: 15px;
-}
+    .spoon-friend-avatar-container {
+        position: relative;
+        display: inline-block;
+        margin-bottom: 15px;
+    }
 
-.spoon-friend-avatar {
-    width: 80px;
-    height: 80px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 4px solid #d48ac1;
-    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
-}
+    .spoon-friend-avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 4px solid #d48ac1;
+        box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+    }
 
-.spoon-friend-online-badge {
-    position: absolute;
-    bottom: 5px;
-    right: 5px;
-    width: 20px;
-    height: 20px;
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    border-radius: 50%;
-    border: 3px solid white;
-    box-shadow: 0 2px 8px rgba(34, 197, 94, 0.5);
-    animation: pulse-online 2s infinite;
-}
+    .spoon-friend-online-badge {
+        position: absolute;
+        bottom: 5px;
+        right: 5px;
+        width: 20px;
+        height: 20px;
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        border-radius: 50%;
+        border: 3px solid white;
+        box-shadow: 0 2px 8px rgba(34, 197, 94, 0.5);
+        animation: pulse-online 2s infinite;
+    }
 
-.spoon-friend-name {
-    color: #6b21a8;
-    font-weight: 700;
-    margin-bottom: 8px;
-}
+    .spoon-friend-name {
+        color: #6b21a8;
+        font-weight: 700;
+        margin-bottom: 8px;
+    }
 
-.spoon-friend-meta {
-    color: #8b5a96;
-    font-size: 0.9rem;
-    margin-bottom: 20px;
-}
+    .spoon-friend-meta {
+        color: #8b5a96;
+        font-size: 0.9rem;
+        margin-bottom: 20px;
+    }
 
-.spoon-friend-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-    flex-wrap: wrap;
-}
+    .spoon-friend-actions {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
 
-.spoon-btn-accept {
-    background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: none;
-    box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
-    display: inline-flex;
-    align-items: center;
-}
+    .spoon-btn-accept {
+        background: linear-gradient(135deg, #22c55e 0%, #16a34a 100%);
+        color: white;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: none;
+        box-shadow: 0 4px 15px rgba(34, 197, 94, 0.3);
+        display: inline-flex;
+        align-items: center;
+    }
 
-.spoon-btn-accept:hover {
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
-}
+    .spoon-btn-accept:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(34, 197, 94, 0.4);
+    }
 
-.spoon-btn-decline {
-    background: transparent;
-    color: #ef4444;
-    padding: 10px 20px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    border: 2px solid #ef4444;
-    display: inline-flex;
-    align-items: center;
-}
+    .spoon-btn-decline {
+        background: transparent;
+        color: #ef4444;
+        padding: 10px 20px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        border: 2px solid #ef4444;
+        display: inline-flex;
+        align-items: center;
+    }
 
-.spoon-btn-decline:hover {
-    background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
-}
+    .spoon-btn-decline:hover {
+        background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(239, 68, 68, 0.3);
+    }
 
-.spoon-empty-state-container {
-    background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
-    border-radius: 20px;
-    border: 2px solid #e8d5f0;
-    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.1);
-}
+    .spoon-empty-state-container {
+        background: linear-gradient(135deg, #fdf2f9 0%, #f3e8ff 100%);
+        border-radius: 20px;
+        border: 2px solid #e8d5f0;
+        box-shadow: 0 4px 15px rgba(212, 138, 193, 0.1);
+    }
 
-.spoon-empty-icon {
-    font-size: 4rem;
-    opacity: 0.7;
-    animation: float-icon 3s ease-in-out infinite;
-}
+    .spoon-empty-icon {
+        font-size: 4rem;
+        opacity: 0.7;
+        animation: float-icon 3s ease-in-out infinite;
+    }
 
-.spoon-empty-title {
-    color: #6b21a8;
-    font-weight: 700;
-    margin-bottom: 15px;
-}
+    .spoon-empty-title {
+        color: #6b21a8;
+        font-weight: 700;
+        margin-bottom: 15px;
+    }
 
-.spoon-empty-text {
-    color: #8b5a96;
-    font-size: 1rem;
-    margin-bottom: 0;
-}
+    .spoon-empty-text {
+        color: #8b5a96;
+        font-size: 1rem;
+        margin-bottom: 0;
+    }
 
-.spoon-btn-primary {
-    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
-    color: white;
-    padding: 12px 25px;
-    border-radius: 25px;
-    text-decoration: none;
-    font-weight: 600;
-    transition: all 0.3s ease;
-    display: inline-flex;
-    align-items: center;
-    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
-}
+    .spoon-btn-primary {
+        background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+        color: white;
+        padding: 12px 25px;
+        border-radius: 25px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        display: inline-flex;
+        align-items: center;
+        box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+    }
 
-.spoon-btn-primary:hover {
-    color: white;
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(212, 138, 193, 0.4);
-}
+    .spoon-btn-primary:hover {
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(212, 138, 193, 0.4);
+    }
 
-@keyframes pulse-online {
-    0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-}
+    @keyframes pulse-online {
 
-@keyframes float-icon {
-    0%, 100% { transform: translateY(0px); }
-    50% { transform: translateY(-10px); }
-}
+        0%,
+        100% {
+            transform: scale(1);
+        }
+
+        50% {
+            transform: scale(1.1);
+        }
+    }
+
+    @keyframes float-icon {
+
+        0%,
+        100% {
+            transform: translateY(0px);
+        }
+
+        50% {
+            transform: translateY(-10px);
+        }
+    }
 </style>
 {% endblock %}

@@ -2153,6 +2153,11 @@ body.profile-page .nav-tabs .nav-link {
 .story-options {
     bottom: 10px !important;
     right: 10px;
+    z-index: 2101;
+}
+
+.story-options .dropdown-menu {
+    min-width: 6rem;
 }
 
 .delete-confirm-modal {

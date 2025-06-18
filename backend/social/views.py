@@ -18,11 +18,10 @@ def _build_feed_context(show_posts=True):
     """Return context for feed-related views."""
     posts = (
         Post.objects.all()
-        .annotate(comment_count=Count(
-            "postcomment",
-            filter=Q(postcomment__parent__isnull=True),
-            distinct=True,
-        ))
+        .annotate(
+            # Count all comments including replies
+            comment_count=Count("postcomment", distinct=True)
+        )
         .order_by("-created_at")
         if show_posts
         else Post.objects.none()
@@ -632,6 +631,7 @@ def edit_profile(request):
         elif user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            profile.refresh_from_db()
             return redirect('profile', request.user.username)
     else:
         user_form = UserForm(instance=request.user)

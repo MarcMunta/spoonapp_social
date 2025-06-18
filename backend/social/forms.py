@@ -70,7 +70,7 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['profile_picture', 'bio', 'website', 'location', 'gender']
+        fields = ['bio', 'website', 'location', 'gender']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Cuéntanos algo sobre ti...'}),
             'website': forms.URLInput(attrs={'placeholder': 'https://'}),

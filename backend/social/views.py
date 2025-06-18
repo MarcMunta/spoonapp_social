@@ -632,6 +632,7 @@ def edit_profile(request):
         elif user_form.is_valid() and profile_form.is_valid():
             user_form.save()
             profile_form.save()
+            profile.refresh_from_db()
             return redirect('profile', request.user.username)
     else:
         user_form = UserForm(instance=request.user)

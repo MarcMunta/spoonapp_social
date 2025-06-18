@@ -92,6 +92,9 @@ def home(request):
 
         context['story_form'] = StoryForm()
 
+    # Ensure profile icon is visible on the home page
+    context['hide_profile_icon'] = False
+
     return render(request, 'social/pages/feed.html', context)
 
 def base_context(request):

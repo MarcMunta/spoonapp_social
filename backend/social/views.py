@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
-from .forms import PostForm, CommentForm, ProfileForm, StoryForm
+from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
 from .models import FriendRequest, StoryView
 from .models import PostCategory
 from django.utils import timezone
@@ -598,4 +598,24 @@ def get_notifications_count(request):
         count = Notification.objects.filter(user=request.user, is_read=False).count()
         return JsonResponse({'unread_count': count})
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+@login_required
+def edit_profile(request):
+    profile = request.user.profile
+    if request.method == 'POST':
+        user_form = UserForm(request.POST, instance=request.user)
+        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+            return redirect('profile', request.user.username)
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=profile)
+
+    return render(request, 'social/pages/edit_profile.html', {
+        'user_form': user_form,
+        'form': profile_form,
+        'profile': profile
+    })
 

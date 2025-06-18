@@ -51,8 +51,33 @@
         <div><strong>{{ posts|length }}</strong> Posts</div>
       </div>
 
-      <!-- BIO SOLO PARA VISUALIZAR -->
-      <p>{{ user_profile.bio|default:"Sin biografía" }}</p>
+      <!-- INFORMACION DEL PERFIL -->
+      <div class="profile-info">
+        {% if user_profile.bio %}
+        <div class="profile-info-box">
+          <span class="info-label">Biografía:</span>
+          <span class="info-content">{{ user_profile.bio }}</span>
+        </div>
+        {% endif %}
+        {% if user_profile.website %}
+        <div class="profile-info-box">
+          <span class="info-label">Sitio Web:</span>
+          <span class="info-content"><a href="{{ user_profile.website }}" target="_blank">{{ user_profile.website }}</a></span>
+        </div>
+        {% endif %}
+        {% if user_profile.location %}
+        <div class="profile-info-box">
+          <span class="info-label">Ubicación:</span>
+          <span class="info-content">{{ user_profile.location }}</span>
+        </div>
+        {% endif %}
+        {% if user_profile.gender %}
+        <div class="profile-info-box">
+          <span class="info-label">Género:</span>
+          <span class="info-content">{{ user_profile.gender }}</span>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 

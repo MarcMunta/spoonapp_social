@@ -96,15 +96,19 @@
       0% {
         transform: translate(-50%, -50%) rotate(0deg);
       }
+
       25% {
         transform: translate(-45%, -55%) rotate(90deg);
       }
+
       50% {
         transform: translate(-50%, -50%) rotate(180deg);
       }
+
       75% {
         transform: translate(-55%, -45%) rotate(270deg);
       }
+
       100% {
         transform: translate(-50%, -50%) rotate(360deg);
       }
@@ -122,10 +126,13 @@
     }
 
     @keyframes title-pulse {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
         text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.4);
       }
+
       50% {
         transform: scale(1.02);
         text-shadow: 4px 4px 8px rgba(0, 0, 0, 0.5);
@@ -140,8 +147,15 @@
     }
 
     @keyframes emoji-bounce {
-      0%, 100% { transform: translateY(0px); }
-      50% { transform: translateY(-3px); }
+
+      0%,
+      100% {
+        transform: translateY(0px);
+      }
+
+      50% {
+        transform: translateY(-3px);
+      }
     }
 
     .spoon-chat-item {
@@ -564,6 +578,7 @@
         opacity: 0;
         transform: translateY(10px) scale(0.95);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -767,6 +782,7 @@
         opacity: 0;
         transform: translateY(15px) scale(0.95);
       }
+
       to {
         opacity: 1;
         transform: translateY(0) scale(1);
@@ -781,14 +797,14 @@
         position: -webkit-sticky;
         position: sticky;
       }
-      
+
       .spoon-input-area {
         padding: 12px 15px;
         min-height: 70px;
         position: -webkit-sticky;
         position: sticky;
       }
-      
+
       .spoon-messages-area {
         padding: 15px;
         height: calc(100vh - 210px);
@@ -826,11 +842,12 @@
             <a href="{% url 'notifications' %}" class="see-all">See All</a>
           </div>
           <div class="notification-list" id="notificationList">
-            {% for notification in unread_notifications|slice:":5" %}
+            {% if unread_notifications %}
+            {% for notification in unread_notifications %}
             <div class="notification-item" data-id="{{ notification.id }}" {% if
               notification.notification_type=='message' and notification.related_chat %}
-              data-notification-type="message" data-chat-url="{% url 'chat_detail' notification.related_chat.id %}" {%
-              endif %}>
+              data-notification-type="message" {% if notification.related_chat %}
+              data-chat-url="{% url 'chat_detail' notification.related_chat.id %}" {% endif %}>
               <div class="notification-content">
                 <strong>{{ notification.title }}</strong>
                 <p>{{ notification.message }}</p>
@@ -838,10 +855,12 @@
               </div>
               <button class="mark-read-btn" onclick="markAsRead('{{ notification.id }}')">✓</button>
             </div>
-            {% empty %}
-            <div class="no-notifications">No new notifications</div>
             {% endfor %}
+            {% else %}
+            <div class="no-notifications">No new notifications</div>
+            {% endif %}
           </div>
+
         </div>
       </div>
       {% else %}

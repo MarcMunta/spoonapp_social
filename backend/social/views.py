@@ -433,6 +433,14 @@ def load_messages(request, chat_id):
         'direction': 'before' if before_id else 'after' if after_id else 'initial'
     })
 
+def base_context(request):
+    context = {}
+    if request.user.is_authenticated:
+        context['unread_notifications'] = Notification.objects.filter(
+            user=request.user, is_read=False
+        ).order_by('-created_at')[:5]
+    return context
+
 @login_required
 def chat_detail(request, chat_id):
     """Display messages in a specific chat with enhanced functionality"""

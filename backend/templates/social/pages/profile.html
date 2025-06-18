@@ -14,7 +14,7 @@
         <img src="{{ user_profile.profile_picture_data_url }}" class="rounded-circle img-fluid profile-picture"
           style="width: 150px; height: 150px; object-fit: cover;">
         {% else %}
-        <img src="https://i.imgur.com/jNNT4LE.png" class="rounded-circle img-fluid profile-picture"
+        <img src="{{ default_avatar_data_url }}" class="rounded-circle img-fluid profile-picture"
           style="width: 150px; height: 150px; object-fit: cover;">
         {% endif %}
         {% if user == profile_user %}

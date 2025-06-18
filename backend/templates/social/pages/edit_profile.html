@@ -139,7 +139,7 @@
                 {% if profile.profile_picture %}
                 <img src="{{ profile.profile_picture_data_url }}" class="edit-profile-avatar" alt="Foto de perfil">
                 {% else %}
-                <img src="{% static 'default-avatar.png' %}" class="edit-profile-avatar" alt="Avatar por defecto">
+                <img src="{{ default_avatar_data_url }}" class="edit-profile-avatar" alt="Avatar por defecto">
                 {% endif %}
                 <span class="camera-button">📷</span>
             </label>

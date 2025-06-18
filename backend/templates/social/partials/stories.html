@@ -1,3 +1,4 @@
+{% load static %}
 <div class="stories-wrapper mb-3">
   <span class="stories-prev">&#10094;</span>
   <div class="stories-container">
@@ -12,14 +13,14 @@
              data-expires="{{ user_story_data.expires|join:'|' }}"
              data-user="{{ user.username }}"
              data-profile-url="{% url 'profile' user.username %}"
-             data-avatar-url="{% if user.profile.profile_picture %}{{ user.profile.profile_picture_data_url }}{% else %}https://i.imgur.com/jNNT4LE.png{% endif %}"
+             data-avatar-url="{% if user.profile.profile_picture %}{{ user.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
              data-story-id="{{ user_story_data.ids|join:'|' }}"
              data-own="true"
            {% endif %}>
         {% if user.profile.profile_picture %}
         <img src="{{ user.profile.profile_picture_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% else %}
-        <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ user.username }}" width="50" height="50">
+        <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% endif %}
         <span class="story-add">+</span>
       </div>
@@ -34,12 +35,12 @@
          data-expires="{{ data.expires|join:'|' }}"
          data-user="{{ friend.username }}"
          data-profile-url="{% url 'profile' friend.username %}"
-         data-avatar-url="{% if friend.profile.profile_picture %}{{ friend.profile.profile_picture_data_url }}{% else %}https://i.imgur.com/jNNT4LE.png{% endif %}"
+         data-avatar-url="{% if friend.profile.profile_picture %}{{ friend.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
          data-story-id="{{ data.ids|join:'|' }}">
       {% if friend.profile.profile_picture %}
       <img src="{{ friend.profile.profile_picture_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
       {% else %}
-      <img src="https://i.imgur.com/jNNT4LE.png" class="story-img" alt="{{ friend.username }}" width="50" height="50">
+      <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
       {% endif %}
     </div>
     <div class="story-username">{{ friend.username }}</div>

@@ -108,33 +108,10 @@ def feed(request):
     context['show_form'] = True
 
     if request.user.is_authenticated:
-        Story.objects.filter(expires_at__lte=timezone.now()).delete()
         context['friends'] = get_friends(request.user)
-        active_stories = (
-            Story.objects.filter(expires_at__gt=timezone.now())
-            .select_related('user')
-            .order_by('created_at')
-        )
 
-        user_story_list = active_stories.filter(user=request.user)
-        context['user_story_data'] = {
-            'urls': [st.media_file.url for st in user_story_list],
-            'expires': [st.expires_at.isoformat() for st in user_story_list],
-            'ids': [st.id for st in user_story_list],
-        }
-
-        friend_story_map = {}
-        for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'expires': [], 'ids': []})
-            entry['urls'].append(st.media_file.url)
-            entry['expires'].append(st.expires_at.isoformat())
-            entry['ids'].append(st.id)
-        context['friend_stories'] = friend_story_map
-
-        context['story_form'] = StoryForm()
-
-    # Hide profile icon on the post creation page
-    context['hide_profile_icon'] = True
+    # Show profile icon on the post creation page
+    context['hide_profile_icon'] = False
 
     return render(request, 'social/pages/feed.html', context)
 

@@ -204,7 +204,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentStoryIds = el.dataset.storyId.split('|');
     currentIndex = 0;
     currentStoryElIndex = idx;
-    currentIsOwn = el.dataset.user === currentUsername;
+    currentIsOwn = el.dataset.own === 'true' || el.dataset.user === currentUsername;
     const userContainer = document.querySelector('.story-modal-user');
     if (userContainer) {
       const profileUrl = el.dataset.profileUrl;

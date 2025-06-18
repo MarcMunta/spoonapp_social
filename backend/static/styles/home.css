@@ -2157,7 +2157,12 @@ body.profile-page .nav-tabs .nav-link {
 }
 
 .story-options .dropdown-menu {
+    display: none;
     min-width: 6rem;
+ }
+
+.story-options .dropdown-menu.show {
+    display: block;
 }
 
 .delete-confirm-modal {

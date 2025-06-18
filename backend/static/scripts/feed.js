@@ -52,6 +52,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const itemWidth = storiesContainer.querySelector('.story-item')?.offsetWidth || 120;
     const gap = parseInt(getComputedStyle(storiesContainer).gap) || 0;
     const scrollAmount = itemWidth + gap;
+
+    const updateStoryArrows = () => {
+      const maxScroll = storiesContainer.scrollWidth - storiesContainer.clientWidth;
+      const atStart = storiesContainer.scrollLeft <= 0;
+      const atEnd = storiesContainer.scrollLeft >= maxScroll - 1;
+      const noScroll = maxScroll <= 0;
+      prevStories?.classList.toggle('d-none', atStart || noScroll);
+      nextStories?.classList.toggle('d-none', atEnd || noScroll);
+    };
+
+    updateStoryArrows();
+    storiesContainer.addEventListener('scroll', updateStoryArrows);
+    window.addEventListener('resize', updateStoryArrows);
+
     prevStories?.addEventListener('click', () => {
       storiesContainer.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
     });

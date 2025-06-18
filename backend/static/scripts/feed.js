@@ -312,10 +312,14 @@ document.addEventListener('DOMContentLoaded', () => {
       fetch(`/story/${storyId}/reply/`, {
         method: 'POST',
         body: formData,
-        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+        headers: {
+          'X-Requested-With': 'XMLHttpRequest',
+          'X-CSRFToken': getCSRFToken()
+        }
       })
         .then(res => res.json())
         .then(data => {
+          if (input) input.value = '';
           if (data.chat_id) {
             window.location.href = `/chat/${data.chat_id}/`;
           }

@@ -1489,7 +1489,12 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-modal-user {
     color: #fff;
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .story-prev,
@@ -2053,11 +2058,17 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-modal-user {
     color: #fff;
-    margin-bottom: 8px;
+    margin-bottom: 0;
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
 }
 
 .story-modal-avatar {
     border-radius: 50%;
+    margin-right: 8px;
 }
 
 #storyImage,

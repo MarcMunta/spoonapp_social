@@ -6,6 +6,7 @@ body {
     display: flex;
     flex-direction: column;
     height: 100vh;
+    padding-top: 1.5rem;
 }
 
 .topbar {
@@ -79,6 +80,7 @@ body {
     border-right: 2px solid #f3c2e1;
     box-shadow: 2px 0 4px rgba(0, 0, 0, 0.05);
     overflow-y: auto;
+    padding-top: 3rem;
 }
 
 .menu-item {
@@ -343,6 +345,7 @@ body:has(.spoon-chat-container) .rightbar {
     box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
     overflow-y: auto;
     height: calc(100vh - 60px);
+    padding-top: 3rem;
 }
 
 .sponsored h3,
@@ -2220,7 +2223,8 @@ body.profile-page .nav-tabs .nav-link {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding-bottom: 0.3rem;
     padding-top: 0.4rem;
-    margin-top: 34px; /* antes estaba en 10px */
+    margin-top: 34px;
+    /* antes estaba en 10px */
 }
 
 

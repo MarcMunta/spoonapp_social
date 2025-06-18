@@ -52,18 +52,32 @@
       </div>
 
       <!-- INFORMACION DEL PERFIL -->
-      {% if user_profile.bio %}
-      <p><strong>Biografía:</strong> {{ user_profile.bio }}</p>
-      {% endif %}
-      {% if user_profile.website %}
-      <p><strong>Sitio Web:</strong> <a href="{{ user_profile.website }}" target="_blank">{{ user_profile.website }}</a></p>
-      {% endif %}
-      {% if user_profile.location %}
-      <p><strong>Ubicación:</strong> {{ user_profile.location }}</p>
-      {% endif %}
-      {% if user_profile.gender %}
-      <p><strong>Género:</strong> {{ user_profile.gender }}</p>
-      {% endif %}
+      <div class="profile-info">
+        {% if user_profile.bio %}
+        <div class="profile-info-box">
+          <span class="info-label">Biografía:</span>
+          <span class="info-content">{{ user_profile.bio }}</span>
+        </div>
+        {% endif %}
+        {% if user_profile.website %}
+        <div class="profile-info-box">
+          <span class="info-label">Sitio Web:</span>
+          <span class="info-content"><a href="{{ user_profile.website }}" target="_blank">{{ user_profile.website }}</a></span>
+        </div>
+        {% endif %}
+        {% if user_profile.location %}
+        <div class="profile-info-box">
+          <span class="info-label">Ubicación:</span>
+          <span class="info-content">{{ user_profile.location }}</span>
+        </div>
+        {% endif %}
+        {% if user_profile.gender %}
+        <div class="profile-info-box">
+          <span class="info-label">Género:</span>
+          <span class="info-content">{{ user_profile.gender }}</span>
+        </div>
+        {% endif %}
+      </div>
     </div>
   </div>
 

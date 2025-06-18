@@ -1416,11 +1416,19 @@ body.profile-page .nav-tabs .nav-link {
     margin-bottom: 8px;
 }
 
+.story-modal-avatar {
+    border-radius: 50%;
+}
+
 #storyImage,
 #storyVideo {
     max-height: calc(100% - 60px);
     width: 100%;
     object-fit: contain;
+    object-position: center;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .story-prev,

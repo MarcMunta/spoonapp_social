@@ -27,7 +27,7 @@
                             <div class="spoon-friend-avatar-container">
                                 {% if req.from_user.profile.profile_picture %}
                                 <img src="{{ req.from_user.profile.profile_picture_data_url }}" alt="Profile"
-                                     class="spoon-friend-avatar">
+                                    class="spoon-friend-avatar">
                                 {% else %}
                                 <img src="{{ default_avatar_data_url }}" alt="Default" class="spoon-friend-avatar">
                                 {% endif %}

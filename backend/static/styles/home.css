@@ -621,6 +621,15 @@ body:has(.spoon-chat-container) .rightbar {
     margin-bottom: 0.5rem;
 }
 
+.mention {
+    color: #007bff;
+    text-decoration: none;
+}
+
+.mention:hover {
+    text-decoration: underline;
+}
+
 @keyframes pop {
     0% {
         transform: scale(1);

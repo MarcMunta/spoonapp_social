@@ -343,6 +343,29 @@ body:has(.spoon-chat-container) .rightbar {
     color: #333;
 }
 
+.comment-user {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e0f5ff;
+    padding: 0.2rem 0.5rem;
+    border-radius: 20px;
+    text-decoration: none;
+    margin-right: 0.5rem;
+}
+
+.comment-user img.comment-avatar {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 0.3rem;
+}
+
+.comment-user strong {
+    font-size: 1rem;
+    color: #333;
+}
+
 /* Container for profile info and time */
 .post-top {
     margin-bottom: 0.5rem;

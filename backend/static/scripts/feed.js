@@ -455,9 +455,22 @@ document.addEventListener('DOMContentLoaded', () => {
         const li = document.querySelector(`li[data-comment-id='${deleteId}']`);
         const list = li ? li.closest('.comment-list') : null;
         const postId = list ? list.dataset.postId : null;
+        const repliesList = li ? li.closest('.replies-list') : null;
+        const parentLi = repliesList ? repliesList.closest('li[data-comment-id]') : null;
         pendingCommentDeleteId = null;
         if (data.success && li) {
           li.remove();
+
+          // If deleting a reply, hide the replies list and button when empty
+          if (repliesList) {
+            const remaining = repliesList.querySelectorAll(':scope > li').length;
+            if (remaining === 0) {
+              repliesList.classList.add('d-none');
+              const hideBtn = parentLi ? parentLi.querySelector('.hide-replies-btn') : null;
+              if (hideBtn) hideBtn.remove();
+            }
+          }
+
           if (postId) {
             const countSpan = document.querySelector(`.comment-count-wrapper[data-post-id='${postId}'] .comment-count`);
             if (countSpan) countSpan.textContent = Math.max(0, parseInt(countSpan.textContent) - 1);

@@ -380,6 +380,20 @@ def send_friend_request(request):
     return JsonResponse({"error": "Invalid method"}, status=405)
 
 
+@login_required(login_url='/custom-login/')
+def update_bubble_color(request):
+    if request.method == "POST":
+        color = request.POST.get("color")
+        valid_colors = {c for c, _ in ProfileForm.COLOR_CHOICES}
+        if color in valid_colors:
+            profile = request.user.profile
+            profile.bubble_color = color
+            profile.save(update_fields=["bubble_color"])
+            return JsonResponse({"success": True, "color": color})
+        return JsonResponse({"error": "Invalid color"}, status=400)
+    return JsonResponse({"error": "Invalid method"}, status=405)
+
+
 def load_comments(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     offset = int(request.GET.get("offset", 0))
@@ -441,7 +455,7 @@ def chat_list(request):
             'unread_count': unread_count
         })
     
-    return render(request, 'social/chat_list.html', {'chat_data': chat_data})
+    return render(request, 'social/pages/chat_list.html', {'chat_data': chat_data})
 
 @login_required(login_url='/custom-login/')
 def load_messages(request, chat_id):
@@ -556,7 +570,7 @@ def chat_detail(request, chat_id):
                 })
             return redirect('chat_detail', chat_id=chat.id)
     
-    return render(request, 'social/chat_detail.html', {
+    return render(request, 'social/pages/chat_detail.html', {
         'chat': chat,
         'other_user': other_user,
         'messages': messages,
@@ -644,7 +658,7 @@ def notifications_view(request):
     # Mark all as read when viewing
     Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
     
-    return render(request, 'social/notifications.html', {'notifications': notifications})
+    return render(request, 'social/pages/notifications.html', {'notifications': notifications})
 
 @login_required(login_url='/custom-login/')
 def mark_notification_read(request, notification_id):

@@ -40,7 +40,17 @@
         <a href="{% url 'follow' profile_user.username %}" class="btn btn-outline-primary btn-sm">Follow</a>
         {% endif %}
         {% else %}
-        <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">Editar perfil</a>
+        <div class="d-flex align-items-center gap-2">
+          <div class="color-picker-wrapper position-relative">
+            <span id="profileColorBubble" class="user-color-bubble" style="background-color: {{ user_profile.bubble_color }};"></span>
+            <div id="colorDropdown" class="color-dropdown d-none">
+              {% for code, name in form.COLOR_CHOICES %}
+              <span class="color-option" data-color="{{ code }}" style="background-color: {{ code }};"></span>
+              {% endfor %}
+            </div>
+          </div>
+          <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">Editar perfil</a>
+        </div>
         {% endif %}
       </div>
 
@@ -121,4 +131,26 @@
     </div>
   </div>
 </div>
+<script>
+  const bubble = document.getElementById('profileColorBubble');
+  const dropdown = document.getElementById('colorDropdown');
+  bubble?.addEventListener('click', () => {
+    dropdown?.classList.toggle('d-none');
+  });
+  dropdown?.querySelectorAll('.color-option').forEach(opt => {
+    opt.addEventListener('click', () => {
+      const color = opt.dataset.color;
+      fetch('{% url "update_bubble_color" %}', {
+        method: 'POST',
+        headers: { 'X-CSRFToken': getCSRFToken() },
+        body: new URLSearchParams({ color })
+      }).then(r => r.json()).then(data => {
+        if (data.success) {
+          bubble.style.backgroundColor = data.color;
+          dropdown.classList.add('d-none');
+        }
+      });
+    });
+  });
+</script>
 {% endblock %}

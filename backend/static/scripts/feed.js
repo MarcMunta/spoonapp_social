@@ -589,6 +589,57 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Submit new comments and replies via AJAX
+  document.addEventListener('submit', e => {
+    const commentForm = e.target.closest('.comment-form');
+    const replyForm = e.target.closest('.reply-form');
+    if (!commentForm && !replyForm) return;
+    e.preventDefault();
+    const form = commentForm || replyForm;
+    const formData = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': getCSRFToken()
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) return;
+        const countEl = document.querySelector(`.comment-count-wrapper[data-post-id='${data.post_id}'] .comment-count`);
+        if (countEl) countEl.textContent = parseInt(countEl.textContent) + 1;
+        if (commentForm) {
+          let list = document.getElementById(`comments-${data.post_id}`);
+          if (!list) {
+            list = document.createElement('ul');
+            list.id = `comments-${data.post_id}`;
+            list.dataset.postId = data.post_id;
+            list.dataset.expanded = 'true';
+            list.className = 'list-group list-group-flush mt-2 comment-list';
+            commentForm.insertAdjacentElement('afterend', list);
+          }
+          list.insertAdjacentHTML('beforeend', data.html);
+          const input = commentForm.querySelector('.comment-input');
+          if (input) input.value = '';
+        } else if (replyForm) {
+          const li = replyForm.closest('li[data-comment-id]');
+          if (!li) return;
+          let list = li.querySelector('ul.list-group');
+          if (!list) {
+            list = document.createElement('ul');
+            list.className = 'list-group mt-1 ms-3';
+            li.appendChild(list);
+          }
+          list.insertAdjacentHTML('beforeend', data.html);
+          const input = replyForm.querySelector('.comment-input');
+          if (input) input.value = '';
+          replyForm.classList.add('d-none');
+        }
+      });
+  });
+
   window.addEventListener('scroll', () => {
     document.querySelectorAll('.comment-list').forEach(list => {
       if (list.dataset.expanded !== 'true') return;

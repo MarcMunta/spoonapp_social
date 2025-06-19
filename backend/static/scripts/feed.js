@@ -483,7 +483,7 @@ document.addEventListener('DOMContentLoaded', () => {
                   if (moreBtn) moreBtn.remove();
                   const showMoreBtn = postEl.querySelector('.show-more-comments');
                   if (showMoreBtn) showMoreBtn.remove();
-                  if (data.remaining_top <= 5) {
+                  if (data.remaining_top <= 3) {
                     const lessBtn = postEl.querySelector('.show-less-comments');
                     if (lessBtn) lessBtn.remove();
                   }
@@ -579,7 +579,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const postId = btn.dataset.postId;
       const list = document.getElementById('comments-' + postId);
       const offset = list ? list.children.length : 0;
-      fetch(`/post/${postId}/comments/?offset=${offset}&limit=10`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+      fetch(`/post/${postId}/comments/?offset=${offset}&limit=5`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
         .then(res => res.json())
         .then(data => {
           if (list) {
@@ -605,7 +605,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const list = document.getElementById('comments-' + postId);
       if (list) {
         Array.from(list.children).forEach((li, idx) => {
-          if (idx >= 5) li.style.display = 'none';
+          if (idx >= 3) li.style.display = 'none';
         });
         list.dataset.expanded = 'false';
       }
@@ -703,7 +703,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (input) input.value = '';
 
           const total = parseInt(countEl ? countEl.textContent : list.children.length);
-          if (total > 5) {
+          if (total > 3) {
             const postEl = commentForm.closest('.post');
             if (postEl) {
               const hasLess = postEl.querySelector('.show-less-comments');
@@ -757,7 +757,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const rect = post.getBoundingClientRect();
       if (rect.bottom < 0 || rect.top > window.innerHeight) {
         Array.from(list.children).forEach((li, idx) => {
-          if (idx >= 5) li.style.display = 'none';
+          if (idx >= 3) li.style.display = 'none';
         });
         list.dataset.expanded = 'false';
         const lessBtn = post.querySelector('.show-less-comments');

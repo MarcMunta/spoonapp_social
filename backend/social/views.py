@@ -404,7 +404,7 @@ def update_bubble_color(request):
 def load_comments(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     offset = int(request.GET.get("offset", 0))
-    limit = int(request.GET.get("limit", 10))
+    limit = int(request.GET.get("limit", 5))
     comments_qs = (
         post.postcomment_set.filter(parent__isnull=True)
         .annotate(num_likes=Count("postcommentlike"))

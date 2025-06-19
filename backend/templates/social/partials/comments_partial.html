@@ -1,6 +1,6 @@
 {% load custom_filters %}
 {% for comment in comments %}
-<li class="list-group-item" data-comment-id="{{ comment.id }}" data-username="{{ comment.user.username }}">
+<li class="list-group-item{% if comment.parent %} reply-item{% endif %}" data-comment-id="{{ comment.id }}" data-username="{{ comment.user.username }}">
   <div class="d-flex justify-content-between align-items-start">
     <div class="d-flex">
       <a href="{% url 'profile' comment.user.username %}" class="comment-user text-decoration-none me-2" style="background-color: {{ comment.user.profile.bubble_color }};">
@@ -30,17 +30,21 @@
     </div>
   </div>
   <div class="comment-content mt-1">{{ comment.content|link_mentions|safe }}</div>
-  <div class="d-flex justify-content-between align-items-center mt-1">
+  <div class="d-flex justify-content-end align-items-center gap-2 mt-1">
     {% if user.is_authenticated %}
-    <button class="reply-btn ms-1">Responder</button>
+    <button class="reply-btn">Responder</button>
     {% endif %}
     {% with replies=comment.replies.all %}
     {% if replies %}
-    <button class="load-replies-btn mx-auto" data-comment-id="{{ comment.id }}">Cargar respuestas</button>
-    <ul class="list-group mt-1 d-none replies-list" id="replies-{{ comment.id }}" data-offset="0"></ul>
+    <button class="load-replies-btn" data-comment-id="{{ comment.id }}">Cargar respuestas</button>
     {% endif %}
     {% endwith %}
   </div>
+  {% with replies=comment.replies.all %}
+  {% if replies %}
+  <ul class="list-group mt-1 d-none replies-list ps-4" id="replies-{{ comment.id }}" data-offset="0"></ul>
+  {% endif %}
+  {% endwith %}
   {% if user.is_authenticated %}
   <form method="post" action="{% url 'comment_post' comment.post.id %}" class="reply-form d-none mt-2">
     {% csrf_token %}

@@ -12,7 +12,7 @@ def get_friends(user):
 
 def friend_requests_processor(request):
     context = {}
-    if request.user.is_authenticated:
+    if hasattr(request, 'user') and request.user.is_authenticated:
         requests = FriendRequest.objects.filter(to_user=request.user, accepted=False)
         all_users = User.objects.exclude(id=request.user.id)
         
@@ -62,7 +62,7 @@ def base_context(request):
         'default_avatar_data_url': DEFAULT_AVATAR_DATA_URL,
     }
     
-    if request.user.is_authenticated:
+    if hasattr(request, 'user') and request.user.is_authenticated:
         # Get unread notifications count
         unread_notifications = Notification.objects.filter(
             user=request.user, 

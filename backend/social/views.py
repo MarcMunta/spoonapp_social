@@ -14,6 +14,9 @@ from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 import json
 
+def custom_404(request):
+    return render(request, '404.html', status=404)
+
 def _build_feed_context(show_posts=True):
     """Return context for feed-related views."""
     posts = (
@@ -115,9 +118,7 @@ def feed(request):
     context['hide_profile_icon'] = False
     return render(request, 'social/pages/feed.html', context)
 
-
-
-@login_required
+@login_required(login_url='/custom-login/')
 def create_post(request):
     if request.method == 'POST':
         form = PostForm(request.POST, request.FILES)
@@ -128,7 +129,7 @@ def create_post(request):
             form.save_m2m()
     return redirect('home')
 
-@login_required
+@login_required(login_url='/custom-login/')
 def delete_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.user != post.user:
@@ -139,7 +140,7 @@ def delete_post(request, post_id):
             return JsonResponse({'success': True})
         return redirect('home')
 
-@login_required
+@login_required(login_url='/custom-login/')
 def upload_story(request):
     if request.method == 'POST':
         form = StoryForm(request.POST, request.FILES)
@@ -150,7 +151,7 @@ def upload_story(request):
     return redirect('home')
 
 
-@login_required
+@login_required(login_url='/custom-login/')
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     like, created = PostLike.objects.get_or_create(user=request.user, post=post)
@@ -161,14 +162,14 @@ def like_post(request, post_id):
     return redirect('home')
 
 
-@login_required
+@login_required(login_url='/custom-login/')
 def share_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     PostShare.objects.create(user=request.user, post=post)
     return redirect('home')
 
 
-@login_required
+@login_required(login_url='/custom-login/')
 def comment_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     if request.method == 'POST':
@@ -186,12 +187,12 @@ def comment_post(request, post_id):
             )
     return redirect('home')
 
-@login_required
+@login_required(login_url='/custom-login/')
 def friend_requests_view(request):
     requests = FriendRequest.objects.filter(to_user=request.user, accepted=False)
     return render(request, 'social/pages/friend_requests.html', {'requests': requests})
 
-@login_required
+@login_required(login_url='/custom-login/')
 def accept_friend_request(request, req_id):
     req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
     req.accepted = True
@@ -208,13 +209,13 @@ def accept_friend_request(request, req_id):
     
     return redirect('friend_requests')
 
-@login_required
+@login_required(login_url='/custom-login/')
 def reject_friend_request(request, req_id):
     req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
     req.delete()
     return redirect('friend_requests')
 
-@login_required
+@login_required(login_url='/custom-login/')
 def like_comment(request, comment_id):
     comment = get_object_or_404(PostComment, id=comment_id)
     like, created = PostCommentLike.objects.get_or_create(user=request.user, comment=comment)
@@ -225,7 +226,7 @@ def like_comment(request, comment_id):
     return redirect('home')
 
 
-@login_required
+@login_required(login_url='/custom-login/')
 def delete_comment(request, comment_id):
     comment = get_object_or_404(PostComment, id=comment_id)
     if request.user != comment.user and request.user != comment.post.user:
@@ -237,7 +238,7 @@ def delete_comment(request, comment_id):
         return redirect('home')
     return JsonResponse({'error': 'Invalid method'}, status=405)
 
-@login_required
+@login_required(login_url='/custom-login/')
 def follow_user(request, username):
     target_user = get_object_or_404(User, username=username)
     existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=target_user)
@@ -245,7 +246,7 @@ def follow_user(request, username):
         FriendRequest.objects.create(from_user=request.user, to_user=target_user)
     return redirect('profile', username=username)
 
-@login_required
+@login_required(login_url='/custom-login/')
 def unfollow_user(request, username):
     target_user = get_object_or_404(User, username=username)
     FriendRequest.objects.filter(from_user=request.user, to_user=target_user).delete()
@@ -301,7 +302,7 @@ def profile(request, username):
     return render(request, 'social/pages/profile.html', context)
 
 
-@login_required
+@login_required(login_url='/custom-login/')
 def search_users(request):
     if request.method == "GET":
         query = request.GET.get("q", "")
@@ -323,7 +324,7 @@ def search_users(request):
 
         return JsonResponse(results, safe=False)
 
-@login_required
+@login_required(login_url='/custom-login/')
 def send_friend_request(request):
     if request.method == "POST":
         try:
@@ -372,7 +373,7 @@ def get_user_online_status(user):
             return True
     return False
 
-@login_required
+@login_required(login_url='/custom-login/')
 def friends_list_view(request):
     user = request.user
     friends = FriendRequest.objects.filter(
@@ -389,7 +390,7 @@ def friends_list_view(request):
         'friends': all_friends
     })
 
-@login_required
+@login_required(login_url='/custom-login/')
 def chat_list(request):
     """Display list of all chats for the current user"""
     user_chats = Chat.objects.filter(participants=request.user).prefetch_related('participants', 'messages')
@@ -409,7 +410,7 @@ def chat_list(request):
     
     return render(request, 'social/chat_list.html', {'chat_data': chat_data})
 
-@login_required
+@login_required(login_url='/custom-login/')
 def load_messages(request, chat_id):
     """Load messages for AJAX requests with pagination support"""
     chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
@@ -475,7 +476,7 @@ def base_context(request):
         ).order_by('-created_at')[:5]
     return context
 
-@login_required
+@login_required(login_url='/custom-login/')
 def chat_detail(request, chat_id):
     """Display messages in a specific chat with enhanced functionality"""
     chat = get_object_or_404(Chat, id=chat_id, participants=request.user)
@@ -529,7 +530,7 @@ def chat_detail(request, chat_id):
         'now': timezone.now(),
     })
 
-@login_required
+@login_required(login_url='/custom-login/')
 def start_chat(request, user_id):
     """Start or continue a chat with a friend"""
     other_user = get_object_or_404(User, id=user_id)
@@ -557,7 +558,7 @@ def start_chat(request, user_id):
         new_chat.participants.add(request.user, other_user)
         return redirect('chat_detail', chat_id=new_chat.id)
 
-@login_required
+@login_required(login_url='/custom-login/')
 def delete_story(request, story_id):
     """Delete a story owned by the current user"""
     story = get_object_or_404(Story, id=story_id, user=request.user)
@@ -568,7 +569,7 @@ def delete_story(request, story_id):
     return redirect('home')
 
 
-@login_required
+@login_required(login_url='/custom-login/')
 def view_story(request, story_id):
     """Register a view and return total views"""
     story = get_object_or_404(Story, id=story_id)
@@ -580,7 +581,7 @@ def view_story(request, story_id):
     return JsonResponse({'views': views})
 
 
-@login_required
+@login_required(login_url='/custom-login/')
 def reply_story(request, story_id):
     """Send a chat message in reply to a story."""
     story = get_object_or_404(Story, id=story_id)
@@ -602,7 +603,7 @@ def reply_story(request, story_id):
         return redirect('chat_detail', chat_id=chat.id)
     return redirect('home')
 
-@login_required
+@login_required(login_url='/custom-login/')
 def notifications_view(request):
     """Display all notifications for the current user"""
     notifications = Notification.objects.filter(user=request.user)
@@ -612,7 +613,7 @@ def notifications_view(request):
     
     return render(request, 'social/notifications.html', {'notifications': notifications})
 
-@login_required
+@login_required(login_url='/custom-login/')
 def mark_notification_read(request, notification_id):
     """Mark a specific notification as read via AJAX"""
     notification = get_object_or_404(Notification, id=notification_id, user=request.user)
@@ -625,7 +626,7 @@ def mark_notification_read(request, notification_id):
     
     return redirect('notifications')
 
-@login_required
+@login_required(login_url='/custom-login/')
 def get_notifications_count(request):
     """Get unread notifications count via AJAX"""
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
@@ -633,7 +634,7 @@ def get_notifications_count(request):
         return JsonResponse({'unread_count': count})
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-@login_required
+@login_required(login_url='/custom-login/')
 def edit_profile(request):
     profile = request.user.profile
     if request.method == 'POST':
@@ -658,3 +659,11 @@ def edit_profile(request):
         'profile': profile
     })
 
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
+def custom_403(request, exception=None):
+    return render(request, '403.html', status=403)
+
+def custom_500(request):
+    return render(request, '500.html', status=500)

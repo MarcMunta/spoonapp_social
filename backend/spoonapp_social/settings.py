@@ -2,8 +2,8 @@ from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-demo-key'
-DEBUG = True
-ALLOWED_HOSTS = []
+DEBUG = True # Cambiar a False en producción
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # o ['*'] para desarrollo local
 
 INSTALLED_APPS = [
     'django.contrib.admin',
@@ -25,6 +25,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social.middleware.UpdateLastSeenMiddleware',
+    'social.middleware.Redirect404Middleware',
 ]
 
 ROOT_URLCONF = 'spoonapp_social.urls'
@@ -66,6 +67,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [BASE_DIR / 'static']
+STATIC_ROOT = BASE_DIR / 'staticfiles'  # obligatorio si vas a usar collectstatic
 
 # Location where uploaded media files are stored
 MEDIA_URL = '/media/'

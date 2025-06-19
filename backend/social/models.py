@@ -192,6 +192,7 @@ class Profile(models.Model):
     website = models.URLField(blank=True, null=True)
     location = models.CharField(max_length=100, blank=True, null=True)
     gender = models.CharField(max_length=20, blank=True, null=True)
+    bubble_color = models.CharField(max_length=7, default="#ff0000")
 
     def __str__(self):
         return self.user.username

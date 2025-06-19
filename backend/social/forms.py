@@ -67,10 +67,23 @@ class UserForm(forms.ModelForm):
 
 class ProfileForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)
+    COLOR_CHOICES = [
+        ("#ff0000", "Red"),
+        ("#ffa500", "Orange"),
+        ("#ffff00", "Yellow"),
+        ("#008000", "Green"),
+        ("#00ffff", "Cyan"),
+        ("#0000ff", "Blue"),
+        ("#800080", "Purple"),
+        ("#ff00ff", "Magenta"),
+        ("#ffc0cb", "Pink"),
+        ("#a52a2a", "Brown"),
+    ]
+    bubble_color = forms.ChoiceField(choices=COLOR_CHOICES, required=False)
 
     class Meta:
         model = Profile
-        fields = ['bio', 'website', 'location', 'gender']
+        fields = ['bio', 'website', 'location', 'gender', 'bubble_color']
         widgets = {
             'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Cuéntanos algo sobre ti...'}),
             'website': forms.URLInput(attrs={'placeholder': 'https://'}),
@@ -81,9 +94,12 @@ class ProfileForm(forms.ModelForm):
     def save(self, commit=True):
         instance = super().save(commit=False)
         pic = self.cleaned_data.get('profile_picture')
+        color = self.cleaned_data.get('bubble_color')
         if pic and hasattr(pic, "read"):
             instance.profile_picture = pic.read()
             instance.profile_picture_mime = pic.content_type
+        if color:
+            instance.bubble_color = color
         if commit:
             instance.save()
         return instance

@@ -620,6 +620,14 @@ body:has(.spoon-chat-container) .rightbar {
     border-radius: 8px;
     margin-bottom: 0.5rem;
 }
+.comment-list .reply-item {
+    margin-left: 1rem;
+    background-color: #fcfcfc;
+}
+.replies-list {
+    padding-left: 1rem;
+    border-left: 2px solid #eee;
+}
 
 .mention {
     color: #007bff;

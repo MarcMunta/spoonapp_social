@@ -1,6 +1,6 @@
 {% extends 'social/layouts/base.html' %}
 {% load static %}
-{% block title %}Feed{% endblock %}
+{% block title %}SpoonApp Social{% endblock %}
 {% block content %}
 {% if user.is_authenticated and show_form %}
 <form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="input-bar mb-3">

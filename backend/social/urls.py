@@ -19,6 +19,7 @@ urlpatterns = [
     path('friend-requests/accept/<int:req_id>/', views.accept_friend_request, name='accept_friend_request'),
     path('friend-requests/reject/<int:req_id>/', views.reject_friend_request, name='reject_friend_request'),
     path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
+    path('update-bubble-color/', views.update_bubble_color, name='update_bubble_color'),
     path("api/search-users/", views.search_users, name="search_users"),
     path('follow/<str:username>/', views.follow_user, name='follow'),
     path('unfollow/<str:username>/', views.unfollow_user, name='unfollow'),

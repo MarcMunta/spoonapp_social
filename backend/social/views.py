@@ -380,6 +380,20 @@ def send_friend_request(request):
     return JsonResponse({"error": "Invalid method"}, status=405)
 
 
+@login_required(login_url='/custom-login/')
+def update_bubble_color(request):
+    if request.method == "POST":
+        color = request.POST.get("color")
+        valid_colors = {c for c, _ in ProfileForm.COLOR_CHOICES}
+        if color in valid_colors:
+            profile = request.user.profile
+            profile.bubble_color = color
+            profile.save(update_fields=["bubble_color"])
+            return JsonResponse({"success": True, "color": color})
+        return JsonResponse({"error": "Invalid color"}, status=400)
+    return JsonResponse({"error": "Invalid method"}, status=405)
+
+
 def load_comments(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     offset = int(request.GET.get("offset", 0))

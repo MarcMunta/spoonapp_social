@@ -3,6 +3,7 @@
   <div class="d-flex justify-content-between align-items-start">
     <div class="d-flex">
       <a href="{% url 'profile' comment.user.username %}" class="comment-user text-decoration-none me-2">
+        <span class="user-color-bubble me-1" style="background-color: {{ comment.user.profile.bubble_color }};"></span>
         {% if comment.user.profile.profile_picture %}
         <img src="{{ comment.user.profile.profile_picture_data_url }}" alt="{{ comment.user.username }}" class="comment-avatar">
         {% else %}

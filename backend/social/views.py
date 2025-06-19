@@ -214,6 +214,7 @@ def comment_post(request, post_id):
                         "user": request.user,
                         "comment_form": CommentForm(),
                     },
+                    request=request,
                 )
                 return JsonResponse(
                     {
@@ -414,6 +415,7 @@ def load_comments(request, post_id):
     html = render_to_string(
         "social/partials/comments_partial.html",
         {"comments": comments_qs, "user": request.user},
+        request=request,
     )
     total = post.postcomment_set.filter(parent__isnull=True).count()
     has_more = offset + limit < total
@@ -432,6 +434,7 @@ def load_replies(request, comment_id):
     html = render_to_string(
         "social/partials/comments_partial.html",
         {"comments": replies_qs, "user": request.user, "comment_form": CommentForm()},
+        request=request,
     )
     total = comment.replies.count()
     has_more = offset + limit < total

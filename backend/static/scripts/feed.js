@@ -355,16 +355,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     confirmDeleteBtn.addEventListener('click', () => {
       if (!pendingDeleteId) return;
-      fetch(`/story/${pendingDeleteId}/delete/`, {
+      const deleteId = pendingDeleteId;
+      fetch(`/story/${deleteId}/delete/`, {
         method: 'POST',
         headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
       }).then(res => res.json()).then(data => {
         deleteConfirm.style.display = 'none';
+        const storyEl = storyEls[currentStoryElIndex];
         pendingDeleteId = null;
         resumeProgress();
-        if (data.success) {
-          window.location.reload();
+        if (data.success && storyEl) {
+          const item = storyEl.closest('.story-item');
+          if (item) item.remove();
+          storyEls.splice(currentStoryElIndex, 1);
         }
+        closeStories();
       });
     });
 
@@ -397,14 +402,17 @@ document.addEventListener('DOMContentLoaded', () => {
   if (postDeleteConfirm && confirmDeletePostBtn && cancelDeletePostBtn) {
     confirmDeletePostBtn.addEventListener('click', () => {
       if (!pendingPostDeleteId) return;
-      fetch(`/post/${pendingPostDeleteId}/delete/`, {
+      const deleteId = pendingPostDeleteId;
+      fetch(`/post/${deleteId}/delete/`, {
         method: 'POST',
         headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
       }).then(res => res.json()).then(data => {
         postDeleteConfirm.style.display = 'none';
+        const btn = document.querySelector(`.delete-post-btn[data-post-id='${deleteId}']`);
+        const postEl = btn ? btn.closest('.post') : null;
         pendingPostDeleteId = null;
-        if (data.success) {
-          window.location.reload();
+        if (data.success && postEl) {
+          postEl.remove();
         }
       });
     });
@@ -438,14 +446,22 @@ document.addEventListener('DOMContentLoaded', () => {
   if (commentDeleteConfirm && confirmDeleteCommentBtn && cancelDeleteCommentBtn) {
     confirmDeleteCommentBtn.addEventListener('click', () => {
       if (!pendingCommentDeleteId) return;
-      fetch(`/comment/${pendingCommentDeleteId}/delete/`, {
+      const deleteId = pendingCommentDeleteId;
+      fetch(`/comment/${deleteId}/delete/`, {
         method: 'POST',
         headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
       }).then(res => res.json()).then(data => {
         commentDeleteConfirm.style.display = 'none';
+        const li = document.querySelector(`li[data-comment-id='${deleteId}']`);
+        const list = li ? li.closest('.comment-list') : null;
+        const postId = list ? list.dataset.postId : null;
         pendingCommentDeleteId = null;
-        if (data.success) {
-          window.location.reload();
+        if (data.success && li) {
+          li.remove();
+          if (postId) {
+            const countSpan = document.querySelector(`.comment-count-wrapper[data-post-id='${postId}'] .comment-count`);
+            if (countSpan) countSpan.textContent = Math.max(0, parseInt(countSpan.textContent) - 1);
+          }
         }
       });
     });
@@ -587,6 +603,57 @@ document.addEventListener('DOMContentLoaded', () => {
       lessBtn.textContent = 'Ver menos';
       btn.replaceWith(lessBtn);
     }
+  });
+
+  // Submit new comments and replies via AJAX
+  document.addEventListener('submit', e => {
+    const commentForm = e.target.closest('.comment-form');
+    const replyForm = e.target.closest('.reply-form');
+    if (!commentForm && !replyForm) return;
+    e.preventDefault();
+    const form = commentForm || replyForm;
+    const formData = new FormData(form);
+    fetch(form.action, {
+      method: 'POST',
+      body: formData,
+      headers: {
+        'X-Requested-With': 'XMLHttpRequest',
+        'X-CSRFToken': getCSRFToken()
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.success) return;
+        const countEl = document.querySelector(`.comment-count-wrapper[data-post-id='${data.post_id}'] .comment-count`);
+        if (countEl) countEl.textContent = parseInt(countEl.textContent) + 1;
+        if (commentForm) {
+          let list = document.getElementById(`comments-${data.post_id}`);
+          if (!list) {
+            list = document.createElement('ul');
+            list.id = `comments-${data.post_id}`;
+            list.dataset.postId = data.post_id;
+            list.dataset.expanded = 'true';
+            list.className = 'list-group list-group-flush mt-2 comment-list';
+            commentForm.insertAdjacentElement('afterend', list);
+          }
+          list.insertAdjacentHTML('beforeend', data.html);
+          const input = commentForm.querySelector('.comment-input');
+          if (input) input.value = '';
+        } else if (replyForm) {
+          const li = replyForm.closest('li[data-comment-id]');
+          if (!li) return;
+          let list = li.querySelector('ul.list-group');
+          if (!list) {
+            list = document.createElement('ul');
+            list.className = 'list-group mt-1 ms-3';
+            li.appendChild(list);
+          }
+          list.insertAdjacentHTML('beforeend', data.html);
+          const input = replyForm.querySelector('.comment-input');
+          if (input) input.value = '';
+          replyForm.classList.add('d-none');
+        }
+      });
   });
 
   window.addEventListener('scroll', () => {

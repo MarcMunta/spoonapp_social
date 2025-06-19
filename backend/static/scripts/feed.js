@@ -531,7 +531,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = e.target.closest('.reply-btn');
     if (btn) {
       e.preventDefault();
-      const form = btn.nextElementSibling;
+      const container = btn.parentElement;
+      const form = container ? container.nextElementSibling : null;
       if (form) {
         form.classList.toggle('d-none');
         const input = form.querySelector('.comment-input');
@@ -602,6 +603,36 @@ document.addEventListener('DOMContentLoaded', () => {
       lessBtn.dataset.postId = postId;
       lessBtn.textContent = 'Ver menos';
       btn.replaceWith(lessBtn);
+    }
+  });
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.load-replies-btn');
+    if (btn) {
+      e.preventDefault();
+      const commentId = btn.dataset.commentId;
+      const list = document.getElementById('replies-' + commentId);
+      if (list) list.classList.remove('d-none');
+      const lessBtn = document.createElement('button');
+      lessBtn.className = 'hide-replies-btn';
+      lessBtn.dataset.commentId = commentId;
+      lessBtn.textContent = 'Ver menos';
+      btn.replaceWith(lessBtn);
+    }
+  });
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.hide-replies-btn');
+    if (btn) {
+      e.preventDefault();
+      const commentId = btn.dataset.commentId;
+      const list = document.getElementById('replies-' + commentId);
+      if (list) list.classList.add('d-none');
+      const moreBtn = document.createElement('button');
+      moreBtn.className = 'load-replies-btn';
+      moreBtn.dataset.commentId = commentId;
+      moreBtn.textContent = 'Cargar respuestas';
+      btn.replaceWith(moreBtn);
     }
   });
 

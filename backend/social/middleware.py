@@ -1,8 +1,8 @@
 from django.utils import timezone
 from .models import Profile
 from .default_avatar import DEFAULT_AVATAR_BYTES
+from django.http import HttpResponseNotFound, HttpResponseForbidden, HttpResponseServerError
 from django.shortcuts import redirect
-from django.http import HttpResponseNotFound
 
 class UpdateLastSeenMiddleware:
     def __init__(self, get_response):
@@ -23,14 +23,22 @@ class UpdateLastSeenMiddleware:
         response = self.get_response(request)
         return response
 
-class Redirect404Middleware:
+class RedirectErrorMiddleware:
     def __init__(self, get_response):
         self.get_response = get_response
 
     def __call__(self, request):
-        response = self.get_response(request)
+        try:
+            response = self.get_response(request)
 
-        if isinstance(response, HttpResponseNotFound):
-            return redirect('custom_404')
+            if isinstance(response, HttpResponseNotFound):
+                return redirect('/404/')
+            elif isinstance(response, HttpResponseForbidden):
+                return redirect('/403/')
+            elif isinstance(response, HttpResponseServerError):
+                return redirect('/500/')
 
-        return response
+            return response
+
+        except Exception:
+            return redirect('/500/')  # Fallback si hay una excepción inesperada

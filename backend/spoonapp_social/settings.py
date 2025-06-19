@@ -25,7 +25,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'social.middleware.UpdateLastSeenMiddleware',
-    'social.middleware.Redirect404Middleware',
+    'social.middleware.RedirectErrorMiddleware',
 ]
 
 ROOT_URLCONF = 'spoonapp_social.urls'
@@ -74,3 +74,7 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+HANDLER404 = 'social.views.custom_404'
+HANDLER403 = 'social.views.custom_403'
+HANDLER500 = 'social.views.custom_500'

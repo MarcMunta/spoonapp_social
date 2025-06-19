@@ -420,6 +420,47 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Comment deletion modal
+  const commentDeleteConfirm = document.getElementById('commentDeleteConfirm');
+  const confirmDeleteCommentBtn = document.getElementById('confirmDeleteComment');
+  const cancelDeleteCommentBtn = document.getElementById('cancelDeleteComment');
+  let pendingCommentDeleteId = null;
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.delete-comment-btn');
+    if (btn) {
+      e.preventDefault();
+      pendingCommentDeleteId = btn.dataset.commentId;
+      if (commentDeleteConfirm) commentDeleteConfirm.style.display = 'flex';
+    }
+  });
+
+  if (commentDeleteConfirm && confirmDeleteCommentBtn && cancelDeleteCommentBtn) {
+    confirmDeleteCommentBtn.addEventListener('click', () => {
+      if (!pendingCommentDeleteId) return;
+      fetch(`/comment/${pendingCommentDeleteId}/delete/`, {
+        method: 'POST',
+        headers: { 'X-Requested-With': 'XMLHttpRequest', 'X-CSRFToken': getCSRFToken() }
+      }).then(res => res.json()).then(data => {
+        commentDeleteConfirm.style.display = 'none';
+        pendingCommentDeleteId = null;
+        if (data.success) {
+          window.location.reload();
+        }
+      });
+    });
+
+    const hideCommentDeleteModal = () => {
+      commentDeleteConfirm.style.display = 'none';
+      pendingCommentDeleteId = null;
+    };
+
+    cancelDeleteCommentBtn.addEventListener('click', hideCommentDeleteModal);
+    commentDeleteConfirm.addEventListener('click', e => {
+      if (e.target === commentDeleteConfirm) hideCommentDeleteModal();
+    });
+  }
+
   if (optionsBtn && optionsMenu) {
     optionsBtn.addEventListener('click', e => {
       e.stopPropagation();

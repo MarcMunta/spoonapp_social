@@ -531,7 +531,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = e.target.closest('.reply-btn');
     if (btn) {
       e.preventDefault();
-      const form = btn.nextElementSibling;
+      const container = btn.parentElement;
+      const form = container ? container.nextElementSibling : null;
       if (form) {
         form.classList.toggle('d-none');
         const input = form.querySelector('.comment-input');

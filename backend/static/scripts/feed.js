@@ -512,6 +512,19 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('click', e => {
+    const btn = e.target.closest('.reply-btn');
+    if (btn) {
+      e.preventDefault();
+      const form = btn.nextElementSibling;
+      if (form) {
+        form.classList.toggle('d-none');
+        const input = form.querySelector('.comment-input');
+        if (input && !form.classList.contains('d-none')) input.focus();
+      }
+    }
+  });
+
+  document.addEventListener('click', e => {
     const btn = e.target.closest('.load-more-comments');
     if (btn) {
       e.preventDefault();

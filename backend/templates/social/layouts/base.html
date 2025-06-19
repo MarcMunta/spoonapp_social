@@ -1071,26 +1071,23 @@
     {% if not hide_profile_icon %}
     <div class="profile-icon">
       {% if user.is_authenticated %}
-      {% if user.profile.profile_picture %}
       <a href="{% url 'profile' user.username %}">
-        <img src="{{ user.profile.profile_picture_data_url }}" alt="Foto de perfil"
-          style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+        {% if user.profile.profile_picture %}
+        <img src="{{ user.profile.profile_picture_data_url }}" alt="Foto de perfil">
+        {% else %}
+        <img src="{{ default_avatar_data_url }}" alt="Por defecto">
+        {% endif %}
+        <span>Profile</span>
       </a>
-      {% else %}
-      <a href="{% url 'profile' user.username %}">
-        <img src="{{ default_avatar_data_url }}" alt="Por defecto"
-          style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
-      </a>
-      {% endif %}
       {% else %}
       <a href="{% url 'home' %}">
-        <img src="{{ default_avatar_data_url }}" alt="Invitado"
-          style="width: 35px; height: 35px; border-radius: 50%; object-fit: cover;">
+        <img src="{{ default_avatar_data_url }}" alt="Invitado">
+        <span>Profile</span>
       </a>
       {% endif %}
     </div>
-    {% endif %}
 
+    {% endif %}
   </div>
 
   <div class="sidebar">

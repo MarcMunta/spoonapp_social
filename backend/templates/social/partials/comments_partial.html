@@ -1,7 +1,17 @@
 {% for comment in comments %}
 <li class="list-group-item" data-comment-id="{{ comment.id }}">
-  <div class="d-flex justify-content-between align-items-center">
-    <div><strong>{{ comment.user.username }}:</strong> {{ comment.content }}</div>
+  <div class="d-flex justify-content-between align-items-start">
+    <div class="d-flex">
+      <a href="{% url 'profile' comment.user.username %}" class="comment-user text-decoration-none me-2">
+        {% if comment.user.profile.profile_picture %}
+        <img src="{{ comment.user.profile.profile_picture_data_url }}" alt="{{ comment.user.username }}" class="comment-avatar">
+        {% else %}
+        <img src="{{ default_avatar_data_url }}" alt="Default" class="comment-avatar">
+        {% endif %}
+        <strong>{{ comment.user.username }}</strong>
+      </a>
+      <span class="comment-content">{{ comment.content }}</span>
+    </div>
     <div class="d-flex align-items-center">
       {% if user.is_authenticated %}
       <a href="{% url 'like_comment' comment.id %}" data-url="{% url 'like_comment' comment.id %}"

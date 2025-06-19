@@ -560,8 +560,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = e.target.closest('.reply-btn');
     if (btn) {
       e.preventDefault();
-      const container = btn.parentElement;
-      const form = container ? container.nextElementSibling : null;
+      const li = btn.closest('li[data-comment-id]');
+      const form = li ? li.querySelector('.reply-form') : null;
       if (form) {
         form.classList.toggle('d-none');
         const input = form.querySelector('.comment-input');

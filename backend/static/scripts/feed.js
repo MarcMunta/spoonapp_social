@@ -688,19 +688,50 @@ document.addEventListener('DOMContentLoaded', () => {
           list.insertAdjacentHTML('beforeend', data.html);
           const input = commentForm.querySelector('.comment-input');
           if (input) input.value = '';
+
+          const total = parseInt(countEl ? countEl.textContent : list.children.length);
+          if (total > 5) {
+            const postEl = commentForm.closest('.post');
+            if (postEl) {
+              const hasLess = postEl.querySelector('.show-less-comments');
+              const hasMore = postEl.querySelector('.load-more-comments, .show-more-comments');
+              if (!hasLess && !hasMore) {
+                const lessBtn = document.createElement('button');
+                lessBtn.className = 'show-less-comments';
+                lessBtn.dataset.postId = data.post_id;
+                lessBtn.textContent = 'Ver menos';
+                list.insertAdjacentElement('afterend', lessBtn);
+              }
+            }
+          }
         } else if (replyForm) {
           const li = replyForm.closest('li[data-comment-id]');
           if (!li) return;
-          let list = li.querySelector('ul.list-group');
+          let list = li.querySelector('ul.replies-list');
           if (!list) {
             list = document.createElement('ul');
-            list.className = 'list-group mt-1';
+            list.id = `replies-${li.dataset.commentId}`;
+            list.className = 'list-group mt-1 replies-list';
             li.appendChild(list);
           }
+          list.classList.remove('d-none');
           list.insertAdjacentHTML('beforeend', data.html);
           const input = replyForm.querySelector('.comment-input');
           if (input) input.value = '';
           replyForm.classList.add('d-none');
+
+          const container = replyForm.previousElementSibling;
+          if (container) {
+            const loadBtn = container.querySelector('.load-replies-btn');
+            const hideBtn = container.querySelector('.hide-replies-btn');
+            if (!hideBtn) {
+              const newBtn = document.createElement('button');
+              newBtn.className = 'hide-replies-btn';
+              newBtn.dataset.commentId = li.dataset.commentId;
+              newBtn.textContent = 'Ver menos';
+              if (loadBtn) loadBtn.replaceWith(newBtn); else container.appendChild(newBtn);
+            }
+          }
         }
       });
   });

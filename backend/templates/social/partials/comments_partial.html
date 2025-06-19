@@ -30,7 +30,7 @@
   {% endif %}
   {% if comment.replies.all %}
   <ul class="list-group mt-1 ms-3">
-    {% include 'social/partials/comments_partial.html' with comments=comment.replies.all only %}
+    {% include 'social/partials/comments_partial.html' with comments=comment.replies.all %}
   </ul>
   {% endif %}
 </li>

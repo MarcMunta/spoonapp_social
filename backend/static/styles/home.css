@@ -268,7 +268,7 @@ body:has(.spoon-chat-container) .rightbar {
     border: 2px solid #f4d0e4;
     border-radius: 16px;
     margin-bottom: 1.5rem;
-    padding: 1rem;
+    padding: 1rem 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s;
     overflow: hidden;
@@ -276,7 +276,7 @@ body:has(.spoon-chat-container) .rightbar {
 
 .post:hover {
     background: transparent;
-    padding: 0.5rem 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
     transform: translateY(-3px);
 }
 
@@ -2284,6 +2284,13 @@ body.profile-page .nav-tabs .nav-link {
 }
 
 @keyframes fadeInUp {
-    from { opacity: 0; transform: translateY(10px); }
-    to { opacity: 1; transform: translateY(0); }
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

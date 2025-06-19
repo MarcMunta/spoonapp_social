@@ -31,6 +31,6 @@ class Redirect404Middleware:
         response = self.get_response(request)
 
         if isinstance(response, HttpResponseNotFound):
-            return redirect('custom_404')
+            return redirect('/404/')  # redirige al endpoint manual
 
         return response

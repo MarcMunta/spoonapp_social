@@ -14,7 +14,12 @@ from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 import json
 
-def custom_404(request):
+# Vista para cuando Django lanza un 404 real
+def custom_404(request, exception):
+    return render(request, '404.html', status=404)
+
+# Vista para probar desde /404/
+def test_404_view(request):
     return render(request, '404.html', status=404)
 
 def _build_feed_context(show_posts=True):

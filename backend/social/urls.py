@@ -33,5 +33,5 @@ urlpatterns = [
     path('mark-notification-read/<int:notification_id>/', views.mark_notification_read, name='mark_notification_read'),
     path('api/notifications-count/', views.get_notifications_count, name='notifications_count'),
     path('post/<int:post_id>/', views.post_detail, name='post_detail'),
-    path('404/', views.custom_404),
+    path('404/', views.test_404_view)
 ]

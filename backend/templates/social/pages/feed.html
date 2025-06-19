@@ -17,8 +17,7 @@
 {% for post in posts %}
 <div class="post mb-3">
   <div class="d-flex justify-content-between align-items-center mb-1 post-top">
-    <a href="{% url 'profile' post.user.username %}" class="post-user text-decoration-none"
-      style="background-color: {{ post.user.profile.bubble_color }};">
+    <a href="{% url 'profile' post.user.username %}" class="post-user text-decoration-none" style="background-color: {{ post.user.profile.bubble_color }};">
       {% if post.user.profile.profile_picture %}
       <img src="{{ post.user.profile.profile_picture_data_url }}" alt="{{ post.user.username }}" class="post-avatar">
       {% else %}
@@ -66,9 +65,8 @@
       {% else %}
       <span><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</span>
       {% endif %}
-      <span class="comment-count-wrapper" data-post-id="{{ post.id }}"><span class="comment-count">{{
-          post.postcomment_set.count }}</span>💬</span>
-      <span class="share-btn">📤</span>
+      <span class="comment-count-wrapper" data-post-id="{{ post.id }}"><span class="comment-count">{{ post.postcomment_set.count }}</span>💬</span>
+      <button type="button" class="share-btn btn btn-link p-0">📤</button>
       <span class="bookmark-btn">🔖</span>
     </div>
   </div>

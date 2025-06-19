@@ -224,6 +224,19 @@ def like_comment(request, comment_id):
         return JsonResponse({"likes": comment.postcommentlike_set.count()})
     return redirect('home')
 
+
+@login_required
+def delete_comment(request, comment_id):
+    comment = get_object_or_404(PostComment, id=comment_id)
+    if request.user != comment.user and request.user != comment.post.user:
+        return HttpResponseForbidden("No tienes permiso para eliminar este comentario.")
+    if request.method == 'POST':
+        comment.delete()
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'success': True, 'comment_id': comment_id})
+        return redirect('home')
+    return JsonResponse({'error': 'Invalid method'}, status=405)
+
 @login_required
 def follow_user(request, username):
     target_user = get_object_or_404(User, username=username)

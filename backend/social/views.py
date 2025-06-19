@@ -179,12 +179,29 @@ def comment_post(request, post_id):
             parent = None
             if parent_id:
                 parent = PostComment.objects.filter(id=parent_id, post=post).first()
-            PostComment.objects.create(
+            comment = PostComment.objects.create(
                 user=request.user,
                 post=post,
                 parent=parent,
                 content=form.cleaned_data['content']
             )
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                html = render_to_string(
+                    "social/partials/comments_partial.html",
+                    {
+                        "comments": [comment],
+                        "user": request.user,
+                        "comment_form": CommentForm(),
+                    },
+                )
+                return JsonResponse(
+                    {
+                        "success": True,
+                        "html": html,
+                        "post_id": post.id,
+                        "parent_id": parent.id if parent else None,
+                    }
+                )
     return redirect('home')
 
 @login_required(login_url='/custom-login/')

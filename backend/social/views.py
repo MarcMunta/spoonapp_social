@@ -270,9 +270,11 @@ def delete_comment(request, comment_id):
     if request.user != comment.user and request.user != comment.post.user:
         return HttpResponseForbidden("No tienes permiso para eliminar este comentario.")
     if request.method == 'POST':
+        post = comment.post
         comment.delete()
+        remaining_top = post.postcomment_set.filter(parent__isnull=True).count()
         if request.headers.get("x-requested-with") == "XMLHttpRequest":
-            return JsonResponse({'success': True, 'comment_id': comment_id})
+            return JsonResponse({'success': True, 'comment_id': comment_id, 'remaining_top': remaining_top})
         return redirect('home')
     return JsonResponse({'error': 'Invalid method'}, status=405)
 

@@ -461,6 +461,22 @@ document.addEventListener('DOMContentLoaded', () => {
           if (postId) {
             const countSpan = document.querySelector(`.comment-count-wrapper[data-post-id='${postId}'] .comment-count`);
             if (countSpan) countSpan.textContent = Math.max(0, parseInt(countSpan.textContent) - 1);
+            if (list && typeof data.remaining_top === 'number') {
+              const visible = list.querySelectorAll(':scope > li').length;
+              if (data.remaining_top <= visible) {
+                const postEl = list.closest('.post');
+                if (postEl) {
+                  const moreBtn = postEl.querySelector('.load-more-comments');
+                  if (moreBtn) moreBtn.remove();
+                  const showMoreBtn = postEl.querySelector('.show-more-comments');
+                  if (showMoreBtn) showMoreBtn.remove();
+                  if (data.remaining_top <= 5) {
+                    const lessBtn = postEl.querySelector('.show-less-comments');
+                    if (lessBtn) lessBtn.remove();
+                  }
+                }
+              }
+            }
           }
         }
       });
@@ -537,11 +553,6 @@ document.addEventListener('DOMContentLoaded', () => {
         form.classList.toggle('d-none');
         const input = form.querySelector('.comment-input');
         if (input && !form.classList.contains('d-none')) {
-          const li = btn.closest('li[data-comment-id]');
-          const username = li ? li.dataset.username : '';
-          if (username && !input.value.startsWith(`@${username}`)) {
-            input.value = `@${username} `;
-          }
           input.focus();
         }
       }

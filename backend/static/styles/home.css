@@ -2323,3 +2323,42 @@ body.profile-page .nav-tabs .nav-link {
         transform: translateY(0);
     }
 }
+
+.reply-btn {
+    background: linear-gradient(to right, #f9c1d4, #d58bf8);
+    color: #fff;
+    border: none;
+    border-radius: 20px;
+    padding: 0.3rem 0.8rem;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reply-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.reply-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reply-send-btn {
+    background: linear-gradient(to right, #7cb9e8, #4d9de0);
+    color: #fff;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #3d8cc7;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.reply-send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}

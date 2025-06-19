@@ -20,17 +20,17 @@
     </div>
   </div>
   {% if user.is_authenticated %}
-  <button class="btn btn-link btn-sm reply-btn p-0 ms-1">Responder</button>
+  <button class="reply-btn ms-1">Responder</button>
   <form method="post" action="{% url 'comment_post' comment.post.id %}" class="reply-form d-none mt-2">
     {% csrf_token %}
     <input type="hidden" name="parent" value="{{ comment.id }}">
     {{ comment_form.content }}
-    <button type="submit" class="btn btn-primary btn-sm">Enviar</button>
+    <button type="submit" class="reply-send-btn">Enviar</button>
   </form>
   {% endif %}
   {% if comment.replies.all %}
   <ul class="list-group mt-1 ms-3">
-    {% include 'social/partials/comments_partial.html' with comments=comment.replies.all only %}
+    {% include 'social/partials/comments_partial.html' with comments=comment.replies.all %}
   </ul>
   {% endif %}
 </li>

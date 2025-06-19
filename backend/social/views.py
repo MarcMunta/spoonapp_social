@@ -195,11 +195,16 @@ def comment_post(request, post_id):
             parent = None
             if parent_id:
                 parent = PostComment.objects.filter(id=parent_id, post=post).first()
+            content = form.cleaned_data['content']
+            if parent:
+                mention = f"@{parent.user.username} "
+                if not content.startswith(mention):
+                    content = mention + content
             comment = PostComment.objects.create(
                 user=request.user,
                 post=post,
                 parent=parent,
-                content=form.cleaned_data['content']
+                content=content
             )
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 html = render_to_string(

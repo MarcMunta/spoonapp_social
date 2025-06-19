@@ -11,6 +11,7 @@ urlpatterns = [
     path('post/<int:post_id>/share/', views.share_post, name='share_post'),
     path('post/<int:post_id>/comment/', views.comment_post, name='comment_post'),
     path('post/<int:post_id>/comments/', views.load_comments, name='load_comments'),
+    path('comment/<int:comment_id>/replies/', views.load_replies, name='load_replies'),
     path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
     path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),

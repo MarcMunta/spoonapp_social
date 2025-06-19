@@ -642,13 +642,28 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) {
       e.preventDefault();
       const commentId = btn.dataset.commentId;
-      const list = document.getElementById('replies-' + commentId);
-      if (list) list.classList.remove('d-none');
-      const lessBtn = document.createElement('button');
-      lessBtn.className = 'hide-replies-btn';
-      lessBtn.dataset.commentId = commentId;
-      lessBtn.textContent = 'Ver menos';
-      btn.replaceWith(lessBtn);
+      let list = document.getElementById('replies-' + commentId);
+      const offset = list ? list.children.length : 0;
+      fetch(`/comment/${commentId}/replies/?offset=${offset}&limit=3`, { headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+        .then(res => res.json())
+        .then(data => {
+          if (!list) {
+            const li = document.querySelector(`li[data-comment-id='${commentId}']`);
+            list = document.createElement('ul');
+            list.id = 'replies-' + commentId;
+            list.className = 'list-group mt-1 replies-list';
+            if (li) li.appendChild(list);
+          }
+          list.classList.remove('d-none');
+          list.insertAdjacentHTML('beforeend', data.html);
+          if (!data.has_more) {
+            const lessBtn = document.createElement('button');
+            lessBtn.className = 'hide-replies-btn';
+            lessBtn.dataset.commentId = commentId;
+            lessBtn.textContent = 'Ver menos';
+            btn.replaceWith(lessBtn);
+          }
+        });
     }
   });
 
@@ -658,7 +673,10 @@ document.addEventListener('DOMContentLoaded', () => {
       e.preventDefault();
       const commentId = btn.dataset.commentId;
       const list = document.getElementById('replies-' + commentId);
-      if (list) list.classList.add('d-none');
+      if (list) {
+        list.innerHTML = '';
+        list.classList.add('d-none');
+      }
       const moreBtn = document.createElement('button');
       moreBtn.className = 'load-replies-btn';
       moreBtn.dataset.commentId = commentId;

@@ -1,5 +1,5 @@
 {% for comment in comments %}
-<li class="list-group-item" data-comment-id="{{ comment.id }}">
+<li class="list-group-item" data-comment-id="{{ comment.id }}" data-username="{{ comment.user.username }}">
   <div class="d-flex justify-content-between align-items-start">
     <div class="d-flex">
       <a href="{% url 'profile' comment.user.username %}" class="comment-user text-decoration-none me-2" style="background-color: {{ comment.user.profile.bubble_color }};">
@@ -28,7 +28,7 @@
       {% endif %}
     </div>
   </div>
-  <div class="comment-content ms-5 mt-1">{{ comment.content }}</div>
+  <div class="comment-content mt-1">{{ comment.content }}</div>
   <div class="d-flex justify-content-between align-items-center mt-1">
     {% if user.is_authenticated %}
     <button class="reply-btn ms-1">Responder</button>
@@ -46,7 +46,7 @@
   </form>
   {% endif %}
   {% if comment.replies.all %}
-  <ul class="list-group mt-1 ms-3 d-none replies-list" id="replies-{{ comment.id }}">
+  <ul class="list-group mt-1 d-none replies-list" id="replies-{{ comment.id }}">
     {% include 'social/partials/comments_partial.html' with comments=comment.replies.all %}
   </ul>
   {% endif %}

@@ -536,7 +536,14 @@ document.addEventListener('DOMContentLoaded', () => {
       if (form) {
         form.classList.toggle('d-none');
         const input = form.querySelector('.comment-input');
-        if (input && !form.classList.contains('d-none')) input.focus();
+        if (input && !form.classList.contains('d-none')) {
+          const li = btn.closest('li[data-comment-id]');
+          const username = li ? li.dataset.username : '';
+          if (username && !input.value.startsWith(`@${username}`)) {
+            input.value = `@${username} `;
+          }
+          input.focus();
+        }
       }
     }
   });
@@ -676,7 +683,7 @@ document.addEventListener('DOMContentLoaded', () => {
           let list = li.querySelector('ul.list-group');
           if (!list) {
             list = document.createElement('ul');
-            list.className = 'list-group mt-1 ms-3';
+            list.className = 'list-group mt-1';
             li.appendChild(list);
           }
           list.insertAdjacentHTML('beforeend', data.html);

@@ -731,6 +731,26 @@ body:has(.spoon-chat-container) .rightbar {
     box-shadow: 0 6px 0 #d45f5f;
 }
 
+.load-replies-btn,
+.hide-replies-btn {
+    background-color: #87cefa;
+    color: #ffffff;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    cursor: pointer;
+    display: block;
+    margin: 0.3rem auto;
+    box-shadow: 0 4px 0 #7ab8e6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.load-replies-btn:hover,
+.hide-replies-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #5fa8d3;
+}
+
 .status-dot {
     height: 10px;
     width: 10px;

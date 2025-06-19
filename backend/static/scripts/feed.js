@@ -605,6 +605,36 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.load-replies-btn');
+    if (btn) {
+      e.preventDefault();
+      const commentId = btn.dataset.commentId;
+      const list = document.getElementById('replies-' + commentId);
+      if (list) list.classList.remove('d-none');
+      const lessBtn = document.createElement('button');
+      lessBtn.className = 'hide-replies-btn';
+      lessBtn.dataset.commentId = commentId;
+      lessBtn.textContent = 'Ver menos';
+      btn.replaceWith(lessBtn);
+    }
+  });
+
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.hide-replies-btn');
+    if (btn) {
+      e.preventDefault();
+      const commentId = btn.dataset.commentId;
+      const list = document.getElementById('replies-' + commentId);
+      if (list) list.classList.add('d-none');
+      const moreBtn = document.createElement('button');
+      moreBtn.className = 'load-replies-btn';
+      moreBtn.dataset.commentId = commentId;
+      moreBtn.textContent = 'Cargar respuestas';
+      btn.replaceWith(moreBtn);
+    }
+  });
+
   // Submit new comments and replies via AJAX
   document.addEventListener('submit', e => {
     const commentForm = e.target.closest('.comment-form');

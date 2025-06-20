@@ -6,7 +6,8 @@
   dropdown?.querySelectorAll('.color-option').forEach(opt => {
     opt.addEventListener('click', () => {
       const color = opt.dataset.color;
-      fetch('{% url "update_bubble_color" %}', {
+      const url = bubble.dataset.updateUrl;
+      fetch(url, {
         method: 'POST',
         headers: { 'X-CSRFToken': getCSRFToken() },
         body: new URLSearchParams({ color })

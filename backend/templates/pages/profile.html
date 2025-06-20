@@ -43,7 +43,8 @@
         <div class="d-flex align-items-center gap-2">
           <div class="color-picker-wrapper position-relative">
             <span id="profileColorBubble" class="user-color-bubble"
-              style="background-color: {{ user_profile.bubble_color }};"></span>
+              style="background-color: {{ user_profile.bubble_color }};"
+              data-update-url="{% url 'update_bubble_color' %}"></span>
             <div id="colorDropdown" class="color-dropdown d-none">
               {% for code, name in form.COLOR_CHOICES %}
               <span class="color-option" data-color="{{ code }}" style="background-color: {{ code }};"></span>
@@ -73,8 +74,9 @@
         {% if user_profile.website %}
         <div class="profile-info-box">
           <span class="info-label">Sitio Web:</span>
-          <span class="info-content"><a href="{{ user_profile.website }}" target="_blank">{{ user_profile.website
-              }}</a></span>
+          <span class="info-content">
+            <a href="{{ user_profile.website }}" target="_blank">{{ user_profile.website }}</a>
+          </span>
         </div>
         {% endif %}
         {% if user_profile.location %}

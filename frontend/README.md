@@ -13,4 +13,4 @@ npm run build
 
 Use `npm run dev` during development to rebuild on changes.
 
-The compiled JavaScript is output to `../backend/static/scripts/main.js` and loaded by the Django template at `/static/scripts/main.js`.
+The compiled JavaScript is output to `../backend/static/js/main.js` and loaded by the Django template at `/static/js/main.js`.

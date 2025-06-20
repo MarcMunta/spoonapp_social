@@ -28,7 +28,7 @@ En resumen, esta interfaz es una fusión clara de las funcionalidades de redes s
 
 ## Frontend
 See `frontend/README.md` for setup and build instructions. After building, the
-bundle is placed in `backend/static/scripts/main.js` and automatically loaded on the home page.
+bundle is placed in `backend/static/js/main.js` and automatically loaded on the home page.
 
 ## Running
 Ensure Python and Node.js are installed, then install Python dependencies:

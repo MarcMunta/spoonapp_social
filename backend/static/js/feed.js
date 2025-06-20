@@ -541,6 +541,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  function closeReply(container) {
+    if (!container) return;
+    container.classList.add('closing');
+    container.classList.remove('show-form');
+    setTimeout(() => container.classList.remove('closing'), 300);
+  }
+
   document.addEventListener('click', e => {
     const btn = e.target.closest('.like-comment');
     if (btn) {
@@ -573,10 +580,26 @@ document.addEventListener('DOMContentLoaded', () => {
       const form = e.target.closest('.reply-form');
       if (form) {
         const container = form.closest('.reply-inline-container');
-        if (container) container.classList.remove('show-form');
+        if (container) closeReply(container);
       }
     }
   });
+
+  document.addEventListener(
+    'blur',
+    e => {
+      const input = e.target.closest('.reply-form .comment-input');
+      if (input) {
+        const container = input.closest('.reply-inline-container');
+        setTimeout(() => {
+          if (!container.contains(document.activeElement) && input.value.trim() === '') {
+            closeReply(container);
+          }
+        }, 100);
+      }
+    },
+    true
+  );
 
   document.addEventListener('click', e => {
     const btn = e.target.closest('.load-more-comments');
@@ -757,7 +780,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (input) input.value = '';
           const container = replyForm.closest('.reply-inline-container');
           if (container) {
-            container.classList.remove('show-form');
+            closeReply(container);
             const actions = container.parentElement;
             const loadBtn = actions ? actions.querySelector('.load-replies-btn') : null;
             const hideBtn = actions ? actions.querySelector('.hide-replies-btn') : null;

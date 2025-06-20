@@ -1,7 +1,12 @@
 {% extends "layouts/base.html" %}
 {% load static %}
 
-<link rel="stylesheet" href="{% static 'css/friend_requests.css' %}">
+{% block title %}SpoonApp Social{% endblock %}
+
+{% block extra_css %}
+<link href="{% static 'css/friend_requests.css' %}" rel="stylesheet" />
+{% endblock %}
+
 {% block content %}
 <div class="container-fluid px-4">
     <div class="row justify-content-center">
@@ -14,7 +19,8 @@
                     </div>
                     <div>
                         <h2 class="spoon-section-title mb-1">Friend Requests</h2>
-                        <p class="spoon-section-subtitle mb-0">Manage your pending friend connections</p>
+                        <p class="spoon-section-subtitle mb-0">Manage your pending friend
+                            connections</p>
                     </div>
                 </div>
             </div>
@@ -27,33 +33,27 @@
                         <div class="text-center mb-3">
                             <div class="spoon-friend-avatar-container">
                                 {% if req.from_user.profile.profile_picture %}
-                                <img src="{{ req.from_user.profile.profile_picture_data_url }}" alt="Profile"
-                                    class="spoon-friend-avatar">
+                                <img alt="Profile" class="spoon-friend-avatar"
+                                    src="{{ req.from_user.profile.profile_picture_data_url }}">
                                 {% else %}
-                                <img src="{{ default_avatar_data_url }}" alt="Default" class="spoon-friend-avatar">
+                                <img alt="Default" class="spoon-friend-avatar" src="{{ default_avatar_data_url }}">
                                 {% endif %}
-
                                 {% if req.from_user.profile.online %}
                                 <div class="spoon-friend-online-badge"></div>
                                 {% endif %}
                             </div>
                         </div>
-
                         <div class="text-center">
                             <h5 class="spoon-friend-name mb-2">{{ req.from_user.username }}</h5>
-                            <p class="spoon-friend-meta mb-3">
-                                <i class="fas fa-clock me-1"></i>
-                                {{ req.timestamp|timesince }} ago
-                            </p>
-
-                            <div class="spoon-friend-actions">
-                                <a href="{% url 'accept_friend_request' req.id %}" class="spoon-btn-accept">
-                                    <i class="fas fa-check me-2"></i>Accept
+                            <div class="spoon-friend-actions d-flex justify-content-center gap-2">
+                                <a class="spoon-btn-accept" href="{% url 'accept_friend_request' req.id %}">
+                                    <i class="fas fa-check me-1"></i>Accept
                                 </a>
-                                <a href="{% url 'reject_friend_request' req.id %}" class="spoon-btn-decline">
-                                    <i class="fas fa-times me-2"></i>Decline
+                                <a class="spoon-btn-secondary" href="{% url 'profile' req.from_user.username %}">
+                                    <i class="fas fa-user me-1"></i>Profile
                                 </a>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -64,9 +64,10 @@
                 <div class="text-center py-5">
                     <div class="spoon-empty-icon mb-4">👥🍴</div>
                     <h4 class="spoon-empty-title">No friend requests</h4>
-                    <p class="spoon-empty-text">When someone wants to connect with you on SpoonApp, you'll see their
+                    <p class="spoon-empty-text">When someone wants to connect with you on SpoonApp,
+                        you'll see their
                         request here!</p>
-                    <a href="{% url 'home' %}" class="spoon-btn-primary mt-3">
+                    <a class="spoon-btn-primary mt-3" href="{% url 'home' %}">
                         <i class="fas fa-home me-2"></i>Back to Feed
                     </a>
                 </div>
@@ -75,5 +76,4 @@
         </div>
     </div>
 </div>
-
 {% endblock %}

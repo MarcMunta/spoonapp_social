@@ -70,9 +70,12 @@ def _build_feed_context(show_posts=True):
     }
 
 def get_friends(user):
-    sent = FriendRequest.objects.filter(from_user=user, accepted=True).values_list('to_user', flat=True)
-    received = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
-    mutual_ids = set(sent).intersection(set(received))
+    if not user.is_authenticated:
+        return User.objects.none()
+
+    sent_ids = FriendRequest.objects.filter(from_user=user, accepted=True).values_list('to_user', flat=True)
+    received_ids = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
+    mutual_ids = set(sent_ids).intersection(received_ids)
     return User.objects.filter(id__in=mutual_ids)
 
 def home(request):
@@ -237,13 +240,13 @@ def friend_requests_view(request):
 
 @login_required(login_url='/custom-login/')
 def accept_friend_request(request, req_id):
-    req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
-    req.accepted = True
-    req.save()
+    friend_request = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
+    friend_request.accepted = True
+    friend_request.save()
     
     # Create notification for the friend request sender
     Notification.objects.create(
-        user=req.from_user,
+        user=friend_request.from_user,
         notification_type='friend_accepted',
         title=f'{request.user.username} accepted your friend request',
         message=f'You are now friends with {request.user.username}',
@@ -286,20 +289,15 @@ def delete_comment(request, comment_id):
 @login_required(login_url='/custom-login/')
 def follow_user(request, username):
     target_user = get_object_or_404(User, username=username)
-    
+
     if request.user == target_user:
         return redirect('profile', username=username)
 
+    # Evita duplicados
     existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=target_user).first()
-
     if not existing_request:
-        reverse_request = FriendRequest.objects.filter(from_user=target_user, to_user=request.user).first()
-        if reverse_request:
-            reverse_request.accepted = True
-            reverse_request.save()
-            FriendRequest.objects.create(from_user=request.user, to_user=target_user, accepted=True)
-        else:
-            FriendRequest.objects.create(from_user=request.user, to_user=target_user, accepted=False)
+        # No crees solicitud aceptada automática: simplemente se envía
+        FriendRequest.objects.create(from_user=request.user, to_user=target_user, accepted=False)
 
     return redirect('profile', username=username)
 
@@ -341,24 +339,17 @@ def profile(request, username):
     is_friend = False
 
     if request.user.is_authenticated and request.user != profile_user:
-        is_following_accepted = FriendRequest.objects.filter(
-            from_user=request.user, to_user=profile_user, accepted=True
-        ).exists()
-        is_followed_by_accepted = FriendRequest.objects.filter(
-            from_user=profile_user, to_user=request.user, accepted=True
-        ).exists()
+        req_sent = FriendRequest.objects.filter(from_user=request.user, to_user=profile_user).first()
+        req_received = FriendRequest.objects.filter(from_user=profile_user, to_user=request.user).first()
 
-        # Solo si ambos se siguen
-        is_friend = is_following_accepted and is_followed_by_accepted
+        is_following = req_sent is not None
+        is_followed_by = req_received is not None
 
-        # Si no son amigos aún, comprobamos si ya envió solicitud
-        if not is_friend:
-            is_following = FriendRequest.objects.filter(
-                from_user=request.user, to_user=profile_user, accepted=False
-            ).exists()
+        is_friend = (
+            req_sent is not None and req_received is not None and
+            req_sent.accepted and req_received.accepted
+        )
 
-        # Si el otro usuario me sigue, aunque no seamos amigos aún
-        is_followed_by = is_followed_by_accepted
 
     if request.method == 'POST' and request.user == profile_user:
         form = ProfileForm(request.POST, request.FILES, instance=user_profile)
@@ -378,7 +369,7 @@ def profile(request, username):
         'is_friend': is_friend,
         'total_matches': PostLike.objects.filter(post__user=profile_user).count(),
         'total_friends': get_friends(profile_user).count(),
-        'friends': get_friends(request.user),
+        'friends': get_friends(request.user) if request.user.is_authenticated else [],
         'categories': categories,
         'posts_by_category': posts_by_category,
     }

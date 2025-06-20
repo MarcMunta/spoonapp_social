@@ -398,6 +398,7 @@ body:has(.spoon-chat-container) .rightbar {
     display: flex;
     align-items: center;
 }
+
 .post-info-group .post-info-bubble:first-child {
     background: linear-gradient(to right, #b76fc5, #e98fc0);
     color: #fff;
@@ -464,6 +465,12 @@ body:has(.spoon-chat-container) .rightbar {
     margin-left: 8px;
     position: relative;
     cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+}
+
+.friend-icon-link:hover {
+    text-decoration: none;
 }
 
 .friends h3 .friend-icon .notification-badge {
@@ -724,21 +731,31 @@ body:has(.spoon-chat-container) .rightbar {
 .user-suggestion {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    padding: 8px 10px;
-    border-bottom: 1px solid #eee;
-    transition: background 0.2s;
+    gap: 12px;
+    padding: 10px;
+    border-radius: 12px;
+    background-color: #fff0f8;
+    text-decoration: none;
+    color: #7c3aed;
+    transition: background 0.2s ease, transform 0.1s ease;
 }
 
 .user-suggestion:hover {
-    background: #f9f1fa;
+    background-color: #f3e8ff;
+    transform: scale(1.01);
+    text-decoration: none;
+}
+
+.user-suggestion-inner {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
 .user-suggestion img {
-    width: 32px;
-    height: 32px;
+    width: 36px;
+    height: 36px;
     border-radius: 50%;
-    margin-right: 10px;
     object-fit: cover;
 }
 
@@ -755,7 +772,7 @@ body:has(.spoon-chat-container) .rightbar {
 .user-suggestion span {
     flex-grow: 1;
     color: #6b21a8;
-    font-weight: 500;
+    font-weight: bold;
 }
 
 .user-suggestion button {
@@ -774,6 +791,17 @@ body:has(.spoon-chat-container) .rightbar {
     transform: translateY(-1px);
     box-shadow: 0 2px 8px rgba(212, 138, 193, 0.3);
 }
+
+.user-suggestion-link {
+    text-decoration: none;
+    color: #7c3aed;
+    font-weight: 600;
+}
+
+.user-suggestion-link:hover {
+    text-decoration: underline;
+}
+
 
 .search-friends-container {
     position: relative;
@@ -1760,9 +1788,11 @@ body.profile-page .nav-tabs .nav-link {
     transform: scale(1);
     overflow: hidden;
 }
+
 .story-modal.open-anim {
     animation: fadeIn 0.3s ease-out;
 }
+
 @keyframes fadeIn {
     from {
         transform: scale(0.95);
@@ -2388,9 +2418,11 @@ body.profile-page .nav-tabs .nav-link {
     align-items: center;
     overflow: hidden;
 }
+
 .story-modal.open-anim {
     animation: fadeIn 0.3s ease-out;
 }
+
 @keyframes fadeIn {
     from {
         transform: scale(0.95);
@@ -2512,6 +2544,7 @@ body.profile-page .nav-tabs .nav-link {
     border-radius: 8px;
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    display: none;
 }
 
 .delete-confirm-modal {

@@ -127,13 +127,14 @@
     <div class="friends">
       <h3 class="section-title d-flex align-items-center justify-content-between">
         Friends
-        <span class="friend-icon">
+        <a href="{% url 'friend_requests' %}" class="friend-icon text-reset">
           👥
           {% if pending_requests|length > 0 %}
           <span class="notification-badge">{{ pending_requests|length }}</span>
           {% endif %}
-        </span>
+        </a>
       </h3>
+
 
       <div class="search-friends-container">
         <input type="text" id="searchFriendInput" placeholder="Search users..." autocomplete="off" />
@@ -166,7 +167,7 @@
         </div>
       </div>
 
-      
+
     </div>
 
   </div>

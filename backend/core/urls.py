@@ -24,6 +24,7 @@ urlpatterns = [
     path("api/search-users/", views.search_users, name="search_users"),
     path('follow/<str:username>/', views.follow_user, name='follow'),
     path('unfollow/<str:username>/', views.unfollow_user, name='unfollow'),
+    path('cancel-request/<str:username>/', views.cancel_follow_request, name='cancel_request'),
     path('chats/', views.chat_list, name='chat_list'),
     path('chat/<int:chat_id>/', views.chat_detail, name='chat_detail'),
     path('start-chat/<int:user_id>/', views.start_chat, name='start_chat'),

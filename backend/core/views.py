@@ -6,7 +6,7 @@ from django.contrib.sessions.models import Session
 from django.utils.timezone import now
 from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
-from .models import FriendRequest, StoryView
+from .models import FriendRequest, StoryView, Profile
 from .models import PostCategory
 from django.utils import timezone
 from django.http import HttpResponseForbidden
@@ -72,8 +72,8 @@ def _build_feed_context(show_posts=True):
 def get_friends(user):
     sent = FriendRequest.objects.filter(from_user=user, accepted=True).values_list('to_user', flat=True)
     received = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
-    all_friend_ids = list(sent) + list(received)
-    return User.objects.filter(id__in=all_friend_ids)
+    mutual_ids = set(sent).intersection(set(received))
+    return User.objects.filter(id__in=mutual_ids)
 
 def home(request):
     context = _build_feed_context()
@@ -282,17 +282,40 @@ def delete_comment(request, comment_id):
 @login_required(login_url='/custom-login/')
 def follow_user(request, username):
     target_user = get_object_or_404(User, username=username)
-    existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=target_user)
-    if not existing_request.exists() and request.user != target_user:
-        FriendRequest.objects.create(from_user=request.user, to_user=target_user)
+    
+    if request.user == target_user:
+        return redirect('profile', username=username)
+
+    existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=target_user).first()
+
+    if not existing_request:
+        reverse_request = FriendRequest.objects.filter(from_user=target_user, to_user=request.user).first()
+        if reverse_request:
+            reverse_request.accepted = True
+            reverse_request.save()
+            FriendRequest.objects.create(from_user=request.user, to_user=target_user, accepted=True)
+        else:
+            FriendRequest.objects.create(from_user=request.user, to_user=target_user, accepted=False)
+
     return redirect('profile', username=username)
 
 @login_required(login_url='/custom-login/')
 def unfollow_user(request, username):
     target_user = get_object_or_404(User, username=username)
+
     FriendRequest.objects.filter(from_user=request.user, to_user=target_user).delete()
-    # Opcionalmente, también elimina si ya son amigos (si así lo gestionas)
-    request.user.profile.friends.remove(target_user)
+
+    reverse = FriendRequest.objects.filter(from_user=target_user, to_user=request.user, accepted=True).first()
+    if reverse:
+        reverse.accepted = False
+        reverse.save()
+
+    return redirect('profile', username=username)
+
+@login_required(login_url='/custom-login/')
+def cancel_follow_request(request, username):
+    target_user = get_object_or_404(User, username=username)
+    FriendRequest.objects.filter(from_user=request.user, to_user=target_user, accepted=False).delete()
     return redirect('profile', username=username)
 
 def post_detail(request, post_id):
@@ -303,18 +326,35 @@ def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
     posts = Post.objects.filter(user=profile_user).order_by('-created_at').prefetch_related('categories')
     user_profile, _ = Profile.objects.get_or_create(user=profile_user)
-    categories = PostCategory.objects.exclude(slug__isnull=True)  # Excluir categorías sin slug
+    categories = PostCategory.objects.exclude(slug__isnull=True)
 
     posts_by_category = {'all': list(posts)}
     for category in categories:
         posts_by_category[category.slug] = list(posts.filter(categories__slug=category.slug))
 
     is_following = False
+    is_followed_by = False
+    is_friend = False
+
     if request.user.is_authenticated and request.user != profile_user:
-        is_following = FriendRequest.objects.filter(
-            Q(from_user=request.user, to_user=profile_user, accepted=True) |
-            Q(from_user=profile_user, to_user=request.user, accepted=True)
+        is_following_accepted = FriendRequest.objects.filter(
+            from_user=request.user, to_user=profile_user, accepted=True
         ).exists()
+        is_followed_by_accepted = FriendRequest.objects.filter(
+            from_user=profile_user, to_user=request.user, accepted=True
+        ).exists()
+
+        # Solo si ambos se siguen
+        is_friend = is_following_accepted and is_followed_by_accepted
+
+        # Si no son amigos aún, comprobamos si ya envió solicitud
+        if not is_friend:
+            is_following = FriendRequest.objects.filter(
+                from_user=request.user, to_user=profile_user, accepted=False
+            ).exists()
+
+        # Si el otro usuario me sigue, aunque no seamos amigos aún
+        is_followed_by = is_followed_by_accepted
 
     if request.method == 'POST' and request.user == profile_user:
         form = ProfileForm(request.POST, request.FILES, instance=user_profile)
@@ -330,6 +370,8 @@ def profile(request, username):
         'posts': posts,
         'form': form,
         'is_following': is_following,
+        'is_followed_by': is_followed_by,
+        'is_friend': is_friend,
         'total_matches': PostLike.objects.filter(post__user=profile_user).count(),
         'total_friends': get_friends(profile_user).count(),
         'friends': get_friends(request.user),
@@ -341,7 +383,6 @@ def profile(request, username):
         context['story_form'] = StoryForm()
 
     return render(request, 'pages/profile.html', context)
-
 
 @login_required(login_url='/custom-login/')
 def search_users(request):

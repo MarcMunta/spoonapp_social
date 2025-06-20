@@ -414,7 +414,11 @@ def load_comments(request, post_id):
     )
     html = render_to_string(
         "partials/comments_partial.html",
-        {"comments": comments_qs, "user": request.user},
+        {
+            "comments": comments_qs,
+            "user": request.user,
+            "comment_form": CommentForm(),
+        },
         request=request,
     )
     total = post.postcomment_set.filter(parent__isnull=True).count()

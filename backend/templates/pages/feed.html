@@ -25,23 +25,29 @@
       {% endif %}
       <strong>{{ post.user.username }}</strong>
     </a>
-    <div class="ms-auto d-flex align-items-center">
-      <div class="post-time text-muted text-end me-2">
-        <span class="post-relative me-1" data-created="{{ post.created_at|date:'c' }}"></span>
-        <span class="post-date">{{ post.created_at|date:"H:i d/m/Y" }}</span>
+    <div class="ms-auto">
+      <div class="post-info-group d-flex align-items-center">
+        <span class="post-info-bubble">
+          <span class="post-relative" data-created="{{ post.created_at|date:'c' }}"></span>
+        </span>
+        <span class="post-info-bubble">
+          <span class="post-date">{{ post.created_at|date:"H:i d/m/Y" }}</span>
+        </span>
+        {% if post.user == request.user %}
+        <span class="post-info-bubble">
+          <div class="dropdown">
+            <button class="dropdown-toggle btn btn-sm p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+              ⋯
+            </button>
+            <ul class="dropdown-menu">
+              <li>
+                <a href="#" class="dropdown-item text-danger delete-post-btn" data-post-id="{{ post.id }}">Eliminar</a>
+              </li>
+            </ul>
+          </div>
+        </span>
+        {% endif %}
       </div>
-      {% if post.user == request.user %}
-      <div class="dropdown">
-        <button class="dropdown-toggle btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          ⋯
-        </button>
-        <ul class="dropdown-menu">
-          <li>
-            <a href="#" class="dropdown-item text-danger delete-post-btn" data-post-id="{{ post.id }}">Eliminar</a>
-          </li>
-        </ul>
-      </div>
-      {% endif %}
     </div>
   </div>
   {% if post.image %}

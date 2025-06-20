@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Internal Server Error</title>
+    <link rel="stylesheet" href="{% static 'css/errors.css' %}">
+</head>
+
+<body>
+    <div class="error-container">
+        <img class="error-logo" src="{% static 'img/spoonapp.png' %}" alt="SpoonApp Logo">
+        <div class="error-code">
+            <span>5</span>
+            <span>0</span>            
+            <span>0</span>
+        </div>
+        <div class="message">
+            <p>Woops...<br>Something Went Wrong</p>
+        </div>
+        <a href="/" class="btn">Go Home</a>
+    </div>
+</body>
+</html>

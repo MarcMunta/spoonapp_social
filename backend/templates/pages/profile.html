@@ -1,4 +1,4 @@
-{% extends 'social/layouts/base.html' %}
+{% extends 'layouts/base.html' %}
 {% load custom_filters %}
 {% block title %}SpoonApp Social{% endblock %}
 {% block body_class %}profile-page{% endblock %}
@@ -115,7 +115,7 @@
     {% if cat.slug %}
     <div class="category-group" data-category="{{ cat.slug }}" style="display: none;">
       {% for post in posts_by_category|get_item:cat.slug %}
-      {% include 'social/partials/post_card.html' with post=post %}
+      {% include 'partials/post_card.html' with post=post %}
       {% empty %}
       <div class="text-muted">No hay publicaciones en esta categoría.</div>
       {% endfor %}
@@ -126,33 +126,12 @@
     <!-- ALL POSTS -->
     <div class="category-group" data-category="all">
       {% for post in posts_by_category|get_item:"all" %}
-      {% include 'social/partials/post_card.html' with post=post %}
+      {% include 'partials/post_card.html' with post=post %}
       {% empty %}
       <div class="text-muted">No hay publicaciones.</div>
       {% endfor %}
     </div>
   </div>
 </div>
-<script>
-  const bubble = document.getElementById('profileColorBubble');
-  const dropdown = document.getElementById('colorDropdown');
-  bubble?.addEventListener('click', () => {
-    dropdown?.classList.toggle('d-none');
-  });
-  dropdown?.querySelectorAll('.color-option').forEach(opt => {
-    opt.addEventListener('click', () => {
-      const color = opt.dataset.color;
-      fetch('{% url "update_bubble_color" %}', {
-        method: 'POST',
-        headers: { 'X-CSRFToken': getCSRFToken() },
-        body: new URLSearchParams({ color })
-      }).then(r => r.json()).then(data => {
-        if (data.success) {
-          bubble.style.backgroundColor = data.color;
-          dropdown.classList.add('d-none');
-        }
-      });
-    });
-  });
-</script>
+<script src="{% static 'js/profile.js' %}"></script>
 {% endblock %}

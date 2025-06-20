@@ -1,0 +1,56 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}SpoonApp Social{% endblock %}
+
+{% block content %}
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+
+<div class="profile-card">
+    <div class="profile-header">
+        <h2>Editar Perfil</h2>
+        <form method="post" enctype="multipart/form-data" id="photoUploadForm">
+            {% csrf_token %}
+            <div class="camera-icon-overlay">
+                <label for="id_profile_picture">
+                    {% if profile.profile_picture %}
+                    <img src="{{ profile.profile_picture_data_url }}" class="edit-profile-avatar" alt="Profile Picture">
+                    {% else %}
+                    <img src="{% static 'default-avatar.png' %}" class="edit-profile-avatar" alt="Default Avatar">
+                    {% endif %}
+                </label>
+                <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*"
+                    onchange="this.form.submit()" hidden>
+                <span class="camera-button">📷</span>
+            </div>
+        </form>
+
+    </div>
+
+    <form method="post" enctype="multipart/form-data" class="profile-form">
+        {% csrf_token %}
+        <label for="{{ user_form.username.id_for_label }}">Nombre de usuario</label>
+        <input type="text" name="{{ user_form.username.name }}" id="{{ user_form.username.id_for_label }}"
+            value="{{ user_form.username.value }}" class="form-control" placeholder="Tu nombre de usuario">
+
+        <label for="{{ form.bio.id_for_label }}">Biografía</label>
+        {{ form.bio }}
+
+        <label for="{{ form.website.id_for_label }}">Sitio Web</label>
+        {{ form.website }}
+
+        <label for="{{ form.location.id_for_label }}">Ubicación</label>
+        {{ form.location }}
+
+        <label for="{{ form.gender.id_for_label }}">Género</label>
+        {{ form.gender }}
+
+        <button type="submit">Guardar cambios</button>
+    </form>
+
+    <a href="{% url 'profile' request.user.username %}" class="back-link">← Volver al perfil</a>
+</div>
+
+{% endblock %}

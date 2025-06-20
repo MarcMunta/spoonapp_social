@@ -102,7 +102,7 @@ def home(request):
         context['friend_stories'] = friend_story_map
         context['story_form'] = StoryForm()
 
-    return render(request, 'social/pages/feed.html', context)
+    return render(request, 'pages/feed.html', context)
 
 def feed(request):
     context = _build_feed_context(show_posts=False)
@@ -132,7 +132,7 @@ def feed(request):
         context['story_form'] = StoryForm()
 
     context['hide_profile_icon'] = False
-    return render(request, 'social/pages/feed.html', context)
+    return render(request, 'pages/feed.html', context)
 
 @login_required(login_url='/custom-login/')
 def create_post(request):
@@ -208,7 +208,7 @@ def comment_post(request, post_id):
             )
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 html = render_to_string(
-                    "social/partials/comments_partial.html",
+                    "partials/comments_partial.html",
                     {
                         "comments": [comment],
                         "user": request.user,
@@ -229,7 +229,7 @@ def comment_post(request, post_id):
 @login_required(login_url='/custom-login/')
 def friend_requests_view(request):
     requests = FriendRequest.objects.filter(to_user=request.user, accepted=False)
-    return render(request, 'social/pages/friend_requests.html', {'requests': requests})
+    return render(request, 'pages/friend_requests.html', {'requests': requests})
 
 @login_required(login_url='/custom-login/')
 def accept_friend_request(request, req_id):
@@ -297,7 +297,7 @@ def unfollow_user(request, username):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'social/pages/post_detail.html', {'post': post})
+    return render(request, 'pages/post_detail.html', {'post': post})
 
 def profile(request, username): 
     profile_user = get_object_or_404(User, username=username)
@@ -340,7 +340,7 @@ def profile(request, username):
     if request.user == profile_user:
         context['story_form'] = StoryForm()
 
-    return render(request, 'social/pages/profile.html', context)
+    return render(request, 'pages/profile.html', context)
 
 
 @login_required(login_url='/custom-login/')
@@ -413,7 +413,7 @@ def load_comments(request, post_id):
         .prefetch_related("replies")
     )
     html = render_to_string(
-        "social/partials/comments_partial.html",
+        "partials/comments_partial.html",
         {"comments": comments_qs, "user": request.user},
         request=request,
     )
@@ -432,7 +432,7 @@ def load_replies(request, comment_id):
         .order_by("-num_likes", "-created_at")[offset : offset + limit]
     )
     html = render_to_string(
-        "social/partials/comments_partial.html",
+        "partials/comments_partial.html",
         {"comments": replies_qs, "user": request.user, "comment_form": CommentForm()},
         request=request,
     )
@@ -461,7 +461,8 @@ def friends_list_view(request):
         online = get_user_online_status(friend)
         all_friends.append({'user': friend, 'online': online})
 
-    return render(request, 'social/friends_panel.html', {
+    # Template moved during project restructuring
+    return render(request, 'pages/friend_requests.html', {
         'friends': all_friends
     })
 
@@ -483,7 +484,7 @@ def chat_list(request):
             'unread_count': unread_count
         })
     
-    return render(request, 'social/pages/chat_list.html', {'chat_data': chat_data})
+    return render(request, 'pages/chat_list.html', {'chat_data': chat_data})
 
 @login_required(login_url='/custom-login/')
 def load_messages(request, chat_id):
@@ -598,7 +599,7 @@ def chat_detail(request, chat_id):
                 })
             return redirect('chat_detail', chat_id=chat.id)
     
-    return render(request, 'social/pages/chat_detail.html', {
+    return render(request, 'pages/chat_detail.html', {
         'chat': chat,
         'other_user': other_user,
         'messages': messages,
@@ -686,7 +687,7 @@ def notifications_view(request):
     # Mark all as read when viewing
     Notification.objects.filter(user=request.user, is_read=False).update(is_read=True)
     
-    return render(request, 'social/pages/notifications.html', {'notifications': notifications})
+    return render(request, 'pages/notifications.html', {'notifications': notifications})
 
 @login_required(login_url='/custom-login/')
 def mark_notification_read(request, notification_id):
@@ -728,7 +729,7 @@ def edit_profile(request):
         user_form = UserForm(instance=request.user)
         profile_form = ProfileForm(instance=profile)
 
-    return render(request, 'social/pages/edit_profile.html', {
+    return render(request, 'pages/edit_profile.html', {
         'user_form': user_form,
         'form': profile_form,
         'profile': profile

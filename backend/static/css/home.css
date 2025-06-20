@@ -397,6 +397,10 @@ body:has(.spoon-chat-container) .rightbar {
     display: flex;
     align-items: center;
 }
+.post-info-group .post-info-bubble:first-child {
+    background: linear-gradient(to right, #b76fc5, #e98fc0);
+    color: #fff;
+}
 
 .post-info-bubble .dropdown-toggle {
     border: none;

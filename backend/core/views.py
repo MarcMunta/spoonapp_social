@@ -462,7 +462,6 @@ def load_comments(request, post_id):
     return JsonResponse({"html": html, "has_more": has_more})
 
 
-@login_required(login_url='/custom-login/')
 def load_replies(request, comment_id):
     comment = get_object_or_404(PostComment, id=comment_id)
     offset = int(request.GET.get("offset", 0))

@@ -90,7 +90,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const img = document.getElementById("storyImage");
   const video = document.getElementById("storyVideo");
   const progressBar = document.querySelector(".story-progress-bar");
-  const modalContent = modal.querySelector(".story-modal-content");
+  const modalContent = modal.querySelector(".story-modal");
   const storyOptions = document.querySelector(".story-options");
   const storyViews = document.querySelector(".story-views");
   const viewsModal = document.getElementById("storyViewsList");
@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ? viewsModal.querySelector(".views-list-body")
     : null;
   const replyContainer = document.querySelector(".story-reply");
-  const deleteBtn = document.querySelector(".story-delete");
+  const deleteBtn = document.querySelector(".btn-eliminar-historia");
   const replyInput = document.getElementById("storyReplyInput");
   const optionsBtn = document.querySelector(".story-options-btn");
   const optionsMenu = storyOptions

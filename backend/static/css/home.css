@@ -2424,7 +2424,9 @@ body.profile-page .nav-tabs .nav-link {
     padding: 0.3rem 0.8rem;
     font-size: 0.8rem;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .reply-btn:hover {
@@ -2446,12 +2448,19 @@ body.profile-page .nav-tabs .nav-link {
 }
 
 .reply-inline-container.show-form .reply-btn {
-    display: none;
+    opacity: 0;
+    transform: translateX(-10px);
+    pointer-events: none;
 }
 
 .reply-inline-container.show-form .reply-form {
     display: flex;
     animation: fadeSlideIn 0.5s forwards;
+}
+
+.reply-inline-container.closing .reply-form {
+    display: flex !important;
+    animation: fadeSlideOut 0.3s forwards;
 }
 
 @keyframes fadeSlideIn {
@@ -2462,6 +2471,17 @@ body.profile-page .nav-tabs .nav-link {
     to {
         opacity: 1;
         transform: translateX(0);
+    }
+}
+
+@keyframes fadeSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-10px);
     }
 }
 
@@ -2486,15 +2506,15 @@ body.profile-page .nav-tabs .nav-link {
     font-size: 0.8rem;
     cursor: pointer;
     box-shadow: 0 4px 0 #3d8cc7;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
     opacity: 0;
     pointer-events: none;
-    animation: none;
+    transform: translateX(-10px);
 }
 
 .reply-inline-container.show-form .reply-send-btn {
-    animation: fadeIn 0.3s forwards;
-    animation-delay: 0.5s;
+    opacity: 1;
+    transform: translateX(0);
     pointer-events: auto;
 }
 

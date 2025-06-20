@@ -2544,6 +2544,7 @@ body.profile-page .nav-tabs .nav-link {
     border-radius: 8px;
     cursor: pointer;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+    display: none;
 }
 
 .delete-confirm-modal {

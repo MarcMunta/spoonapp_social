@@ -8,14 +8,16 @@
       {{ story_form.media_file }}
       <div class="story-thumb user-story{% if user_story_data.urls %} open-story{% endif %}"
            {% if user_story_data.urls %}
-             data-urls="{{ user_story_data.urls|join:'|' }}"
-             data-types="{{ user_story_data.types|join:'|' }}"
-             data-expires="{{ user_story_data.expires|join:'|' }}"
-             data-user="{{ user.username }}"
-             data-profile-url="{% url 'profile' user.username %}"
-             data-avatar-url="{% if user.profile.profile_picture %}{{ user.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
-             data-story-id="{{ user_story_data.ids|join:'|' }}"
-             data-own="true"
+           data-urls="{{ user_story_data.urls|join:'|' }}"
+            data-types="{{ user_story_data.types|join:'|' }}"
+            data-expires="{{ user_story_data.expires|join:'|' }}"
+            data-created="{{ user_story_data.created|join:'|' }}"
+            data-user="{{ user.username }}"
+            data-profile-url="{% url 'profile' user.username %}"
+            data-avatar-url="{% if user.profile.profile_picture %}{{ user.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
+            data-bubble-color="{{ user.profile.bubble_color }}"
+            data-story-id="{{ user_story_data.ids|join:'|' }}"
+            data-own="true"
            {% endif %}>
         {% if user.profile.profile_picture %}
         <img src="{{ user.profile.profile_picture_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
@@ -33,9 +35,11 @@
          data-urls="{{ data.urls|join:'|' }}"
          data-types="{{ data.types|join:'|' }}"
          data-expires="{{ data.expires|join:'|' }}"
+         data-created="{{ data.created|join:'|' }}"
          data-user="{{ friend.username }}"
          data-profile-url="{% url 'profile' friend.username %}"
          data-avatar-url="{% if friend.profile.profile_picture %}{{ friend.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
+         data-bubble-color="{{ friend.profile.bubble_color }}"
          data-story-id="{{ data.ids|join:'|' }}">
       {% if friend.profile.profile_picture %}
       <img src="{{ friend.profile.profile_picture_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
@@ -50,28 +54,34 @@
   <span class="stories-next">&#10095;</span>
 </div>
 
-<div id="storyModal" class="story-modal">
-  <div class="story-modal-content">
+<div id="storyModal" class="story-backdrop">
+  <div class="story-modal">
+    <div class="story-header d-flex justify-content-between align-items-center mb-2 px-2">
+      <div class="story-modal-user"></div>
+      <div class="d-flex align-items-center">
+        <span class="story-countdown me-2"></span>
+        <button type="button" class="btn-close btn-close-white story-modal-close" aria-label="Close"></button>
+      </div>
+    </div>
     <div class="story-progress"><div class="story-progress-bar"></div></div>
-    <div class="story-countdown"></div>
     <div class="dropup dropdown story-options position-absolute" style="display:none;">
       <button class="btn btn-sm btn-dark story-options-btn">&#8942;</button>
       <ul class="dropdown-menu">
         <li><a class="dropdown-item text-danger story-delete" href="#" data-story-id="">Eliminar</a></li>
       </ul>
     </div>
-    <div class="story-views text-white position-absolute" style="bottom:8px; left:10px; display:none;"></div>
-    <span class="story-modal-close">&times;</span>
+    <div class="story-views text-white position-absolute d-flex align-items-center" style="bottom:8px; left:10px; display:none;">
+      <span class="me-1">👁</span><span class="view-count"></span>
+    </div>
     <span class="story-prev">&#10094;</span>
     <span class="story-next">&#10095;</span>
-    <div class="story-modal-user text-white mb-2"></div>
-    <img id="storyImage" class="w-100 d-none" />
-    <video id="storyVideo" class="w-100 d-none" controls></video>
+    <img id="storyImage" class="story-image d-none" />
+    <video id="storyVideo" class="story-image d-none" controls></video>
     <div class="story-reply mt-2 d-flex">
       <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="Responder...">
       <button id="storyReplySend" class="btn btn-primary" data-story-id="">Enviar</button>
-</div>
-</div>
+    </div>
+  </div>
 </div>
 <div id="deleteConfirm" class="delete-confirm-modal">
   <div class="delete-confirm-content">

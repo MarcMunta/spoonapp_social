@@ -77,8 +77,8 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   let currentUrls = [];
-  let currentExpires = [];
   let currentTypes = [];
+  let currentExpires = [];
   let currentIndex = 0;
   let progressTimeout;
   let countdownInterval;
@@ -105,24 +105,24 @@ document.addEventListener("DOMContentLoaded", () => {
   const countdownEl = document.querySelector(".story-countdown");
 
   let currentStoryIds = [];
+  let currentCreated = [];
   let currentIsOwn = false;
+  let holdStart = 0;
+  let skipNavClick = false;
+  const HOLD_THRESHOLD = 200;
 
-  function updateCountdown(expireIso) {
+  function updateElapsed(createdIso) {
     if (!countdownEl) return;
-    const created = new Date(
-      new Date(expireIso).getTime() - 24 * 60 * 60 * 1000
-    );
-    const diff = Date.now() - created.getTime();
-    if (diff <= 0) {
-      countdownEl.textContent = "0m";
-      return;
-    }
-    const minutes = Math.floor(diff / 60000);
-    if (minutes < 60) {
-      countdownEl.textContent = `${minutes}m`;
+    const created = new Date(createdIso).getTime();
+    let diffMs = Date.now() - created;
+    if (diffMs < 0) diffMs = 0;
+    const totalSeconds = Math.floor(diffMs / 1000);
+    if (totalSeconds < 60) {
+      countdownEl.textContent = `${totalSeconds}s`;
+    } else if (totalSeconds < 3600) {
+      countdownEl.textContent = `${Math.floor(totalSeconds / 60)}m`;
     } else {
-      const hours = Math.floor(minutes / 60);
-      countdownEl.textContent = `${hours}h`;
+      countdownEl.textContent = `${Math.floor(totalSeconds / 3600)}h`;
     }
   }
 
@@ -179,11 +179,8 @@ document.addEventListener("DOMContentLoaded", () => {
     progressPaused = false;
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
-    updateCountdown(currentExpires[idx]);
-    countdownInterval = setInterval(
-      () => updateCountdown(currentExpires[idx]),
-      1000
-    );
+    updateElapsed(currentCreated[idx]);
+    countdownInterval = setInterval(() => updateElapsed(currentCreated[idx]), 1000);
     progressTimeout = setTimeout(nextStory, remainingTime);
     const replyBtn = document.getElementById("storyReplySend");
     if (replyBtn && currentStoryElIndex != null) {
@@ -200,7 +197,8 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((res) => res.json())
       .then((data) => {
         if (currentIsOwn && storyViews) {
-          storyViews.textContent = `${data.views} views`;
+          const countEl = storyViews.querySelector('.view-count');
+          if (countEl) countEl.textContent = data.views;
         }
       });
   }
@@ -209,10 +207,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentStoryElIndex = 0;
 
   function openStories(el, idx) {
-    currentUrls = el.dataset.urls.split("|");
-    currentTypes = el.dataset.types.split("|");
-    currentExpires = el.dataset.expires.split("|");
-    currentStoryIds = el.dataset.storyId.split("|");
+    currentUrls = el.dataset.urls.split('|');
+    currentTypes = el.dataset.types.split('|');
+    currentExpires = el.dataset.expires.split('|');
+    currentCreated = el.dataset.created.split('|');
+    currentStoryIds = el.dataset.storyId.split('|');
     currentIndex = 0;
     currentStoryElIndex = idx;
     currentIsOwn =
@@ -220,9 +219,12 @@ document.addEventListener("DOMContentLoaded", () => {
     const userContainer = document.querySelector(".story-modal-user");
     if (userContainer) {
       const profileUrl = el.dataset.profileUrl;
-      const avatarHtml = `<a href="${profileUrl}"><img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40" alt="${el.dataset.user}"></a>`;
-      const nameHtml = `<a href="${profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
-      userContainer.innerHTML = avatarHtml + nameHtml;
+      const bubbleColor = el.dataset.bubbleColor || '#e0f5ff';
+      userContainer.innerHTML =
+        `<a href="${profileUrl}" class="post-user text-decoration-none" style="background-color:${bubbleColor};">
+            <img src="${el.dataset.avatarUrl}" class="post-avatar" width="40" height="40" alt="${el.dataset.user}">
+            <strong>${el.dataset.user}</strong>
+         </a>`;
     }
     const replyBtn = document.getElementById("storyReplySend");
     if (replyBtn) {
@@ -232,9 +234,12 @@ document.addEventListener("DOMContentLoaded", () => {
       replyBtn.disabled = currentIsOwn;
     }
     if (replyInput) replyInput.disabled = currentIsOwn;
-    if (storyOptions)
-      storyOptions.style.display = currentIsOwn ? "block" : "none";
-    if (storyViews) storyViews.style.display = currentIsOwn ? "block" : "none";
+    if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
+    if (storyViews) {
+      storyViews.style.display = currentIsOwn ? 'block' : 'none';
+      const countEl = storyViews.querySelector('.view-count');
+      if (countEl) countEl.textContent = '';
+    }
     if (replyContainer) {
       if (currentIsOwn) {
         replyContainer.classList.add("d-none");
@@ -291,8 +296,36 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
+  modalContent.addEventListener('mousedown', () => {
+    holdStart = Date.now();
+    pauseProgress();
+  });
+
+  modalContent.addEventListener('mouseup', () => {
+    if (Date.now() - holdStart > HOLD_THRESHOLD) {
+      skipNavClick = true;
+    }
+    resumeProgress();
+  });
+
+  modalContent.addEventListener('touchstart', () => {
+    holdStart = Date.now();
+    pauseProgress();
+  });
+
+  modalContent.addEventListener('touchend', () => {
+    if (Date.now() - holdStart > HOLD_THRESHOLD) {
+      skipNavClick = true;
+    }
+    resumeProgress();
+  });
+
   // allow clicking on the content to navigate left/right
-  modalContent.addEventListener("click", (e) => {
+  modalContent.addEventListener('click', e => {
+    if (skipNavClick) {
+      skipNavClick = false;
+      return;
+    }
     if (e.target === modalContent || e.target === img || e.target === video) {
       const rect = modalContent.getBoundingClientRect();
       const clickX = e.clientX - rect.left;

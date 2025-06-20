@@ -380,6 +380,33 @@ body:has(.spoon-chat-container) .rightbar {
     margin-right: 0.25rem;
 }
 
+/* Bubble styles for post info elements */
+.post-info-group {
+    background: linear-gradient(to right, #b76fc5, #e98fc0);
+    color: #fff;
+    padding: 0.25rem 0.5rem;
+    border-radius: 20px;
+    display: inline-flex;
+    gap: 0.25rem;
+    align-items: center;
+}
+
+.post-info-bubble {
+    background-color: transparent;
+    padding: 0.15rem 0.4rem;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+}
+.post-info-group .post-info-bubble:first-child {
+    background: linear-gradient(to right, #b76fc5, #e98fc0);
+    color: #fff;
+}
+
+.post-info-bubble .dropdown-toggle {
+    border: none;
+}
+
 .post-footer {
     display: flex;
     justify-content: space-between;
@@ -1708,36 +1735,37 @@ body.profile-page .nav-tabs .nav-link {
     font-size: 0.85rem;
 }
 
-.story-modal {
+.story-backdrop {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
     z-index: 2000;
+    padding: 10px;
 }
 
-.story-modal-content {
+.story-modal {
     position: relative;
     max-width: 600px;
     width: 90%;
-    background: #000;
+    background-color: rgba(0, 0, 0, 0.85);
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     transform: scale(1);
+    overflow: hidden;
 }
-
-.story-modal-content.open-anim {
-    animation: storyZoom 0.3s ease-out;
+.story-modal.open-anim {
+    animation: fadeIn 0.3s ease-out;
 }
-
-@keyframes storyZoom {
+@keyframes fadeIn {
     from {
-        transform: scale(0.8);
+        transform: scale(0.95);
         opacity: 0;
     }
 
@@ -1766,16 +1794,18 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-countdown {
     position: absolute;
-    top: 6px;
-    right: 10px;
+    top: 8px;
+    right: 40px;
     color: #fff;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 2px 6px;
+    border-radius: 12px;
     font-size: 0.9rem;
 }
 
 .story-modal-close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
+    background: transparent;
+    border: none;
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
@@ -1783,12 +1813,29 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-modal-user {
     color: #fff;
-    margin-bottom: 0;
-    position: absolute;
-    top: 10px;
-    left: 10px;
     display: flex;
     align-items: center;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 1;
+}
+
+.story-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.story-image {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.story-views {
+    font-size: 0.9rem;
 }
 
 .story-prev,
@@ -2311,41 +2358,42 @@ body.profile-page .nav-tabs .nav-link {
     font-size: 0.85rem;
 }
 
-.story-modal {
+.story-backdrop {
     display: none;
     position: fixed;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
     z-index: 2000;
+    padding: 10px;
 }
 
-.story-modal-content {
+.story-modal {
     position: relative;
     max-width: 850px;
     width: 95%;
     height: 90vh;
-    background: #000;
+    background-color: rgba(0, 0, 0, 0.85);
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.4);
     transform: scale(1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
-
-.story-modal-content.open-anim {
-    animation: storyZoom 0.3s ease-out;
+.story-modal.open-anim {
+    animation: fadeIn 0.3s ease-out;
 }
-
-@keyframes storyZoom {
+@keyframes fadeIn {
     from {
-        transform: scale(0.8);
+        transform: scale(0.95);
         opacity: 0;
     }
 
@@ -2374,16 +2422,18 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-countdown {
     position: absolute;
-    top: 6px;
-    right: 50px;
+    top: 8px;
+    right: 40px;
     color: #fff;
+    background: rgba(255, 255, 255, 0.4);
+    padding: 2px 6px;
+    border-radius: 12px;
     font-size: 0.9rem;
 }
 
 .story-modal-close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
+    background: transparent;
+    border: none;
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
@@ -2391,12 +2441,12 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-modal-user {
     color: #fff;
-    margin-bottom: 0;
-    position: absolute;
-    top: 10px;
-    left: 10px;
     display: flex;
     align-items: center;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 1;
 }
 
 .story-modal-avatar {

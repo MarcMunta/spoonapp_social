@@ -98,7 +98,7 @@ document.addEventListener("DOMContentLoaded", () => {
     ? viewsModal.querySelector(".views-list-body")
     : null;
   const replyContainer = document.querySelector(".story-reply");
-  const deleteBtn = document.querySelector(".story-delete");
+  const deleteBtn = document.querySelector(".btn-eliminar-historia");
   const replyInput = document.getElementById("storyReplyInput");
   const optionsBtn = document.querySelector(".story-options-btn");
   const optionsMenu = storyOptions

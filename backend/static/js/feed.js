@@ -564,42 +564,55 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   document.addEventListener('click', e => {
-    const btn = e.target.closest('.reply-btn');
+    const btn = e.target.closest('.btn-responder');
     if (btn) {
       e.preventDefault();
-      const container = btn.closest('.reply-inline-container');
-      if (!container) return;
-      container.classList.add('show-form');
-      const input = container.querySelector('.reply-form .comment-input');
+      if (btn.classList.contains('expandido')) return;
+      btn.classList.add('expandido');
+      btn.style.width = '100%';
+      btn.innerHTML = `
+        <input type="text" placeholder="Comentario" class="input-transformado" />
+        <button class="btn-enviar">Enviar</button>
+      `;
+      const input = btn.querySelector('.input-transformado');
+      const send = btn.querySelector('.btn-enviar');
       if (input) input.focus();
-    }
-  });
-
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Escape') {
-      const form = e.target.closest('.reply-form');
-      if (form) {
-        const container = form.closest('.reply-inline-container');
-        if (container) closeReply(container);
+      if (send) {
+        send.addEventListener('click', () => {
+          const content = input.value.trim();
+          if (!content) return;
+          const formData = new FormData();
+          formData.append('content', content);
+          const parentId = btn.dataset.parentId;
+          if (parentId) formData.append('parent', parentId);
+          fetch(`/post/${btn.dataset.postId}/comment/`, {
+            method: 'POST',
+            body: formData,
+            headers: {
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': getCSRFToken()
+            }
+          })
+            .then(res => res.json())
+            .then(data => {
+              if (!data.success) return;
+              const li = btn.closest('li[data-comment-id]');
+              if (!li) return;
+              let list = li.querySelector('div.respuestas');
+              if (!list) {
+                list = document.createElement('div');
+                list.id = `replies-${btn.dataset.parentId}`;
+                list.className = 'respuestas list-group mt-1';
+                li.appendChild(list);
+              }
+              list.classList.remove('d-none');
+              list.insertAdjacentHTML('beforeend', data.html);
+              input.value = '';
+            });
+        });
       }
     }
   });
-
-  document.addEventListener(
-    'blur',
-    e => {
-      const input = e.target.closest('.reply-form .comment-input');
-      if (input) {
-        const container = input.closest('.reply-inline-container');
-        setTimeout(() => {
-          if (!container.contains(document.activeElement) && input.value.trim() === '') {
-            closeReply(container);
-          }
-        }, 100);
-      }
-    },
-    true
-  );
 
   document.addEventListener('click', e => {
     const btn = e.target.closest('.load-more-comments');
@@ -717,10 +730,9 @@ document.addEventListener('DOMContentLoaded', () => {
   // Submit new comments and replies via AJAX
   document.addEventListener('submit', e => {
     const commentForm = e.target.closest('.comment-form');
-    const replyForm = e.target.closest('.reply-form');
-    if (!commentForm && !replyForm) return;
+    if (!commentForm) return;
     e.preventDefault();
-    const form = commentForm || replyForm;
+    const form = commentForm;
     const formData = new FormData(form);
     fetch(form.action, {
       method: 'POST',
@@ -762,34 +774,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 lessBtn.textContent = 'Ver menos';
                 list.insertAdjacentElement('afterend', lessBtn);
               }
-            }
-          }
-        } else if (replyForm) {
-          const li = replyForm.closest('li[data-comment-id]');
-          if (!li) return;
-          let list = li.querySelector('div.respuestas');
-          if (!list) {
-            list = document.createElement('div');
-            list.id = `replies-${li.dataset.commentId}`;
-            list.className = 'respuestas list-group mt-1';
-            li.appendChild(list);
-          }
-          list.classList.remove('d-none');
-          list.insertAdjacentHTML('beforeend', data.html);
-          const input = replyForm.querySelector('.comment-input');
-          if (input) input.value = '';
-          const container = replyForm.closest('.reply-inline-container');
-          if (container) {
-            closeReply(container);
-            const actions = container.parentElement;
-            const loadBtn = actions ? actions.querySelector('.load-replies-btn') : null;
-            const hideBtn = actions ? actions.querySelector('.hide-replies-btn') : null;
-            if (!hideBtn && actions) {
-              const newBtn = document.createElement('button');
-              newBtn.className = 'hide-replies-btn';
-              newBtn.dataset.commentId = li.dataset.commentId;
-              newBtn.textContent = 'Ver menos';
-              if (loadBtn) loadBtn.replaceWith(newBtn); else actions.appendChild(newBtn);
             }
           }
         }

@@ -1893,6 +1893,38 @@ body.profile-page .nav-tabs .nav-link {
     }
 }
 
+.btn-responder {
+    transition: width 0.3s ease, padding 0.3s ease;
+    width: 100px;
+    padding: 8px 12px;
+    border-radius: 20px;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.btn-responder.expandido {
+    width: 100%;
+    padding: 8px 16px;
+    border-radius: 12px;
+}
+
+.input-transformado {
+    border: none;
+    outline: none;
+    width: 80%;
+    font-size: 14px;
+    padding: 4px;
+}
+
+.btn-enviar {
+    background: #4da6ff;
+    border: none;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 12px;
+    margin-left: 8px;
+}
+
 /* Enhanced scrollbar with better visibility */
 .spoon-messages-area::-webkit-scrollbar {
     width: 14px;

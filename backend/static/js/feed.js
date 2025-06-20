@@ -93,6 +93,10 @@ document.addEventListener("DOMContentLoaded", () => {
   const modalContent = modal.querySelector(".story-modal-content");
   const storyOptions = document.querySelector(".story-options");
   const storyViews = document.querySelector(".story-views");
+  const viewsModal = document.getElementById("storyViewsList");
+  const viewsModalBody = viewsModal
+    ? viewsModal.querySelector(".views-list-body")
+    : null;
   const replyContainer = document.querySelector(".story-reply");
   const deleteBtn = document.querySelector(".story-delete");
   const replyInput = document.getElementById("storyReplyInput");
@@ -154,6 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showStory(idx) {
+    if (viewsModal) viewsModal.classList.remove("show");
     const url = currentUrls[idx];
     const type = currentTypes[idx] || "";
     if (type.startsWith("video")) {
@@ -260,6 +265,7 @@ document.addEventListener("DOMContentLoaded", () => {
     clearInterval(countdownInterval);
     if (progressBar) progressBar.style.width = "0%";
     if (countdownEl) countdownEl.textContent = "";
+    if (viewsModal) viewsModal.classList.remove("show");
   }
 
   function nextStory() {
@@ -435,6 +441,28 @@ document.addEventListener("DOMContentLoaded", () => {
     cancelDeleteBtn.addEventListener("click", hideDeleteModal);
     deleteConfirm.addEventListener("click", (e) => {
       if (e.target === deleteConfirm) hideDeleteModal();
+    });
+  }
+
+  if (storyViews && viewsModal && viewsModalBody) {
+    storyViews.addEventListener("click", () => {
+      const storyId = currentStoryIds[currentIndex];
+      fetch(`/story/${storyId}/viewers/`, {
+        headers: { "X-Requested-With": "XMLHttpRequest" },
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          viewsModalBody.innerHTML = data.html;
+          viewsModal.classList.add("show");
+          pauseProgress();
+        });
+    });
+
+    viewsModal.addEventListener("click", (e) => {
+      if (e.target === viewsModal) {
+        viewsModal.classList.remove("show");
+        resumeProgress();
+      }
     });
   }
 

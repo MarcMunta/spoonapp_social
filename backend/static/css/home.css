@@ -2431,6 +2431,36 @@ body.profile-page .nav-tabs .nav-link {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.reply-inline-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.reply-inline-container .reply-form {
+    display: none;
+}
+
+.reply-inline-container.show-form .reply-btn {
+    display: none;
+}
+
+.reply-inline-container.show-form .reply-form {
+    display: flex;
+    animation: fadeSlideIn 0.3s forwards;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 .reply-form {
     display: flex;
     align-items: center;

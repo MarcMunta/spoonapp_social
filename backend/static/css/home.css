@@ -2523,9 +2523,11 @@ body.profile-page .nav-tabs .nav-link {
     z-index: 2101;
 }
 
+
 .story-options .dropdown-menu {
     display: none;
     min-width: 6rem;
+    z-index: 2101;
 }
 
 .story-options .dropdown-menu.show {
@@ -2536,7 +2538,7 @@ body.profile-page .nav-tabs .nav-link {
     position: absolute;
     bottom: 20px;
     right: 20px;
-    z-index: 10000;
+    z-index: 2102;
     background: #f44336;
     color: white;
     border: none;

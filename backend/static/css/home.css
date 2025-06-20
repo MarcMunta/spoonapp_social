@@ -1601,9 +1601,7 @@ body.profile-page .nav-tabs .nav-link {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
     z-index: 2000;
@@ -2226,9 +2224,7 @@ body.profile-page .nav-tabs .nav-link {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
     z-index: 2000;

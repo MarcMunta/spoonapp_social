@@ -561,7 +561,10 @@ document.addEventListener('DOMContentLoaded', () => {
     if (btn) {
       e.preventDefault();
       const li = btn.closest('li[data-comment-id]');
-      const form = li ? li.querySelector('.reply-form') : null;
+      if (!li) return;
+      const commentId = li.dataset.commentId;
+      const container = li.querySelector('#reply-container-' + commentId);
+      const form = container ? container.querySelector('.reply-form') : null;
       if (form) {
         form.classList.toggle('d-none');
         const input = form.querySelector('.comment-input');
@@ -751,7 +754,7 @@ document.addEventListener('DOMContentLoaded', () => {
           if (input) input.value = '';
           replyForm.classList.add('d-none');
 
-          const container = replyForm.previousElementSibling;
+          const container = replyForm.parentElement.previousElementSibling;
           if (container) {
             const loadBtn = container.querySelector('.load-replies-btn');
             const hideBtn = container.querySelector('.hide-replies-btn');

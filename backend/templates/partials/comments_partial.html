@@ -46,12 +46,14 @@
   {% endif %}
   {% endwith %}
   {% if user.is_authenticated %}
-  <form method="post" action="{% url 'comment_post' comment.post.id %}" class="reply-form d-none mt-2">
-    {% csrf_token %}
-    <input type="hidden" name="parent" value="{{ comment.id }}">
-    {{ comment_form.content }}
-    <button type="submit" class="reply-send-btn">Enviar</button>
-  </form>
+  <div id="reply-container-{{ comment.id }}" class="reply-container">
+    <form method="post" action="{% url 'comment_post' comment.post.id %}" class="reply-form d-none mt-2">
+      {% csrf_token %}
+      <input type="hidden" name="parent" value="{{ comment.id }}">
+      {{ comment_form.content }}
+      <button type="submit" class="reply-send-btn">Enviar</button>
+    </form>
+  </div>
   {% endif %}
   </li>
 {% endfor %}

@@ -32,7 +32,15 @@
   <div class="comment-content mt-1">{{ comment.content|link_mentions|safe }}</div>
   <div class="d-flex align-items-center gap-2 mt-1">
     {% if user.is_authenticated %}
-    <button class="reply-btn">Responder</button>
+    <div class="reply-inline-container">
+      <button class="reply-btn">Responder</button>
+      <form method="post" action="{% url 'comment_post' comment.post.id %}" class="reply-form">
+        {% csrf_token %}
+        <input type="hidden" name="parent" value="{{ comment.id }}">
+        {{ comment_form.content }}
+        <button type="submit" class="reply-send-btn">Enviar</button>
+      </form>
+    </div>
     {% endif %}
     {% with replies=comment.replies.all %}
     {% if replies %}
@@ -45,15 +53,5 @@
   <div class="respuestas list-group mt-1 d-none" id="replies-{{ comment.id }}" data-offset="0"></div>
   {% endif %}
   {% endwith %}
-  {% if user.is_authenticated %}
-  <div id="reply-container-{{ comment.id }}" class="reply-container">
-    <form method="post" action="{% url 'comment_post' comment.post.id %}" class="reply-form d-none mt-2">
-      {% csrf_token %}
-      <input type="hidden" name="parent" value="{{ comment.id }}">
-      {{ comment_form.content }}
-      <button type="submit" class="reply-send-btn">Enviar</button>
-    </form>
-  </div>
-  {% endif %}
   </li>
 {% endfor %}

@@ -573,6 +573,7 @@ body:has(.spoon-chat-container) .rightbar {
     padding: 0.6rem 0.8rem;
     min-height: 40px;
     color: #333;
+    flex: 1;
 }
 
 .comment-form {
@@ -2423,7 +2424,9 @@ body.profile-page .nav-tabs .nav-link {
     padding: 0.3rem 0.8rem;
     font-size: 0.8rem;
     cursor: pointer;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    opacity: 1;
+    transform: translateX(0);
 }
 
 .reply-btn:hover {
@@ -2431,10 +2434,68 @@ body.profile-page .nav-tabs .nav-link {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.reply-inline-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    flex: 1;
+}
+
+.reply-inline-container .reply-form {
+    display: none;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.reply-inline-container.show-form .reply-btn {
+    opacity: 0;
+    transform: translateX(-10px);
+    pointer-events: none;
+}
+
+.reply-inline-container.show-form .reply-form {
+    display: flex;
+    animation: fadeSlideIn 0.5s forwards;
+}
+
+.reply-inline-container.closing .reply-form {
+    display: flex !important;
+    animation: fadeSlideOut 0.3s forwards;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeSlideOut {
+    from {
+        opacity: 1;
+        transform: translateX(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 .reply-form {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
 }
 
 .reply-send-btn {
@@ -2446,7 +2507,16 @@ body.profile-page .nav-tabs .nav-link {
     font-size: 0.8rem;
     cursor: pointer;
     box-shadow: 0 4px 0 #3d8cc7;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    transition: transform 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-10px);
+}
+
+.reply-inline-container.show-form .reply-send-btn {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
 }
 
 .reply-send-btn:hover {

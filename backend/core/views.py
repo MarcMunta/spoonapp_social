@@ -15,23 +15,23 @@ from django.template.loader import render_to_string
 import json
 
 def test_404_view(request):
-    return render(request, '404.html', status=404)
+    return render(request, 'errors/404.html', status=404)
 
 def test_403_view(request):
-    return render(request, '403.html', status=403)
+    return render(request, 'errors/403.html', status=403)
 
 def test_500_view(request):
-    return render(request, '500.html', status=500)
+    return render(request, 'errors/500.html', status=500)
 
 # Handlers reales para producción
 def custom_404(request, exception):
-    return render(request, '404.html', status=404)
+    return render(request, 'errors/404.html', status=404)
 
 def custom_403(request, exception):
-    return render(request, '403.html', status=403)
+    return render(request, 'errors/403.html', status=403)
 
 def custom_500(request):
-    return render(request, '500.html', status=500)
+    return render(request, 'errors/500.html', status=500)
 
 def _build_feed_context(show_posts=True):
     """Return context for feed-related views."""
@@ -777,10 +777,10 @@ def edit_profile(request):
     })
 
 def custom_404(request, exception):
-    return render(request, '404.html', status=404)
+    return render(request, 'errors/404.html', status=404)
 
 def custom_403(request, exception=None):
-    return render(request, '403.html', status=403)
+    return render(request, 'errors/403.html', status=403)
 
 def custom_500(request):
-    return render(request, '500.html', status=500)
+    return render(request, 'errors/500.html', status=500)

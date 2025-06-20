@@ -1,0 +1,12 @@
+{% for viewer in viewers %}
+<a href="{% url 'profile' viewer.user.username %}" class="post-user text-decoration-none mb-2 d-block" style="background-color: {{ viewer.bubble_color }};">
+  {% if viewer.profile_picture %}
+  <img src="{{ viewer.profile_picture_data_url }}" alt="{{ viewer.user.username }}" class="post-avatar">
+  {% else %}
+  <img src="{{ default_avatar_data_url }}" alt="Default" class="post-avatar">
+  {% endif %}
+  <strong>{{ viewer.user.username }}</strong>
+</a>
+{% empty %}
+<p class="text-center mb-0">Aún no hay vistas</p>
+{% endfor %}

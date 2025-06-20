@@ -30,6 +30,7 @@ urlpatterns = [
     path('start-chat/<int:user_id>/', views.start_chat, name='start_chat'),
     path('chat/<int:chat_id>/messages/', views.load_messages, name='load_messages'),
     path('story/<int:story_id>/view/', views.view_story, name='view_story'),
+    path('story/<int:story_id>/viewers/', views.story_viewers, name='story_viewers'),
     path('story/<int:story_id>/delete/', views.delete_story, name='delete_story'),
     path('story/<int:story_id>/reply/', views.reply_story, name='reply_story'),
     path('notifications/', views.notifications_view, name='notifications'),

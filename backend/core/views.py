@@ -698,6 +698,26 @@ def view_story(request, story_id):
 
 
 @login_required(login_url='/custom-login/')
+def story_viewers(request, story_id):
+    """Return HTML list of users who viewed a story."""
+    story = get_object_or_404(Story, id=story_id)
+    if story.user != request.user:
+        return HttpResponseForbidden("No tienes permiso para ver las vistas.")
+    viewer_ids = (
+        StoryView.objects.filter(story=story)
+        .values_list("viewer", flat=True)
+        .distinct()
+    )
+    viewers = Profile.objects.select_related("user").filter(user__id__in=viewer_ids)
+    html = render_to_string(
+        "partials/story_viewers_list.html",
+        {"viewers": viewers},
+        request=request,
+    )
+    return JsonResponse({"html": html})
+
+
+@login_required(login_url='/custom-login/')
 def reply_story(request, story_id):
     """Send a chat message in reply to a story."""
     story = get_object_or_404(Story, id=story_id)

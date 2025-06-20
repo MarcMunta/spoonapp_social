@@ -382,7 +382,8 @@ body:has(.spoon-chat-container) .rightbar {
 
 /* Bubble styles for post info elements */
 .post-info-group {
-    background-color: #e0f5ff;
+    background: linear-gradient(to right, #b76fc5, #e98fc0);
+    color: #fff;
     padding: 0.25rem 0.5rem;
     border-radius: 20px;
     display: inline-flex;
@@ -391,7 +392,7 @@ body:has(.spoon-chat-container) .rightbar {
 }
 
 .post-info-bubble {
-    background-color: #fff;
+    background-color: transparent;
     padding: 0.15rem 0.4rem;
     border-radius: 12px;
     display: flex;

@@ -189,7 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
       .then(res => res.json())
       .then(data => {
         if (currentIsOwn && storyViews) {
-          storyViews.textContent = `${data.views} views`;
+          const countEl = storyViews.querySelector('.view-count');
+          if (countEl) countEl.textContent = data.views;
         }
       });
   }
@@ -221,7 +222,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (replyInput) replyInput.disabled = currentIsOwn;
     if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
-    if (storyViews) storyViews.style.display = currentIsOwn ? 'block' : 'none';
+    if (storyViews) {
+      storyViews.style.display = currentIsOwn ? 'block' : 'none';
+      const countEl = storyViews.querySelector('.view-count');
+      if (countEl) countEl.textContent = '';
+    }
     if (replyContainer) {
       if (currentIsOwn) {
         replyContainer.classList.add('d-none');

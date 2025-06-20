@@ -1601,29 +1601,33 @@ body.profile-page .nav-tabs .nav-link {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
     z-index: 2000;
+    padding: 10px;
 }
 
 .story-modal-content {
     position: relative;
     max-width: 600px;
     width: 90%;
-    background: #000;
+    background: #111;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     transform: scale(1);
+    overflow: hidden;
 }
 
 .story-modal-content.open-anim {
-    animation: storyZoom 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out;
 }
-
-@keyframes storyZoom {
+@keyframes fadeIn {
     from {
-        transform: scale(0.8);
+        transform: scale(0.95);
         opacity: 0;
     }
 
@@ -1651,17 +1655,13 @@ body.profile-page .nav-tabs .nav-link {
 }
 
 .story-countdown {
-    position: absolute;
-    top: 6px;
-    right: 10px;
-    color: #fff;
+    color: #ccc;
     font-size: 0.9rem;
 }
 
 .story-modal-close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
+    background: transparent;
+    border: none;
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
@@ -1669,12 +1669,25 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-modal-user {
     color: #fff;
-    margin-bottom: 0;
-    position: absolute;
-    top: 10px;
-    left: 10px;
     display: flex;
     align-items: center;
+}
+
+.story-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.story-image {
+    width: 100%;
+    object-fit: cover;
+    border-radius: 12px;
+}
+
+.story-views {
+    font-size: 0.9rem;
 }
 
 .story-prev,
@@ -2204,10 +2217,13 @@ body.profile-page .nav-tabs .nav-link {
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     align-items: center;
     justify-content: center;
     z-index: 2000;
+    padding: 10px;
 }
 
 .story-modal-content {
@@ -2215,23 +2231,24 @@ body.profile-page .nav-tabs .nav-link {
     max-width: 850px;
     width: 95%;
     height: 90vh;
-    background: #000;
+    background: #111;
     padding: 10px;
-    border-radius: 10px;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
     transform: scale(1);
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    overflow: hidden;
 }
 
 .story-modal-content.open-anim {
-    animation: storyZoom 0.3s ease-out;
+    animation: fadeIn 0.3s ease-out;
 }
-
-@keyframes storyZoom {
+@keyframes fadeIn {
     from {
-        transform: scale(0.8);
+        transform: scale(0.95);
         opacity: 0;
     }
 
@@ -2259,17 +2276,13 @@ body.profile-page .nav-tabs .nav-link {
 }
 
 .story-countdown {
-    position: absolute;
-    top: 6px;
-    right: 50px;
-    color: #fff;
+    color: #ccc;
     font-size: 0.9rem;
 }
 
 .story-modal-close {
-    position: absolute;
-    top: 5px;
-    right: 10px;
+    background: transparent;
+    border: none;
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
@@ -2277,10 +2290,6 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-modal-user {
     color: #fff;
-    margin-bottom: 0;
-    position: absolute;
-    top: 10px;
-    left: 10px;
     display: flex;
     align-items: center;
 }

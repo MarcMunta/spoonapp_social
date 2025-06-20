@@ -1677,6 +1677,10 @@ body.profile-page .nav-tabs .nav-link {
     color: #fff;
     display: flex;
     align-items: center;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 1;
 }
 
 .story-header {
@@ -2304,6 +2308,10 @@ body.profile-page .nav-tabs .nav-link {
     color: #fff;
     display: flex;
     align-items: center;
+    position: absolute;
+    top: 8px;
+    left: 10px;
+    z-index: 1;
 }
 
 .story-modal-avatar {

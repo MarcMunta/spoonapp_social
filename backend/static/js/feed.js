@@ -103,6 +103,9 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentStoryIds = [];
   let currentCreated = [];
   let currentIsOwn = false;
+  let holdStart = 0;
+  let skipNavClick = false;
+  const HOLD_THRESHOLD = 200;
 
   function updateElapsed(createdIso) {
     if (!countdownEl) return;
@@ -284,8 +287,36 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
+  modalContent.addEventListener('mousedown', () => {
+    holdStart = Date.now();
+    pauseProgress();
+  });
+
+  modalContent.addEventListener('mouseup', () => {
+    if (Date.now() - holdStart > HOLD_THRESHOLD) {
+      skipNavClick = true;
+    }
+    resumeProgress();
+  });
+
+  modalContent.addEventListener('touchstart', () => {
+    holdStart = Date.now();
+    pauseProgress();
+  });
+
+  modalContent.addEventListener('touchend', () => {
+    if (Date.now() - holdStart > HOLD_THRESHOLD) {
+      skipNavClick = true;
+    }
+    resumeProgress();
+  });
+
   // allow clicking on the content to navigate left/right
   modalContent.addEventListener('click', e => {
+    if (skipNavClick) {
+      skipNavClick = false;
+      return;
+    }
     if (e.target === modalContent || e.target === img || e.target === video) {
       const rect = modalContent.getBoundingClientRect();
       const clickX = e.clientX - rect.left;

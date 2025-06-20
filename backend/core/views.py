@@ -461,7 +461,8 @@ def friends_list_view(request):
         online = get_user_online_status(friend)
         all_friends.append({'user': friend, 'online': online})
 
-    return render(request, 'pages/friends_panel.html', {
+    # Template moved during project restructuring
+    return render(request, 'pages/friend_requests.html', {
         'friends': all_friends
     })
 

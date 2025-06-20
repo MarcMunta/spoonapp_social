@@ -8,9 +8,10 @@
       {{ story_form.media_file }}
       <div class="story-thumb user-story{% if user_story_data.urls %} open-story{% endif %}"
            {% if user_story_data.urls %}
-            data-urls="{{ user_story_data.urls|join:'|' }}"
+           data-urls="{{ user_story_data.urls|join:'|' }}"
             data-types="{{ user_story_data.types|join:'|' }}"
             data-expires="{{ user_story_data.expires|join:'|' }}"
+            data-created="{{ user_story_data.created|join:'|' }}"
             data-user="{{ user.username }}"
             data-profile-url="{% url 'profile' user.username %}"
             data-avatar-url="{% if user.profile.profile_picture %}{{ user.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
@@ -34,6 +35,7 @@
          data-urls="{{ data.urls|join:'|' }}"
          data-types="{{ data.types|join:'|' }}"
          data-expires="{{ data.expires|join:'|' }}"
+         data-created="{{ data.created|join:'|' }}"
          data-user="{{ friend.username }}"
          data-profile-url="{% url 'profile' friend.username %}"
          data-avatar-url="{% if friend.profile.profile_picture %}{{ friend.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
@@ -57,7 +59,7 @@
     <div class="story-header d-flex justify-content-between align-items-center mb-2 px-2">
       <div class="story-modal-user"></div>
       <div class="d-flex align-items-center">
-        <span class="story-countdown text-muted me-2"></span>
+        <span class="story-countdown me-2"></span>
         <button type="button" class="btn-close btn-close-white story-modal-close" aria-label="Close"></button>
       </div>
     </div>

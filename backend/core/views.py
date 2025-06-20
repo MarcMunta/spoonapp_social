@@ -89,15 +89,17 @@ def home(request):
             'urls': [st.media_data_url for st in user_story_list],
             'types': [st.media_mime or '' for st in user_story_list],
             'expires': [st.expires_at.isoformat() for st in user_story_list],
+            'created': [st.created_at.isoformat() for st in user_story_list],
             'ids': [st.id for st in user_story_list],
         }
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'ids': []})
+            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'created': [], 'ids': []})
             entry['urls'].append(st.media_data_url)
             entry['types'].append(st.media_mime or '')
             entry['expires'].append(st.expires_at.isoformat())
+            entry['created'].append(st.created_at.isoformat())
             entry['ids'].append(st.id)
         context['friend_stories'] = friend_story_map
         context['story_form'] = StoryForm()
@@ -118,15 +120,17 @@ def feed(request):
             'urls': [st.media_data_url for st in user_story_list],
             'types': [st.media_mime or '' for st in user_story_list],
             'expires': [st.expires_at.isoformat() for st in user_story_list],
+            'created': [st.created_at.isoformat() for st in user_story_list],
             'ids': [st.id for st in user_story_list],
         }
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'ids': []})
+            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'created': [], 'ids': []})
             entry['urls'].append(st.media_data_url)
             entry['types'].append(st.media_mime or '')
             entry['expires'].append(st.expires_at.isoformat())
+            entry['created'].append(st.created_at.isoformat())
             entry['ids'].append(st.id)
         context['friend_stories'] = friend_story_map
         context['story_form'] = StoryForm()

@@ -75,8 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   let currentUrls = [];
-  let currentExpires = [];
   let currentTypes = [];
+  let currentExpires = [];
   let currentIndex = 0;
   let progressTimeout;
   let countdownInterval;
@@ -101,16 +101,14 @@ document.addEventListener('DOMContentLoaded', () => {
   const countdownEl = document.querySelector('.story-countdown');
 
   let currentStoryIds = [];
+  let currentCreated = [];
   let currentIsOwn = false;
 
-  function updateCountdown(expireIso) {
+  function updateElapsed(createdIso) {
     if (!countdownEl) return;
-    const expire = new Date(expireIso).getTime();
-    const diffMs = expire - Date.now();
-    if (diffMs <= 0) {
-      countdownEl.textContent = '0s';
-      return;
-    }
+    const created = new Date(createdIso).getTime();
+    let diffMs = Date.now() - created;
+    if (diffMs < 0) diffMs = 0;
     const totalSeconds = Math.floor(diffMs / 1000);
     if (totalSeconds < 60) {
       countdownEl.textContent = `${totalSeconds}s`;
@@ -174,8 +172,8 @@ document.addEventListener('DOMContentLoaded', () => {
     progressPaused = false;
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
-    updateCountdown(currentExpires[idx]);
-    countdownInterval = setInterval(() => updateCountdown(currentExpires[idx]), 1000);
+    updateElapsed(currentCreated[idx]);
+    countdownInterval = setInterval(() => updateElapsed(currentCreated[idx]), 1000);
     progressTimeout = setTimeout(nextStory, remainingTime);
     const replyBtn = document.getElementById('storyReplySend');
     if (replyBtn && currentStoryElIndex != null) {
@@ -203,6 +201,7 @@ document.addEventListener('DOMContentLoaded', () => {
     currentUrls = el.dataset.urls.split('|');
     currentTypes = el.dataset.types.split('|');
     currentExpires = el.dataset.expires.split('|');
+    currentCreated = el.dataset.created.split('|');
     currentStoryIds = el.dataset.storyId.split('|');
     currentIndex = 0;
     currentStoryElIndex = idx;

@@ -18,14 +18,15 @@ document
         users.forEach((user) => {
           const li = document.createElement("li");
           li.innerHTML = `
-            <div class="user-suggestion">
-              <img src="${
-                user.avatar || "https://via.placeholder.com/40"
-              }" alt="avatar" />
-              <span class="username">${user.username}</span>
-              <button onclick="sendFriendRequest(${user.id}, this)">Add</button>
-            </div>
-            `;
+  <a class="user-suggestion" href="/profile/${user.username}/">
+    <div class="user-suggestion-inner">
+      <img src="${
+        user.avatar || "https://via.placeholder.com/40"
+      }" alt="avatar" />
+      <span>${user.username}</span>
+    </div>
+  </a>
+`;
 
           resultsList.appendChild(li);
         });
@@ -38,24 +39,6 @@ document
         }
       });
   });
-
-function sendFriendRequest(userId, button) {
-  fetch("/send-friend-request/", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      "X-CSRFToken": getCSRFToken(),
-    },
-    body: JSON.stringify({ user_id: userId }),
-  }).then((response) => {
-    if (response.ok) {
-      button.textContent = "Sent";
-      button.disabled = true;
-    } else {
-      alert("Error sending friend request.");
-    }
-  });
-}
 
 function getCSRFToken() {
   const cookie = document.cookie

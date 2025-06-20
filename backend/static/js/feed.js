@@ -560,17 +560,20 @@ document.addEventListener('DOMContentLoaded', () => {
     const btn = e.target.closest('.reply-btn');
     if (btn) {
       e.preventDefault();
-      const li = btn.closest('li[data-comment-id]');
-      if (!li) return;
-      const commentId = li.dataset.commentId;
-      const container = li.querySelector('#reply-container-' + commentId);
-      const form = container ? container.querySelector('.reply-form') : null;
+      const container = btn.closest('.reply-inline-container');
+      if (!container) return;
+      container.classList.add('show-form');
+      const input = container.querySelector('.reply-form .comment-input');
+      if (input) input.focus();
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') {
+      const form = e.target.closest('.reply-form');
       if (form) {
-        form.classList.toggle('d-none');
-        const input = form.querySelector('.comment-input');
-        if (input && !form.classList.contains('d-none')) {
-          input.focus();
-        }
+        const container = form.closest('.reply-inline-container');
+        if (container) container.classList.remove('show-form');
       }
     }
   });
@@ -752,18 +755,18 @@ document.addEventListener('DOMContentLoaded', () => {
           list.insertAdjacentHTML('beforeend', data.html);
           const input = replyForm.querySelector('.comment-input');
           if (input) input.value = '';
-          replyForm.classList.add('d-none');
-
-          const container = replyForm.parentElement.previousElementSibling;
+          const container = replyForm.closest('.reply-inline-container');
           if (container) {
-            const loadBtn = container.querySelector('.load-replies-btn');
-            const hideBtn = container.querySelector('.hide-replies-btn');
-            if (!hideBtn) {
+            container.classList.remove('show-form');
+            const actions = container.parentElement;
+            const loadBtn = actions ? actions.querySelector('.load-replies-btn') : null;
+            const hideBtn = actions ? actions.querySelector('.hide-replies-btn') : null;
+            if (!hideBtn && actions) {
               const newBtn = document.createElement('button');
               newBtn.className = 'hide-replies-btn';
               newBtn.dataset.commentId = li.dataset.commentId;
               newBtn.textContent = 'Ver menos';
-              if (loadBtn) loadBtn.replaceWith(newBtn); else container.appendChild(newBtn);
+              if (loadBtn) loadBtn.replaceWith(newBtn); else actions.appendChild(newBtn);
             }
           }
         }

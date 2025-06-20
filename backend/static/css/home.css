@@ -573,6 +573,7 @@ body:has(.spoon-chat-container) .rightbar {
     padding: 0.6rem 0.8rem;
     min-height: 40px;
     color: #333;
+    flex: 1;
 }
 
 .comment-form {
@@ -2431,10 +2432,49 @@ body.profile-page .nav-tabs .nav-link {
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
+.reply-inline-container {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.reply-inline-container .reply-form {
+    display: none;
+    width: 100%;
+    flex-grow: 1;
+}
+
+.reply-inline-container.show-form .reply-btn {
+    display: none;
+}
+
+.reply-inline-container.show-form .reply-form {
+    display: flex;
+    animation: fadeSlideIn 0.5s forwards;
+}
+
+@keyframes fadeSlideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
 .reply-form {
     display: flex;
     align-items: center;
     gap: 0.5rem;
+    width: 100%;
 }
 
 .reply-send-btn {
@@ -2447,6 +2487,15 @@ body.profile-page .nav-tabs .nav-link {
     cursor: pointer;
     box-shadow: 0 4px 0 #3d8cc7;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    opacity: 0;
+    pointer-events: none;
+    animation: none;
+}
+
+.reply-inline-container.show-form .reply-send-btn {
+    animation: fadeIn 0.3s forwards;
+    animation-delay: 0.5s;
+    pointer-events: auto;
 }
 
 .reply-send-btn:hover {

@@ -455,7 +455,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const li = document.querySelector(`li[data-comment-id='${deleteId}']`);
         const list = li ? li.closest('.comment-list') : null;
         const postId = list ? list.dataset.postId : null;
-        const repliesList = li ? li.closest('.replies-list') : null;
+        const repliesList = li ? li.closest('.respuestas') : null;
         const parentLi = repliesList ? repliesList.closest('li[data-comment-id]') : null;
         pendingCommentDeleteId = null;
         if (data.success && li) {
@@ -649,9 +649,9 @@ document.addEventListener('DOMContentLoaded', () => {
         .then(data => {
           if (!list) {
             const li = document.querySelector(`li[data-comment-id='${commentId}']`);
-            list = document.createElement('ul');
+            list = document.createElement('div');
             list.id = 'replies-' + commentId;
-            list.className = 'list-group mt-1 replies-list';
+            list.className = 'respuestas list-group mt-1';
             if (li) li.appendChild(list);
           }
           list.classList.remove('d-none');
@@ -738,11 +738,11 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (replyForm) {
           const li = replyForm.closest('li[data-comment-id]');
           if (!li) return;
-          let list = li.querySelector('ul.replies-list');
+          let list = li.querySelector('div.respuestas');
           if (!list) {
-            list = document.createElement('ul');
+            list = document.createElement('div');
             list.id = `replies-${li.dataset.commentId}`;
-            list.className = 'list-group mt-1 replies-list';
+            list.className = 'respuestas list-group mt-1';
             li.appendChild(list);
           }
           list.classList.remove('d-none');

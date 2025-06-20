@@ -4,11 +4,13 @@ from .default_avatar import DEFAULT_AVATAR_DATA_URL
 from django.db.models import Q
 
 def get_friends(user):
-    """Helper function to get friends list"""
-    sent = FriendRequest.objects.filter(from_user=user, accepted=True).values_list('to_user', flat=True)
-    received = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
-    all_friend_ids = list(sent) + list(received)
-    return User.objects.filter(id__in=all_friend_ids)
+    if not user.is_authenticated:
+        return User.objects.none()
+
+    sent_ids = FriendRequest.objects.filter(from_user=user, accepted=True).values_list('to_user', flat=True)
+    received_ids = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
+    mutual_ids = set(sent_ids).intersection(received_ids)
+    return User.objects.filter(id__in=mutual_ids)
 
 def friend_requests_processor(request):
     context = {}

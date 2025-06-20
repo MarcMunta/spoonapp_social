@@ -13,7 +13,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'social',
+    'core',
 ]
 
 MIDDLEWARE = [
@@ -24,8 +24,8 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'social.middleware.UpdateLastSeenMiddleware',
-    'social.middleware.RedirectErrorMiddleware',
+    'core.middleware.UpdateLastSeenMiddleware',
+    'core.middleware.RedirectErrorMiddleware',
 ]
 
 ROOT_URLCONF = 'spoonapp_social.urls'
@@ -41,9 +41,9 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'social.context_processors.friend_requests_processor',
-                'social.context_processors.base_context',
-                'social.views.base_context',
+                'core.context_processors.friend_requests_processor',
+                'core.context_processors.base_context',
+                'core.views.base_context',
             ],
         },
     },
@@ -75,6 +75,6 @@ MEDIA_ROOT = BASE_DIR / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-HANDLER404 = 'social.views.custom_404'
-HANDLER403 = 'social.views.custom_403'
-HANDLER500 = 'social.views.custom_500'
+HANDLER404 = 'core.views.custom_404'
+HANDLER403 = 'core.views.custom_403'
+HANDLER500 = 'core.views.custom_500'

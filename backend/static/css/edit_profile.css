@@ -1,0 +1,122 @@
+body {
+    font-family: 'Inter', sans-serif;
+    background: #fafafa;
+}
+
+.profile-card {
+    max-width: 500px;
+    margin: 50px auto;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+}
+
+.profile-header {
+    background: #fcefae;
+    padding: 2rem 1.5rem 1rem;
+    text-align: center;
+}
+
+.profile-header h2 {
+    color: #d63384;
+    margin-bottom: 1rem;
+}
+
+.profile-avatar {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid white;
+    margin-top: -50px;
+}
+
+.profile-form {
+    padding: 2rem;
+}
+
+.profile-form label {
+    font-weight: 600;
+    margin-top: 1rem;
+    display: block;
+}
+
+.profile-form input,
+.profile-form textarea,
+.profile-form select {
+    width: 100%;
+    padding: 10px 15px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    background: #fcf8e8;
+    transition: 0.2s;
+}
+
+.profile-form input:focus,
+.profile-form textarea:focus,
+.profile-form select:focus {
+    outline: none;
+    border-color: #d63384;
+    background: #fff;
+}
+
+.profile-form button {
+    margin-top: 2rem;
+    width: 100%;
+    padding: 12px;
+    background: #d63384;
+    color: white;
+    font-weight: 600;
+    border: none;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: 0.3s ease;
+}
+
+.profile-form button:hover {
+    background: #c12670;
+}
+
+.back-link {
+    display: block;
+    text-align: center;
+    margin-top: 15px;
+    color: #aaa;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+
+.back-link:hover {
+    text-decoration: underline;
+}
+
+.edit-profile-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    position: relative;
+}
+
+.camera-icon-overlay {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.camera-button {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background: #6c63ff;
+    border-radius: 50%;
+    padding: 6px;
+    color: white;
+    font-size: 14px;
+}
+
+#id_profile_picture {
+    display: none;
+}

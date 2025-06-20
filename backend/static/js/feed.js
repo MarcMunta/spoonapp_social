@@ -105,18 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateCountdown(expireIso) {
     if (!countdownEl) return;
-    const created = new Date(new Date(expireIso).getTime() - 24 * 60 * 60 * 1000);
-    const diff = Date.now() - created.getTime();
-    if (diff <= 0) {
-      countdownEl.textContent = '0m';
+    const expire = new Date(expireIso).getTime();
+    const diffMs = expire - Date.now();
+    if (diffMs <= 0) {
+      countdownEl.textContent = '0s';
       return;
     }
-    const minutes = Math.floor(diff / 60000);
-    if (minutes < 60) {
-      countdownEl.textContent = `${minutes}m`;
+    const totalSeconds = Math.floor(diffMs / 1000);
+    if (totalSeconds < 60) {
+      countdownEl.textContent = `${totalSeconds}s`;
+    } else if (totalSeconds < 3600) {
+      countdownEl.textContent = `${Math.floor(totalSeconds / 60)}m`;
     } else {
-      const hours = Math.floor(minutes / 60);
-      countdownEl.textContent = `${hours}h`;
+      countdownEl.textContent = `${Math.floor(totalSeconds / 3600)}h`;
     }
   }
 
@@ -209,11 +210,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const userContainer = document.querySelector('.story-modal-user');
     if (userContainer) {
       const profileUrl = el.dataset.profileUrl;
-      const avatarHtml =
-        `<a href="${profileUrl}"><img src="${el.dataset.avatarUrl}" class="story-modal-avatar me-2" width="40" height="40" alt="${el.dataset.user}"></a>`;
-      const nameHtml =
-        `<a href="${profileUrl}" class="story-modal-name text-white fs-5">${el.dataset.user}</a>`;
-      userContainer.innerHTML = avatarHtml + nameHtml;
+      const bubbleColor = el.dataset.bubbleColor || '#e0f5ff';
+      userContainer.innerHTML =
+        `<a href="${profileUrl}" class="post-user text-decoration-none" style="background-color:${bubbleColor};">
+            <img src="${el.dataset.avatarUrl}" class="post-avatar" width="40" height="40" alt="${el.dataset.user}">
+            <strong>${el.dataset.user}</strong>
+         </a>`;
     }
     const replyBtn = document.getElementById('storyReplySend');
     if (replyBtn) {

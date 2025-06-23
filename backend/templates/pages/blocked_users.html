@@ -1,0 +1,32 @@
+{% extends 'layouts/base.html' %}
+{% load static %}
+
+{% block title %}SpoonApp Social{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <h2 class="mb-4">Usuarios bloqueados</h2>
+  {% if blocks %}
+  <ul class="list-group">
+    {% for block in blocks %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div class="post-user text-decoration-none" style="background-color: {{ block.blocked.profile.bubble_color }};">
+        {% if block.blocked.profile.profile_picture %}
+        <img src="{{ block.blocked.profile.profile_picture_data_url }}" alt="{{ block.blocked.username }}" class="post-avatar">
+        {% else %}
+        <img src="{{ default_avatar_data_url }}" alt="Default" class="post-avatar">
+        {% endif %}
+        <strong>{{ block.blocked.username }}</strong>
+      </div>
+      <form method="post" action="{% url 'unblock_user' block.blocked.username %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-sm btn-danger">Desbloquear</button>
+      </form>
+    </li>
+    {% endfor %}
+  </ul>
+  {% else %}
+  <p class="text-muted">No has bloqueado a nadie.</p>
+  {% endif %}
+</div>
+{% endblock %}

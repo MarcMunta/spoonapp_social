@@ -18,7 +18,7 @@
 </form>
 {% endif %}
 {% if user.is_authenticated and not show_form %}
-{% include 'partials/stories.html' %}
+{% include "partials/stories/stories.html" %}
 {% endif %}
 {% for post in posts %}
 <div class="post mb-3">
@@ -96,7 +96,7 @@
   {% if comments %}
   <ul id="comments-{{ post.id }}" data-post-id="{{ post.id }}" data-expanded="false"
     class="list-group list-group-flush mt-2 comment-list">
-    {% include 'partials/comments_partial.html' with comments=comments|slice:":3" %}
+    {% include 'partials/comments/comments_partial.html' with comments=comments|slice:":3" %}
   </ul>
   {% if comments|length > 3 %}
   <button class="load-more-comments" data-post-id="{{ post.id }}">Cargar más</button>

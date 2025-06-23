@@ -101,6 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const deleteBtn = document.querySelector(".btn-eliminar-historia");
   const replyInput = document.getElementById("storyReplyInput");
   const optionsBtn = document.querySelector(".story-options-btn");
+  if (deleteBtn) deleteBtn.style.display = "none";
   const optionsMenu = storyOptions
     ? storyOptions.querySelector(".dropdown-menu")
     : null;
@@ -252,7 +253,10 @@ document.addEventListener("DOMContentLoaded", () => {
         replyContainer.classList.remove("d-none");
       }
     }
-    if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[currentIndex];
+    if (deleteBtn) {
+      deleteBtn.dataset.storyId = currentStoryIds[currentIndex];
+      deleteBtn.style.display = "none";
+    }
     modal.style.display = "flex";
     modalContent.classList.add("open-anim");
     showStory(currentIndex);
@@ -266,6 +270,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (progressBar) progressBar.style.width = "0%";
     if (countdownEl) countdownEl.textContent = "";
     if (viewsModal) viewsModal.classList.remove("show");
+    if (deleteBtn) deleteBtn.style.display = "none";
   }
 
   function nextStory() {
@@ -628,9 +633,11 @@ document.addEventListener("DOMContentLoaded", () => {
       const open = optionsMenu.classList.contains("show");
       if (open) {
         optionsMenu.classList.remove("show");
+        if (deleteBtn) deleteBtn.style.display = "none";
         resumeProgress();
       } else {
         optionsMenu.classList.add("show");
+        if (deleteBtn) deleteBtn.style.display = "block";
         pauseProgress();
       }
     });
@@ -641,6 +648,7 @@ document.addEventListener("DOMContentLoaded", () => {
         optionsMenu.classList.contains("show")
       ) {
         optionsMenu.classList.remove("show");
+        if (deleteBtn) deleteBtn.style.display = "none";
         resumeProgress();
       }
     });

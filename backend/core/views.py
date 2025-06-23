@@ -373,6 +373,21 @@ def hide_stories(request, username):
         StoryVisibilityBlock.objects.get_or_create(story_owner=request.user, hidden_user=target_user)
     return redirect('profile', request.user.username)
 
+
+@login_required(login_url='/custom-login/')
+def hidden_stories_list(request):
+    blocks = StoryVisibilityBlock.objects.filter(story_owner=request.user).select_related('hidden_user__profile')
+    return render(request, 'pages/hidden_stories.html', {'blocks': blocks})
+
+
+@login_required(login_url='/custom-login/')
+def unhide_stories(request, username):
+    target_user = get_object_or_404(User, username=username)
+    StoryVisibilityBlock.objects.filter(story_owner=request.user, hidden_user=target_user).delete()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True})
+    return redirect('hidden_stories_list')
+
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'pages/post_detail.html', {'post': post})

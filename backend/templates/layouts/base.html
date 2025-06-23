@@ -142,12 +142,30 @@
       </div>
 
       <div class="friends-bubbles">
+        {% if user.is_authenticated %}
+        <div class="friend-bubble text-center">
+          {% if user.profile.profile_picture %}
+          <img src="{{ user.profile.profile_picture_data_url }}" alt="{{ user.username }}"
+            style="border-color: {{ user.profile.bubble_color }};">
+          {% else %}
+          <img src="{{ default_avatar_data_url }}" alt="{{ user.username }}"
+            style="border-color: {{ user.profile.bubble_color }};">
+          {% endif %}
+          <div class="friend-name mt-1">{{ user.username }}</div>
+          <div class="friend-status">
+            <span class="text-success">Online</span>
+            <a href="{% url 'profile' user.username %}" class="message-icon ms-1">👤</a>
+          </div>
+        </div>
+        {% endif %}
         {% for f in friends %}
         <div class="friend-bubble text-center">
           {% if f.profile.profile_picture %}
-          <img src="{{ f.profile.profile_picture_data_url }}" alt="{{ f.username }}">
+          <img src="{{ f.profile.profile_picture_data_url }}" alt="{{ f.username }}"
+            style="border-color: {{ f.profile.bubble_color }};">
           {% else %}
-          <img src="{{ default_avatar_data_url }}" alt="{{ f.username }}">
+          <img src="{{ default_avatar_data_url }}" alt="{{ f.username }}"
+            style="border-color: {{ f.profile.bubble_color }};">
           {% endif %}
           <div class="friend-name mt-1">{{ f.username }}</div>
           <div class="friend-status">

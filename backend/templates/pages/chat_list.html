@@ -4,6 +4,11 @@
 
 {% block title %}SpoonApp Social{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
+{% endblock %}
+
+
 {% block content %}
 {% timezone "Europe/London" %}
 <div class="spoon-chat-container">

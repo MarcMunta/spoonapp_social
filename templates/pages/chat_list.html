@@ -50,12 +50,9 @@
 
                             <div class="d-flex justify-content-between align-items-center">
                                 {% if data.last_message %}
-                                <div class="spoon-last-message">
-                                    {% if data.last_message.sender == user %}You: {% endif %}
-                                    {{ data.last_message.content|truncatechars:25 }}
-                                </div>
+                                <div class="spoon-last-message">Last message at {{ data.last_message.sent_at|localtime|date:"H:i" }}</div>
                                 {% else %}
-                                <div class="spoon-last-message">Start your conversation! 🍴</div>
+                                <div class="spoon-last-message">New message</div>
                                 {% endif %}
 
                                 {% if data.unread_count > 0 %}

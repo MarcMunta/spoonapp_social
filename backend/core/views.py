@@ -265,7 +265,7 @@ def comment_post(request, post_id):
             )
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 html = render_to_string(
-                    "partials/comments_partial.html",
+                    "partials/comments/comments_partial.html",
                     {
                         "comments": [comment],
                         "user": request.user,
@@ -560,7 +560,7 @@ def load_comments(request, post_id):
         .prefetch_related("replies")
     )
     html = render_to_string(
-        "partials/comments_partial.html",
+        "partials/comments/comments_partial.html",
         {
             "comments": comments_qs,
             "user": request.user,
@@ -582,7 +582,7 @@ def load_replies(request, comment_id):
         .order_by("-num_likes", "-created_at")[offset : offset + limit]
     )
     html = render_to_string(
-        "partials/comments_partial.html",
+        "partials/comments/comments_partial.html",
         {"comments": replies_qs, "user": request.user, "comment_form": CommentForm()},
         request=request,
     )
@@ -832,7 +832,7 @@ def story_viewers(request, story_id):
     )
     viewers = Profile.objects.select_related("user").filter(user__id__in=viewer_ids)
     html = render_to_string(
-        "partials/story_viewers_list.html",
+        "partials/stories/story_viewers_list.html",
         {"viewers": viewers},
         request=request,
     )

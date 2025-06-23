@@ -18,8 +18,8 @@ document
         users.forEach((user) => {
           const li = document.createElement("li");
           li.innerHTML = `
-  <a class="user-suggestion" href="/profile/${user.username}/">
-    <div class="user-suggestion-inner">
+  <a href="/profile/${user.username}/" class="user-suggestion-link">
+    <div class="user-suggestion">
       <img src="${
         user.avatar || "https://via.placeholder.com/40"
       }" alt="avatar" />
@@ -27,7 +27,6 @@ document
     </div>
   </a>
 `;
-
           resultsList.appendChild(li);
         });
 

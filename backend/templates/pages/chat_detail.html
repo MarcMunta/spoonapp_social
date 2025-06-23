@@ -66,7 +66,7 @@
                     <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3"
                         data-message-id="{{ message.id }}">
                         <div
-                            class="spoon-message-bubble {% if message.sender == user %}spoon-message-sent{% else %}spoon-message-received{% endif %}">
+                            class="chat-bubble {% if message.sender == user %}user{% else %}other{% endif %}">
                             {% if message.story %}
                             {% if message.story.expires_at > now %}
                             {% if message.story.is_video %}
@@ -79,7 +79,7 @@
                             {% endif %}
                             {% endif %}
                             <div>{{ message.content }}</div>
-                            <div class="spoon-message-time">{{ message.sent_at|date:"H:i" }}</div>
+                            <span class="timestamp">{{ message.sent_at|date:"H:i" }}</span>
                         </div>
                     </div>
                     {% endfor %}

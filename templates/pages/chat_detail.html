@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load static %}
+{% load static custom_filters %}
 
 {% block title %}SpoonApp Social{% endblock %}
 
@@ -78,7 +78,7 @@
                             <div class="text-muted small fst-italic mb-1">Historia no disponible</div>
                             {% endif %}
                             {% endif %}
-                            <div>{{ message.content }}</div>
+                            <div>{{ message.content|censor_bad_words|link_mentions }}</div>
                             <span class="timestamp">{{ message.sent_at|date:"H:i" }}</span>
                         </div>
                     </div>

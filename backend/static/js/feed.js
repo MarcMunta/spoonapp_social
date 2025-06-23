@@ -316,6 +316,13 @@ document.addEventListener("DOMContentLoaded", () => {
     if (Date.now() - holdStart > HOLD_THRESHOLD) {
       skipNavClick = true;
     }
+    if (
+      (viewsModal && viewsModal.classList.contains('show')) ||
+      (optionsMenu && optionsMenu.classList.contains('show')) ||
+      (deleteConfirm && deleteConfirm.style.display === 'flex')
+    ) {
+      return;
+    }
     resumeProgress();
   });
 
@@ -327,6 +334,13 @@ document.addEventListener("DOMContentLoaded", () => {
   modalContent.addEventListener('touchend', () => {
     if (Date.now() - holdStart > HOLD_THRESHOLD) {
       skipNavClick = true;
+    }
+    if (
+      (viewsModal && viewsModal.classList.contains('show')) ||
+      (optionsMenu && optionsMenu.classList.contains('show')) ||
+      (deleteConfirm && deleteConfirm.style.display === 'flex')
+    ) {
+      return;
     }
     resumeProgress();
   });

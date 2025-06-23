@@ -466,7 +466,6 @@ document.addEventListener("DOMContentLoaded", () => {
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
         viewsModal.classList.remove("show");
-        resumeProgress();
       }
     });
   }

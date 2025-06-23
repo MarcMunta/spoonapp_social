@@ -496,6 +496,98 @@ body:has(.spoon-chat-container) .rightbar {
     padding: 0;
 }
 
+/* Bubble layout for friends */
+.friends-bubbles {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.friend-bubble {
+    background: #fff;
+    border-radius: 15px;
+    padding: 10px;
+    width: 100px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.friend-bubble:hover {
+    transform: translateY(-2px);
+}
+
+.friend-bubble img {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-bottom: 4px;
+    border: 2px solid #d48ac1;
+}
+
+.friend-bubble .friend-name {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.friend-bubble .friend-status {
+    font-size: 0.75rem;
+    color: #555;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    margin-top: 2px;
+}
+
+.friend-bubble .message-icon {
+    text-decoration: none;
+}
+
+.viewer-item {
+    background: #fff;
+    border-radius: 10px;
+    padding: 8px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.viewer-item .btn {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+
+.post-categories {
+    margin-top: 0.5rem;
+}
+
+.post-categories .badge {
+    margin-right: 0.25rem;
+}
+
+.spoon-like {
+    display: inline-block;
+    background-color: #d1e7dd;
+    color: #0f5132;
+    padding: 0.3rem 0.6rem;
+    border-radius: 20px;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+}
+
+.spoon-like:hover {
+    transform: scale(1.2);
+}
+
 .comment-input {
     width: 100%;
     border: 1px solid #ccc;
@@ -941,6 +1033,39 @@ body.profile-page .nav-tabs .nav-link {
     }
 }
 
+.reply-form {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.reply-send-btn {
+    background: linear-gradient(to right, #7cb9e8, #4d9de0);
+    color: #fff;
+    border: none;
+    padding: 0.4rem 1rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    box-shadow: 0 4px 0 #3d8cc7;
+    transition: transform 0.3s ease, box-shadow 0.2s ease, opacity 0.3s ease;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(-10px);
+}
+
+.reply-inline-container.show-form .reply-send-btn {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+}
+
+.reply-send-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
 .friends {
     border-bottom: none !important;
     box-shadow: none !important;
@@ -958,4 +1083,19 @@ body.profile-page .nav-tabs .nav-link {
 
 .user-suggestion-link span {
     text-decoration: none !important;
+}
+
+/* --- Chat scrolling fixes --- */
+.spoon-chat-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.spoon-chat-detail {
+    flex: 1;
+}
+
+.spoon-messages-area {
+    flex: 1;
+    overflow-y: auto;
 }

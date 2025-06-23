@@ -34,9 +34,12 @@
                             <div class="spoon-friend-avatar-container">
                                 {% if req.from_user.profile.profile_picture %}
                                 <img alt="Profile" class="spoon-friend-avatar"
-                                    src="{{ req.from_user.profile.profile_picture_data_url }}">
+                                    src="{{ req.from_user.profile.profile_picture_data_url }}"
+                                    style="border-color: {{ req.from_user.profile.bubble_color }};">
                                 {% else %}
-                                <img alt="Default" class="spoon-friend-avatar" src="{{ default_avatar_data_url }}">
+                                <img alt="Default" class="spoon-friend-avatar"
+                                    src="{{ default_avatar_data_url }}"
+                                    style="border-color: {{ req.from_user.profile.bubble_color }};">
                                 {% endif %}
                                 {% if req.from_user.profile.online %}
                                 <div class="spoon-friend-online-badge"></div>

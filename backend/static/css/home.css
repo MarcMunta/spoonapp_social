@@ -1869,6 +1869,11 @@ body.profile-page .nav-tabs .nav-link {
 
 .story-views {
     font-size: 0.9rem;
+    cursor: pointer;
+}
+
+.story-views:hover {
+    cursor: pointer;
 }
 
 .story-prev,
@@ -3802,7 +3807,7 @@ body.profile-page .nav-tabs .nav-link {
     overflow-y: auto;
     transform: translateY(100%);
     opacity: 0;
-    transition: transform 0.4s ease, opacity 0.4s ease;
+    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
 }
 
 .views-list-modal.show .views-list-content {

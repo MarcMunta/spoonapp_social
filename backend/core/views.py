@@ -47,15 +47,24 @@ def custom_403(request, exception):
 def custom_500(request):
     return render(request, 'errors/500.html', status=500)
 
-def _build_feed_context(show_posts=True):
+def _build_feed_context(request, show_posts=True):
     """Return context for feed-related views."""
+    posts_qs = Post.objects.all()
+    if request.user.is_authenticated:
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list(
+            "blocked_id", flat=True
+        )
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list(
+            "blocker_id", flat=True
+        )
+        posts_qs = posts_qs.exclude(user__id__in=blocked_ids).exclude(
+            user__id__in=blocking_ids
+        )
     posts = (
-        Post.objects.all()
-        .annotate(
+        posts_qs.annotate(
             # Count all comments including replies
             comment_count=Count("postcomment", distinct=True)
-        )
-        .order_by("-created_at")
+        ).order_by("-created_at")
         if show_posts
         else Post.objects.none()
     )
@@ -90,10 +99,13 @@ def get_friends(user):
     sent_ids = FriendRequest.objects.filter(from_user=user, accepted=True).values_list('to_user', flat=True)
     received_ids = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
     mutual_ids = set(sent_ids).intersection(received_ids)
-    return User.objects.filter(id__in=mutual_ids)
+    qs = User.objects.filter(id__in=mutual_ids)
+    blocked_ids = Block.objects.filter(blocker=user).values_list('blocked_id', flat=True)
+    blocking_ids = Block.objects.filter(blocked=user).values_list('blocker_id', flat=True)
+    return qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
 
 def home(request):
-    context = _build_feed_context()
+    context = _build_feed_context(request)
     context['show_form'] = False
 
     if request.user.is_authenticated:
@@ -102,9 +114,13 @@ def home(request):
         hidden_owners = StoryVisibilityBlock.objects.filter(
             hidden_user=request.user
         ).values_list('story_owner', flat=True)
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
         active_stories = (
             Story.objects.filter(expires_at__gt=timezone.now())
             .exclude(user__in=hidden_owners)
+            .exclude(user__id__in=blocked_ids)
+            .exclude(user__id__in=blocking_ids)
             .select_related('user')
             .order_by('created_at')
         )
@@ -132,7 +148,7 @@ def home(request):
     return render(request, 'pages/feed.html', context)
 
 def feed(request):
-    context = _build_feed_context(show_posts=False)
+    context = _build_feed_context(request, show_posts=False)
     context['show_form'] = True
 
     if request.user.is_authenticated:
@@ -141,9 +157,13 @@ def feed(request):
         hidden_owners = StoryVisibilityBlock.objects.filter(
             hidden_user=request.user
         ).values_list('story_owner', flat=True)
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
         active_stories = (
             Story.objects.filter(expires_at__gt=timezone.now())
             .exclude(user__in=hidden_owners)
+            .exclude(user__id__in=blocked_ids)
+            .exclude(user__id__in=blocking_ids)
             .select_related('user')
             .order_by('created_at')
         )
@@ -388,12 +408,30 @@ def unhide_stories(request, username):
         return JsonResponse({'success': True})
     return redirect('hidden_stories_list')
 
+
+@login_required(login_url='/custom-login/')
+def blocked_users_list(request):
+    blocks = Block.objects.filter(blocker=request.user).select_related('blocked__profile')
+    return render(request, 'pages/blocked_users.html', {'blocks': blocks})
+
+
+@login_required(login_url='/custom-login/')
+def unblock_user(request, username):
+    target_user = get_object_or_404(User, username=username)
+    Block.objects.filter(blocker=request.user, blocked=target_user).delete()
+    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
+        return JsonResponse({'success': True})
+    return redirect('blocked_users_list')
+
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
     return render(request, 'pages/post_detail.html', {'post': post})
 
-def profile(request, username): 
+def profile(request, username):
     profile_user = get_object_or_404(User, username=username)
+    if request.user.is_authenticated:
+        if Block.objects.filter(blocker=request.user, blocked=profile_user).exists() or Block.objects.filter(blocker=profile_user, blocked=request.user).exists():
+            return HttpResponseForbidden("No tienes permiso para ver este perfil.")
     posts = Post.objects.filter(user=profile_user).order_by('-created_at').prefetch_related('categories')
     user_profile, _ = Profile.objects.get_or_create(user=profile_user)
     categories = PostCategory.objects.exclude(slug__isnull=True)
@@ -454,6 +492,11 @@ def search_users(request):
         users = User.objects.filter(
             Q(username__icontains=query) | Q(email__icontains=query)
         ).exclude(id=request.user.id)[:10]
+
+        if request.user.is_authenticated:
+            blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
+            blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
+            users = users.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
 
         results = []
         for user in users:

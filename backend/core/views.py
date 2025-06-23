@@ -99,7 +99,15 @@ def home(request):
     if request.user.is_authenticated:
         Story.objects.filter(expires_at__lte=timezone.now()).delete()
         context['friends'] = get_friends(request.user)
-        active_stories = Story.objects.filter(expires_at__gt=timezone.now()).select_related('user').order_by('created_at')
+        hidden_owners = StoryVisibilityBlock.objects.filter(
+            hidden_user=request.user
+        ).values_list('story_owner', flat=True)
+        active_stories = (
+            Story.objects.filter(expires_at__gt=timezone.now())
+            .exclude(user__in=hidden_owners)
+            .select_related('user')
+            .order_by('created_at')
+        )
 
         user_story_list = active_stories.filter(user=request.user)
         context['user_story_data'] = {
@@ -130,7 +138,15 @@ def feed(request):
     if request.user.is_authenticated:
         Story.objects.filter(expires_at__lte=timezone.now()).delete()
         context['friends'] = get_friends(request.user)
-        active_stories = Story.objects.filter(expires_at__gt=timezone.now()).select_related('user').order_by('created_at')
+        hidden_owners = StoryVisibilityBlock.objects.filter(
+            hidden_user=request.user
+        ).values_list('story_owner', flat=True)
+        active_stories = (
+            Story.objects.filter(expires_at__gt=timezone.now())
+            .exclude(user__in=hidden_owners)
+            .select_related('user')
+            .order_by('created_at')
+        )
 
         user_story_list = active_stories.filter(user=request.user)
         context['user_story_data'] = {
@@ -725,6 +741,8 @@ def delete_story(request, story_id):
 def view_story(request, story_id):
     """Register a view and return total views"""
     story = get_object_or_404(Story, id=story_id)
+    if StoryVisibilityBlock.objects.filter(story_owner=story.user, hidden_user=request.user).exists():
+        return HttpResponseForbidden("No tienes permiso para ver esta historia.")
     if request.user != story.user:
         StoryView.objects.get_or_create(story=story, viewer=request.user)
     views = StoryView.objects.filter(story=story).values('viewer').distinct().count()
@@ -757,6 +775,10 @@ def story_viewers(request, story_id):
 def reply_story(request, story_id):
     """Send a chat message in reply to a story."""
     story = get_object_or_404(Story, id=story_id)
+    if StoryVisibilityBlock.objects.filter(story_owner=story.user, hidden_user=request.user).exists():
+        if request.headers.get("x-requested-with") == "XMLHttpRequest":
+            return JsonResponse({'error': 'No puedes responder a esta historia.'}, status=403)
+        return redirect('home')
     if request.user == story.user:
         if request.headers.get("x-requested-with") == "XMLHttpRequest":
             return JsonResponse({'error': 'Cannot reply to own story.'}, status=403)

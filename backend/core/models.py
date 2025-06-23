@@ -211,3 +211,21 @@ class Profile(models.Model):
                 base64.b64encode(self.profile_picture).decode(),
             )
         return ""
+
+
+class Block(models.Model):
+    blocker = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocking')
+    blocked = models.ForeignKey(User, on_delete=models.CASCADE, related_name='blocked_by')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('blocker', 'blocked')
+
+
+class StoryVisibilityBlock(models.Model):
+    story_owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='story_hidden_to')
+    hidden_user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='hidden_story_from')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('story_owner', 'hidden_user')

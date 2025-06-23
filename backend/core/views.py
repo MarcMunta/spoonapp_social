@@ -4,10 +4,24 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
-from .models import Post, PostLike, PostComment, PostShare, Profile, PostCommentLike, Chat, Message, Notification, Story
+from .models import (
+    Post,
+    PostLike,
+    PostComment,
+    PostShare,
+    Profile,
+    PostCommentLike,
+    Chat,
+    Message,
+    Notification,
+    Story,
+    FriendRequest,
+    StoryView,
+    PostCategory,
+    Block,
+    StoryVisibilityBlock,
+)
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
-from .models import FriendRequest, StoryView, Profile
-from .models import PostCategory
 from django.utils import timezone
 from django.http import HttpResponseForbidden
 from django.db.models import Q, Prefetch, Count
@@ -319,6 +333,29 @@ def cancel_follow_request(request, username):
     target_user = get_object_or_404(User, username=username)
     FriendRequest.objects.filter(from_user=request.user, to_user=target_user, accepted=False).delete()
     return redirect('profile', username=username)
+
+
+@login_required(login_url='/custom-login/')
+def remove_follower(request, username):
+    follower = get_object_or_404(User, username=username)
+    FriendRequest.objects.filter(from_user=follower, to_user=request.user).delete()
+    return redirect('profile', request.user.username)
+
+
+@login_required(login_url='/custom-login/')
+def block_user(request, username):
+    user_to_block = get_object_or_404(User, username=username)
+    if user_to_block != request.user:
+        Block.objects.get_or_create(blocker=request.user, blocked=user_to_block)
+    return redirect('profile', user_to_block.username)
+
+
+@login_required(login_url='/custom-login/')
+def hide_stories(request, username):
+    target_user = get_object_or_404(User, username=username)
+    if target_user != request.user:
+        StoryVisibilityBlock.objects.get_or_create(story_owner=request.user, hidden_user=target_user)
+    return redirect('profile', request.user.username)
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)

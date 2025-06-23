@@ -1323,6 +1323,7 @@ body.profile-page .nav-tabs .nav-link {
 
 /* Enhanced scrolling experience */
 .spoon-messages-area {
+    flex: 1;
     scroll-padding-top: 20px;
     scroll-padding-bottom: 20px;
     overscroll-behavior: contain;
@@ -1373,6 +1374,7 @@ body.profile-page .nav-tabs .nav-link {
     height: 100%;
     display: flex;
     flex-direction: column;
+    flex: 1;
     background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
     position: relative;
     overflow: hidden;
@@ -1572,6 +1574,7 @@ body.profile-page .nav-tabs .nav-link {
     height: 100% !important;
     display: flex !important;
     flex-direction: column !important;
+    flex: 1 !important;
     background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%) !important;
     position: relative !important;
     overflow: hidden !important;
@@ -2811,6 +2814,8 @@ body.profile-page .nav-tabs .nav-link {
     margin-top: -1rem;
     border: 3px solid #c0c4cc;
     position: relative;
+    display: flex;
+    flex-direction: column;
 }
 
 .spoon-chat-container::before {
@@ -3092,6 +3097,7 @@ body.profile-page .nav-tabs .nav-link {
     height: 100%;
     display: flex;
     flex-direction: column;
+    flex: 1;
     background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
     position: relative;
     overflow: hidden;
@@ -3837,4 +3843,19 @@ body.profile-page .nav-tabs .nav-link {
 
 .user-suggestion-link span {
     text-decoration: none !important;
+}
+
+/* --- Chat scrolling fixes --- */
+.spoon-chat-container {
+    display: flex;
+    flex-direction: column;
+}
+
+.spoon-chat-detail {
+    flex: 1;
+}
+
+.spoon-messages-area {
+    flex: 1;
+    overflow-y: auto;
 }

@@ -5,8 +5,7 @@
     border-radius: 12px;
     overflow: hidden;
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
-    margin: -1rem;
-    margin-top: -1rem;
+    margin: 0;
     border: 3px solid #c0c4cc;
     position: relative;
 }

@@ -731,10 +731,10 @@ body:has(.spoon-chat-container) .rightbar {
 .user-suggestion {
     display: flex;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     padding: 10px;
     border-radius: 12px;
-    background-color: #fff0f8;
+    background: #fdf4ff;
     text-decoration: none;
     color: #7c3aed;
     transition: background 0.2s ease, transform 0.1s ease;
@@ -767,6 +767,7 @@ body:has(.spoon-chat-container) .rightbar {
     text-overflow: ellipsis;
     white-space: nowrap;
     margin-right: 10px;
+    text-decoration: none;
 }
 
 .user-suggestion span {
@@ -793,10 +794,12 @@ body:has(.spoon-chat-container) .rightbar {
 }
 
 .user-suggestion-link {
+    display: block;
     text-decoration: none;
-    color: #7c3aed;
-    font-weight: 600;
+    width: 100%;
 }
+
+
 
 .user-suggestion-link:hover {
     text-decoration: underline;
@@ -3802,4 +3805,8 @@ body.profile-page .nav-tabs .nav-link {
 .views-list-modal.show .views-list-content {
     transform: translateY(0);
     opacity: 1;
+}
+
+.user-suggestion-link span {
+    text-decoration: none !important;
 }

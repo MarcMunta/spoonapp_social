@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 14:02+0000\n"
+"POT-Creation-Date: 2025-06-24 15:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,82 +17,246 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-#: spoonapp_social/settings.py:70
+
+#: backend/spoonapp_social/settings.py:70
 msgid "English"
 msgstr "English"
+
+#: backend/spoonapp_social/settings.py:71
+msgid "Spanish"
+msgstr "Spanish"
+
+#: backend/spoonapp_social/settings.py:72
+msgid "Irish"
+msgstr "Irish"
+
+#: templates/layouts/base.html:48
+msgid "Notifications"
+msgstr "Notifications"
+
+#: templates/layouts/base.html:49
+msgid "See All"
+msgstr "See All"
+
+#: templates/layouts/base.html:67
+msgid "No new notifications"
+msgstr "No new notifications"
+
+#: templates/layouts/base.html:90 templates/layouts/base.html:95
+msgid "Profile"
+msgstr "Profile"
+
+#: templates/layouts/base.html:116
+msgid "Streams"
+msgstr "Streams"
+
+#: templates/layouts/base.html:117
+msgid "Events"
+msgstr "Events"
+
+#: templates/layouts/base.html:118 templates/layouts/base.html:145
+#: templates/pages/profile.html:115
+msgid "Friends"
+msgstr "Friends"
+
+#: templates/layouts/base.html:119
+msgid "Memories"
+msgstr "Memories"
+
+#: templates/layouts/base.html:120
+msgid "Games"
+msgstr "Games"
+
+#: templates/layouts/base.html:122
+msgid "Restaurants"
+msgstr "Restaurants"
+
+#: templates/layouts/base.html:123 templates/layouts/base.html:124
+#: templates/layouts/base.html:125 templates/layouts/base.html:126
+msgid "Go To Site"
+msgstr "Go To Site"
+
+#: templates/layouts/base.html:127
+msgid "See More"
+msgstr "See More"
+
+#: templates/layouts/base.html:137
+msgid "Sponsored"
+msgstr "Sponsored"
+
+#: templates/layouts/base.html:155
+msgid "Search users..."
+msgstr "Search users..."
+
+#: templates/layouts/base.html:173
+msgid "Online"
+msgstr "Online"
+
+#: templates/layouts/base.html:175
+#, python-format
+msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
+msgstr "Last seen: %(f.profile.last_seen|naturaltime)s"
+
+# Translations for profile page
+#: templates/pages/edit_profile.html:13
+#, fuzzy
+#| msgid "Editar perfil"
+msgid "Edit Profile"
+msgstr "Edit profile"
+
+#: templates/pages/edit_profile.html:34
+msgid "Username"
+msgstr "Username"
+
+#: templates/pages/edit_profile.html:36
+msgid "Your username"
+msgstr "Your username"
+
+#: templates/pages/edit_profile.html:38
+#, fuzzy
+#| msgid "Biografía:"
+msgid "Biography"
+msgstr "Biography"
+
+#: templates/pages/edit_profile.html:41
+msgid "Website"
+msgstr "Website"
+
+#: templates/pages/edit_profile.html:44
+msgid "Location"
+msgstr "Location"
+
+#: templates/pages/edit_profile.html:47
+msgid "Gender"
+msgstr "Gender"
+
+#: templates/pages/edit_profile.html:50
+msgid "Save changes"
+msgstr "Save changes"
+
+#: templates/pages/edit_profile.html:53
+msgid "Back to profile"
+msgstr "Back to profile"
+
+#: templates/pages/feed.html:17
+msgid "Publish"
+msgstr "Publish"
+
+#: templates/pages/feed.html:50 templates/pages/feed.html:112
+#: templates/pages/feed.html:119
+#: templates/partials/comments/comments_partial.html:33
+#: templates/partials/stories/stories.html:70
+#: templates/partials/stories/stories.html:84
+#: templates/partials/stories/stories.html:97
+msgid "Delete"
+msgstr "Delete"
+
+#: templates/pages/feed.html:102
+msgid "Load more"
+msgstr "Load more"
+
+#: templates/pages/feed.html:110
+msgid "Delete this post permanently?"
+msgstr "Delete this post permanently?"
+
+#: templates/pages/feed.html:111 templates/pages/feed.html:118
+#: templates/partials/stories/stories.html:96
+#, fuzzy
+#| msgid "Cancelar"
+msgid "Cancel"
+msgstr "Cancel"
+
+#: templates/pages/feed.html:117
+msgid "Delete this comment permanently?"
+msgstr "Delete this comment permanently?"
 
 # Translations for profile page
 #: templates/pages/profile.html:90
 msgid "Editar perfil"
 msgstr "Edit profile"
 
-#: templates/pages/profile.html:95
+#: templates/pages/profile.html:94
 msgid "Historias ocultas"
 msgstr "Hidden stories"
 
-#: templates/pages/profile.html:96
+#: templates/pages/profile.html:95
 msgid "Usuarios bloqueados"
 msgstr "Blocked users"
 
-#: templates/pages/profile.html:121
-msgid "Biografía:"
-msgstr "Biography:"
-
-#: templates/pages/profile.html:127
-msgid "Sitio Web:"
-msgstr "Website:"
-
-#: templates/pages/profile.html:135
-msgid "Ubicación:"
-msgstr "Location:"
-
-#: templates/pages/profile.html:141
-msgid "Género:"
-msgstr "Gender:"
-
-#: templates/pages/profile.html:206
-msgid "Eliminar"
-msgstr "Delete"
-
-#: templates/pages/profile.html:218
-msgid "Responder..."
-msgstr "Reply..."
-
-#: templates/pages/profile.html:219
-msgid "Enviar"
-msgstr "Send"
-
-#: templates/pages/profile.html:221
-msgid "Visto por"
-msgstr "Viewed by"
-
-#: templates/pages/profile.html:232
-msgid "¿Eliminar definitivamente esta historia?"
-msgstr "Delete this story permanently?"
-
-#: templates/pages/profile.html:233
-msgid "Cancelar"
-msgstr "Cancel"
-
-#: templates/pages/profile.html:112
+#: templates/pages/profile.html:114
 msgid "Matches"
 msgstr "Matches"
 
-#: templates/pages/profile.html:113
-msgid "Friends"
-msgstr "Friends"
-
-#: templates/pages/profile.html:114
+#: templates/pages/profile.html:116
 msgid "Posts"
 msgstr "Posts"
 
-#: templates/pages/profile.html:154
+#: templates/pages/profile.html:123
+msgid "Biografía:"
+msgstr "Biography:"
+
+#: templates/pages/profile.html:129
+msgid "Sitio Web:"
+msgstr "Website:"
+
+#: templates/pages/profile.html:137
+msgid "Ubicación:"
+msgstr "Location:"
+
+#: templates/pages/profile.html:143
+msgid "Género:"
+msgstr "Gender:"
+
+#: templates/pages/profile.html:156
 msgid "All Posts"
 msgstr "All Posts"
-#: spoonapp_social/settings.py:71
-msgid "Spanish"
-msgstr "Spanish"
 
-#: spoonapp_social/settings.py:72
-msgid "Irish"
-msgstr "Irish"
+#: templates/pages/profile.html:208 templates/pages/profile.html:223
+#: templates/pages/profile.html:236
+msgid "Eliminar"
+msgstr "Delete"
+
+#: templates/pages/profile.html:220
+msgid "Responder..."
+msgstr "Reply..."
+
+#: templates/pages/profile.html:221
+msgid "Enviar"
+msgstr "Send"
+
+#: templates/pages/profile.html:226
+msgid "Visto por"
+msgstr "Viewed by"
+
+#: templates/pages/profile.html:234
+msgid "¿Eliminar definitivamente esta historia?"
+msgstr "Delete this story permanently?"
+
+#: templates/pages/profile.html:235
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: templates/partials/comments/comments_partial.html:43
+msgid "Reply"
+msgstr "Reply"
+
+#: templates/partials/comments/comments_partial.html:48
+#: templates/partials/stories/stories.html:82
+msgid "Send"
+msgstr "Send"
+
+#: templates/partials/comments/comments_partial.html:54
+msgid "Load replies"
+msgstr "Load replies"
+
+#: templates/partials/stories/stories.html:81
+msgid "Reply..."
+msgstr "Reply..."
+
+#: templates/partials/stories/stories.html:87
+msgid "Viewed by"
+msgstr "Viewed by"
+
+#: templates/partials/stories/stories.html:95
+msgid "Delete this story permanently?"
+msgstr "Delete this story permanently?"

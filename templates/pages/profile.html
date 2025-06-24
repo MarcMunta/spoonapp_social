@@ -136,7 +136,7 @@
     <div class="row g-2 category-group" data-category="{{ cat.slug }}" style="display: none;">
       {% for post in posts_by_category|get_item:cat.slug %}
       <div class="col-4">
-        {% include 'partials/post_card.html' with post=post %}
+        {% include 'partials/posts/post_card.html' with post=post %}
       </div> {% empty %}
       <div class="text-muted">No hay publicaciones en esta categoría.</div>
       {% endfor %}
@@ -148,7 +148,7 @@
     <div class="row g-2 category-group" data-category="all">
       {% for post in posts_by_category|get_item:"all" %}
       <div class="col-4">
-        {% include 'partials/post_card.html' with post=post %}
+        {% include 'partials/posts/post_card.html' with post=post %}
       </div> {% empty %}
       <div class="text-muted">No hay publicaciones.</div>
       {% endfor %}

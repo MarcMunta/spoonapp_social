@@ -263,7 +263,7 @@ def comment_post(request, post_id):
             )
             if request.headers.get("x-requested-with") == "XMLHttpRequest":
                 html = render_to_string(
-                    "partials/comments/comments_partial.html",
+                    "partials/comments_partial.html",
                     {
                         "comments": [comment],
                         "user": request.user,
@@ -566,7 +566,7 @@ def load_comments(request, post_id):
         .prefetch_related("replies")
     )
     html = render_to_string(
-        "partials/comments/comments_partial.html",
+        "partials/comments_partial.html",
         {
             "comments": comments_qs,
             "user": request.user,
@@ -588,7 +588,7 @@ def load_replies(request, comment_id):
         .order_by("-num_likes", "-created_at")[offset : offset + limit]
     )
     html = render_to_string(
-        "partials/comments/comments_partial.html",
+        "partials/comments_partial.html",
         {"comments": replies_qs, "user": request.user, "comment_form": CommentForm()},
         request=request,
     )
@@ -723,13 +723,7 @@ def chat_detail(request, chat_id):
     
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
-        blocked_words = ['cola', 'gay', 'puta']
-
-        def contains_blocked(text):
-            lower = text.lower()
-            return any(word in lower for word in blocked_words)
-
-        if content and len(content) > 2 and not contains_blocked(content):
+        if content:
             message = Message.objects.create(
                 chat=chat,
                 sender=request.user,
@@ -759,10 +753,6 @@ def chat_detail(request, chat_id):
                     'message_id': message.id,
                     'timestamp': message.sent_at.strftime('%H:%M')
                 })
-            return redirect('chat_detail', chat_id=chat.id)
-        else:
-            if request.headers.get("x-requested-with") == "XMLHttpRequest":
-                return JsonResponse({'success': False, 'error': 'Invalid message'}, status=400)
             return redirect('chat_detail', chat_id=chat.id)
     
     return render(request, 'pages/chat_detail.html', {
@@ -838,7 +828,7 @@ def story_viewers(request, story_id):
     )
     viewers = Profile.objects.select_related("user").filter(user__id__in=viewer_ids)
     html = render_to_string(
-        "partials/stories/story_viewers_list.html",
+        "partials/story_viewers_list.html",
         {"viewers": viewers},
         request=request,
     )

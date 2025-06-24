@@ -317,7 +317,7 @@
 .spoon-chat-header-detail {
     position: fixed !important;
     top: 80px !important;
-    left: 240px !important;
+    left: 220px !important;
     right: 0 !important;
     z-index: 1000 !important;
     background: linear-gradient(135deg, #8b5a96 0%, #6b21a8 100%);
@@ -540,7 +540,7 @@
     border-top: 3px solid #e2e8f0;
     position: fixed;
     bottom: 0;
-    left: 240px !important;
+    left: 220px !important;
     right: 0 !important;
     z-index: 1000;
     min-height: 80px;

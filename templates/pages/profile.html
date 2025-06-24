@@ -88,21 +88,23 @@
             </div>
           </div>
           <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">{% trans "Editar perfil" %}</a>
-          <div class="dropdown ms-1">
+          <div class="dropdown ms-1 ms-auto">
             <button class="dropdown-toggle btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋯</button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'hidden_stories_list' %}">{% trans "Historias ocultas" %}</a></li>
               <li><a class="dropdown-item" href="{% url 'blocked_users_list' %}">{% trans "Usuarios bloqueados" %}</a></li>
+              <li>
+                <form action="{% url 'set_language' %}" method="post" class="px-3 py-1">
+                  {% csrf_token %}
+                  <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
+                    <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>Español</option>
+                    <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+                    <option value="ga" {% if LANGUAGE_CODE == 'ga' %}selected{% endif %}>Gaeilge</option>
+                  </select>
+                </form>
+              </li>
             </ul>
           </div>
-          <form action="{% url 'set_language' %}" method="post" class="ms-2">
-            {% csrf_token %}
-            <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
-              <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>Español</option>
-              <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-              <option value="ga" {% if LANGUAGE_CODE == 'ga' %}selected{% endif %}>Gaeilge</option>
-            </select>
-          </form>
           </div>
           {% endif %}
         </div>

@@ -31,12 +31,14 @@ class RedirectErrorMiddleware:
         try:
             response = self.get_response(request)
 
-            if isinstance(response, HttpResponseNotFound):
-                return redirect('/404/')
-            elif isinstance(response, HttpResponseForbidden):
-                return redirect('/403/')
-            elif isinstance(response, HttpResponseServerError):
-                return redirect('/500/')
+            # Avoid redirect loops when already on an error page
+            if request.path not in ['/404/', '/403/', '/500/']:
+                if isinstance(response, HttpResponseNotFound):
+                    return redirect('/404/')
+                elif isinstance(response, HttpResponseForbidden):
+                    return redirect('/403/')
+                elif isinstance(response, HttpResponseServerError):
+                    return redirect('/500/')
 
             return response
 

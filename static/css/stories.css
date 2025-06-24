@@ -1,16 +1,20 @@
 .story-item {
     text-align: center;
-    width: 55px;
+    width: 64px;
     flex-shrink: 0;
+    font-family: 'Poppins', sans-serif;
 }
 
 .story-thumb {
-    width: 50px;
-    height: 50px;
+    width: 56px;
+    height: 56px;
     border-radius: 50%;
     overflow: hidden;
     position: relative;
     cursor: pointer;
+    border: 2px solid #f4d0e4;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    background-color: white;
 }
 
 .story-img {
@@ -18,30 +22,36 @@
     height: 100%;
     object-fit: cover;
     border-radius: 50%;
-    border: 2px dashed #ccc;
-    transition: transform 0.2s, border-color 0.2s;
+    transition: transform 0.2s ease;
+    border: 2px dashed #d58bf8;
 }
 
 .story-add {
     position: absolute;
-    bottom: 0;
-    right: 0;
-    background: #0d6efd;
-    color: #fff;
+    bottom: -2px;
+    right: -2px;
+    background: linear-gradient(to right, #d58bf8, #f9c1d4);
+    color: white;
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
+    width: 20px;
+    height: 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-weight: bold;
-    border: 2px solid #fff;
-    font-size: 14px;
+    font-size: 12px;
+    border: 2px solid white;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
 }
 
 .story-username {
-    margin-top: 4px;
-    font-size: 0.85rem;
+    margin-top: 5px;
+    font-size: 0.75rem;
+    color: #333;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 64px;
 }
 
 .story-modal {
@@ -103,17 +113,6 @@
 
 .story-next {
     right: 5px;
-}
-
-.story-item {
-    text-align: center;
-    width: 55px;
-    flex-shrink: 0;
-}
-
-.story-username {
-    margin-top: 4px;
-    font-size: 0.85rem;
 }
 
 .story-modal {
@@ -249,12 +248,21 @@
     transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
 }
 
-/* Stories Styles */
 .stories-container {
+    margin-top: 50px;
     display: flex;
-    gap: 12px;
+    align-items: center;
+    gap: 16px;
     overflow-x: auto;
-    padding-bottom: 10px;
+    padding: 12px 16px;
+    background: #fff3f7;
+    border-radius: 12px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+    scrollbar-width: none;
+}
+
+.stories-container::-webkit-scrollbar {
+    display: none;
 }
 
 .open-story .story-img {
@@ -265,8 +273,8 @@
 .story-thumb:hover .story-img {
     transform: scale(1.05);
     border-color: #0a58ca;
+    box-shadow: 0 4px 10px rgba(213, 139, 248, 0.3);
 }
-
 
 .story-backdrop {
     display: none;
@@ -351,6 +359,7 @@
 .story-views:hover {
     cursor: pointer;
 }
+
 .views-list-modal.show .views-list-content {
     transform: translateY(0);
     opacity: 1;
@@ -364,6 +373,7 @@
     border-radius: 20px;
     background: rgba(0, 0, 0, 0.4);
 }
+
 .story-modal-user img {
     width: 32px;
     height: 32px;

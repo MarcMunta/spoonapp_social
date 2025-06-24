@@ -9,6 +9,12 @@ body {
     padding-top: 1.5rem;
 }
 
+.language-selector {
+    margin-left: auto;
+    margin-right: 1rem;
+}
+
+
 .topbar {
     background: linear-gradient(to right, #b76fc5, #e98fc0);
     display: flex;
@@ -176,7 +182,6 @@ body {
 
 .main-content {
     margin-left: 240px;
-    margin-top: 80px;
     margin-right: 300px;
     padding: 1rem;
     flex: 1;
@@ -203,18 +208,42 @@ body:has(.spoon-chat-container) .rightbar {
 }
 
 .input-bar {
+    margin-top: 55px;
+    background-color: #fff3f7;
+    border-radius: 16px;
+    padding: 1rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
-    margin-bottom: 1rem;
-    background-color: #fff3f7;
-    padding: 0.5rem;
-    border-radius: 10px;
-    border: 1px solid #e0b9d8;
+    gap: 0.75rem;
+    font-family: 'Poppins', sans-serif;
+    color: #2c2c2c;
 }
 
 .input-bar>* {
     margin-bottom: 0.5rem;
 }
+
+.input-bar input[type="text"],
+.input-bar textarea,
+.input-bar select {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 0.6rem 1rem;
+    width: 100%;
+    font-size: 1rem;
+    background-color: #ffffff;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.input-bar input:focus,
+.input-bar textarea:focus,
+.input-bar select:focus {
+    border-color: #d58bf8;
+    box-shadow: 0 0 0 3px rgba(213, 139, 248, 0.25);
+    outline: none;
+}
+
 
 .input-bar input,
 .input-bar select,
@@ -276,14 +305,16 @@ body:has(.spoon-chat-container) .rightbar {
 
 .publish-btn {
     align-self: flex-end;
-    background-color: #d48ac1;
+    background: linear-gradient(to right, #d58bf8, #f9c1d4);
     border: none;
-    color: #fff;
-    padding: 0.5rem 1rem;
-    border-radius: 20px;
-    font-size: 1rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 30px;
+    color: white;
+    font-weight: bold;
+    font-size: 0.95rem;
     cursor: pointer;
-    transition: background-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+    transition: background 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 4px 0 #c078db;
 }
 
 .publish-btn:hover {

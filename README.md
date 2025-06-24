@@ -45,6 +45,12 @@ npm install
 npm run build
 ```
 
+Compile translations (after editing .po files):
+
+```bash
+django-admin compilemessages
+```
+
 Run the Django development server:
 
 ```bash

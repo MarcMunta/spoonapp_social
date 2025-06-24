@@ -30,7 +30,9 @@
 
     <div class="topbar-icons center">
       <a href="{% url 'home' %}">🏠</a>
-      <a href="{% url 'subir_publicacion' %}">➕</a>
+      <a href="{% url 'subir_publicacion' %}" aria-label="Crear publicación">
+        <i class="fas fa-plus"></i>
+      </a>
       {% if user.is_authenticated %}
       <a href="{% url 'chat_list' %}">💬</a>
       <div class="notification-dropdown">

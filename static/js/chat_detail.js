@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+function initChatDetail() {
   const messagesArea = document.getElementById("spoon-messages-area");
   const messageForm = document.getElementById("spoon-message-form");
   const messageInput = document.getElementById("spoon-message-input");
@@ -757,4 +757,10 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log(
     "✅ Chat initialized successfully with enhanced scrolling and persistent input bar"
   );
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChatDetail);
+} else {
+  initChatDetail();
+}

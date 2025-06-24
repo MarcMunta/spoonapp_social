@@ -323,8 +323,8 @@
 
 .story-modal-close {
     position: absolute;
-    top: 8px;
-    right: 10px;
+    top: 8px !important;
+    right: 10px !important;
     background: transparent;
     border: none;
     color: #fff;

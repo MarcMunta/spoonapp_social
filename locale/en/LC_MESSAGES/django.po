@@ -1,0 +1,98 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-06-24 14:02+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+#: spoonapp_social/settings.py:70
+msgid "English"
+msgstr "English"
+
+# Translations for profile page
+#: templates/pages/profile.html:90
+msgid "Editar perfil"
+msgstr "Edit profile"
+
+#: templates/pages/profile.html:95
+msgid "Historias ocultas"
+msgstr "Hidden stories"
+
+#: templates/pages/profile.html:96
+msgid "Usuarios bloqueados"
+msgstr "Blocked users"
+
+#: templates/pages/profile.html:121
+msgid "Biografía:"
+msgstr "Biography:"
+
+#: templates/pages/profile.html:127
+msgid "Sitio Web:"
+msgstr "Website:"
+
+#: templates/pages/profile.html:135
+msgid "Ubicación:"
+msgstr "Location:"
+
+#: templates/pages/profile.html:141
+msgid "Género:"
+msgstr "Gender:"
+
+#: templates/pages/profile.html:206
+msgid "Eliminar"
+msgstr "Delete"
+
+#: templates/pages/profile.html:218
+msgid "Responder..."
+msgstr "Reply..."
+
+#: templates/pages/profile.html:219
+msgid "Enviar"
+msgstr "Send"
+
+#: templates/pages/profile.html:221
+msgid "Visto por"
+msgstr "Viewed by"
+
+#: templates/pages/profile.html:232
+msgid "¿Eliminar definitivamente esta historia?"
+msgstr "Delete this story permanently?"
+
+#: templates/pages/profile.html:233
+msgid "Cancelar"
+msgstr "Cancel"
+
+#: templates/pages/profile.html:112
+msgid "Matches"
+msgstr "Matches"
+
+#: templates/pages/profile.html:113
+msgid "Friends"
+msgstr "Friends"
+
+#: templates/pages/profile.html:114
+msgid "Posts"
+msgstr "Posts"
+
+#: templates/pages/profile.html:154
+msgid "All Posts"
+msgstr "All Posts"
+#: spoonapp_social/settings.py:71
+msgid "Spanish"
+msgstr "Spanish"
+
+#: spoonapp_social/settings.py:72
+msgid "Irish"
+msgstr "Irish"

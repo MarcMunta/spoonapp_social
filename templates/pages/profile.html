@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load custom_filters %}
+{% load i18n %}
 
 {% load static %}
 
@@ -86,37 +87,44 @@
               {% endfor %}
             </div>
           </div>
-          <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">Editar perfil</a>
+          <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">{% trans "Editar perfil" %}</a>
           <div class="dropdown ms-1">
-            <button class="dropdown-toggle btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown"
-              aria-expanded="false">⋯</button>
+            <button class="dropdown-toggle btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋯</button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'hidden_stories_list' %}">Historias ocultas</a></li>
-              <li><a class="dropdown-item" href="{% url 'blocked_users_list' %}">Usuarios bloqueados</a></li>
+              <li><a class="dropdown-item" href="{% url 'hidden_stories_list' %}">{% trans "Historias ocultas" %}</a></li>
+              <li><a class="dropdown-item" href="{% url 'blocked_users_list' %}">{% trans "Usuarios bloqueados" %}</a></li>
             </ul>
           </div>
+          <form action="{% url 'set_language' %}" method="post" class="ms-2">
+            {% csrf_token %}
+            <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
+              <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>Español</option>
+              <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
+              <option value="ga" {% if LANGUAGE_CODE == 'ga' %}selected{% endif %}>Gaeilge</option>
+            </select>
+          </form>
+          </div>
+          {% endif %}
         </div>
-        {% endif %}
-      </div>
 
       <!-- ESTADÍSTICAS -->
       <div class="d-flex gap-4 mb-2">
-        <div><strong>{{ total_matches }}</strong> Matches</div>
-        <div><strong>{{ total_friends }}</strong> Friends</div>
-        <div><strong>{{ posts|length }}</strong> Posts</div>
+        <div><strong>{{ total_matches }}</strong> {% trans "Matches" %}</div>
+        <div><strong>{{ total_friends }}</strong> {% trans "Friends" %}</div>
+        <div><strong>{{ posts|length }}</strong> {% trans "Posts" %}</div>
       </div>
 
       <!-- INFORMACION DEL PERFIL -->
       <div class="profile-info">
         {% if user_profile.bio %}
         <div class="profile-info-box">
-          <span class="info-label">Biografía:</span>
+          <span class="info-label">{% trans "Biografía:" %}</span>
           <span class="info-content">{{ user_profile.bio }}</span>
         </div>
         {% endif %}
         {% if user_profile.website %}
         <div class="profile-info-box">
-          <span class="info-label">Sitio Web:</span>
+          <span class="info-label">{% trans "Sitio Web:" %}</span>
           <span class="info-content">
             <a href="{{ user_profile.website }}" target="_blank">{{ user_profile.website }}</a>
           </span>
@@ -124,13 +132,13 @@
         {% endif %}
         {% if user_profile.location %}
         <div class="profile-info-box">
-          <span class="info-label">Ubicación:</span>
+          <span class="info-label">{% trans "Ubicación:" %}</span>
           <span class="info-content">{{ user_profile.location }}</span>
         </div>
         {% endif %}
         {% if user_profile.gender %}
         <div class="profile-info-box">
-          <span class="info-label">Género:</span>
+          <span class="info-label">{% trans "Género:" %}</span>
           <span class="info-content">{{ user_profile.gender }}</span>
         </div>
         {% endif %}
@@ -143,7 +151,7 @@
   <!-- TABS DINÁMICAS -->
   <ul class="nav nav-tabs mb-4" id="categoryTabs">
     <li class="nav-item">
-      <a class="nav-link active" data-category="all" href="#">All Posts</a>
+      <a class="nav-link active" data-category="all" href="#">{% trans "All Posts" %}</a>
     </li>
     {% for cat in categories %}
     {% if cat.slug %}
@@ -195,7 +203,7 @@
     <div class="dropup dropdown story-options position-absolute" style="display:none;">
       <button class="btn btn-sm btn-dark story-options-btn">&#8942;</button>
       <ul class="dropdown-menu">
-        <li><a class="dropdown-item text-danger story-delete" href="#" data-story-id="">Eliminar</a></li>
+          <li><a class="dropdown-item text-danger story-delete" href="#" data-story-id="">{% trans "Eliminar" %}</a></li>
       </ul>
     </div>
     <div class="story-views text-white position-absolute d-flex align-items-center"
@@ -207,13 +215,13 @@
     <img id="storyImage" class="story-image d-none" />
     <video id="storyVideo" class="story-image d-none" controls></video>
     <div class="story-reply mt-2 d-flex">
-      <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="Responder...">
-      <button id="storyReplySend" class="btn btn-primary" data-story-id="">Enviar</button>
+        <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="{% trans 'Responder...' %}">
+        <button id="storyReplySend" class="btn btn-primary" data-story-id="">{% trans "Enviar" %}</button>
     </div>
-    <button class="btn-eliminar-historia story-delete" data-story-id="">Eliminar</button>
+      <button class="btn-eliminar-historia story-delete" data-story-id="">{% trans "Eliminar" %}</button>
     <div id="storyViewsList" class="views-list-modal">
       <div class="views-list-content">
-        <h5 class="text-center mb-2">Visto por</h5>
+          <h5 class="text-center mb-2">{% trans "Visto por" %}</h5>
         <div class="views-list-body"></div>
       </div>
     </div>
@@ -221,9 +229,9 @@
 </div>
 <div id="deleteConfirm" class="delete-confirm-modal">
   <div class="delete-confirm-content">
-    <p class="mb-3">¿Eliminar definitivamente esta historia?</p>
-    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteStory">Cancelar</button>
-    <button type="button" class="btn btn-danger" id="confirmDeleteStory">Eliminar</button>
+    <p class="mb-3">{% trans "¿Eliminar definitivamente esta historia?" %}</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteStory">{% trans "Cancelar" %}</button>
+    <button type="button" class="btn btn-danger" id="confirmDeleteStory">{% trans "Eliminar" %}</button>
   </div>
 </div>
 <script src="{% static 'js/profile.js' %}"></script>

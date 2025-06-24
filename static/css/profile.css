@@ -61,6 +61,9 @@ body.profile-page .profile-story-add {
     width: 24px;
     height: 24px;
     font-size: 18px;
+    bottom: 4px;
+    right: 4px;
+    z-index: 1;
 }
 
 body.profile-page .profile-avatar-wrapper img {

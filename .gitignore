@@ -8,3 +8,6 @@ frontend/node_modules/
 media/
 
 __pycache__/
+
+# Ignore built frontend bundle
+backend/static/js/

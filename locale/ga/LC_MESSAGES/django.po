@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 14:02+0000\n"
+"POT-Creation-Date: 2025-06-24 15:19+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,82 +18,246 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : "
 "4);\n"
-#: spoonapp_social/settings.py:70
+
+#: backend/spoonapp_social/settings.py:70
 msgid "English"
-msgstr ""
+msgstr "English"
+
+#: backend/spoonapp_social/settings.py:71
+msgid "Spanish"
+msgstr "Spáinnis"
+
+#: backend/spoonapp_social/settings.py:72
+msgid "Irish"
+msgstr "Gaeilge"
+
+#: templates/layouts/base.html:48
+msgid "Notifications"
+msgstr "Fógraí"
+
+#: templates/layouts/base.html:49
+msgid "See All"
+msgstr "Féach Uile"
+
+#: templates/layouts/base.html:67
+msgid "No new notifications"
+msgstr "Níl fógraí nua"
+
+#: templates/layouts/base.html:90 templates/layouts/base.html:95
+msgid "Profile"
+msgstr "Próifíl"
+
+#: templates/layouts/base.html:116
+msgid "Streams"
+msgstr "Sruthanna"
+
+#: templates/layouts/base.html:117
+msgid "Events"
+msgstr "Imeachtaí"
+
+#: templates/layouts/base.html:118 templates/layouts/base.html:145
+#: templates/pages/profile.html:115
+msgid "Friends"
+msgstr "Cairde"
+
+#: templates/layouts/base.html:119
+msgid "Memories"
+msgstr "Cuimhní"
+
+#: templates/layouts/base.html:120
+msgid "Games"
+msgstr "Cluichí"
+
+#: templates/layouts/base.html:122
+msgid "Restaurants"
+msgstr "Bialanna"
+
+#: templates/layouts/base.html:123 templates/layouts/base.html:124
+#: templates/layouts/base.html:125 templates/layouts/base.html:126
+msgid "Go To Site"
+msgstr "Téigh go dtí an Suíomh"
+
+#: templates/layouts/base.html:127
+msgid "See More"
+msgstr "Tuilleadh"
+
+#: templates/layouts/base.html:137
+msgid "Sponsored"
+msgstr "Urraithe"
+
+#: templates/layouts/base.html:155
+msgid "Search users..."
+msgstr "Cuardaigh úsáideoirí..."
+
+#: templates/layouts/base.html:173
+msgid "Online"
+msgstr "Ar líne"
+
+#: templates/layouts/base.html:175
+#, python-format
+msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
+msgstr "Feicthe go deireanach: %(f.profile.last_seen|naturaltime)s"
+
+# Translations for profile page (Irish)
+#: templates/pages/edit_profile.html:13
+#, fuzzy
+#| msgid "Editar perfil"
+msgid "Edit Profile"
+msgstr "Cuir in Eagar an Próifíl"
+
+#: templates/pages/edit_profile.html:34
+msgid "Username"
+msgstr "Ainm úsáideora"
+
+#: templates/pages/edit_profile.html:36
+msgid "Your username"
+msgstr "Do ainm úsáideora"
+
+#: templates/pages/edit_profile.html:38
+#, fuzzy
+#| msgid "Biografía:"
+msgid "Biography"
+msgstr "Beathaisnéis"
+
+#: templates/pages/edit_profile.html:41
+msgid "Website"
+msgstr "Suíomh Gréasáin"
+
+#: templates/pages/edit_profile.html:44
+msgid "Location"
+msgstr "Suíomh"
+
+#: templates/pages/edit_profile.html:47
+msgid "Gender"
+msgstr "Inscne"
+
+#: templates/pages/edit_profile.html:50
+msgid "Save changes"
+msgstr "Sábháil athruithe"
+
+#: templates/pages/edit_profile.html:53
+msgid "Back to profile"
+msgstr "Ar ais go dtí an próifíl"
+
+#: templates/pages/feed.html:17
+msgid "Publish"
+msgstr "Foilsigh"
+
+#: templates/pages/feed.html:50 templates/pages/feed.html:112
+#: templates/pages/feed.html:119
+#: templates/partials/comments/comments_partial.html:33
+#: templates/partials/stories/stories.html:70
+#: templates/partials/stories/stories.html:84
+#: templates/partials/stories/stories.html:97
+msgid "Delete"
+msgstr "Scrios"
+
+#: templates/pages/feed.html:102
+msgid "Load more"
+msgstr "Luchtaigh níos mó"
+
+#: templates/pages/feed.html:110
+msgid "Delete this post permanently?"
+msgstr "Scrios an post seo go buan?"
+
+#: templates/pages/feed.html:111 templates/pages/feed.html:118
+#: templates/partials/stories/stories.html:96
+#, fuzzy
+#| msgid "Cancelar"
+msgid "Cancel"
+msgstr "Cealaigh"
+
+#: templates/pages/feed.html:117
+msgid "Delete this comment permanently?"
+msgstr "Scrios an trácht seo go buan?"
 
 # Translations for profile page (Irish)
 #: templates/pages/profile.html:90
 msgid "Editar perfil"
 msgstr "Cuir in Eagar an Próifíl"
 
-#: templates/pages/profile.html:95
+#: templates/pages/profile.html:94
 msgid "Historias ocultas"
 msgstr "Scéalta folaithe"
 
-#: templates/pages/profile.html:96
+#: templates/pages/profile.html:95
 msgid "Usuarios bloqueados"
 msgstr "Úsáideoirí blocáilte"
 
-#: templates/pages/profile.html:121
-msgid "Biografía:"
-msgstr "Beathaisnéis:"
-
-#: templates/pages/profile.html:127
-msgid "Sitio Web:"
-msgstr "Suíomh Gréasáin:"
-
-#: templates/pages/profile.html:135
-msgid "Ubicación:"
-msgstr "Suíomh:"
-
-#: templates/pages/profile.html:141
-msgid "Género:"
-msgstr "Inscne:"
-
-#: templates/pages/profile.html:206
-msgid "Eliminar"
-msgstr "Scrios"
-
-#: templates/pages/profile.html:218
-msgid "Responder..."
-msgstr "Freagair..."
-
-#: templates/pages/profile.html:219
-msgid "Enviar"
-msgstr "Seol"
-
-#: templates/pages/profile.html:221
-msgid "Visto por"
-msgstr "Feicthe ag"
-
-#: templates/pages/profile.html:232
-msgid "¿Eliminar definitivamente esta historia?"
-msgstr "Scrios an scéal seo go buan?"
-
-#: templates/pages/profile.html:233
-msgid "Cancelar"
-msgstr "Cealaigh"
-
-#: templates/pages/profile.html:112
+#: templates/pages/profile.html:114
 msgid "Matches"
 msgstr "Meaitseálacha"
 
-#: templates/pages/profile.html:113
-msgid "Friends"
-msgstr "Cairde"
-
-#: templates/pages/profile.html:114
+#: templates/pages/profile.html:116
 msgid "Posts"
 msgstr "Poist"
 
-#: templates/pages/profile.html:154
+#: templates/pages/profile.html:123
+msgid "Biografía:"
+msgstr "Beathaisnéis:"
+
+#: templates/pages/profile.html:129
+msgid "Sitio Web:"
+msgstr "Suíomh Gréasáin:"
+
+#: templates/pages/profile.html:137
+msgid "Ubicación:"
+msgstr "Suíomh:"
+
+#: templates/pages/profile.html:143
+msgid "Género:"
+msgstr "Inscne:"
+
+#: templates/pages/profile.html:156
 msgid "All Posts"
 msgstr "Gach Post"
-#: spoonapp_social/settings.py:71
-msgid "Spanish"
-msgstr "Spáinnis"
 
-#: spoonapp_social/settings.py:72
-msgid "Irish"
-msgstr "Gaeilge"
+#: templates/pages/profile.html:208 templates/pages/profile.html:223
+#: templates/pages/profile.html:236
+msgid "Eliminar"
+msgstr "Scrios"
+
+#: templates/pages/profile.html:220
+msgid "Responder..."
+msgstr "Freagair..."
+
+#: templates/pages/profile.html:221
+msgid "Enviar"
+msgstr "Seol"
+
+#: templates/pages/profile.html:226
+msgid "Visto por"
+msgstr "Feicthe ag"
+
+#: templates/pages/profile.html:234
+msgid "¿Eliminar definitivamente esta historia?"
+msgstr "Scrios an scéal seo go buan?"
+
+#: templates/pages/profile.html:235
+msgid "Cancelar"
+msgstr "Cealaigh"
+
+#: templates/partials/comments/comments_partial.html:43
+msgid "Reply"
+msgstr "Freagair"
+
+#: templates/partials/comments/comments_partial.html:48
+#: templates/partials/stories/stories.html:82
+msgid "Send"
+msgstr "Seol"
+
+#: templates/partials/comments/comments_partial.html:54
+msgid "Load replies"
+msgstr "Luchtaigh freagraí"
+
+#: templates/partials/stories/stories.html:81
+msgid "Reply..."
+msgstr "Freagair..."
+
+#: templates/partials/stories/stories.html:87
+msgid "Viewed by"
+msgstr "Feicthe ag"
+
+#: templates/partials/stories/stories.html:95
+msgid "Delete this story permanently?"
+msgstr "Scrios an scéal seo go buan?"

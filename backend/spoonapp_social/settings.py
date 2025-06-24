@@ -33,7 +33,8 @@ ROOT_URLCONF = 'spoonapp_social.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        # Templates live in the repository root
+        'DIRS': [BASE_DIR.parent / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -66,12 +67,13 @@ USE_I18N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-STATIC_ROOT = BASE_DIR / 'staticfiles'  # obligatorio si vas a usar collectstatic
+# Static files are stored at the repository root
+STATICFILES_DIRS = [BASE_DIR.parent / 'static']
+STATIC_ROOT = BASE_DIR.parent / 'staticfiles'  # obligatorio si vas a usar collectstatic
 
 # Location where uploaded media files are stored
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+MEDIA_ROOT = BASE_DIR.parent / 'media'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 

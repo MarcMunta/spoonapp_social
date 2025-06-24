@@ -1,5 +1,10 @@
 // Functions from base.html
 
+// Prefix URLs with the current language code extracted from the
+// <html> tag. This ensures links and API calls automatically use
+// the proper /es, /en, etc. prefix based on the active language.
+const LANG_PREFIX = `/${document.documentElement.lang}`;
+
 document
   .getElementById("searchFriendInput")
   ?.addEventListener("input", function () {
@@ -12,13 +17,13 @@ document
       return;
     }
 
-    fetch(`/api/search-users/?q=${encodeURIComponent(query)}`)
+    fetch(`${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}`)
       .then((res) => res.json())
       .then((users) => {
         users.forEach((user) => {
           const li = document.createElement("li");
           li.innerHTML = `
-  <a href="/profile/${user.username}/" class="user-suggestion-link">
+  <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
       <img src="${
         user.avatar || "https://via.placeholder.com/40"
@@ -54,7 +59,7 @@ function toggleNotifications(event) {
 }
 
 function markAsRead(notificationId) {
-  fetch(`/mark-notification-read/${notificationId}/`, {
+  fetch(`${LANG_PREFIX}/mark-notification-read/${notificationId}/`, {
     method: "POST",
     headers: {
       "X-CSRFToken": getCSRFToken(),
@@ -85,7 +90,7 @@ function markAsRead(notificationId) {
 
 setInterval(() => {
   if (document.querySelector(".notification-bell")) {
-    fetch("/api/notifications-count/", {
+    fetch(`${LANG_PREFIX}/api/notifications-count/`, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
       .then((response) => response.json())

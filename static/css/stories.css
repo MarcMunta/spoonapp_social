@@ -275,7 +275,7 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
+    background-color: rgba(0, 0, 0, 0.7);
     align-items: center;
     justify-content: center;
     z-index: 2000;
@@ -346,4 +346,23 @@
 
 .story-views:hover {
     cursor: pointer;
+}
+.views-list-modal.show .views-list-content {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.story-modal-user a {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 8px;
+    border-radius: 20px;
+    background: rgba(0, 0, 0, 0.4);
+}
+.story-modal-user img {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
 }

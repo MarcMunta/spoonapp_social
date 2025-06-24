@@ -15,9 +15,16 @@ document.addEventListener("DOMContentLoaded", function () {
   let oldestMessageId = null;
   let newestMessageId = null;
   let initialLoad = true;
-  let chatId = "{{ chat.id }}";
+  const chatId = messagesArea ? messagesArea.dataset.chatId : null;
   let isUserScrolling = false;
   let scrollTimer = null;
+
+  const blockedWords = ["cola", "gay", "puta"];
+  function isValidMessage(msg) {
+    if (!msg || msg.trim().length < 3) return false;
+    const text = msg.toLowerCase();
+    return !blockedWords.some((w) => text.includes(w));
+  }
 
   console.log("🚀 Chat system initializing...");
 
@@ -334,13 +341,11 @@ document.addEventListener("DOMContentLoaded", function () {
             } mb-3`;
             messageWrapper.dataset.messageId = msg.id;
             messageWrapper.innerHTML = `
-                        <div class="spoon-message-bubble ${
-                          msg.is_mine
-                            ? "spoon-message-sent"
-                            : "spoon-message-received"
+                        <div class="chat-bubble ${
+                          msg.is_mine ? "user" : "other"
                         } spoon-message-loaded">
                             <div>${escapeHtml(msg.content)}</div>
-                            <div class="spoon-message-time">${msg.sent_at}</div>
+                            <span class="timestamp">${msg.sent_at}</span>
                         </div>
                     `;
             messagesArea.insertBefore(messageWrapper, messagesArea.firstChild);
@@ -429,13 +434,11 @@ document.addEventListener("DOMContentLoaded", function () {
             } mb-3`;
             messageWrapper.dataset.messageId = msg.id;
             messageWrapper.innerHTML = `
-                        <div class="spoon-message-bubble ${
-                          msg.is_mine
-                            ? "spoon-message-sent"
-                            : "spoon-message-received"
+                        <div class="chat-bubble ${
+                          msg.is_mine ? "user" : "other"
                         }" data-new="true">
                             <div>${escapeHtml(msg.content)}</div>
-                            <div class="spoon-message-time">${msg.sent_at}</div>
+                            <span class="timestamp">${msg.sent_at}</span>
                         </div>
                     `;
             messagesArea.appendChild(messageWrapper);
@@ -576,7 +579,10 @@ document.addEventListener("DOMContentLoaded", function () {
       e.preventDefault();
 
       const content = messageInput.value.trim();
-      if (!content) return;
+      if (!isValidMessage(content)) {
+        showErrorMessage("Message not allowed");
+        return;
+      }
 
       // Close emoji picker when sending message
       if (emojiPicker) {
@@ -592,12 +598,12 @@ document.addEventListener("DOMContentLoaded", function () {
       messageWrapper.className = "d-flex justify-content-end mb-3";
       messageWrapper.dataset.messageId = tempId;
       messageWrapper.innerHTML = `
-                <div class="spoon-message-bubble spoon-message-sent" data-new="true">
+                <div class="chat-bubble user" data-new="true">
                     <div>${escapeHtml(content)}</div>
-                    <div class="spoon-message-time">${new Date().toLocaleTimeString(
+                    <span class="timestamp">${new Date().toLocaleTimeString(
                       "en-US",
                       { hour: "2-digit", minute: "2-digit", hour12: false }
-                    )}</div>
+                    )}</span>
                 </div>
             `;
 
@@ -631,7 +637,7 @@ document.addEventListener("DOMContentLoaded", function () {
           if (!data.success) {
             messageWrapper.remove();
             messageInput.value = content;
-            showErrorMessage("Failed to send message. Try again!");
+            showErrorMessage(data.error || "Failed to send message. Try again!");
           } else {
             // Update with real message ID if provided
             if (data.message_id) {

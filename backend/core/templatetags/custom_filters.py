@@ -28,3 +28,17 @@ def link_mentions(text):
         return f'<a href="{url}" class="mention">@{username}</a>'
 
     return mark_safe(MENTION_RE.sub(repl, text))
+
+# Simple text moderation filter replacing offensive words with asterisks
+BAD_WORDS = [
+    'puta', 'mierda', 'imbecil', 'idiota', 'tonto',
+    'cabron', 'pendejo', 'marica', 'perra'
+]
+
+@register.filter
+def censor_bad_words(text):
+    """Replace offensive words with asterisks."""
+    if not text:
+        return ''
+    pattern = re.compile(r'(?i)\b(' + '|'.join(map(re.escape, BAD_WORDS)) + r')\b')
+    return pattern.sub(lambda m: '*' * len(m.group(0)), text)

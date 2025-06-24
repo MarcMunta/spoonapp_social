@@ -45,11 +45,8 @@ npm install
 npm run build
 ```
 
-Compile translations (after editing .po files):
-
-```bash
-django-admin compilemessages
-```
+The translations are automatically compiled whenever `manage.py` is executed,
+so you no longer need to run `django-admin compilemessages` manually.
 
 Run the Django development server:
 

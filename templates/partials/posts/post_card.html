@@ -8,8 +8,8 @@
 
         <div class="post-overlay">
             <div class="post-stats">
-                <span>❤️ {{ post.likes.count|default:"0" }}</span>
-                <span>💬 {{ post.comments.count|default:"0" }}</span>
+                <span>🥄 {{ post.postlike_set.count }}</span>
+                <span>💬 {{ post.postcomment_set.count }}</span>
             </div>
         </div>
     </div>

@@ -136,7 +136,6 @@
         </a>
       </h3>
 
-
       <div class="search-friends-container">
         <input type="text" id="searchFriendInput" placeholder="Search users..." autocomplete="off" />
         <ul id="searchResults" class="autocomplete-list"></ul>
@@ -144,35 +143,30 @@
 
       <div class="friends-bubbles">
         {% for f in friends %}
-        <div class="friend-bubble d-flex align-items-center justify-content-between">
-          <a href="{% url 'profile' f.username %}"
-            class="friend-info d-flex align-items-center text-decoration-none flex-grow-1">
-            {% if f.profile.profile_picture %}
-            <img src="{{ f.profile.profile_picture_data_url }}" alt="{{ f.username }}"
-              style="border-color: {{ f.profile.bubble_color }};">
-            {% else %}
-            <img src="{{ default_avatar_data_url }}" alt="{{ f.username }}"
-              style="border-color: {{ f.profile.bubble_color }};">
+        <div class="friend-bubble">
+          {% if f.profile.profile_picture %}
+          <img src="{{ f.profile.profile_picture_data_url }}" alt="{{ f.username }}"
+            style="border-color: {{ f.profile.bubble_color }};">
+          {% else %}
+          <img src="{{ default_avatar_data_url }}" alt="{{ f.username }}"
+            style="border-color: {{ f.profile.bubble_color }};">
+          {% endif %}
+
+          <div class="friend-info">
+            <div class="friend-name">{{ f.username }}</div>
+            {% if f.profile.online %}
+            <div class="friend-status text-success">Online</div>
+            {% elif f.profile.last_seen %}
+            <div class="friend-status text-muted">Last seen: {{ f.profile.last_seen|naturaltime }}</div>
             {% endif %}
-            <div class="ms-2">
-              <div class="friend-name">{{ f.username }}</div>
-              {% if f.profile.online %}
-              <div class="friend-status text-success">Online</div>
-              {% elif f.profile.last_seen %}
-              <div class="friend-status text-muted">Last seen: {{ f.profile.last_seen|naturaltime }}</div>
-              {% endif %}
-            </div>
-          </a>
-          <a href="{% url 'start_chat' f.id %}" class="message-icon ms-1">💬</a>
+          </div>
+
+          <a href="{% url 'start_chat' f.id %}" class="message-icon">💬</a>
         </div>
         {% endfor %}
       </div>
-
-
     </div>
-
   </div>
-
   <script src="{% static 'js/feed.js' %}"></script>
   <script src="{% static 'js/layout.js' %}"></script>
   <script type="module" src="{% static 'js/main.js' %}"></script>

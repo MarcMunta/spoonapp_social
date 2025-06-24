@@ -1,41 +1,16 @@
 {% load static %}
-<!-- post_card.html -->
-<div class="post-card border rounded-3 p-4 mb-4 bg-white shadow-sm">
-    <!-- Usuario -->
-    <div class="d-flex align-items-center mb-3">
-        {% if post.user.profile.profile_picture %}
-        <img src="{{ post.user.profile.profile_picture_data_url }}" alt="Avatar"
-             class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
-        {% else %}
-        <img src="{{ default_avatar_data_url }}" alt="Avatar"
-             class="rounded-circle me-2" style="width:40px;height:40px;object-fit:cover;">
+<a href="{% url 'post_detail' post.id %}" class="post-card-link">
+    <div class="post-card" style="background-image: url('{{ post.image_data_url }}');">
+
+        {% if post.image %}
+        <img src="{{ post.image_data_url }}" alt="Post image" class="post-main-img">
         {% endif %}
-        <div>
-            <p class="fw-semibold mb-0">{{ post.user.username }}</p>
-            <small class="text-muted">{{ post.created_at|date:"d M Y · H:i" }}</small>
+
+        <div class="post-overlay">
+            <div class="post-stats">
+                <span>❤️ {{ post.likes.count|default:"0" }}</span>
+                <span>💬 {{ post.comments.count|default:"0" }}</span>
+            </div>
         </div>
     </div>
-
-    <!-- Imagen principal -->
-    {% if post.image %}
-    <div class="mb-3">
-        <img src="{{ post.image_data_url }}" alt="Post image" class="img-fluid rounded-3" style="max-height:500px;object-fit:cover;">
-    </div>
-    {% endif %}
-
-    <!-- Descripción -->
-    {% if post.description %}
-    <p class="mb-2 whitespace-pre-line">{{ post.description }}</p>
-    {% endif %}
-
-    <!-- Categoría -->
-    {% if post.category %}
-    <span class="badge text-bg-primary mb-2">{{ post.category.name }}</span>
-    {% endif %}
-
-    <!-- Likes y comentarios -->
-    <div class="d-flex justify-content-between mt-2 text-muted">
-        <span>{{ post.likes.count }} ❤️ Likes</span>
-        <a href="{% url 'post_detail' post.id %}" class="text-decoration-none">Ver comentarios</a>
-    </div>
-</div>
+</a>

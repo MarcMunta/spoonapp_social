@@ -374,17 +374,6 @@ body:has(.spoon-chat-container) .rightbar {
     border: none;
 }
 
-
-.friend-status {
-    padding: 0.5rem 0;
-    color: #333;
-}
-
-.friend-status span {
-    color: #777;
-    font-size: 0.9rem;
-}
-
 .search-friends-container {
     margin-top: 10px;
     margin-bottom: 10px;
@@ -505,29 +494,57 @@ body:has(.spoon-chat-container) .rightbar {
 }
 
 .friend-bubble {
-    background: #fff;
-    border-radius: 15px;
-    padding: 10px;
-    width: 100%;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    justify-content: space-between;
+    background: #fff;
+    border-radius: 12px;
+    padding: 10px 14px;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.08);
+    width: 100%;
+    gap: 12px;
 }
+
 
 .friend-bubble:hover {
     transform: translateY(-2px);
 }
 
 .friend-bubble img {
-    width: 48px;
-    height: 48px;
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     object-fit: cover;
-    margin-right: 10px;
     border: 2px solid #d48ac1;
+    flex-shrink: 0;
+}
+
+.friend-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    flex: 1;
+    min-width: 0;
+}
+
+.friend-name {
+    font-weight: 600;
+    font-size: 1rem;
+    color: #111;
+    margin-bottom: 2px;
+}
+
+.friend-status {
+    font-size: 0.85rem;
+    color: #555;
+    word-break: break-word;
+}
+
+.message-icon {
+    font-size: 1.2rem;
+    text-decoration: none;
+    color: #aaa;
+    margin-left: auto;
 }
 
 .friend-bubble .friend-name {

@@ -1,15 +1,98 @@
 {% extends 'layouts/base.html' %}
+{% load static %}
 
-{% block title %}SpoonApp Social{% endblock %}
+{% block title %}Publicación de {{ post.user.username }} — SpoonApp{% endblock %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/post.css' %}">
+<link rel="stylesheet" href="{% static 'css/feed.css' %}">
+{% endblock %}
 
 {% block content %}
-<div class="max-w-xl mx-auto p-4">
-    <h1 class="text-xl font-bold mb-2">{{ post.user.username }}</h1>
+<div class="post mb-3">
+    <div class="d-flex justify-content-between align-items-center mb-1 post-top">
+        <a href="{% url 'profile' post.user.username %}" class="post-user text-decoration-none"
+            {% if post.user.profile and post.user.profile.bubble_color %}
+                style="background-color: {{ post.user.profile.bubble_color }};"
+            {% endif %}>
+            {% if post.user.profile.profile_picture %}
+            <img src="{{ post.user.profile.profile_picture_data_url }}" alt="{{ post.user.username }}"
+                class="post-avatar">
+            {% else %}
+            <img src="{{ default_avatar_data_url }}" alt="Por defecto" class="post-avatar">
+            {% endif %}
+            <strong>{{ post.user.username }}</strong>
+        </a>
+        <div class="ms-auto">
+            <div class="post-info-group d-flex align-items-center">
+                <span class="post-info-bubble">
+                    <span class="post-date">{{ post.created_at|date:"H:i d/m/Y" }}</span>
+                </span>
+            </div>
+        </div>
+    </div>
+
     {% if post.image %}
-    <img src="{{ post.image_data_url }}" alt="Imagen del post" class="rounded mb-4">
+    <div class="post-image">
+        <img src="{{ post.image_data_url }}" alt="">
+    </div>
+    <hr class="post-divider">
     {% endif %}
-    <p class="mb-4">{{ post.description }}</p>
-    <p class="text-gray-600 text-sm">Publicado: {{ post.created_at }}</p>
+
+    <div class="post-header d-flex justify-content-between">
+        <div class="post-title">
+            <div class="post-categories">
+                {% for cat in post.categories.all %}
+                <span class="badge bg-secondary me-1">{{ cat.name }}</span>
+                {% endfor %}
+            </div>
+        </div>
+        <div class="post-stats" id="like-btn-{{ post.id }}">
+            {% if user.is_authenticated %}
+            <a href="{% url 'like_post' post.id %}" data-url="{% url 'like_post' post.id %}"
+                class="spoon-like like-post"><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</a>
+            {% else %}
+            <span><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</span>
+            {% endif %}
+            <span class="comment-count-wrapper" data-post-id="{{ post.id }}">
+                <span class="comment-count">{{ post.postcomment_set.count }}</span> 💬
+            </span>
+            <button type="button" class="share-btn btn btn-link p-0">📤</button>
+            <span class="bookmark-btn">🔖</span>
+        </div>
+    </div>
+
+    {% if post.caption %}
+    <p class="post-caption">{{ post.caption }}</p>
+    {% endif %}
+
+    {% if user.is_authenticated %}
+    <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
+        {% csrf_token %}
+        {{ comment_form.content }}
+        <button type="submit" class="comment-btn">Comentar</button>
+    </form>
+    {% endif %}
+
+    {% with comments=post.postcomment_set.all %}
+    {% if comments %}
+    <ul id="comments-{{ post.id }}" data-post-id="{{ post.id }}" data-expanded="false"
+        class="list-group list-group-flush mt-2 comment-list">
+        {% include 'partials/comments_partial.html' with comments=comments|slice:":3" %}
+    </ul>
+    {% if comments|length > 3 %}
+    <button class="load-more-comments" data-post-id="{{ post.id }}">Cargar más</button>
+    {% endif %}
+    {% endif %}
+    {% endwith %}
+
+    <div class="back-link mt-4 text-center">
+        <a href="{% url 'profile' request.user.username %}" class="text-muted">← Volver al perfil</a>
+    </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/htmx.org@1.9.2"></script>
+<script src="{% static 'js/feed.js' %}"></script>  {# ESTO FALTABA #}
 {% endblock %}

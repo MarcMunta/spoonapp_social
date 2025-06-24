@@ -1,3 +1,6 @@
+// Prefix URLs with the current language code taken from the <html> tag.
+const LANG_PREFIX = `/${document.documentElement.lang}`;
+
 document.addEventListener("DOMContentLoaded", () => {
   const updateRelativeTimes = () => {
     document.querySelectorAll(".post-relative").forEach((el) => {
@@ -200,7 +203,7 @@ document.addEventListener("DOMContentLoaded", () => {
       replyInput.disabled = currentIsOwn;
     }
     if (deleteBtn) deleteBtn.dataset.storyId = currentStoryIds[idx];
-    fetch(`/story/${currentStoryIds[idx]}/view/`, {
+    fetch(`${LANG_PREFIX}/story/${currentStoryIds[idx]}/view/`, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
       .then((res) => res.json())
@@ -388,7 +391,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (!storyId) return;
       const formData = new FormData();
       formData.append("content", content);
-      fetch(`/story/${storyId}/reply/`, {
+      fetch(`${LANG_PREFIX}/story/${storyId}/reply/`, {
         method: "POST",
         body: formData,
         headers: {
@@ -400,7 +403,7 @@ document.addEventListener("DOMContentLoaded", () => {
         .then((data) => {
           if (input) input.value = "";
           if (data.chat_id) {
-            window.location.href = `/chat/${data.chat_id}/`;
+            window.location.href = `${LANG_PREFIX}/chat/${data.chat_id}/`;
           }
         });
     });
@@ -432,7 +435,7 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmDeleteBtn.addEventListener("click", () => {
       if (!pendingDeleteId) return;
       const deleteId = pendingDeleteId;
-      fetch(`/story/${deleteId}/delete/`, {
+      fetch(`${LANG_PREFIX}/story/${deleteId}/delete/`, {
         method: "POST",
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -469,7 +472,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (storyViews && viewsModal && viewsModalBody) {
     storyViews.addEventListener("click", () => {
       const storyId = currentStoryIds[currentIndex];
-      fetch(`/story/${storyId}/viewers/`, {
+      fetch(`${LANG_PREFIX}/story/${storyId}/viewers/`, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       })
         .then((res) => res.json())
@@ -505,7 +508,7 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmDeletePostBtn.addEventListener("click", () => {
       if (!pendingPostDeleteId) return;
       const deleteId = pendingPostDeleteId;
-      fetch(`/post/${deleteId}/delete/`, {
+      fetch(`${LANG_PREFIX}/post/${deleteId}/delete/`, {
         method: "POST",
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -562,7 +565,7 @@ document.addEventListener("DOMContentLoaded", () => {
     confirmDeleteCommentBtn.addEventListener("click", () => {
       if (!pendingCommentDeleteId) return;
       const deleteId = pendingCommentDeleteId;
-      fetch(`/comment/${deleteId}/delete/`, {
+      fetch(`${LANG_PREFIX}/comment/${deleteId}/delete/`, {
         method: "POST",
         headers: {
           "X-Requested-With": "XMLHttpRequest",
@@ -758,7 +761,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const postId = btn.dataset.postId;
       const list = document.getElementById("comments-" + postId);
       const offset = list ? list.children.length : 0;
-      fetch(`/post/${postId}/comments/?offset=${offset}&limit=5`, {
+      fetch(`${LANG_PREFIX}/post/${postId}/comments/?offset=${offset}&limit=5`, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       })
         .then((res) => res.json())
@@ -825,7 +828,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const commentId = btn.dataset.commentId;
       let list = document.getElementById("replies-" + commentId);
       const offset = list ? list.children.length : 0;
-      fetch(`/comment/${commentId}/replies/?offset=${offset}&limit=3`, {
+      fetch(`${LANG_PREFIX}/comment/${commentId}/replies/?offset=${offset}&limit=3`, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       })
         .then((res) => res.json())

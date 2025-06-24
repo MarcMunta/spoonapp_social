@@ -21,3 +21,17 @@ dropdown?.querySelectorAll(".color-option").forEach((opt) => {
       });
   });
 });
+
+const storyInput = document.getElementById("id_media_file");
+if (storyInput) {
+  storyInput.addEventListener("change", () => {
+    document.getElementById("storyForm")?.submit();
+  });
+  const addBtn = document.querySelector(".profile-story-add");
+  if (addBtn) {
+    addBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      storyInput.click();
+    });
+  }
+}

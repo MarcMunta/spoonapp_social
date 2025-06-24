@@ -7,6 +7,7 @@
 {% block body_class %}profile-page{% endblock %}
 
 {% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/stories.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
@@ -38,7 +39,7 @@
             {% else %}
             <img src="{{ default_avatar_data_url }}" class="profile-picture" style="width: 150px; height: 150px; object-fit: cover;">
             {% endif %}
-            <span class="story-add profile-story-add" onclick="event.stopPropagation(); document.getElementById('id_media_file').click();">+</span>
+            <span class="story-add profile-story-add">+</span>
           </div>
         </form>
         {% else %}

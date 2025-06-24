@@ -30,5 +30,8 @@
   {% else %}
   <p class="text-muted">No has ocultado historias de nadie.</p>
   {% endif %}
+  <div class="text-center mt-4">
+    <a href="{% url 'profile' request.user.username %}" class="text-muted">← Volver al perfil</a>
+  </div>
 </div>
 {% endblock %}

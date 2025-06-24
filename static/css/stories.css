@@ -322,11 +322,15 @@
 }
 
 .story-modal-close {
+    position: absolute;
+    top: 8px;
+    right: 10px;
     background: transparent;
     border: none;
     color: #fff;
     font-size: 1.5rem;
     cursor: pointer;
+    z-index: 1;
 }
 
 .story-modal-user {

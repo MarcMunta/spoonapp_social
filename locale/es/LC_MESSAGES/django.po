@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-06-24 15:19+0000\n"
+"POT-Creation-Date: 2025-06-24 16:53+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -98,76 +98,88 @@ msgstr "En l00ednea"
 msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
 msgstr "Visto por última vez: %(f.profile.last_seen|naturaltime)s"
 
+#: templates/pages/chat_detail.html:102
+msgid "Share your food thoughts... 🍽️"
+msgstr "Comparte tus pensamientos culinarios... 🍽️"
+
+#: templates/pages/chat_detail.html:104
+msgid "Add emoji"
+msgstr "Agregar emoji"
+
+#: templates/pages/chat_detail.html:108
+msgid "Send message"
+msgstr "Enviar mensaje"
+
 # Traducciones para la página de perfil
-#: templates/pages/edit_profile.html:13
+#: templates/pages/edit_profile.html:14
 #, fuzzy
 #| msgid "Editar perfil"
 msgid "Edit Profile"
 msgstr "Editar perfil"
 
-#: templates/pages/edit_profile.html:34
+#: templates/pages/edit_profile.html:35
 msgid "Username"
 msgstr "Nombre de usuario"
 
-#: templates/pages/edit_profile.html:36
+#: templates/pages/edit_profile.html:37
 msgid "Your username"
 msgstr "Tu nombre de usuario"
 
-#: templates/pages/edit_profile.html:38
+#: templates/pages/edit_profile.html:39
 #, fuzzy
 #| msgid "Biografía:"
 msgid "Biography"
 msgstr "Biograf00eda"
 
-#: templates/pages/edit_profile.html:41
+#: templates/pages/edit_profile.html:42
 msgid "Website"
 msgstr "Sitio Web"
 
-#: templates/pages/edit_profile.html:44
+#: templates/pages/edit_profile.html:45
 msgid "Location"
 msgstr "Ubicaci00f3n"
 
-#: templates/pages/edit_profile.html:47
+#: templates/pages/edit_profile.html:48
 msgid "Gender"
 msgstr "G00e9nero"
 
-#: templates/pages/edit_profile.html:50
+#: templates/pages/edit_profile.html:51
 msgid "Save changes"
 msgstr "Guardar cambios"
 
-#: templates/pages/edit_profile.html:53
+#: templates/pages/edit_profile.html:54
 msgid "Back to profile"
 msgstr "Volver al perfil"
 
-#: templates/pages/feed.html:17
+#: templates/pages/feed.html:18
 msgid "Publish"
 msgstr "Publicar"
 
-#: templates/pages/feed.html:50 templates/pages/feed.html:112
-#: templates/pages/feed.html:119
-#: templates/partials/comments/comments_partial.html:33
-#: templates/partials/stories/stories.html:70
-#: templates/partials/stories/stories.html:84
-#: templates/partials/stories/stories.html:97
+#: templates/pages/feed.html:51 templates/pages/feed.html:113
+#: templates/pages/feed.html:120
+#: templates/partials/comments/comments_partial.html:34
+#: templates/partials/stories/stories.html:71
+#: templates/partials/stories/stories.html:85
+#: templates/partials/stories/stories.html:98
 msgid "Delete"
 msgstr "Eliminar"
 
-#: templates/pages/feed.html:102
+#: templates/pages/feed.html:103
 msgid "Load more"
 msgstr "Cargar más"
 
-#: templates/pages/feed.html:110
+#: templates/pages/feed.html:111
 msgid "Delete this post permanently?"
 msgstr "¿Eliminar definitivamente esta publicación?"
 
-#: templates/pages/feed.html:111 templates/pages/feed.html:118
-#: templates/partials/stories/stories.html:96
+#: templates/pages/feed.html:112 templates/pages/feed.html:119
+#: templates/partials/stories/stories.html:97
 #, fuzzy
 #| msgid "Cancelar"
 msgid "Cancel"
 msgstr "Cancelar"
 
-#: templates/pages/feed.html:117
+#: templates/pages/feed.html:118
 msgid "Delete this comment permanently?"
 msgstr "¿Eliminar definitivamente este comentario?"
 
@@ -237,27 +249,27 @@ msgstr "¿Eliminar definitivamente esta historia?"
 msgid "Cancelar"
 msgstr "Cancelar"
 
-#: templates/partials/comments/comments_partial.html:43
+#: templates/partials/comments/comments_partial.html:44
 msgid "Reply"
 msgstr "Responder"
 
-#: templates/partials/comments/comments_partial.html:48
-#: templates/partials/stories/stories.html:82
+#: templates/partials/comments/comments_partial.html:49
+#: templates/partials/stories/stories.html:83
 msgid "Send"
 msgstr "Enviar"
 
-#: templates/partials/comments/comments_partial.html:54
+#: templates/partials/comments/comments_partial.html:55
 msgid "Load replies"
 msgstr "Cargar respuestas"
 
-#: templates/partials/stories/stories.html:81
+#: templates/partials/stories/stories.html:82
 msgid "Reply..."
 msgstr "Responder..."
 
-#: templates/partials/stories/stories.html:87
+#: templates/partials/stories/stories.html:88
 msgid "Viewed by"
 msgstr "Visto por"
 
-#: templates/partials/stories/stories.html:95
+#: templates/partials/stories/stories.html:96
 msgid "Delete this story permanently?"
 msgstr "¿Eliminar definitivamente esta historia?"

@@ -8,6 +8,7 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/stories.css' %}">
+<link rel="stylesheet" href="{% static 'css/stories.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
@@ -22,43 +23,37 @@
           {% csrf_token %}
           {{ story_form.media_file }}
           <div class="story-thumb profile-story-thumb user-story{% if profile_story_data.urls %} open-story{% endif %}"
-            {% if profile_story_data.urls %}
-            data-urls="{{ profile_story_data.urls|join:'|' }}"
+            {% if profile_story_data.urls %} data-urls="{{ profile_story_data.urls|join:'|' }}"
             data-types="{{ profile_story_data.types|join:'|' }}"
             data-expires="{{ profile_story_data.expires|join:'|' }}"
-            data-created="{{ profile_story_data.created|join:'|' }}"
-            data-user="{{ profile_user.username }}"
+            data-created="{{ profile_story_data.created|join:'|' }}" data-user="{{ profile_user.username }}"
             data-profile-url="{% url 'profile' profile_user.username %}"
             data-avatar-url="{% if user_profile.profile_picture %}{{ user_profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
-            data-bubble-color="{{ user_profile.bubble_color }}"
-            data-story-id="{{ profile_story_data.ids|join:'|' }}"
-            data-own="true"
-            {% endif %}>
+            data-bubble-color="{{ user_profile.bubble_color }}" data-story-id="{{ profile_story_data.ids|join:'|' }}"
+            data-own="true" {% endif %}>
             {% if user_profile.profile_picture %}
-            <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture" style="width: 150px; height: 150px; object-fit: cover;">
+            <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture"
+              alt="{{ profile_user.username }}">
             {% else %}
-            <img src="{{ default_avatar_data_url }}" class="profile-picture" style="width: 150px; height: 150px; object-fit: cover;">
+            <img src="{{ default_avatar_data_url }}" class="profile-picture" alt="{{ profile_user.username }}">
             {% endif %}
             <span class="story-add profile-story-add">+</span>
           </div>
         </form>
         {% else %}
-        <div class="story-thumb profile-story-thumb{% if profile_story_data.urls %} open-story{% endif %}"
-          {% if profile_story_data.urls %}
-          data-urls="{{ profile_story_data.urls|join:'|' }}"
-          data-types="{{ profile_story_data.types|join:'|' }}"
-          data-expires="{{ profile_story_data.expires|join:'|' }}"
-          data-created="{{ profile_story_data.created|join:'|' }}"
-          data-user="{{ profile_user.username }}"
+        <div class="story-thumb profile-story-thumb{% if profile_story_data.urls %} open-story{% endif %}" {% if
+          profile_story_data.urls %} data-urls="{{ profile_story_data.urls|join:'|' }}"
+          data-types="{{ profile_story_data.types|join:'|' }}" data-expires="{{ profile_story_data.expires|join:'|' }}"
+          data-created="{{ profile_story_data.created|join:'|' }}" data-user="{{ profile_user.username }}"
           data-profile-url="{% url 'profile' profile_user.username %}"
           data-avatar-url="{% if user_profile.profile_picture %}{{ user_profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
-          data-bubble-color="{{ user_profile.bubble_color }}"
-          data-story-id="{{ profile_story_data.ids|join:'|' }}"
-          {% endif %}>
+          data-bubble-color="{{ user_profile.bubble_color }}" data-story-id="{{ profile_story_data.ids|join:'|' }}" {%
+          endif %}>
           {% if user_profile.profile_picture %}
-          <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture" style="width: 150px; height: 150px; object-fit: cover;">
+          <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture"
+            alt="{{ profile_user.username }}">
           {% else %}
-          <img src="{{ default_avatar_data_url }}" class="profile-picture" style="width: 150px; height: 150px; object-fit: cover;">
+          <img src="{{ default_avatar_data_url }}" class="profile-picture" alt="{{ profile_user.username }}">
           {% endif %}
         </div>
         {% endif %}
@@ -183,6 +178,52 @@
       <div class="text-muted">No hay publicaciones.</div>
       {% endfor %}
     </div>
+  </div>
+</div>
+<div id="storyModal" class="story-backdrop">
+  <div class="story-modal">
+    <div class="story-header d-flex justify-content-between align-items-center mb-2 px-2">
+      <div class="story-modal-user"></div>
+      <div class="d-flex align-items-center">
+        <span class="story-countdown me-2"></span>
+        <button type="button" class="btn-close btn-close-white story-modal-close" aria-label="Close"></button>
+      </div>
+    </div>
+    <div class="story-progress">
+      <div class="story-progress-bar"></div>
+    </div>
+    <div class="dropup dropdown story-options position-absolute" style="display:none;">
+      <button class="btn btn-sm btn-dark story-options-btn">&#8942;</button>
+      <ul class="dropdown-menu">
+        <li><a class="dropdown-item text-danger story-delete" href="#" data-story-id="">Eliminar</a></li>
+      </ul>
+    </div>
+    <div class="story-views text-white position-absolute d-flex align-items-center"
+      style="bottom:8px; left:10px; display:none;">
+      <span class="me-1">👁</span><span class="view-count"></span>
+    </div>
+    <span class="story-prev">&#10094;</span>
+    <span class="story-next">&#10095;</span>
+    <img id="storyImage" class="story-image d-none" />
+    <video id="storyVideo" class="story-image d-none" controls></video>
+    <div class="story-reply mt-2 d-flex">
+      <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="Responder...">
+      <button id="storyReplySend" class="btn btn-primary" data-story-id="">Enviar</button>
+    </div>
+    <button class="btn-eliminar-historia story-delete" data-story-id="">Eliminar</button>
+    <div id="storyViewsList" class="views-list-modal">
+      <div class="views-list-content">
+        <h5 class="text-center mb-2">Visto por</h5>
+        <div class="views-list-body"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="deleteConfirm" class="delete-confirm-modal">
+  <div class="delete-confirm-content">
+    <p class="mb-3">¿Eliminar definitivamente esta historia?</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteStory">Cancelar</button>
+    <button type="button" class="btn btn-danger" id="confirmDeleteStory">Eliminar</button>
   </div>
 </div>
 <script src="{% static 'js/profile.js' %}"></script>

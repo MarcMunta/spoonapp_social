@@ -46,9 +46,15 @@ body.profile-page .btn-outline-primary {
 }
 
 body.profile-page .profile-avatar-wrapper {
+    position: relative;
     width: 180px;
     height: 180px;
     margin: 0 auto;
+}
+
+body.profile-page .profile-story-thumb {
+    width: 100%;
+    height: 100%;
 }
 
 body.profile-page .profile-avatar-wrapper img {

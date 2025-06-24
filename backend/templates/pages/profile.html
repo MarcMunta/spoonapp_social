@@ -1,8 +1,14 @@
 {% extends 'layouts/base.html' %}
 {% load custom_filters %}
+
+{% load static %}
+
 {% block title %}SpoonApp Social{% endblock %}
 {% block body_class %}profile-page{% endblock %}
-{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
@@ -57,7 +63,8 @@
           </div>
           <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">Editar perfil</a>
           <div class="dropdown ms-1">
-            <button class="dropdown-toggle btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋯</button>
+            <button class="dropdown-toggle btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false">⋯</button>
             <ul class="dropdown-menu">
               <li><a class="dropdown-item" href="{% url 'hidden_stories_list' %}">Historias ocultas</a></li>
               <li><a class="dropdown-item" href="{% url 'blocked_users_list' %}">Usuarios bloqueados</a></li>
@@ -126,10 +133,11 @@
   <div class="row g-3">
     {% for cat in categories %}
     {% if cat.slug %}
-    <div class="category-group" data-category="{{ cat.slug }}" style="display: none;">
+    <div class="row g-2 category-group" data-category="{{ cat.slug }}" style="display: none;">
       {% for post in posts_by_category|get_item:cat.slug %}
-      {% include 'partials/post_card.html' with post=post %}
-      {% empty %}
+      <div class="col-4">
+        {% include 'partials/post_card.html' with post=post %}
+      </div> {% empty %}
       <div class="text-muted">No hay publicaciones en esta categoría.</div>
       {% endfor %}
     </div>
@@ -137,10 +145,11 @@
     {% endfor %}
 
     <!-- ALL POSTS -->
-    <div class="category-group" data-category="all">
+    <div class="row g-2 category-group" data-category="all">
       {% for post in posts_by_category|get_item:"all" %}
-      {% include 'partials/post_card.html' with post=post %}
-      {% empty %}
+      <div class="col-4">
+        {% include 'partials/post_card.html' with post=post %}
+      </div> {% empty %}
       <div class="text-muted">No hay publicaciones.</div>
       {% endfor %}
     </div>

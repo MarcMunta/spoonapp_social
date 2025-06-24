@@ -5,6 +5,11 @@ body.profile-page {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
+body.profile-page .row.align-items-center.mb-4 {
+    flex-wrap: nowrap;
+    gap: 2rem;
+}
+
 body.profile-page .container {
     background: white;
     border-radius: 15px;
@@ -16,9 +21,9 @@ body.profile-page .container {
 body.profile-page h1,
 body.profile-page h2 {
     color: #2c3e50;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 0.3rem;
-    margin-bottom: 1rem;
+    border-bottom: none;
+    margin-bottom: 0.5rem;
+    padding-bottom: 0;
 }
 
 body.profile-page img.rounded-circle {
@@ -38,4 +43,135 @@ body.profile-page .btn-outline-primary {
     border-radius: 20px;
     padding: 0.3rem 1.2rem;
     font-weight: bold;
+}
+
+body.profile-page .profile-avatar-wrapper {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto;
+}
+
+body.profile-page .profile-avatar-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 4px solid #d48ac1;
+}
+
+body.profile-page .col-md-9 {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.6rem;
+}
+
+body.profile-page .d-flex.align-items-center.gap-2 {
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.category-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    justify-content: flex-start;
+}
+
+.category-group .col-4 {
+    flex: 0 0 calc(33.333% - 12px);
+    max-width: calc(33.333% - 12px);
+}
+
+.category-group>* {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border-radius: 8px;
+}
+
+.category-group img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+}
+
+.post-card-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+}
+
+.post-card {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    position: relative;
+    overflow: hidden;
+    border-radius: 14px;
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.25s ease;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}
+
+.post-card::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: inherit;
+    background-size: cover;
+    background-position: center;
+    filter: blur(12px) brightness(0.5);
+    z-index: 0;
+}
+
+/* Imagen original centrada, sin deformar */
+.post-main-img {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    height: 100%;
+    object-fit: scale-down;
+    border-radius: 10px;
+    transition: transform 0.3s ease;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.25);
+}
+
+/* Hover animado */
+.post-card:hover {
+    transform: scale(1.02);
+}
+
+/* Capa de overlay */
+.post-overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.5rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    font-weight: 600;
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+.post-card:hover .post-overlay {
+    opacity: 1;
+}
+
+.post-stats {
+    display: flex;
+    gap: 1.5rem;
+    align-items: center;
 }

@@ -223,7 +223,6 @@ def upload_story(request):
             story.save()
     return redirect('home')
 
-
 @login_required(login_url='/custom-login/')
 def like_post(request, post_id):
     post = get_object_or_404(Post, id=post_id)
@@ -232,8 +231,7 @@ def like_post(request, post_id):
         like.delete()
     if request.headers.get("x-requested-with") == "XMLHttpRequest":
         return JsonResponse({"likes": post.postlike_set.count()})
-    return redirect('home')
-
+    return redirect(request.META.get("HTTP_REFERER", "home"))
 
 @login_required(login_url='/custom-login/')
 def share_post(request, post_id):
@@ -281,7 +279,7 @@ def comment_post(request, post_id):
                         "parent_id": parent.id if parent else None,
                     }
                 )
-    return redirect('home')
+    return redirect(request.META.get("HTTP_REFERER", "home"))
 
 @login_required(login_url='/custom-login/')
 def friend_requests_view(request):
@@ -425,7 +423,15 @@ def unblock_user(request, username):
 
 def post_detail(request, post_id):
     post = get_object_or_404(Post, id=post_id)
-    return render(request, 'pages/post_detail.html', {'post': post})
+    
+    comment_form = CommentForm()
+    comments = post.postcomment_set.filter(parent__isnull=True).select_related('user__profile').prefetch_related('replies', 'postcommentlike_set')
+
+    return render(request, 'pages/post_detail.html', {
+        'post': post,
+        'comment_form': comment_form,
+        'comments': comments,
+    })
 
 def profile(request, username):
     profile_user = get_object_or_404(User, username=username)

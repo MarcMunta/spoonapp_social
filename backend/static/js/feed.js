@@ -186,7 +186,10 @@ document.addEventListener("DOMContentLoaded", () => {
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
     updateElapsed(currentCreated[idx]);
-    countdownInterval = setInterval(() => updateElapsed(currentCreated[idx]), 1000);
+    countdownInterval = setInterval(
+      () => updateElapsed(currentCreated[idx]),
+      1000
+    );
     progressTimeout = setTimeout(nextStory, remainingTime);
     const replyBtn = document.getElementById("storyReplySend");
     if (replyBtn && currentStoryElIndex != null) {
@@ -203,7 +206,7 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((res) => res.json())
       .then((data) => {
         if (currentIsOwn && storyViews) {
-          const countEl = storyViews.querySelector('.view-count');
+          const countEl = storyViews.querySelector(".view-count");
           if (countEl) countEl.textContent = data.views;
         }
       });
@@ -213,11 +216,11 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentStoryElIndex = 0;
 
   function openStories(el, idx) {
-    currentUrls = el.dataset.urls.split('|');
-    currentTypes = el.dataset.types.split('|');
-    currentExpires = el.dataset.expires.split('|');
-    currentCreated = el.dataset.created.split('|');
-    currentStoryIds = el.dataset.storyId.split('|');
+    currentUrls = el.dataset.urls.split("|");
+    currentTypes = el.dataset.types.split("|");
+    currentExpires = el.dataset.expires.split("|");
+    currentCreated = el.dataset.created.split("|");
+    currentStoryIds = el.dataset.storyId.split("|");
     currentIndex = 0;
     currentStoryElIndex = idx;
     currentIsOwn =
@@ -225,9 +228,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const userContainer = document.querySelector(".story-modal-user");
     if (userContainer) {
       const profileUrl = el.dataset.profileUrl;
-      const bubbleColor = el.dataset.bubbleColor || '#e0f5ff';
-      userContainer.innerHTML =
-        `<a href="${profileUrl}" class="post-user text-decoration-none" style="background-color:${bubbleColor};">
+      const bubbleColor = el.dataset.bubbleColor || "#e0f5ff";
+      userContainer.innerHTML = `<a href="${profileUrl}" class="post-user text-decoration-none" style="background-color:${bubbleColor};">
             <img src="${el.dataset.avatarUrl}" class="post-avatar" width="40" height="40" alt="${el.dataset.user}">
             <strong>${el.dataset.user}</strong>
          </a>`;
@@ -240,11 +242,12 @@ document.addEventListener("DOMContentLoaded", () => {
       replyBtn.disabled = currentIsOwn;
     }
     if (replyInput) replyInput.disabled = currentIsOwn;
-    if (storyOptions) storyOptions.style.display = currentIsOwn ? 'block' : 'none';
+    if (storyOptions)
+      storyOptions.style.display = currentIsOwn ? "block" : "none";
     if (storyViews) {
-      storyViews.style.display = currentIsOwn ? 'block' : 'none';
-      const countEl = storyViews.querySelector('.view-count');
-      if (countEl) countEl.textContent = '';
+      storyViews.style.display = currentIsOwn ? "block" : "none";
+      const countEl = storyViews.querySelector(".view-count");
+      if (countEl) countEl.textContent = "";
     }
     if (replyContainer) {
       if (currentIsOwn) {
@@ -307,38 +310,38 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  modalContent.addEventListener('mousedown', () => {
+  modalContent.addEventListener("mousedown", () => {
     holdStart = Date.now();
     pauseProgress();
   });
 
-  modalContent.addEventListener('mouseup', () => {
+  modalContent.addEventListener("mouseup", () => {
     if (Date.now() - holdStart > HOLD_THRESHOLD) {
       skipNavClick = true;
     }
     if (
-      (viewsModal && viewsModal.classList.contains('show')) ||
-      (optionsMenu && optionsMenu.classList.contains('show')) ||
-      (deleteConfirm && deleteConfirm.style.display === 'flex')
+      (viewsModal && viewsModal.classList.contains("show")) ||
+      (optionsMenu && optionsMenu.classList.contains("show")) ||
+      (deleteConfirm && deleteConfirm.style.display === "flex")
     ) {
       return;
     }
     resumeProgress();
   });
 
-  modalContent.addEventListener('touchstart', () => {
+  modalContent.addEventListener("touchstart", () => {
     holdStart = Date.now();
     pauseProgress();
   });
 
-  modalContent.addEventListener('touchend', () => {
+  modalContent.addEventListener("touchend", () => {
     if (Date.now() - holdStart > HOLD_THRESHOLD) {
       skipNavClick = true;
     }
     if (
-      (viewsModal && viewsModal.classList.contains('show')) ||
-      (optionsMenu && optionsMenu.classList.contains('show')) ||
-      (deleteConfirm && deleteConfirm.style.display === 'flex')
+      (viewsModal && viewsModal.classList.contains("show")) ||
+      (optionsMenu && optionsMenu.classList.contains("show")) ||
+      (deleteConfirm && deleteConfirm.style.display === "flex")
     ) {
       return;
     }
@@ -346,7 +349,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // allow clicking on the content to navigate left/right
-  modalContent.addEventListener('click', e => {
+  modalContent.addEventListener("click", (e) => {
     if (skipNavClick) {
       skipNavClick = false;
       return;

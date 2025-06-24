@@ -99,13 +99,13 @@
                     <form method="post" id="spoon-message-form" class="d-flex w-100 align-items-center gap-3">
                         {% csrf_token %}
                         <input type="text" name="content" id="spoon-message-input" class="spoon-message-input"
-                            placeholder="Share your food thoughts... 🍽️" required>
+                            placeholder="{% trans 'Share your food thoughts... 🍽️' %}" required>
 
-                        <button type="button" class="spoon-emoji-btn" id="emoji-btn" title="Add emoji">
+                        <button type="button" class="spoon-emoji-btn" id="emoji-btn" title="{% trans 'Add emoji' %}">
                             😊
                         </button>
 
-                        <button type="submit" class="spoon-send-button" title="Send message">
+                        <button type="submit" class="spoon-send-button" title="{% trans 'Send message' %}">
                             <i class="fas fa-paper-plane"></i>
                         </button>
                     </form>

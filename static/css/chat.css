@@ -316,7 +316,7 @@
 
 .spoon-chat-header-detail {
     position: fixed !important;
-    top: 60px !important;
+    top: 80px !important;
     left: 240px !important;
     right: 0 !important;
     z-index: 1000 !important;

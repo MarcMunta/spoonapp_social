@@ -15,7 +15,7 @@ document.addEventListener("DOMContentLoaded", function () {
   let oldestMessageId = null;
   let newestMessageId = null;
   let initialLoad = true;
-  let chatId = "{{ chat.id }}";
+  const chatId = messagesArea ? messagesArea.dataset.chatId : null;
   let isUserScrolling = false;
   let scrollTimer = null;
 

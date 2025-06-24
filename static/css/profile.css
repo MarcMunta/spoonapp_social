@@ -57,6 +57,12 @@ body.profile-page .profile-story-thumb {
     height: 100%;
 }
 
+body.profile-page .profile-story-add {
+    width: 24px;
+    height: 24px;
+    font-size: 18px;
+}
+
 body.profile-page .profile-avatar-wrapper img {
     width: 100%;
     height: 100%;

@@ -1,4 +1,4 @@
-document.addEventListener("DOMContentLoaded", function () {
+function initChatDetail() {
   const messagesArea = document.getElementById("spoon-messages-area");
   const messageForm = document.getElementById("spoon-message-form");
   const messageInput = document.getElementById("spoon-message-input");
@@ -55,8 +55,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 height: calc(100vh - 240px) !important;
                 overflow-y: auto !important;
                 overflow-x: hidden !important;
-                padding: 20px !important;
-                margin-bottom: 100px !important;
+                padding: 20px 20px 120px !important;
                 scroll-behavior: smooth !important;
             `;
       console.log("✅ Messages area height set correctly");
@@ -758,4 +757,10 @@ document.addEventListener("DOMContentLoaded", function () {
   console.log(
     "✅ Chat initialized successfully with enhanced scrolling and persistent input bar"
   );
-});
+}
+
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", initChatDetail);
+} else {
+  initChatDetail();
+}

@@ -446,6 +446,23 @@ def profile(request, username):
     for category in categories:
         posts_by_category[category.slug] = list(posts.filter(categories__slug=category.slug))
 
+    story_qs = Story.objects.filter(user=profile_user, expires_at__gt=timezone.now()).order_by('created_at')
+    if request.user.is_authenticated:
+        hidden_owners = StoryVisibilityBlock.objects.filter(
+            hidden_user=request.user
+        ).values_list('story_owner', flat=True)
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
+        story_qs = story_qs.exclude(user__in=hidden_owners).exclude(user__id__in=blocked_ids).exclude(user__id__in=blocking_ids)
+
+    profile_story_data = {
+        'urls': [st.media_data_url for st in story_qs],
+        'types': [st.media_mime or '' for st in story_qs],
+        'expires': [st.expires_at.isoformat() for st in story_qs],
+        'created': [st.created_at.isoformat() for st in story_qs],
+        'ids': [st.id for st in story_qs],
+    }
+
     is_following = False
     is_followed_by = False
     is_friend = False
@@ -484,6 +501,7 @@ def profile(request, username):
         'friends': get_friends(request.user) if request.user.is_authenticated else [],
         'categories': categories,
         'posts_by_category': posts_by_category,
+        'profile_story_data': profile_story_data,
     }
 
     if request.user == profile_user:

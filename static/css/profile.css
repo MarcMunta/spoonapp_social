@@ -65,6 +65,10 @@ body.profile-page .profile-avatar-wrapper img {
     border: 4px solid #d48ac1;
 }
 
+body.profile-page .open-story .profile-picture {
+    border-color: #0d6efd;
+}
+
 body.profile-page .col-md-9 {
     display: flex;
     flex-direction: column;

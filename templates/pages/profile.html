@@ -22,15 +22,17 @@
         <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}">
           {% csrf_token %}
           {{ story_form.media_file }}
-          <div class="profile-story-thumb user-story{% if profile_story_data.urls %} open-story{% endif %}" {% if
-            profile_story_data.urls %} data-urls="{{ profile_story_data.urls|join:'|' }}"
+          <div class="profile-story-thumb user-story{% if profile_story_data.urls %} open-story{% endif %}"
+            {% if profile_story_data.urls %}
+            data-urls="{{ profile_story_data.urls|join:'|' }}"
             data-types="{{ profile_story_data.types|join:'|' }}"
             data-expires="{{ profile_story_data.expires|join:'|' }}"
             data-created="{{ profile_story_data.created|join:'|' }}" data-user="{{ profile_user.username }}"
             data-profile-url="{% url 'profile' profile_user.username %}"
             data-avatar-url="{% if user_profile.profile_picture %}{{ user_profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
             data-bubble-color="{{ user_profile.bubble_color }}" data-story-id="{{ profile_story_data.ids|join:'|' }}"
-            data-own="true" {% endif %}>
+            data-own="true"
+            {% endif %}>
             {% if user_profile.profile_picture %}
             <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture"
               alt="{{ profile_user.username }}">
@@ -41,14 +43,16 @@
           </div>
         </form>
         {% else %}
-        <div class="story-thumb profile-story-thumb{% if profile_story_data.urls %} open-story{% endif %}" {% if
-          profile_story_data.urls %} data-urls="{{ profile_story_data.urls|join:'|' }}"
-          data-types="{{ profile_story_data.types|join:'|' }}" data-expires="{{ profile_story_data.expires|join:'|' }}"
+        <div class="story-thumb profile-story-thumb{% if profile_story_data.urls %} open-story{% endif %}"
+          {% if profile_story_data.urls %}
+          data-urls="{{ profile_story_data.urls|join:'|' }}"
+          data-types="{{ profile_story_data.types|join:'|' }}"
+          data-expires="{{ profile_story_data.expires|join:'|' }}"
           data-created="{{ profile_story_data.created|join:'|' }}" data-user="{{ profile_user.username }}"
           data-profile-url="{% url 'profile' profile_user.username %}"
           data-avatar-url="{% if user_profile.profile_picture %}{{ user_profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
-          data-bubble-color="{{ user_profile.bubble_color }}" data-story-id="{{ profile_story_data.ids|join:'|' }}" {%
-          endif %}>
+          data-bubble-color="{{ user_profile.bubble_color }}" data-story-id="{{ profile_story_data.ids|join:'|' }}"
+          {% endif %}>
           {% if user_profile.profile_picture %}
           <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture"
             alt="{{ profile_user.username }}">

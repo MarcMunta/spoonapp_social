@@ -79,7 +79,7 @@ msgstr "Ir al sitio"
 
 #: templates/layouts/base.html:127
 msgid "See More"
-msgstr "Ver m00e1s"
+msgstr "Ver más"
 
 #: templates/layouts/base.html:137
 msgid "Sponsored"
@@ -91,7 +91,7 @@ msgstr "Buscar usuarios..."
 
 #: templates/layouts/base.html:173
 msgid "Online"
-msgstr "En l00ednea"
+msgstr "En línea"
 
 #: templates/layouts/base.html:175
 #, python-format
@@ -129,7 +129,7 @@ msgstr "Tu nombre de usuario"
 #, fuzzy
 #| msgid "Biografía:"
 msgid "Biography"
-msgstr "Biograf00eda"
+msgstr "Biografía"
 
 #: templates/pages/edit_profile.html:42
 msgid "Website"
@@ -137,11 +137,11 @@ msgstr "Sitio Web"
 
 #: templates/pages/edit_profile.html:45
 msgid "Location"
-msgstr "Ubicaci00f3n"
+msgstr "Ubicación"
 
 #: templates/pages/edit_profile.html:48
 msgid "Gender"
-msgstr "G00e9nero"
+msgstr "Género"
 
 #: templates/pages/edit_profile.html:51
 msgid "Save changes"
@@ -205,11 +205,11 @@ msgstr "Usuarios bloqueados"
 
 #: templates/pages/profile.html:114
 msgid "Matches"
-msgstr "Matches"
+msgstr "Coincidencias"
 
 #: templates/pages/profile.html:116
 msgid "Posts"
-msgstr "Posts"
+msgstr "Publicaciones"
 
 #: templates/pages/profile.html:123
 msgid "Biografía:"
@@ -229,7 +229,7 @@ msgstr "Género:"
 
 #: templates/pages/profile.html:156
 msgid "All Posts"
-msgstr "All Posts"
+msgstr "Todas las publicaciones"
 
 #: templates/pages/profile.html:208 templates/pages/profile.html:223
 #: templates/pages/profile.html:236

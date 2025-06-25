@@ -921,11 +921,21 @@ document.addEventListener("DOMContentLoaded", () => {
         list.innerHTML = "";
         list.classList.add("d-none");
       }
-      const moreBtn = document.createElement("button");
-      moreBtn.className = "load-replies-btn";
-      moreBtn.dataset.commentId = commentId;
-      moreBtn.textContent = "Cargar respuestas";
-      btn.replaceWith(moreBtn);
+      const container = btn.parentElement;
+      const existingMoreBtn = container
+        ? container.querySelector(
+            ".load-replies-btn[data-comment-id='" + commentId + "']"
+          )
+        : null;
+      if (existingMoreBtn) {
+        btn.remove();
+      } else {
+        const moreBtn = document.createElement("button");
+        moreBtn.className = "load-replies-btn";
+        moreBtn.dataset.commentId = commentId;
+        moreBtn.textContent = "Cargar respuestas";
+        btn.replaceWith(moreBtn);
+      }
     }
   });
 

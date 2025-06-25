@@ -234,6 +234,10 @@
     z-index: 2102;
 }
 
+.views-list-modal.show {
+    display: flex;
+}
+
 .views-list-content {
     background: rgba(0, 0, 0, 0.85);
     color: #fff;

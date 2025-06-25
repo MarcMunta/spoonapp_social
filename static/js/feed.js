@@ -441,8 +441,9 @@ document.addEventListener("DOMContentLoaded", () => {
           "X-Requested-With": "XMLHttpRequest",
           "X-CSRFToken": getCSRFToken(),
         },
+        credentials: "same-origin",
       })
-        .then((res) => res.json())
+        .then((res) => (res.ok ? res.json() : Promise.reject()))
         .then((data) => {
           deleteConfirm.style.display = "none";
           const storyEl = storyEls[currentStoryElIndex];
@@ -454,6 +455,11 @@ document.addEventListener("DOMContentLoaded", () => {
             storyEls.splice(currentStoryElIndex, 1);
           }
           closeStories();
+        })
+        .catch(() => {
+          deleteConfirm.style.display = "none";
+          pendingDeleteId = null;
+          resumeProgress();
         });
     });
 
@@ -647,6 +653,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (optionsBtn && optionsMenu) {
+    const holdOptions = (e) => {
+      e.stopPropagation();
+      pauseProgress();
+    };
+    optionsBtn.addEventListener("mousedown", holdOptions);
+    optionsBtn.addEventListener("touchstart", holdOptions);
+    optionsBtn.addEventListener("mouseup", holdOptions);
+    optionsBtn.addEventListener("touchend", holdOptions);
     optionsBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const open = optionsMenu.classList.contains("show");

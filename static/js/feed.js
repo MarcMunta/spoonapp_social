@@ -115,9 +115,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const replyInput = document.getElementById("storyReplyInput");
   const optionsBtn = document.querySelector(".story-options-btn");
   if (deleteBtn) deleteBtn.style.display = "none";
-  const optionsMenu = storyOptions
-    ? storyOptions.querySelector(".dropdown-menu")
-    : null;
+  let optionsOpen = false;
   const currentUsername = document.body.dataset.currentUser || "";
 
   const countdownEl = document.querySelector(".story-countdown");
@@ -334,7 +332,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (
       (viewsModal && viewsModal.classList.contains("show")) ||
-      (optionsMenu && optionsMenu.classList.contains("show")) ||
+      optionsOpen ||
       (deleteConfirm && deleteConfirm.style.display === "flex")
     ) {
       return;
@@ -353,7 +351,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
     if (
       (viewsModal && viewsModal.classList.contains("show")) ||
-      (optionsMenu && optionsMenu.classList.contains("show")) ||
+      optionsOpen ||
       (deleteConfirm && deleteConfirm.style.display === "flex")
     ) {
       return;
@@ -398,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const storyId = replyBtnEl.dataset.storyId;
       const input = document.getElementById("storyReplyInput");
       const content = input ? input.value.trim() : "";
-      if (!storyId) return;
+      if (!storyId || !content) return;
       const formData = new FormData();
       formData.append("content", content);
       fetch(`${LANG_PREFIX}/story/${storyId}/reply/`, {
@@ -409,12 +407,20 @@ document.addEventListener("DOMContentLoaded", () => {
           "X-CSRFToken": getCSRFToken(),
         },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) return res.json().then((d) => Promise.reject(d));
+          return res.json();
+        })
         .then((data) => {
           if (input) input.value = "";
           if (data.chat_id) {
             window.location.href = `${LANG_PREFIX}/chat/${data.chat_id}/`;
+          } else if (data.error) {
+            alert(data.error);
           }
+        })
+        .catch(() => {
+          alert("Error sending reply");
         });
     });
 
@@ -438,7 +444,7 @@ document.addEventListener("DOMContentLoaded", () => {
         resumeProgress();
         return;
       }
-      if (optionsMenu) optionsMenu.classList.remove("show");
+      if (optionsOpen) optionsOpen = false;
       deleteBtn.style.display = "none";
       deleteConfirm.style.display = "flex";
       pauseProgress();
@@ -682,7 +688,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  if (optionsBtn && optionsMenu) {
+  if (optionsBtn) {
     const holdOptions = (e) => {
       e.stopPropagation();
       pauseProgress();
@@ -693,24 +699,18 @@ document.addEventListener("DOMContentLoaded", () => {
     optionsBtn.addEventListener("touchend", holdOptions);
     optionsBtn.addEventListener("click", (e) => {
       e.stopPropagation();
-      const open = optionsMenu.classList.contains("show");
-      if (open) {
-        optionsMenu.classList.remove("show");
-        if (deleteBtn) deleteBtn.style.display = "none";
-        resumeProgress();
-      } else {
-        optionsMenu.classList.add("show");
-        if (deleteBtn) deleteBtn.style.display = "block";
+      optionsOpen = !optionsOpen;
+      if (deleteBtn) deleteBtn.style.display = optionsOpen ? "block" : "none";
+      if (optionsOpen) {
         pauseProgress();
+      } else {
+        resumeProgress();
       }
     });
 
     document.addEventListener("click", (e) => {
-      if (
-        !storyOptions.contains(e.target) &&
-        optionsMenu.classList.contains("show")
-      ) {
-        optionsMenu.classList.remove("show");
+      if (optionsOpen && !storyOptions.contains(e.target)) {
+        optionsOpen = false;
         if (deleteBtn) deleteBtn.style.display = "none";
         resumeProgress();
       }

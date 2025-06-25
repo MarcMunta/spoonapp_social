@@ -149,15 +149,6 @@
     margin-right: auto;
 }
 
-.story-options .dropdown-menu {
-    display: none;
-    min-width: 6rem;
-    z-index: 2101;
-}
-
-.story-options .dropdown-menu.show {
-    display: block;
-}
 
 .story-prev,
 .story-next {

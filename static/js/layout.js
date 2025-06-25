@@ -199,6 +199,8 @@ document.querySelectorAll("#categoryTabs .nav-link").forEach((tab) => {
     document
       .querySelectorAll("#categoryTabs .nav-link")
       .forEach((link) => link.classList.remove("active"));
+    // Mark the clicked tab as active so users know which filter is applied
+    this.classList.add("active");
     document
       .querySelectorAll(".category-group")
       .forEach((group) => (group.style.display = "none"));

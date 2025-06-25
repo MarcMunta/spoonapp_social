@@ -23,7 +23,7 @@
         <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}">
           {% csrf_token %}
           {{ story_form.media_file }}
-          <div class="story-thumb profile-story-thumb user-story{% if profile_story_data.urls %} open-story{% endif %}"
+          <div class="profile-story-thumb user-story{% if profile_story_data.urls %} open-story{% endif %}"
             {% if profile_story_data.urls %} data-urls="{{ profile_story_data.urls|join:'|' }}"
             data-types="{{ profile_story_data.types|join:'|' }}"
             data-expires="{{ profile_story_data.expires|join:'|' }}"

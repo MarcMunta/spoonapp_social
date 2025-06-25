@@ -813,14 +813,20 @@ document.addEventListener("DOMContentLoaded", () => {
           if (list) {
             list.insertAdjacentHTML("beforeend", data.html);
           }
-          if (!data.has_more) {
-            const lessBtn = document.createElement("button");
+          let lessBtn = btn.parentElement
+            ? btn.parentElement.querySelector(".show-less-comments")
+            : null;
+          if (!lessBtn) {
+            lessBtn = document.createElement("button");
             lessBtn.className = "show-less-comments";
             lessBtn.dataset.postId = postId;
             lessBtn.textContent = "Ver menos";
-            btn.replaceWith(lessBtn);
-            if (list) list.dataset.expanded = "true";
+            btn.insertAdjacentElement("afterend", lessBtn);
           }
+          if (!data.has_more) {
+            btn.remove();
+          }
+          if (list) list.dataset.expanded = "true";
         });
     }
   });
@@ -888,12 +894,18 @@ document.addEventListener("DOMContentLoaded", () => {
           }
           list.classList.remove("d-none");
           list.insertAdjacentHTML("beforeend", data.html);
-          if (!data.has_more) {
-            const lessBtn = document.createElement("button");
+          let lessBtn = btn.parentElement
+            ? btn.parentElement.querySelector(".hide-replies-btn")
+            : null;
+          if (!lessBtn) {
+            lessBtn = document.createElement("button");
             lessBtn.className = "hide-replies-btn";
             lessBtn.dataset.commentId = commentId;
             lessBtn.textContent = "Ver menos";
-            btn.replaceWith(lessBtn);
+            btn.insertAdjacentElement("afterend", lessBtn);
+          }
+          if (!data.has_more) {
+            btn.remove();
           }
         });
     }

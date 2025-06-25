@@ -1,6 +1,16 @@
 // Prefix URLs with the current language code taken from the <html> tag.
 const LANG_PREFIX = `/${document.documentElement.lang}`;
 
+// Define CSRF helper locally in case layout.js hasn't been loaded
+if (typeof getCSRFToken === "undefined") {
+  function getCSRFToken() {
+    const cookie = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("csrftoken="));
+    return cookie ? cookie.split("=")[1] : "";
+  }
+}
+
 document.addEventListener("DOMContentLoaded", () => {
   const updateRelativeTimes = () => {
     document.querySelectorAll(".post-relative").forEach((el) => {

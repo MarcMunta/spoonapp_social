@@ -428,6 +428,8 @@ document.addEventListener("DOMContentLoaded", () => {
         resumeProgress();
         return;
       }
+      if (optionsMenu) optionsMenu.classList.remove("show");
+      deleteBtn.style.display = "none";
       deleteConfirm.style.display = "flex";
       pauseProgress();
     });

@@ -3,6 +3,7 @@ from django.urls import path, include
 from django.views.generic import RedirectView
 from django.conf import settings
 from django.conf.urls.static import static
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from core import urls as social_urls
 from django.conf.urls import handler404, handler403, handler500
 from django.conf.urls.i18n import i18n_patterns
@@ -20,7 +21,7 @@ urlpatterns += i18n_patterns(
 # Serve uploaded media files during development
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+    urlpatterns += staticfiles_urlpatterns()
 
 handler404 = 'core.views.custom_404'
 handler403 = 'core.views.custom_403'

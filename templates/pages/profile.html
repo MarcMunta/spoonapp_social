@@ -22,8 +22,8 @@
         <form id="storyForm" method="post" enctype="multipart/form-data" action="{% url 'upload_story' %}">
           {% csrf_token %}
           {{ story_form.media_file }}
-          <div class="profile-story-thumb user-story{% if profile_story_data.urls %} open-story{% endif %}"
-            {% if profile_story_data.urls %} data-urls="{{ profile_story_data.urls|join:'|' }}"
+          <div class="profile-story-thumb user-story{% if profile_story_data.urls %} open-story{% endif %}" {% if
+            profile_story_data.urls %} data-urls="{{ profile_story_data.urls|join:'|' }}"
             data-types="{{ profile_story_data.types|join:'|' }}"
             data-expires="{{ profile_story_data.expires|join:'|' }}"
             data-created="{{ profile_story_data.created|join:'|' }}" data-user="{{ profile_user.username }}"
@@ -88,25 +88,28 @@
           </div>
           <a href="{% url 'edit_profile' %}" class="btn btn-sm btn-outline-secondary">{% trans "Editar perfil" %}</a>
           <div class="dropdown ms-1 ms-auto">
-            <button class="dropdown-toggle btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋯</button>
+            <button class="dropdown-toggle btn btn-sm btn-outline-secondary" type="button" data-bs-toggle="dropdown"
+              aria-expanded="false">⋯</button>
             <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="{% url 'hidden_stories_list' %}">{% trans "Historias ocultas" %}</a></li>
-              <li><a class="dropdown-item" href="{% url 'blocked_users_list' %}">{% trans "Usuarios bloqueados" %}</a></li>
+              <li><a class="dropdown-item" href="{% url 'hidden_stories_list' %}">{% trans "Historias ocultas" %}</a>
+              </li>
+              <li><a class="dropdown-item" href="{% url 'blocked_users_list' %}">{% trans "Usuarios bloqueados" %}</a>
+              </li>
               <li>
                 <form action="{% url 'set_language' %}" method="post" class="px-3 py-1">
                   {% csrf_token %}
                   <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
-                    <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>Español</option>
-                    <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-                    <option value="ga" {% if LANGUAGE_CODE == 'ga' %}selected{% endif %}>Gaeilge</option>
+                    <option value="es" {% if LANGUAGE_CODE=='es' %}selected{% endif %}>Español</option>
+                    <option value="en" {% if LANGUAGE_CODE=='en' %}selected{% endif %}>English</option>
+                    <option value="ga" {% if LANGUAGE_CODE=='ga' %}selected{% endif %}>Gaeilge</option>
                   </select>
                 </form>
               </li>
             </ul>
           </div>
-          </div>
-          {% endif %}
         </div>
+        {% endif %}
+      </div>
 
       <!-- ESTADÍSTICAS -->
       <div class="d-flex gap-4 mb-2">
@@ -152,12 +155,14 @@
   <!-- TABS DINÁMICAS -->
   <ul class="nav nav-tabs mb-4" id="categoryTabs">
     <li class="nav-item">
-      <a class="nav-link {% if selected_category == 'all' %}active{% endif %}" data-category="all" href="#">{% trans "All Posts" %}</a>
+      <a class="nav-link {% if selected_category == 'all' %}active{% endif %}" data-category="all" href="#">{% trans
+        "All Posts" %}</a>
     </li>
     {% for cat in categories %}
     {% if cat.slug %}
     <li class="nav-item">
-      <a class="nav-link {% if selected_category == cat.slug %}active{% endif %}" data-category="{{ cat.slug }}" href="#">{{ cat.name }}</a>
+      <a class="nav-link {% if selected_category == cat.slug %}active{% endif %}" data-category="{{ cat.slug }}"
+        href="#">{{ cat.name }}</a>
     </li>
     {% endif %}
     {% endfor %}
@@ -167,7 +172,8 @@
   <div class="row g-3">
     {% for cat in categories %}
     {% if cat.slug %}
-    <div class="row g-2 category-group" data-category="{{ cat.slug }}" style="display: {% if selected_category == cat.slug %}flex{% else %}none{% endif %};">
+    <div class="row g-2 category-group" data-category="{{ cat.slug }}"
+      style="display: {% if selected_category == cat.slug %}flex{% else %}none{% endif %};">
       {% for post in posts_by_category|get_item:cat.slug %}
       <div class="col-4">
         {% include 'partials/posts/post_card.html' with post=post %}
@@ -179,7 +185,8 @@
     {% endfor %}
 
     <!-- ALL POSTS -->
-    <div class="row g-2 category-group" data-category="all" style="display: {% if selected_category == 'all' %}flex{% else %}none{% endif %};">
+    <div class="row g-2 category-group" data-category="all"
+      style="display: {% if selected_category == 'all' %}flex{% else %}none{% endif %};">
       {% for post in posts_by_category|get_item:"all" %}
       <div class="col-4">
         {% include 'partials/posts/post_card.html' with post=post %}
@@ -213,13 +220,13 @@
     <img id="storyImage" class="story-image d-none" />
     <video id="storyVideo" class="story-image d-none" controls></video>
     <div class="story-reply mt-2 d-flex">
-        <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="{% trans 'Responder...' %}">
-        <button type="button" id="storyReplySend" class="btn btn-primary" data-story-id="">{% trans "Enviar" %}</button>
+      <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="{% trans 'Responder...' %}">
+      <button type="button" id="storyReplySend" class="btn btn-primary" data-story-id="">{% trans "Enviar" %}</button>
     </div>
-      <button class="btn-eliminar-historia story-delete" data-story-id="">{% trans "Eliminar" %}</button>
+    <button class="btn-eliminar-historia story-delete" data-story-id="">{% trans "Eliminar" %}</button>
     <div id="storyViewsList" class="views-list-modal">
       <div class="views-list-content">
-          <h5 class="text-center mb-2">{% trans "Visto por" %}</h5>
+        <h5 class="text-center mb-2">{% trans "Visto por" %}</h5>
         <div class="views-list-body"></div>
       </div>
     </div>

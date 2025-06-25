@@ -167,6 +167,13 @@ msgstr "Delete"
 msgid "Load more"
 msgstr "Load more"
 
+#: javascript translations
+msgid "Show more"
+msgstr "Show more"
+
+msgid "Show less"
+msgstr "Show less"
+
 #: templates/pages/feed.html:111
 msgid "Delete this post permanently?"
 msgstr "Delete this post permanently?"

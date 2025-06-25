@@ -441,8 +441,9 @@ document.addEventListener("DOMContentLoaded", () => {
           "X-Requested-With": "XMLHttpRequest",
           "X-CSRFToken": getCSRFToken(),
         },
+        credentials: "same-origin",
       })
-        .then((res) => res.json())
+        .then((res) => (res.ok ? res.json() : Promise.reject()))
         .then((data) => {
           deleteConfirm.style.display = "none";
           const storyEl = storyEls[currentStoryElIndex];
@@ -454,6 +455,11 @@ document.addEventListener("DOMContentLoaded", () => {
             storyEls.splice(currentStoryElIndex, 1);
           }
           closeStories();
+        })
+        .catch(() => {
+          deleteConfirm.style.display = "none";
+          pendingDeleteId = null;
+          resumeProgress();
         });
     });
 

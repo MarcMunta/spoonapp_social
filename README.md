@@ -54,3 +54,8 @@ Run the Django development server:
 cd backend
 python manage.py runserver
 ```
+
+If the `msgfmt` binary required for compiling translations is missing, `manage.py`
+will attempt to install `gettext` using the available package manager (APT on
+Linux, Homebrew on macOS or Chocolatey on Windows). If automatic installation
+fails, install `gettext` manually.

@@ -56,6 +56,10 @@ python manage.py runserver
 ```
 
 If the `msgfmt` binary required for compiling translations is missing, `manage.py`
-will attempt to install `gettext` using the available package manager (APT on
-Linux, Homebrew on macOS or Chocolatey on Windows). If automatic installation
-fails, install `gettext` manually.
+will attempt to install `gettext` using the available package manager
+(APT on Linux, Homebrew on macOS or Chocolatey/Winget on Windows). If automatic
+installation fails, install `gettext` manually. On Windows you can run
+`choco install gettext` or `winget install -e --id GnuWin32.gettext`. Alternatively
+download the prebuilt binaries from
+[mlocati.github.io/gettext-iconv-windows](https://mlocati.github.io/articles/gettext-iconv-windows.html)
+and add the `bin` directory to your `PATH`.

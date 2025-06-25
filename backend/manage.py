@@ -19,11 +19,21 @@ def ensure_msgfmt():
             subprocess.check_call(['brew', 'link', '--force', 'gettext'])
         elif os.name == 'nt' and shutil.which('choco'):
             subprocess.check_call(['choco', 'install', 'gettext', '-y'])
+        elif os.name == 'nt' and shutil.which('winget'):
+            subprocess.check_call(['winget', 'install', '-e', '--id', 'GnuWin32.gettext'])
+        elif os.name == 'nt' and shutil.which('scoop'):
+            subprocess.check_call(['scoop', 'install', 'gettext'])
     except Exception as exc:
         print(f'Failed to automatically install gettext: {exc}')
 
     if not shutil.which('msgfmt'):
-        print('msgfmt is still missing. Please install gettext manually.')
+        print(
+            'msgfmt is still missing. Install gettext manually. '\
+            'On Windows you can use Chocolatey (choco install gettext), '\
+            'Winget (winget install -e --id GnuWin32.gettext) or download '\
+            'prebuilt binaries from https://mlocati.github.io/articles/gettext-iconv-windows.html '
+            'and add the bin directory to your PATH.'
+        )
 
 if __name__ == '__main__':
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'spoonapp_social.settings')

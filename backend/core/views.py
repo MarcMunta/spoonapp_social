@@ -438,13 +438,20 @@ def profile(request, username):
     if request.user.is_authenticated:
         if Block.objects.filter(blocker=request.user, blocked=profile_user).exists() or Block.objects.filter(blocker=profile_user, blocked=request.user).exists():
             return HttpResponseForbidden("No tienes permiso para ver este perfil.")
-    posts = Post.objects.filter(user=profile_user).order_by('-created_at').prefetch_related('categories')
+    posts_all = Post.objects.filter(user=profile_user).order_by('-created_at').prefetch_related('categories')
+    selected_slug = request.GET.get('category')
+    if selected_slug:
+        posts = posts_all.filter(categories__slug=selected_slug)
+    else:
+        posts = posts_all
     user_profile, _ = Profile.objects.get_or_create(user=profile_user)
     categories = PostCategory.objects.exclude(slug__isnull=True)
 
-    posts_by_category = {'all': list(posts)}
+    posts_by_category = {'all': list(posts_all)}
     for category in categories:
-        posts_by_category[category.slug] = list(posts.filter(categories__slug=category.slug))
+        posts_by_category[category.slug] = list(
+            posts_all.filter(categories__slug=category.slug)
+        )
 
     story_qs = Story.objects.filter(user=profile_user, expires_at__gt=timezone.now()).order_by('created_at')
     if request.user.is_authenticated:
@@ -501,6 +508,7 @@ def profile(request, username):
         'friends': get_friends(request.user) if request.user.is_authenticated else [],
         'categories': categories,
         'posts_by_category': posts_by_category,
+        'selected_category': selected_slug or 'all',
         'profile_story_data': profile_story_data,
     }
 

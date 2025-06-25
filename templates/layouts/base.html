@@ -52,7 +52,7 @@
             {% if unread_notifications %}
             {% for notification in unread_notifications %}
             <div class="notification-item" data-id="{{ notification.id }}" {% if
-              notification.notification_type=='message' and notification.related_chat %}
+              notification.notification_type == 'message' and notification.related_chat %}
               data-notification-type="message" {% if notification.related_chat %}
               data-chat-url="{% url 'chat_detail' notification.related_chat.id %}" {% endif %}>
               <div class="notification-content">

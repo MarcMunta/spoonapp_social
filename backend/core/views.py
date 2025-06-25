@@ -189,7 +189,16 @@ def feed(request):
         context['story_form'] = StoryForm()
 
     context['hide_profile_icon'] = False
+
+    category_slug = request.GET.get("category")
+    if category_slug and category_slug != "all":
+        context["posts"] = context["posts"].filter(categories__slug=category_slug)
+
+    if request.headers.get("x-requested-with") == "XMLHttpRequest":
+        return render(request, "partials/posts_list.html", {"posts": context["posts"]})
+
     return render(request, 'pages/feed.html', context)
+
 
 @login_required(login_url='/custom-login/')
 def create_post(request):

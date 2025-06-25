@@ -6,8 +6,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/chat.css' %}">
 {% endblock %}
-
-
+{% load i18n %}
 {% block content %}
 <div class="spoon-chat-container">
     <div class="row h-100 g-0">
@@ -65,8 +64,7 @@
                     {% for message in messages %}
                     <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3"
                         data-message-id="{{ message.id }}">
-                        <div
-                            class="chat-bubble {% if message.sender == user %}user{% else %}other{% endif %}">
+                        <div class="chat-bubble {% if message.sender == user %}user{% else %}other{% endif %}">
                             {% if message.story %}
                             {% if message.story.expires_at > now %}
                             {% if message.story.is_video %}
@@ -216,6 +214,14 @@
                             <div class="emoji-item" data-emoji="✨">✨</div>
                             <div class="emoji-item" data-emoji="🎉">🎉</div>
                             <div class="emoji-item" data-emoji="🎊">🎊</div>
+                            <div class="emoji-item" data-emoji="💥">💥</div>
+                            <div class="emoji-item" data-emoji="💫">💫</div>
+                            <div class="emoji-item" data-emoji="🌟">🌟</div>
+                            <div class="emoji-item" data-emoji="🌈">🌈</div>
+                            <div class="emoji-item" data-emoji="💖">💖</div>
+                            <div class="emoji-item" data-emoji="💞">💞</div>
+                            <div class="emoji-item" data-emoji="💕">💕</div>
+                            <div class="emoji-item" data-emoji="💘">💘</div>
                         </div>
                     </div>
                 </div>

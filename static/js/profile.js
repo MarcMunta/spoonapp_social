@@ -35,3 +35,28 @@ if (storyInput) {
     });
   }
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+  const tabs = document.querySelectorAll("#categoryTabs .nav-link");
+  const groups = document.querySelectorAll(".category-group");
+
+  tabs.forEach((tab) => {
+    tab.addEventListener("click", (e) => {
+      e.preventDefault();
+      const selected = tab.dataset.category;
+
+      // Cambiar pestaña activa
+      tabs.forEach((t) => t.classList.remove("active"));
+      tab.classList.add("active");
+
+      // Mostrar la categoría correspondiente
+      groups.forEach((group) => {
+        if (group.dataset.category === selected) {
+          group.style.display = "flex";
+        } else {
+          group.style.display = "none";
+        }
+      });
+    });
+  });
+});

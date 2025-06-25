@@ -46,7 +46,8 @@ npm run build
 ```
 
 The translations are automatically compiled whenever `manage.py` is executed,
-so you no longer need to run `django-admin compilemessages` manually.
+so you no longer need to run `django-admin compilemessages` manually. Selecting
+a different language in the app also recompiles the translations automatically.
 
 Run the Django development server:
 

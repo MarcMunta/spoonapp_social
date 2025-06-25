@@ -846,7 +846,7 @@ def story_viewers(request, story_id):
     )
     viewers = Profile.objects.select_related("user").filter(user__id__in=viewer_ids)
     html = render_to_string(
-        "partials/story_viewers_list.html",
+        "partials/stories/story_viewers_list.html",
         {"viewers": viewers},
         request=request,
     )

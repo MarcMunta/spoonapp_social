@@ -1,4 +1,5 @@
 {% load custom_filters %}
+{% load i18n %}
 {% for comment in comments %}
 <li class="list-group-item comentario{% if comment.parent %} reply-item{% endif %}" data-comment-id="{{ comment.id }}"
   data-username="{{ comment.user.username }}">
@@ -30,7 +31,7 @@
           aria-expanded="false">⋯</button>
         <ul class="dropdown-menu">
           <li><a href="#" class="dropdown-item text-danger delete-comment-btn"
-              data-comment-id="{{ comment.id }}">Eliminar</a></li>
+              data-comment-id="{{ comment.id }}">{% trans "Delete" %}</a></li>
         </ul>
       </div>
       {% endif %}
@@ -40,18 +41,18 @@
   <div class="d-flex align-items-center gap-2 mt-1">
     {% if user.is_authenticated %}
     <div class="reply-inline-container">
-      <button class="reply-btn">Responder</button>
+      <button class="reply-btn">{% trans "Reply" %}</button>
       <form method="post" action="{% url 'comment_post' comment.post.id %}" class="reply-form">
         {% csrf_token %}
         <input type="hidden" name="parent" value="{{ comment.id }}">
         {{ comment_form.content }}
-        <button type="submit" class="reply-send-btn">Enviar</button>
+        <button type="submit" class="reply-send-btn">{% trans "Send" %}</button>
       </form>
     </div>
     {% endif %}
     {% with replies=comment.replies.all %}
     {% if replies %}
-    <button class="load-replies-btn" data-comment-id="{{ comment.id }}">Cargar respuestas</button>
+    <button class="load-replies-btn" data-comment-id="{{ comment.id }}">{% trans "Load replies" %}</button>
     {% endif %}
     {% endwith %}
   </div>

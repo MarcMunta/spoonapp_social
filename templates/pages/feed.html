@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load i18n %}
 {% block title %}SpoonApp Social{% endblock %}
 
 {% block extra_css %}
@@ -14,7 +15,7 @@
   {{ post_form.image }}
   {{ post_form.caption }}
   {{ post_form.categories }}
-  <button type="submit" class="publish-btn">📤 Publicar</button>
+  <button type="submit" class="publish-btn">📤 {% trans "Publish" %}</button>
 </form>
 {% endif %}
 {% if user.is_authenticated and not show_form %}
@@ -47,7 +48,7 @@
             </button>
             <ul class="dropdown-menu">
               <li>
-                <a href="#" class="dropdown-item text-danger delete-post-btn" data-post-id="{{ post.id }}">Eliminar</a>
+                <a href="#" class="dropdown-item text-danger delete-post-btn" data-post-id="{{ post.id }}">{% trans "Delete" %}</a>
               </li>
             </ul>
           </div>
@@ -99,7 +100,7 @@
     {% include 'partials/comments/comments_partial.html' with comments=comments|slice:":3" %}
   </ul>
   {% if comments|length > 3 %}
-  <button class="load-more-comments" data-post-id="{{ post.id }}">Cargar más</button>
+  <button class="load-more-comments" data-post-id="{{ post.id }}">{% trans "Load more" %}</button>
   {% endif %}
   {% endif %}
   {% endwith %}
@@ -107,16 +108,16 @@
 {% endfor %}
 <div id="postDeleteConfirm" class="delete-confirm-modal">
   <div class="delete-confirm-content">
-    <p class="mb-3">¿Eliminar definitivamente esta publicación?</p>
-    <button type="button" class="btn btn-secondary me-2" id="cancelDeletePost">Cancelar</button>
-    <button type="button" class="btn btn-danger" id="confirmDeletePost">Eliminar</button>
+    <p class="mb-3">{% trans "Delete this post permanently?" %}</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeletePost">{% trans "Cancel" %}</button>
+    <button type="button" class="btn btn-danger" id="confirmDeletePost">{% trans "Delete" %}</button>
   </div>
 </div>
 <div id="commentDeleteConfirm" class="delete-confirm-modal">
   <div class="delete-confirm-content">
-    <p class="mb-3">¿Eliminar definitivamente este comentario?</p>
-    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteComment">Cancelar</button>
-    <button type="button" class="btn btn-danger" id="confirmDeleteComment">Eliminar</button>
+    <p class="mb-3">{% trans "Delete this comment permanently?" %}</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteComment">{% trans "Cancel" %}</button>
+    <button type="button" class="btn btn-danger" id="confirmDeleteComment">{% trans "Delete" %}</button>
   </div>
 </div>
 {% endblock %}

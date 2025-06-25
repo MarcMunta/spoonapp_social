@@ -192,21 +192,25 @@ document
     document.getElementById("photoUploadForm").submit();
   });
 
-document.querySelectorAll("#categoryTabs .nav-link").forEach((tab) => {
-  tab.addEventListener("click", function (e) {
+document.addEventListener("DOMContentLoaded", () => {
+  const tabsContainer = document.getElementById("categoryTabs");
+  if (!tabsContainer) return;
+
+  tabsContainer.addEventListener("click", (e) => {
+    const tab = e.target.closest(".nav-link[data-category]");
+    if (!tab) return;
+
     e.preventDefault();
-    const selected = this.getAttribute("data-category");
-    document
-      .querySelectorAll("#categoryTabs .nav-link")
+    const selected = tab.getAttribute("data-category");
+
+    tabsContainer
+      .querySelectorAll(".nav-link")
       .forEach((link) => link.classList.remove("active"));
-    // Mark the clicked tab as active so users know which filter is applied
-    this.classList.add("active");
-    document
-      .querySelectorAll(".category-group")
-      .forEach((group) => (group.style.display = "none"));
-    const activeGroup = document.querySelector(
-      `.category-group[data-category="${selected}"]`
-    );
-    if (activeGroup) activeGroup.style.display = "flex";
+    tab.classList.add("active");
+
+    document.querySelectorAll(".category-group").forEach((group) => {
+      group.style.display =
+        group.getAttribute("data-category") === selected ? "flex" : "none";
+    });
   });
 });

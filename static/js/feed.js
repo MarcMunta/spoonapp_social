@@ -396,7 +396,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const storyId = replyBtnEl.dataset.storyId;
       const input = document.getElementById("storyReplyInput");
       const content = input ? input.value.trim() : "";
-      if (!storyId) return;
+      if (!storyId || !content) return;
       const formData = new FormData();
       formData.append("content", content);
       fetch(`${LANG_PREFIX}/story/${storyId}/reply/`, {
@@ -407,12 +407,20 @@ document.addEventListener("DOMContentLoaded", () => {
           "X-CSRFToken": getCSRFToken(),
         },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) return res.json().then((d) => Promise.reject(d));
+          return res.json();
+        })
         .then((data) => {
           if (input) input.value = "";
           if (data.chat_id) {
             window.location.href = `${LANG_PREFIX}/chat/${data.chat_id}/`;
+          } else if (data.error) {
+            alert(data.error);
           }
+        })
+        .catch(() => {
+          alert("Error sending reply");
         });
     });
 

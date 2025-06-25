@@ -462,9 +462,27 @@ document.addEventListener("DOMContentLoaded", () => {
           pendingDeleteId = null;
           resumeProgress();
           if (data.success && storyEl) {
-            const item = storyEl.closest(".story-item");
-            if (item) item.remove();
-            storyEls.splice(currentStoryElIndex, 1);
+            if (
+              storyEl.classList.contains("user-story") ||
+              storyEl.dataset.own === "true"
+            ) {
+              const clone = storyEl.cloneNode(true);
+              clone.classList.remove("open-story");
+              [
+                "urls",
+                "types",
+                "expires",
+                "created",
+                "storyId",
+                "own",
+              ].forEach((attr) => clone.removeAttribute(`data-${attr}`));
+              storyEl.parentNode.replaceChild(clone, storyEl);
+              storyEls.splice(currentStoryElIndex, 1);
+            } else {
+              const item = storyEl.closest(".story-item");
+              if (item) item.remove();
+              storyEls.splice(currentStoryElIndex, 1);
+            }
           }
           closeStories();
         })

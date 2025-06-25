@@ -647,6 +647,14 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   if (optionsBtn && optionsMenu) {
+    const holdOptions = (e) => {
+      e.stopPropagation();
+      pauseProgress();
+    };
+    optionsBtn.addEventListener("mousedown", holdOptions);
+    optionsBtn.addEventListener("touchstart", holdOptions);
+    optionsBtn.addEventListener("mouseup", holdOptions);
+    optionsBtn.addEventListener("touchend", holdOptions);
     optionsBtn.addEventListener("click", (e) => {
       e.stopPropagation();
       const open = optionsMenu.classList.contains("show");

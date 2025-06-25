@@ -1,6 +1,17 @@
 // Prefix URLs with the current language code taken from the <html> tag.
 const LANG_PREFIX = `/${document.documentElement.lang}`;
 
+// Load dynamic translations from the template if available
+const JS_TRANSLATIONS = (() => {
+  const el = document.getElementById('js-translations');
+  if (!el) return {};
+  try {
+    return JSON.parse(el.textContent);
+  } catch (e) {
+    return {};
+  }
+})();
+
 // Define CSRF helper locally in case layout.js hasn't been loaded
 if (typeof getCSRFToken === "undefined") {
   function getCSRFToken() {
@@ -820,7 +831,7 @@ document.addEventListener("DOMContentLoaded", () => {
             lessBtn = document.createElement("button");
             lessBtn.className = "show-less-comments";
             lessBtn.dataset.postId = postId;
-            lessBtn.textContent = "Ver menos";
+            lessBtn.textContent = JS_TRANSLATIONS.show_less || "Show less";
             btn.insertAdjacentElement("afterend", lessBtn);
           }
           if (!data.has_more) {
@@ -846,7 +857,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const moreBtn = document.createElement("button");
       moreBtn.className = "show-more-comments";
       moreBtn.dataset.postId = postId;
-      moreBtn.textContent = "Ver más";
+      moreBtn.textContent = JS_TRANSLATIONS.show_more || "Show more";
       btn.replaceWith(moreBtn);
     }
   });
@@ -866,7 +877,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const lessBtn = document.createElement("button");
       lessBtn.className = "show-less-comments";
       lessBtn.dataset.postId = postId;
-      lessBtn.textContent = "Ver menos";
+      lessBtn.textContent = JS_TRANSLATIONS.show_less || "Show less";
       btn.replaceWith(lessBtn);
     }
   });
@@ -901,7 +912,7 @@ document.addEventListener("DOMContentLoaded", () => {
             lessBtn = document.createElement("button");
             lessBtn.className = "hide-replies-btn";
             lessBtn.dataset.commentId = commentId;
-            lessBtn.textContent = "Ver menos";
+            lessBtn.textContent = JS_TRANSLATIONS.show_less || "Show less";
             btn.insertAdjacentElement("afterend", lessBtn);
           }
           if (!data.has_more) {
@@ -933,7 +944,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const moreBtn = document.createElement("button");
         moreBtn.className = "load-replies-btn";
         moreBtn.dataset.commentId = commentId;
-        moreBtn.textContent = "Cargar respuestas";
+        moreBtn.textContent = JS_TRANSLATIONS.load_replies || "Load replies";
         btn.replaceWith(moreBtn);
       }
     }
@@ -990,7 +1001,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const lessBtn = document.createElement("button");
                 lessBtn.className = "show-less-comments";
                 lessBtn.dataset.postId = data.post_id;
-                lessBtn.textContent = "Ver menos";
+                lessBtn.textContent = JS_TRANSLATIONS.show_less || "Show less";
                 list.insertAdjacentElement("afterend", lessBtn);
               }
             }
@@ -1023,7 +1034,7 @@ document.addEventListener("DOMContentLoaded", () => {
               const newBtn = document.createElement("button");
               newBtn.className = "hide-replies-btn";
               newBtn.dataset.commentId = li.dataset.commentId;
-              newBtn.textContent = "Ver menos";
+              newBtn.textContent = JS_TRANSLATIONS.show_less || "Show less";
               if (loadBtn) loadBtn.replaceWith(newBtn);
               else actions.appendChild(newBtn);
             }
@@ -1048,7 +1059,7 @@ document.addEventListener("DOMContentLoaded", () => {
           const moreBtn = document.createElement("button");
           moreBtn.className = "show-more-comments";
           moreBtn.dataset.postId = lessBtn.dataset.postId;
-          moreBtn.textContent = "Ver más";
+          moreBtn.textContent = JS_TRANSLATIONS.show_more || "Show more";
           lessBtn.replaceWith(moreBtn);
         }
       }

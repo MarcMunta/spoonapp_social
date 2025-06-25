@@ -168,6 +168,13 @@ msgstr "Eliminar"
 msgid "Load more"
 msgstr "Cargar más"
 
+#: javascript translations
+msgid "Show more"
+msgstr "Ver más"
+
+msgid "Show less"
+msgstr "Ver menos"
+
 #: templates/pages/feed.html:111
 msgid "Delete this post permanently?"
 msgstr "¿Eliminar definitivamente esta publicación?"

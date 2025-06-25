@@ -156,6 +156,13 @@ msgstr "Scrios"
 msgid "Load more"
 msgstr "Luchtaigh níos mó"
 
+#: javascript translations
+msgid "Show more"
+msgstr "Show more"
+
+msgid "Show less"
+msgstr "Show less"
+
 #: templates/pages/feed.html:110
 msgid "Delete this post permanently?"
 msgstr "Scrios an post seo go buan?"

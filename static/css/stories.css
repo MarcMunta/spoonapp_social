@@ -122,9 +122,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #ff00c8, #00e0ff);
+    background: linear-gradient(90deg, #0d6efd, #6610f2);
     background-size: 200% 100%;
-    animation: gradientMove 2s linear infinite;
+    animation: progress-slide 1s linear infinite;
 }
 
 .story-header {
@@ -157,6 +157,11 @@
 .story-views {
     font-size: 0.9rem;
     cursor: pointer;
+}
+
+.story-views span:first-child {
+    display: inline-block;
+    animation: eye-pulse 2s infinite;
 }
 
 .story-prev,
@@ -199,9 +204,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #ff00c8, #00e0ff);
+    background: linear-gradient(90deg, #0d6efd, #6610f2);
     background-size: 200% 100%;
-    animation: gradientMove 2s linear infinite;
+    animation: progress-slide 1s linear infinite;
 }
 
 #storyImage,
@@ -426,10 +431,10 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 6px;
     background: rgba(255, 255, 255, 0.3);
     overflow: hidden;
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 
@@ -454,6 +459,12 @@
     font-size: 1.5rem;
     cursor: pointer;
     z-index: 1;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.story-modal-close:hover {
+    transform: rotate(45deg);
+    color: #ff0055;
 }
 
 .story-modal-user {
@@ -492,6 +503,24 @@
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
+}
+
+@keyframes progress-slide {
+    from {
+        background-position: 0 0;
+    }
+    to {
+        background-position: -40px 0;
+    }
+}
+
+@keyframes eye-pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.1);
+    }
 }
 
 @keyframes neonGlow {

@@ -18,6 +18,8 @@ with [esbuild](https://esbuild.github.io/).
 * User and location search
 * Multi-language support (English/Spanish) with automatic language detection
 
+
+
 ## Frontend
 See `frontend/README.md` for setup and build instructions. After building, the
 bundle is placed in `backend/static/js/main.js` and automatically loaded on the home page.

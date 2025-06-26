@@ -1,27 +1,27 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ LANGUAGE_CODE|default:'es' }}">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>403 - Forbidden</title>
+    <title>{% trans "403 - Forbidden" %}</title>
     <link rel="stylesheet" href="{% static 'css/errors.css' %}">
 </head>
 
 <body>
     <div class="error-container">
-        <img class="error-logo" src="{% static 'img/spoonapp.png' %}" alt="SpoonApp Logo">
+        <img class="error-logo" src="{% static 'img/spoonapp.png' %}" alt="{% trans 'SpoonApp Logo' %}">
         <div class="error-code">
             <span>4</span>
             <span>0</span>            
             <span>3</span>
         </div>
         <div class="message">
-            <p>Woops...<br>Something Went Wrong</p>
+            <p>{% trans "Woops..." %}<br>{% trans "Something Went Wrong" %}</p>
         </div>
-        <a href="{% url 'home' %}" class="btn">Go Home</a>
+        <a href="{% url 'home' %}" class="btn">{% trans "Go Home" %}</a>
     </div>
 </body>
 </html>

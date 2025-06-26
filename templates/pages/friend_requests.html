@@ -18,9 +18,8 @@
                         <span class="fs-2">👥</span>
                     </div>
                     <div>
-                        <h2 class="spoon-section-title mb-1">Friend Requests</h2>
-                        <p class="spoon-section-subtitle mb-0">Manage your pending friend
-                            connections</p>
+                        <h2 class="spoon-section-title mb-1">{% trans "Friend Requests" %}</h2>
+                        <p class="spoon-section-subtitle mb-0">{% trans "Manage your pending friend connections" %}</p>
                     </div>
                 </div>
             </div>
@@ -33,11 +32,11 @@
                         <div class="text-center mb-3">
                             <div class="spoon-friend-avatar-container">
                                 {% if req.from_user.profile.profile_picture %}
-                                <img alt="Profile" class="spoon-friend-avatar"
+                                <img alt="{% trans 'Profile' %}" class="spoon-friend-avatar"
                                     src="{{ req.from_user.profile.profile_picture_data_url }}"
                                     style="border-color: {{ req.from_user.profile.bubble_color }};">
                                 {% else %}
-                                <img alt="Default" class="spoon-friend-avatar"
+                                <img alt="{% trans 'Default' %}" class="spoon-friend-avatar"
                                     src="{{ default_avatar_data_url }}"
                                     style="border-color: {{ req.from_user.profile.bubble_color }};">
                                 {% endif %}
@@ -50,10 +49,10 @@
                             <h5 class="spoon-friend-name mb-2">{{ req.from_user.username }}</h5>
                             <div class="spoon-friend-actions d-flex justify-content-center gap-2">
                                 <a class="spoon-btn-accept" href="{% url 'accept_friend_request' req.id %}">
-                                    <i class="fas fa-check me-1"></i>Accept
+                                    <i class="fas fa-check me-1"></i>{% trans 'Accept' %}
                                 </a>
                                 <a class="spoon-btn-secondary" href="{% url 'profile' req.from_user.username %}">
-                                    <i class="fas fa-user me-1"></i>Profile
+                                    <i class="fas fa-user me-1"></i>{% trans 'Profile' %}
                                 </a>
                             </div>
 
@@ -66,12 +65,11 @@
             <div class="spoon-empty-state-container">
                 <div class="text-center py-5">
                     <div class="spoon-empty-icon mb-4">👥🍴</div>
-                    <h4 class="spoon-empty-title">No friend requests</h4>
-                    <p class="spoon-empty-text">When someone wants to connect with you on SpoonApp,
-                        you'll see their
-                        request here!</p>
+                    <h4 class="spoon-empty-title">{% trans 'No friend requests' %}</h4>
+                    {% blocktrans %}When someone wants to connect with you on SpoonApp,
+                        you'll see their request here!{% endblocktrans %}
                     <a class="spoon-btn-primary mt-3" href="{% url 'home' %}">
-                        <i class="fas fa-home me-2"></i>Back to Feed
+                        <i class="fas fa-home me-2"></i>{% trans 'Back to Feed' %}
                     </a>
                 </div>
             </div>

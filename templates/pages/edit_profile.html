@@ -17,9 +17,9 @@
             <div class="camera-icon-overlay">
                 <label for="id_profile_picture">
                     {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture_data_url }}" class="edit-profile-avatar" alt="Profile Picture">
+                    <img src="{{ profile.profile_picture_data_url }}" class="edit-profile-avatar" alt="{% trans 'Profile Picture' %}">
                     {% else %}
-                    <img src="{% static 'default-avatar.png' %}" class="edit-profile-avatar" alt="Default Avatar">
+                    <img src="{% static 'default-avatar.png' %}" class="edit-profile-avatar" alt="{% trans 'Default Avatar' %}">
                     {% endif %}
                 </label>
                 <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*"

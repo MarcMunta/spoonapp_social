@@ -4,6 +4,10 @@ from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home, name='home'),
+    path('custom-login/',
+         auth_views.LoginView.as_view(template_name='pages/login.html'),
+         name='custom_login'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('subir-publicacion/', views.feed, name='subir_publicacion'),
     path('post/<int:post_id>/delete/', views.delete_post, name='delete_post'),
     path('post/new/', views.create_post, name='create_post'),

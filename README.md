@@ -34,6 +34,8 @@ bundle is placed in `backend/static/js/main.js` and automatically loaded on the 
 Ensure Python and Node.js are installed, then install Python dependencies from
 `requirements.txt`:
 
+Build the virtual environment:
+
 ```mermaid
 graph TD
     A["📂 Root folder: spoonapp_social"] --> B{Sistema operativo}
@@ -41,8 +43,6 @@ graph TD
     B -->|macOS / Linux| D["Ejecuta: ./backend/setup_env.sh"]
     C --> E["Entorno virtual activo"]
     D --> E
-    E --> F["cd backend"]
-    F --> G["python manage.py runserver"]
 ```
 
 Build the frontend:

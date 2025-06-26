@@ -493,3 +493,10 @@ msgstr "Entrantes"
 
 msgid "Football"
 msgstr "Fútbol"
+
+# Login page
+msgid "Login"
+msgstr "Iniciar sesión"
+
+msgid "Sign in"
+msgstr "Acceder"

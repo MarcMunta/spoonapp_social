@@ -1,20 +1,21 @@
-# Elimina entorno anterior si existe
+# Remove previous environment if it exists
 if (Test-Path "env") {
     Remove-Item -Recurse -Force env
-    Write-Host "Entorno virtual anterior eliminado."
+    Write-Host "Previous virtual environment removed."
 }
 
-# Crea nuevo entorno virtual
+# Create a new virtual environment
 python -m venv env
-Write-Host "Entorno virtual creado."
+Write-Host "Virtual environment created."
 
-# Activa el entorno virtual en este script (solo funciona si lo ejecutas manualmente, no desde VSCode por defecto)
+# Activate the virtual environment in this script
+# (only works when you run it manually, not from VS Code by default)
 & .\env\Scripts\Activate.ps1
 
-# Instala requirements si existe
+# Install requirements if the file exists
 if (Test-Path ".\backend\requirements.txt") {
     pip install -r .\backend\requirements.txt
-    Write-Host "Dependencias instaladas desde requirements.txt"
+    Write-Host "Dependencies installed from requirements.txt"
 } else {
-    Write-Host "No se encontró requirements.txt"
+    Write-Host "requirements.txt not found"
 }

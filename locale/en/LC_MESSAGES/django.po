@@ -368,3 +368,10 @@ msgstr "Side dish"
 
 msgid "Football"
 msgstr "Football"
+
+# Login page
+msgid "Login"
+msgstr "Login"
+
+msgid "Sign in"
+msgstr "Sign in"

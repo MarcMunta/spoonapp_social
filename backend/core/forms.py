@@ -1,7 +1,6 @@
 from django import forms
 from django.db.models import Case, When, IntegerField
 from .models import Post, PostComment, Profile, PostCategory, Story
-from django.utils.text import slugify
 from django.contrib.auth.models import User
 
 class PostForm(forms.ModelForm):

@@ -5,7 +5,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from core import urls as social_urls
-from django.conf.urls import handler404, handler403, handler500
 from django.conf.urls.i18n import i18n_patterns
 from core.views import set_language
 

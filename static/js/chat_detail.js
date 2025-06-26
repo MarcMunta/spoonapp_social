@@ -26,7 +26,6 @@ function initChatDetail() {
     return !blockedWords.some((w) => text.includes(w));
   }
 
-  console.log("🚀 Chat system initializing...");
 
   // Assicura che l'area input sia sempre visibile
   function ensureInputAreaVisible() {
@@ -44,7 +43,6 @@ function initChatDetail() {
                 margin: 0 !important;
                 padding: 18px 20px !important;
             `;
-      console.log("✅ Input area fixed to bottom");
     }
   }
 
@@ -58,7 +56,6 @@ function initChatDetail() {
                 padding: 20px 20px 120px !important;
                 scroll-behavior: smooth !important;
             `;
-      console.log("✅ Messages area height set correctly");
     }
   }
 
@@ -82,7 +79,6 @@ function initChatDetail() {
       newestMessageId =
         messageElements[messageElements.length - 1].dataset.messageId;
     }
-    console.log("📨 Initialized message IDs:", {
       oldestMessageId,
       newestMessageId,
       total: messageElements.length,
@@ -116,7 +112,6 @@ function initChatDetail() {
         : "none";
     }
 
-    console.log("📊 Scroll indicators updated:", {
       scrollTop,
       scrollBottom,
       hasMoreMessages,
@@ -136,7 +131,6 @@ function initChatDetail() {
       initialLoad = false;
       hasNewerMessages = false;
       updateScrollIndicators();
-      console.log("⬇️ Scrolled to bottom");
     }
   }
 
@@ -146,14 +140,12 @@ function initChatDetail() {
         top: 0,
         behavior: "smooth",
       });
-      console.log("⬆️ Scrolled to top");
     }
   }
 
   // Scroll to bottom on initial load
   setTimeout(() => {
     scrollToBottom(true);
-    console.log("🎯 Initial scroll to bottom completed");
   }, 500);
 
   // Enhanced mouse wheel scrolling con throttling migliorato
@@ -171,7 +163,6 @@ function initChatDetail() {
         const clientHeight = this.clientHeight;
         const delta = e.deltaY;
 
-        console.log("🎡 Wheel event:", {
           scrollTop,
           delta,
           hasMoreMessages,
@@ -187,7 +178,6 @@ function initChatDetail() {
             hasMoreMessages &&
             !isLoadingMessages
           ) {
-            console.log("🔄 Triggering load older messages from wheel");
             loadOlderMessages();
           }
 
@@ -197,14 +187,12 @@ function initChatDetail() {
             hasNewerMessages &&
             !isLoadingMessages
           ) {
-            console.log("🔄 Triggering load newer messages from wheel");
             loadNewerMessages();
           }
         }, 100);
 
         scrollTimer = setTimeout(() => {
           isUserScrolling = false;
-          console.log("🛑 User stopped scrolling");
         }, 1500);
 
         updateScrollIndicators();
@@ -224,7 +212,6 @@ function initChatDetail() {
         const scrollHeight = this.scrollHeight;
         const clientHeight = this.clientHeight;
 
-        console.log("📜 Scroll event:", {
           scrollTop,
           scrollHeight,
           clientHeight,
@@ -232,7 +219,6 @@ function initChatDetail() {
 
         // Auto-load older messages when scrolled to top
         if (scrollTop <= 100 && hasMoreMessages && !isLoadingMessages) {
-          console.log("📤 Auto-loading older messages");
           loadOlderMessages();
         }
 
@@ -242,7 +228,6 @@ function initChatDetail() {
           hasNewerMessages &&
           !isLoadingMessages
         ) {
-          console.log("📥 Auto-loading newer messages");
           loadNewerMessages();
         }
 
@@ -254,7 +239,6 @@ function initChatDetail() {
   // Click handlers for scroll indicators
   if (scrollTopIndicator) {
     scrollTopIndicator.addEventListener("click", function () {
-      console.log("🔝 Top indicator clicked");
       if (hasMoreMessages) {
         loadOlderMessages();
       } else {
@@ -265,7 +249,6 @@ function initChatDetail() {
 
   if (scrollBottomIndicator) {
     scrollBottomIndicator.addEventListener("click", function () {
-      console.log("🔻 Bottom indicator clicked");
       if (hasNewerMessages) {
         loadNewerMessages();
       } else {
@@ -277,7 +260,6 @@ function initChatDetail() {
   // Load older messages function con logging migliorato
   function loadOlderMessages() {
     if (isLoadingMessages || !hasMoreMessages || !oldestMessageId) {
-      console.log("❌ Cannot load older messages:", {
         isLoadingMessages,
         hasMoreMessages,
         oldestMessageId,
@@ -286,7 +268,6 @@ function initChatDetail() {
     }
 
     isLoadingMessages = true;
-    console.log("📤 Loading older messages before ID:", oldestMessageId);
     updateScrollIndicators();
 
     // Show loading indicator
@@ -304,20 +285,17 @@ function initChatDetail() {
     messagesArea.insertBefore(loadingDiv, messagesArea.firstChild);
 
     const url = `/chat/${chatId}/messages/?before=${oldestMessageId}&limit=20`;
-    console.log("🌐 Fetching URL:", url);
 
     fetch(url, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
       .then((response) => {
-        console.log("📡 Response status:", response.status);
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         return response.json();
       })
       .then((data) => {
-        console.log("📦 Loaded older messages:", data);
 
         // Remove loading indicator
         const loadingIndicator = document.getElementById(
@@ -353,7 +331,6 @@ function initChatDetail() {
           // Update oldest message ID
           oldestMessageId = data.messages[0].id;
           hasMoreMessages = data.has_more;
-          console.log(
             "✅ Updated oldestMessageId:",
             oldestMessageId,
             "hasMoreMessages:",
@@ -374,14 +351,12 @@ function initChatDetail() {
           }, 100);
         } else {
           hasMoreMessages = false;
-          console.log("🚫 No more older messages available");
         }
 
         isLoadingMessages = false;
         updateScrollIndicators();
       })
       .catch((error) => {
-        console.error("💥 Error loading older messages:", error);
         const loadingIndicator = document.getElementById(
           "loading-older-messages"
         );
@@ -397,7 +372,6 @@ function initChatDetail() {
   // Load newer messages function con logging migliorato
   function loadNewerMessages() {
     if (isLoadingMessages || !newestMessageId) {
-      console.log("❌ Cannot load newer messages:", {
         isLoadingMessages,
         newestMessageId,
       });
@@ -405,24 +379,20 @@ function initChatDetail() {
     }
 
     isLoadingMessages = true;
-    console.log("📥 Loading newer messages after ID:", newestMessageId);
     updateScrollIndicators();
 
     const url = `/chat/${chatId}/messages/?after=${newestMessageId}&limit=20`;
-    console.log("🌐 Fetching URL:", url);
 
     fetch(url, {
       headers: { "X-Requested-With": "XMLHttpRequest" },
     })
       .then((response) => {
-        console.log("📡 Response status:", response.status);
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
         return response.json();
       })
       .then((data) => {
-        console.log("📦 Loaded newer messages:", data);
 
         if (data.messages && data.messages.length > 0) {
           // Add new messages to the bottom
@@ -446,7 +416,6 @@ function initChatDetail() {
           // Update newest message ID
           newestMessageId = data.messages[data.messages.length - 1].id;
           hasNewerMessages = data.has_more || false;
-          console.log(
             "✅ Updated newestMessageId:",
             newestMessageId,
             "hasNewerMessages:",
@@ -454,14 +423,12 @@ function initChatDetail() {
           );
         } else {
           hasNewerMessages = false;
-          console.log("🚫 No newer messages available");
         }
 
         isLoadingMessages = false;
         updateScrollIndicators();
       })
       .catch((error) => {
-        console.error("💥 Error loading newer messages:", error);
         isLoadingMessages = false;
         updateScrollIndicators();
       });
@@ -488,11 +455,9 @@ function initChatDetail() {
       scrollFloatingBtn.title = "Scroll to latest messages";
       scrollFloatingBtn.onclick = () => scrollToBottom(true);
       document.body.appendChild(scrollFloatingBtn);
-      console.log("🎈 Floating scroll button added");
     } else if (!isScrolledUp && scrollFloatingBtn) {
       scrollFloatingBtn.remove();
       scrollFloatingBtn = null;
-      console.log("🎈 Floating scroll button removed");
     }
   }
 
@@ -508,7 +473,6 @@ function initChatDetail() {
       e.stopPropagation();
       const isVisible = emojiPicker.classList.contains("show");
       emojiPicker.classList.toggle("show", !isVisible);
-      console.log("😊 Emoji picker toggled:", !isVisible);
     });
 
     // Close picker when clicking outside
@@ -519,7 +483,6 @@ function initChatDetail() {
         !emojiPicker.contains(e.target)
       ) {
         emojiPicker.classList.remove("show");
-        console.log("😊 Emoji picker closed - clicked outside");
       }
     });
 
@@ -547,7 +510,6 @@ function initChatDetail() {
             messageInput.setSelectionRange(newCursorPos, newCursorPos);
           }, 0);
 
-          console.log("😊 Emoji added:", emoji);
 
           // DON'T close the picker immediately - let user select multiple emojis
           // emojiPicker.classList.remove('show');
@@ -559,7 +521,6 @@ function initChatDetail() {
     messageInput.addEventListener("keydown", function (e) {
       if (e.key === "Escape") {
         emojiPicker.classList.remove("show");
-        console.log("😊 Emoji picker closed - Escape pressed");
       }
     });
 
@@ -567,7 +528,6 @@ function initChatDetail() {
       // Only close if user is actively typing (not just from emoji insertion)
       if (document.activeElement === messageInput) {
         emojiPicker.classList.remove("show");
-        console.log("😊 Emoji picker closed - user typing");
       }
     });
   }
@@ -586,7 +546,6 @@ function initChatDetail() {
       // Close emoji picker when sending message
       if (emojiPicker) {
         emojiPicker.classList.remove("show");
-        console.log("😊 Emoji picker closed - message sent");
       }
 
       const formData = new FormData(messageForm);
@@ -614,7 +573,6 @@ function initChatDetail() {
       messageInput.value = "";
       updateScrollIndicators();
 
-      console.log("📤 Message sent to UI, sending to server...");
 
       // Send to server
       fetch("", {
@@ -632,7 +590,6 @@ function initChatDetail() {
           return response.json();
         })
         .then((data) => {
-          console.log("✅ Server response:", data);
           if (!data.success) {
             messageWrapper.remove();
             messageInput.value = content;
@@ -642,14 +599,12 @@ function initChatDetail() {
             if (data.message_id) {
               messageWrapper.dataset.messageId = data.message_id;
               newestMessageId = data.message_id;
-              console.log("🆔 Message ID updated:", data.message_id);
             }
           }
         })
         .catch((error) => {
           messageWrapper.remove();
           messageInput.value = content;
-          console.error("💥 Error:", error);
           showErrorMessage("Connection error. Please check your internet!");
         });
     });
@@ -685,7 +640,6 @@ function initChatDetail() {
   setTimeout(() => {
     if (messageInput) {
       messageInput.focus();
-      console.log("🎯 Input focused");
     }
   }, 1000);
 
@@ -754,7 +708,6 @@ function initChatDetail() {
   // Initialize indicators
   updateScrollIndicators();
 
-  console.log(
     "✅ Chat initialized successfully with enhanced scrolling and persistent input bar"
   );
 }

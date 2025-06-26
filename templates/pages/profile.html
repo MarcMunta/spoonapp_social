@@ -70,13 +70,13 @@
         <h2>{{ profile_user.username }}</h2>
         {% if request.user != profile_user %}
         {% if is_friend %}
-        <a href="{% url 'unfollow' profile_user.username %}" class="btn btn-danger">Unfollow</a>
+        <a href="{% url 'unfollow' profile_user.username %}" class="btn btn-danger">{% trans 'Unfollow' %}</a>
         {% elif is_following %}
-        <a href="{% url 'cancel_request' profile_user.username %}" class="btn btn-secondary">Cancel Request</a>
+        <a href="{% url 'cancel_request' profile_user.username %}" class="btn btn-secondary">{% trans 'Cancel Request' %}</a>
         {% elif is_followed_by %}
-        <a href="{% url 'follow' profile_user.username %}" class="btn btn-success">Follow back</a>
+        <a href="{% url 'follow' profile_user.username %}" class="btn btn-success">{% trans 'Follow back' %}</a>
         {% else %}
-        <a href="{% url 'follow' profile_user.username %}" class="btn btn-primary">Follow</a>
+        <a href="{% url 'follow' profile_user.username %}" class="btn btn-primary">{% trans 'Follow' %}</a>
         {% endif %}
         {% else %}
         <div class="d-flex align-items-center gap-2">
@@ -105,7 +105,6 @@
                   <select name="language" onchange="this.form.submit()" class="form-select form-select-sm">
                     <option value="es" {% if LANGUAGE_CODE == 'es' %}selected{% endif %}>Español</option>
                     <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>English</option>
-                    <option value="ga" {% if LANGUAGE_CODE == 'ga' %}selected{% endif %}>Gaeilge</option>
                   </select>
                 </form>
               </li>
@@ -159,8 +158,7 @@
   <!-- TABS DINÁMICAS -->
   <ul class="nav nav-tabs mb-4" id="categoryTabs">
     <li class="nav-item">
-      <a class="nav-link {% if selected_category == 'all' %}active{% endif %}" data-category="all" href="#">{% trans
-        "All Posts" %}</a>
+      <a class="nav-link {% if selected_category == 'all' %}active{% endif %}" data-category="all" href="#">{% trans "All Posts" %}</a>
     </li>
     {% for cat in categories %}
     {% if cat.slug %}
@@ -224,13 +222,13 @@
     <img id="storyImage" class="story-image d-none" />
     <video id="storyVideo" class="story-image d-none" controls></video>
     <div class="story-reply mt-2 d-flex">
-      <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="{% trans 'Responder...' %}">
-      <button type="button" id="storyReplySend" class="btn btn-primary" data-story-id="">{% trans "Enviar" %}</button>
+      <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="{% trans 'Reply...' %}">
+      <button type="button" id="storyReplySend" class="btn btn-primary" data-story-id="">{% trans "Send" %}</button>
     </div>
-    <button class="btn-eliminar-historia story-delete" data-story-id="">{% trans "Eliminar" %}</button>
+    <button class="btn-eliminar-historia story-delete" data-story-id="">{% trans "Delete" %}</button>
     <div id="storyViewsList" class="views-list-modal">
       <div class="views-list-content">
-        <h5 class="text-center mb-2">{% trans "Visto por" %}</h5>
+        <h5 class="text-center mb-2">{% trans "Viewed by" %}</h5>
         <div class="views-list-body"></div>
       </div>
     </div>
@@ -238,9 +236,9 @@
 </div>
 <div id="deleteConfirm" class="delete-confirm-modal">
   <div class="delete-confirm-content">
-    <p class="mb-3">{% trans "¿Eliminar definitivamente esta historia?" %}</p>
-    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteStory">{% trans "Cancelar" %}</button>
-    <button type="button" class="btn btn-danger" id="confirmDeleteStory">{% trans "Eliminar" %}</button>
+    <p class="mb-3">{% trans "Delete this story permanently?" %}</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteStory">{% trans "Cancel" %}</button>
+    <button type="button" class="btn btn-danger" id="confirmDeleteStory">{% trans "Delete" %}</button>
   </div>
 </div>
 <script src="{% static 'js/profile.js' %}"></script>

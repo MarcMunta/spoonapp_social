@@ -14,7 +14,7 @@
         {% if block.blocked.profile.profile_picture %}
         <img src="{{ block.blocked.profile.profile_picture_data_url }}" alt="{{ block.blocked.username }}" class="post-avatar">
         {% else %}
-        <img src="{{ default_avatar_data_url }}" alt="Default" class="post-avatar">
+        <img src="{{ default_avatar_data_url }}" alt="{% trans 'Default' %}" class="post-avatar">
         {% endif %}
         <strong>{{ block.blocked.username }}</strong>
       </div>

@@ -20,6 +20,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'core.middleware.AutoLanguageMiddleware',
     'django.middleware.locale.LocaleMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -69,7 +70,6 @@ LANGUAGE_CODE = 'es'
 LANGUAGES = [
     ('en', _('English')),
     ('es', _('Spanish')),
-    ('ga', _('Irish')),
 ]
 
 LOCALE_PATHS = [BASE_DIR.parent / 'locale']

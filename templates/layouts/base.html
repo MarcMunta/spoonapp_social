@@ -22,7 +22,7 @@
   <div class="topbar">
     <div class="app-title">
       <a href="{% url 'home' %}" class="spoonapp-logo-link">
-        <img src="{% static 'img/spoonapp.png' %}" alt="SpoonApp Logo" class="spoonapp-logo-large" />
+        <img src="{% static 'img/spoonapp.png' %}" alt="{% trans "SpoonApp Logo" %}" class="spoonapp-logo-large" />
         <div class="spoonapp-text-wrapper">
           <span class="social-text">SOCIAL</span>
         </div>
@@ -136,7 +136,7 @@
     <div class="sponsored">
       <h3>{% trans "Sponsored" %}</h3>
       <div class="sponsored-item">
-        <img src="https://via.placeholder.com/250" alt="Sponsored Image">
+        <img src="https://via.placeholder.com/250" alt="{% trans 'Sponsored Image' %}">
         <div>Pizza with Pepperoni<br>Lorem ipsum dolor sit amet. -30%</div>
       </div>
     </div>

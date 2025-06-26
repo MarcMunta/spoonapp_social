@@ -13,8 +13,8 @@ body.profile-page .container {
 }
 
 .profile-avatar-wrapper {
-    width: 260px;
-    height: 260px;
+    width: 300px;
+    height: 300px;
 }
 
 .profile-page .profile-avatar-wrapper {
@@ -47,7 +47,21 @@ body.profile-page .container {
 }
 
 .profile-avatar-wrapper .profile-story-thumb {
-    border: none;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-avatar-wrapper .profile-story-thumb.open-story {
+    border: 5px solid #0d6efd;
+}
+
+.profile-avatar-wrapper .profile-story-thumb:not(.open-story) {
+    border: 5px dashed #adb5bd;
 }
 
 .profile-page .profile-story-add {
@@ -72,8 +86,8 @@ body.profile-page .container {
 
 .story-add.profile-story-add {
     position: absolute;
-    bottom: 0;
-    right: 8px;
+    bottom: 4px;
+    right: 4px;
     background: #3498db;
     color: white;
     border-radius: 50%;
@@ -83,6 +97,7 @@ body.profile-page .container {
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     cursor: pointer;
 }
 

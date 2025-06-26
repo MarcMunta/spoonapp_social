@@ -794,7 +794,7 @@ def chat_detail(request, chat_id):
                     related_user=request.user,
                     related_chat=chat
                 )
-            except Exception as e:
+            except Exception:
                 # Silently handle notification creation errors
                 pass
             
@@ -995,11 +995,3 @@ def delete_account(request):
         return redirect("home")
     return render(request, "pages/confirm_delete.html")
 
-def custom_404(request, exception):
-    return render(request, 'errors/404.html', status=404)
-
-def custom_403(request, exception=None):
-    return render(request, 'errors/403.html', status=403)
-
-def custom_500(request):
-    return render(request, 'errors/500.html', status=500)

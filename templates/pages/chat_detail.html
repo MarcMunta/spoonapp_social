@@ -14,18 +14,18 @@
             <div class="spoon-chat-detail">
                 <!-- Chat Header -->
                 <div class="spoon-chat-header-detail">
-                    <a href="{% url 'chat_list' %}" class="spoon-back-btn" title="Back to chat list">
+                    <a href="{% url 'chat_list' %}" class="spoon-back-btn" title="{% trans 'Back to chat list' %}">
                         <i class="fas fa-arrow-left"></i>
                     </a>
 
                     <div class="spoon-avatar-container me-3">
                         {% if other_user.profile.profile_picture %}
-                        <img src="{{ other_user.profile.profile_picture_data_url }}" alt="Profile" class="spoon-avatar"
+                        <img src="{{ other_user.profile.profile_picture_data_url }}" alt="{% trans 'Profile' %}" class="spoon-avatar"
                             style="width: 50px; height: 50px;"
                             onclick="window.location.href='{% url 'profile' other_user.username %}';"
                             title="View {{ other_user.username }}'s profile">
                         {% else %}
-                        <img src="{{ default_avatar_data_url }}" alt="Default" class="spoon-avatar"
+                        <img src="{{ default_avatar_data_url }}" alt="{% trans 'Default' %}" class="spoon-avatar"
                             style="width: 50px; height: 50px;"
                             onclick="window.location.href='{% url 'profile' other_user.username %}';"
                             title="View {{ other_user.username }}'s profile">
@@ -39,13 +39,13 @@
                     <div class="flex-grow-1">
                         <div class="fw-bold fs-5">{{ other_user.username }}</div>
                         {% if other_user.profile.online %}
-                        <div class="spoon-status-indicator">Online now</div>
+                        <div class="spoon-status-indicator">{% trans 'Online now' %}</div>
                         {% else %}
-                        <small class="opacity-75">Last seen {{ other_user.profile.last_seen|timesince }} ago</small>
+                        <small class="opacity-75">{% trans 'Last seen' %} {{ other_user.profile.last_seen|timesince }} ago</small>
                         {% endif %}
                     </div>
 
-                    <a href="{% url 'home' %}" class="spoon-home-btn" title="Home">
+                    <a href="{% url 'home' %}" class="spoon-home-btn" title="{% trans 'Home' %}">
                         <i class="fas fa-home"></i>
                     </a>
                 </div>
@@ -57,7 +57,7 @@
                         style="display: none;">
                         <div class="spoon-scroll-text">
                             <i class="fas fa-chevron-up"></i>
-                            <span>Scroll up for older messages</span>
+                            <span>{% trans 'Scroll up for older messages' %}</span>
                         </div>
                     </div>
 
@@ -86,7 +86,7 @@
                     <div id="scroll-bottom-indicator" class="spoon-scroll-indicator spoon-scroll-bottom"
                         style="display: none;">
                         <div class="spoon-scroll-text">
-                            <span>Scroll down for newer messages</span>
+                            <span>{% trans 'Scroll down for newer messages' %}</span>
                             <i class="fas fa-chevron-down"></i>
                         </div>
                     </div>

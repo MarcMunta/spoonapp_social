@@ -19,10 +19,10 @@
     <div id="dropZone" class="file-drop-zone">
       <span class="file-drop-icon">📎</span>
       <span class="file-drop-text">{% trans "Drag an image here or click" %}</span>
-      {{ post_form.image.as_widget(attrs={'class': 'hidden-file-input'}) }}
+      {{ post_form.image }}
     </div>
     <div class="textarea-wrapper">
-      {{ post_form.caption.as_widget(attrs={'placeholder': ''}) }}
+      {{ post_form.caption }}
       <label for="id_caption" class="float-label">{% trans "What's on your spoon?" %}</label>
     </div>
     <div class="category-wrapper">

@@ -28,7 +28,7 @@ from .models import (
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
 from django.utils import timezone
 from django.http import HttpResponseForbidden
-from django.db.models import Q, Prefetch, Count
+from django.db.models import Q, Prefetch, Count, Max
 from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
@@ -906,12 +906,26 @@ def story_viewers(request, story_id):
     story = get_object_or_404(Story, id=story_id)
     if story.user != request.user:
         return HttpResponseForbidden("No tienes permiso para ver las vistas.")
-    viewer_ids = (
+    view_info = (
         StoryView.objects.filter(story=story)
-        .values_list("viewer", flat=True)
-        .distinct()
+        .values("viewer")
+        .annotate(last_view=Max("viewed_at"))
+        .order_by("-last_view")
     )
-    viewers = Profile.objects.select_related("user").filter(user__id__in=viewer_ids)
+    viewer_map = {item["viewer"]: item["last_view"] for item in view_info}
+    profiles = (
+        Profile.objects.select_related("user")
+        .filter(user__id__in=viewer_map.keys())
+    )
+    profiles = sorted(profiles, key=lambda p: viewer_map[p.user.id], reverse=True)
+    now = timezone.now()
+    viewers = [
+        {
+            "profile": p,
+            "just_seen": (now - viewer_map[p.user.id]).total_seconds() < 60,
+        }
+        for p in profiles
+    ]
     html = render_to_string(
         "partials/stories/story_viewers_list.html",
         {"viewers": viewers},

@@ -48,6 +48,15 @@ npm run build
 The translations are automatically compiled whenever `manage.py` is executed,
 so you no longer need to run `django-admin compilemessages` manually. Selecting
 a different language in the app also recompiles the translations automatically.
+If you want to compile the translations outside of Django you can run:
+
+```bash
+./setup_env
+```
+
+This script invokes `./tools/gettext/bin/msgfmt` (or the system `msgfmt` if the
+local binary is missing) and generates the `.mo` files inside the `locale/`
+directories.
 
 Run the Django development server:
 

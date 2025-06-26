@@ -42,6 +42,7 @@ graph TD
     B -->|Windows| C["Ejecuta: .\backend\setup_env.ps1"]
     B -->|macOS / Linux| D["Ejecuta: ./backend/setup_env.sh"]
     C --> E["Entorno virtual activo"]
+    D --> E
 ```
 
 Build the frontend:

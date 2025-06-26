@@ -17,15 +17,17 @@
   <form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="post-form">
     {% csrf_token %}
     <div id="dropZone" class="file-drop-zone">
-      <span class="file-drop-icon">📎</span>
+      <span class="file-drop-icon">🖼</span>
       <span class="file-drop-text">{% trans "Drag an image here or click" %}</span>
       {{ post_form.image }}
     </div>
     <div class="textarea-wrapper">
+      <span class="caption-icon">✍</span>
       {{ post_form.caption }}
       <label for="id_caption" class="float-label">{% trans "What's on your spoon?" %}</label>
     </div>
     <div class="category-wrapper">
+      <span class="category-icon">🍽</span>
       {{ post_form.categories }}
     </div>
     <button type="submit" class="publish-btn"><span class="rocket-icon">🚀</span> {% trans "Publish" %}</button>

@@ -150,6 +150,10 @@ msgstr "Volver al perfil"
 msgid "Publish"
 msgstr "Publicar"
 
+#: templates/pages/feed.html:21
+msgid "Drag an image here or click"
+msgstr "Arrastra una imagen aquí o haz clic"
+
 #: templates/pages/feed.html:51 templates/pages/feed.html:113
 #: templates/pages/feed.html:120
 #: templates/partials/comments/comments_partial.html:34

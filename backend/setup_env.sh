@@ -23,6 +23,12 @@ if ! pip3 show googletrans > /dev/null 2>&1; then
   echo "googletrans instalado."
 fi
 
+# Ensure requests is installed even if requirements are missing
+if ! pip3 show requests > /dev/null 2>&1; then
+  pip3 install requests
+  echo "requests instalado."
+fi
+
 # Compile translation files using msgfmt if available
 MSGFMT_CMD="msgfmt"
 if [ -x ./backend/tools/gettext/bin/msgfmt ]; then

@@ -17,6 +17,12 @@ else
   echo "No se encontró requirements.txt"
 fi
 
+# Ensure googletrans is installed even if requirements are missing
+if ! pip3 show googletrans > /dev/null 2>&1; then
+  pip3 install googletrans==4.0.0-rc1
+  echo "googletrans instalado."
+fi
+
 # Compile translation files using msgfmt if available
 MSGFMT_CMD="msgfmt"
 if [ -x ./backend/tools/gettext/bin/msgfmt ]; then

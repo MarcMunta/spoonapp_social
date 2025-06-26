@@ -164,7 +164,7 @@
     {% if cat.slug %}
     <li class="nav-item">
       <a class="nav-link {% if selected_category == cat.slug %}active{% endif %}" data-category="{{ cat.slug }}"
-        href="#">{{ cat.name }}</a>
+        href="#">{{ cat }}</a>
     </li>
     {% endif %}
     {% endfor %}

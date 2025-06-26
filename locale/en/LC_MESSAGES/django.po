@@ -296,3 +296,66 @@ msgstr "Remove follower"
 #: templates/partials/stories/story_viewers_list.html:27
 msgid "No views yet"
 msgstr "No views yet"
+
+msgid "Comment"
+msgstr "Comment"
+
+msgid "Blocked users"
+msgstr "Blocked users"
+
+msgid "Unblock"
+msgstr "Unblock"
+
+msgid "You haven't blocked anyone."
+msgstr "You haven't blocked anyone."
+
+msgid "Hidden stories"
+msgstr "Hidden stories"
+
+msgid "Remove"
+msgstr "Remove"
+
+msgid "You haven't hidden anyone's stories."
+msgstr "You haven't hidden anyone's stories."
+
+msgid "No posts in this category."
+msgstr "No posts in this category."
+
+msgid "No posts."
+msgstr "No posts."
+
+msgid "Starters"
+msgstr "Starters"
+
+msgid "First course"
+msgstr "First course"
+
+msgid "Second course"
+msgstr "Second course"
+
+msgid "Desserts"
+msgstr "Desserts"
+
+msgid "What's on your spoon?"
+msgstr "What's on your spoon?"
+
+msgid "Tell us about yourself..."
+msgstr "Tell us about yourself..."
+
+msgid "Your city"
+msgstr "Your city"
+
+msgid "Select"
+msgstr "Select"
+
+msgid "Male"
+msgstr "Male"
+
+msgid "Female"
+msgstr "Female"
+
+msgid "Other"
+msgstr "Other"
+
+msgid "You can only select one main type: first course, second course or desserts."
+msgstr "You can only select one main type: first course, second course or desserts."

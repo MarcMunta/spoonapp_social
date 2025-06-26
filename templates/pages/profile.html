@@ -180,7 +180,7 @@
       <div class="col-4">
         {% include 'partials/posts/post_card.html' with post=post %}
       </div> {% empty %}
-      <div class="text-muted">No hay publicaciones en esta categoría.</div>
+      <div class="text-muted">{% trans "No posts in this category." %}</div>
       {% endfor %}
     </div>
     {% endif %}
@@ -193,7 +193,7 @@
       <div class="col-4">
         {% include 'partials/posts/post_card.html' with post=post %}
       </div> {% empty %}
-      <div class="text-muted">No hay publicaciones.</div>
+      <div class="text-muted">{% trans "No posts." %}</div>
       {% endfor %}
     </div>
   </div>

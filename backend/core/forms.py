@@ -1,5 +1,6 @@
 from django import forms
 from django.db.models import Case, When, IntegerField
+from django.utils.translation import gettext_lazy as _
 from .models import Post, PostComment, Profile, PostCategory, Story
 from django.contrib.auth.models import User
 
@@ -12,7 +13,7 @@ class PostForm(forms.ModelForm):
         widgets = {
             'caption': forms.Textarea(attrs={
                 'rows': 3,
-                'placeholder': '¿Qué tienes en tu cuchara?',
+                'placeholder': _('What\'s on your spoon?'),
                 'class': 'caption-input'
             }),
             'categories': forms.SelectMultiple(attrs={'class': 'category-select'}),
@@ -44,7 +45,7 @@ class PostForm(forms.ModelForm):
         selected_primary = [c.name.lower() for c in categories if c.name.lower() in primary_types]
         if len(selected_primary) > 1:
             raise forms.ValidationError(
-                'Solo puede elegir un tipo principal: primer plato, segundo plato o postres.'
+                _('You can only select one main type: first course, second course or desserts.')
             )
         return categories
 
@@ -55,7 +56,7 @@ class CommentForm(forms.ModelForm):
         widgets = {
             'content': forms.TextInput(attrs={
                 'class': 'comment-input',
-                'placeholder': 'Comentario',
+                'placeholder': _('Comment'),
             })
         }
 
@@ -97,10 +98,10 @@ class ProfileForm(forms.ModelForm):
         model = Profile
         fields = ['bio', 'website', 'location', 'gender', 'bubble_color']
         widgets = {
-            'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': 'Cuéntanos algo sobre ti...'}),
+            'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': _('Tell us about yourself...')}),
             'website': forms.URLInput(attrs={'placeholder': 'https://'}),
-            'location': forms.TextInput(attrs={'placeholder': 'Tu ciudad'}),
-            'gender': forms.Select(choices=[('', 'Seleccione'), ('Hombre', 'Hombre'), ('Mujer', 'Mujer'), ('Otro', 'Otro')])
+            'location': forms.TextInput(attrs={'placeholder': _('Your city')}),
+            'gender': forms.Select(choices=[('', _('Select')), ('Hombre', _('Male')), ('Mujer', _('Female')), ('Otro', _('Other'))])
         }
 
     def save(self, commit=True):

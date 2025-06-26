@@ -2,11 +2,13 @@ from django import template
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext, get_language
+from django.utils.translation import gettext, gettext_lazy as _, get_language
 from functools import lru_cache
 from googletrans import Translator
 
 _translator = Translator(service_urls=["translate.googleapis.com"])
+# googletrans 4.0.0rc1 uses `raise_Exception` internally; ensure it's present
+setattr(_translator, "raise_Exception", getattr(_translator, "raise_exception", False))
 
 
 @lru_cache(maxsize=1024)
@@ -57,6 +59,26 @@ BAD_WORDS = [
     "perra",
 ]
 
+# Basic offline translations for common profile fields
+OFFLINE_TRANSLATIONS = {
+    # Genders
+    "Hombre": _("Male"),
+    "Mujer": _("Female"),
+    "Otro": _("Other"),
+    "Male": _("Male"),
+    "Female": _("Female"),
+    "Other": _("Other"),
+    # Categories
+    "Entrantes": _("Starters"),
+    "Primer plato": _("First course"),
+    "Segundo plato": _("Second course"),
+    "Postres": _("Desserts"),
+    "Starters": _("Starters"),
+    "First course": _("First course"),
+    "Second course": _("Second course"),
+    "Desserts": _("Desserts"),
+}
+
 
 @register.filter
 def censor_bad_words(text):
@@ -78,9 +100,13 @@ def translate(value):
     translated = gettext(value)
 
     if translated == value:
-        try:
-            translated = _google_translate(value, lang)
-        except Exception:
-            pass
+        # Try offline dictionary before falling back to Google Translate
+        if value in OFFLINE_TRANSLATIONS:
+            translated = OFFLINE_TRANSLATIONS[value]
+        else:
+            try:
+                translated = _google_translate(value, lang)
+            except Exception:
+                pass
 
     return translated

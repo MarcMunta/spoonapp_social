@@ -41,8 +41,6 @@ msgid "No new notifications"
 msgstr "No hay notificaciones nuevas"
 
 #: templates/layouts/base.html:90 templates/layouts/base.html:95
-msgid "Profile"
-msgstr "Perfil"
 
 #: templates/layouts/base.html:116
 msgid "Streams"
@@ -297,3 +295,128 @@ msgstr "Cancelar seguido"
 #: templates/partials/stories/story_viewers_list.html:27
 msgid "No views yet"
 msgstr "Aún no hay vistas"
+
+# Nuevas traducciones
+msgid "SpoonApp Logo"
+msgstr "Logo de SpoonApp"
+
+msgid "Sponsored Image"
+msgstr "Imagen patrocinada"
+
+msgid "Friend Requests"
+msgstr "Solicitudes de amistad"
+
+msgid "Manage your pending friend connections"
+msgstr "Gestiona tus solicitudes pendientes"
+
+msgid "Accept"
+msgstr "Aceptar"
+
+
+msgid "No friend requests"
+msgstr "No hay solicitudes de amistad"
+
+msgid "When someone wants to connect with you on SpoonApp, you'll see their request here!"
+msgstr "Cuando alguien quiera conectar contigo en SpoonApp, verás su solicitud aquí"
+
+msgid "Back to Feed"
+msgstr "Volver al inicio"
+
+msgid "Stay updated with your SpoonApp activity"
+msgstr "Mantente al día con tu actividad de SpoonApp"
+
+msgid "View Chat"
+msgstr "Ver chat"
+
+msgid "View Profile"
+msgstr "Ver perfil"
+
+msgid "Start Chat"
+msgstr "Iniciar chat"
+
+msgid "No notifications yet"
+msgstr "Aún no tienes notificaciones"
+
+msgid "You'll see notifications here when you receive messages or friend requests."
+msgstr "Verás las notificaciones aquí cuando recibas mensajes o solicitudes de amistad."
+
+msgid "SpoonChats"
+msgstr "SpoonChats"
+
+msgid "Last message at"
+msgstr "Último mensaje a las"
+
+msgid "New message"
+msgstr "Nuevo mensaje"
+
+msgid "Online now"
+msgstr "En línea ahora"
+
+msgid "No SpoonChats yet"
+msgstr "Aún no hay SpoonChats"
+
+msgid "Connect with friends and start sharing your culinary adventures!"
+msgstr "Conecta con amigos y comienza a compartir tus aventuras culinarias"
+
+msgid "Welcome to SpoonChats!"
+msgstr "¡Bienvenido a SpoonChats!"
+
+msgid "Select a conversation to start sharing your food experiences"
+msgstr "Selecciona una conversación para empezar a compartir tus experiencias culinarias"
+
+msgid "Where every message is seasoned with friendship 🧂❤️"
+msgstr "Donde cada mensaje está sazonado con amistad 🧂❤️"
+
+msgid "Back to chat list"
+msgstr "Volver al listado de chats"
+
+msgid "Home"
+msgstr "Inicio"
+
+msgid "Last seen"
+msgstr "Visto por última vez"
+
+msgid "Scroll up for older messages"
+msgstr "Desplázate arriba para ver mensajes antiguos"
+
+msgid "Scroll down for newer messages"
+msgstr "Desplázate abajo para ver mensajes nuevos"
+
+msgid "404 - Page Not Found"
+msgstr "404 - Página no encontrada"
+
+msgid "403 - Forbidden"
+msgstr "403 - Prohibido"
+
+msgid "500 - Internal Server Error"
+msgstr "500 - Error interno del servidor"
+
+msgid "Woops..."
+msgstr "Vaya..."
+
+msgid "Something Went Wrong"
+msgstr "Algo salió mal"
+
+msgid "Go Home"
+msgstr "Ir al inicio"
+
+msgid "Profile Picture"
+msgstr "Foto de perfil"
+
+msgid "Default Avatar"
+msgstr "Avatar por defecto"
+
+msgid "Post image"
+msgstr "Imagen de la publicación"
+
+msgid "Unfollow"
+msgstr "Dejar de seguir"
+
+msgid "Cancel Request"
+msgstr "Cancelar solicitud"
+
+msgid "Follow back"
+msgstr "Seguir de vuelta"
+
+msgid "Follow"
+msgstr "Seguir"

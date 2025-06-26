@@ -16,7 +16,7 @@
         {% if block.hidden_user.profile.profile_picture %}
         <img src="{{ block.hidden_user.profile.profile_picture_data_url }}" alt="{{ block.hidden_user.username }}" class="post-avatar">
         {% else %}
-        <img src="{{ default_avatar_data_url }}" alt="Default" class="post-avatar">
+        <img src="{{ default_avatar_data_url }}" alt="{% trans 'Default' %}" class="post-avatar">
         {% endif %}
         <strong>{{ block.hidden_user.username }}</strong>
       </a>

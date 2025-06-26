@@ -11,7 +11,7 @@
         <img src="{{ comment.user.profile.profile_picture_data_url }}" alt="{{ comment.user.username }}"
           class="comment-avatar">
         {% else %}
-        <img src="{{ default_avatar_data_url }}" alt="Default" class="comment-avatar">
+        <img src="{{ default_avatar_data_url }}" alt="{% trans 'Default' %}" class="comment-avatar">
         {% endif %}
         <strong>{{ comment.user.username }}</strong>
       </a>

@@ -157,15 +157,14 @@ button {
 
 .camera-button {
     position: absolute;
-    bottom: .3rem;
-    right: .3rem;
+    bottom: 4px;
+    right: 4px;
     width: 38px;
     height: 38px;
     background: hsl(var(--brand-h) var(--brand-s) var(--brand-l));
+    border-radius: 50%;
     display: grid;
     place-content: center;
-    border-radius: 50%;
-    font-size: 1.1rem;
     color: var(--gray-0);
     border: 3px solid var(--gray-0);
     transition: var(--transition);
@@ -173,6 +172,17 @@ button {
 
 .avatar-wrapper:hover .camera-button {
     transform: scale(1.08);
+}
+
+.profile-form .avatar-wrapper {
+    display: inline-block !important;
+    /* mantiene el ancho del avatar */
+    position: relative;
+    /* ancla para .camera-button   */
+    width: 128px;
+    /* mismo tamaño que la foto    */
+    height: 128px;
+    /* (opcional pero claro)       */
 }
 
 /* hide input */

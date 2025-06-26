@@ -528,11 +528,17 @@ document.addEventListener("DOMContentLoaded", () => {
       fetch(`${LANG_PREFIX}/story/${storyId}/viewers/`, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
       })
-        .then((res) => res.json())
+        .then((res) => {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.json();
+        })
         .then((data) => {
           viewsModalBody.innerHTML = data.html;
           viewsModal.classList.add("show");
           pauseProgress();
+        })
+        .catch(() => {
+          alert("Error loading viewers");
         });
     });
 

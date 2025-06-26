@@ -2,6 +2,7 @@ from django import template
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
+from django.utils.translation import gettext
 import re
 
 register = template.Library()
@@ -42,3 +43,14 @@ def censor_bad_words(text):
         return ''
     pattern = re.compile(r'(?i)\b(' + '|'.join(map(re.escape, BAD_WORDS)) + r')\b')
     return pattern.sub(lambda m: '*' * len(m.group(0)), text)
+
+
+@register.filter
+def translate(value):
+    """Translate a dynamic string if a translation exists."""
+    if value is None:
+        return ''
+    try:
+        return gettext(str(value))
+    except Exception:
+        return value

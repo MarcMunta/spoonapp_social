@@ -359,3 +359,12 @@ msgstr "Other"
 
 msgid "You can only select one main type: first course, second course or desserts."
 msgstr "You can only select one main type: first course, second course or desserts."
+
+msgid "Main course"
+msgstr "Main course"
+
+msgid "Side dish"
+msgstr "Side dish"
+
+msgid "Football"
+msgstr "Football"

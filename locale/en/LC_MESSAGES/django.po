@@ -26,9 +26,6 @@ msgstr "English"
 msgid "Spanish"
 msgstr "Spanish"
 
-#: backend/spoonapp_social/settings.py:72
-msgid "Irish"
-msgstr "Irish"
 
 #: templates/layouts/base.html:48
 msgid "Notifications"

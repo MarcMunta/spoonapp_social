@@ -5,17 +5,22 @@ from .models import Post, PostComment, Profile, PostCategory, Story
 from django.contrib.auth.models import User
 
 class PostForm(forms.ModelForm):
-    image = forms.ImageField(required=False, widget=forms.ClearableFileInput(attrs={'class': 'file-input'}))
+    image = forms.ImageField(
+        required=False,
+        widget=forms.ClearableFileInput(attrs={"class": "hidden-file-input"}),
+    )
 
     class Meta:
         model = Post
         fields = ['image', 'caption', 'categories']
         widgets = {
-            'caption': forms.Textarea(attrs={
-                'rows': 3,
-                'placeholder': _('What\'s on your spoon?'),
-                'class': 'caption-input'
-            }),
+            'caption': forms.Textarea(
+                attrs={
+                    'rows': 3,
+                    'placeholder': '',
+                    'class': 'caption-input',
+                }
+            ),
             'categories': forms.SelectMultiple(attrs={'class': 'category-select'}),
         }
 

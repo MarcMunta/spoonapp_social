@@ -8,7 +8,6 @@ def ensure_msgfmt():
     """Ensure the `msgfmt` binary is available, installing gettext if possible."""
     if shutil.which('msgfmt'):
         return
-
     print('msgfmt not found. Attempting automatic installation of gettext...')
     try:
         if sys.platform.startswith('linux') and shutil.which('apt-get'):
@@ -25,12 +24,11 @@ def ensure_msgfmt():
             subprocess.check_call(['scoop', 'install', 'gettext'])
     except Exception as exc:
         print(f'Failed to automatically install gettext: {exc}')
-
     if not shutil.which('msgfmt'):
         print(
-            'msgfmt is still missing. Install gettext manually. '\
-            'On Windows you can use Chocolatey (choco install gettext), '\
-            'Winget (winget install -e --id GnuWin32.gettext) or download '\
+            'msgfmt is still missing. Install gettext manually. '
+            'On Windows you can use Chocolatey (choco install gettext), '
+            'Winget (winget install -e --id GnuWin32.gettext) or download '
             'prebuilt binaries from https://mlocati.github.io/articles/gettext-iconv-windows.html '
             'and add the bin directory to your PATH.'
         )

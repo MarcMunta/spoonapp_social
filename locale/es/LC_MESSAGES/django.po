@@ -483,3 +483,13 @@ msgstr "Otro"
 
 msgid "You can only select one main type: first course, second course or desserts."
 msgstr "Solo puede elegir un tipo principal: primer plato, segundo plato o postres."
+
+# Additional translations for dynamic values
+msgid "Main course"
+msgstr "Primer plato"
+
+msgid "Side dish"
+msgstr "Entrantes"
+
+msgid "Football"
+msgstr "Fútbol"

@@ -1,6 +1,8 @@
 // Prefix URLs with the current language code taken from the <html> tag.
 const LANG_PREFIX = `/${document.documentElement.lang}`;
 
+const popSound = new Audio('/static/audio/pop.wav');
+
 // Load dynamic translations from the template if available
 const JS_TRANSLATIONS = (() => {
   const el = document.getElementById('js-translations');
@@ -23,6 +25,7 @@ if (typeof getCSRFToken === "undefined") {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  popSound.preload = "auto";
   const updateRelativeTimes = () => {
     document.querySelectorAll(".post-relative").forEach((el) => {
       const created = new Date(el.dataset.created);
@@ -246,6 +249,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentStoryElIndex = 0;
 
   function openStories(el, idx) {
+    el.classList.add("viewed");
+    popSound.currentTime = 0;
+    popSound.play().catch(() => { });
     currentUrls = el.dataset.urls.split("|");
     currentTypes = el.dataset.types.split("|");
     currentExpires = el.dataset.expires.split("|");
@@ -951,8 +957,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const container = btn.parentElement;
       const existingMoreBtn = container
         ? container.querySelector(
-            ".load-replies-btn[data-comment-id='" + commentId + "']"
-          )
+          ".load-replies-btn[data-comment-id='" + commentId + "']"
+        )
         : null;
       if (existingMoreBtn) {
         btn.remove();

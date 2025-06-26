@@ -86,8 +86,8 @@ body.profile-page .container {
 
 .story-add.profile-story-add {
     position: absolute;
-    bottom: 0;
-    right: 8px;
+    bottom: 4px;
+    right: 4px;
     background: #3498db;
     color: white;
     border-radius: 50%;
@@ -97,6 +97,7 @@ body.profile-page .container {
     display: flex;
     align-items: center;
     justify-content: center;
+    line-height: 1;
     cursor: pointer;
 }
 

@@ -1,6 +1,7 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
 {% load i18n %}
+{% load custom_filters %}
 {% block title %}SpoonApp Social{% endblock %}
 
 {% block extra_css %}
@@ -67,7 +68,7 @@
     <div class="post-title">
       <div class="post-categories">
         {% for cat in post.categories.all %}
-        <span class="badge bg-secondary me-1">{{ cat.name }}</span>
+        <span class="badge bg-secondary me-1">{{ cat.name|translate }}</span>
         {% endfor %}
       </div>
     </div>
@@ -90,7 +91,7 @@
   <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
     {% csrf_token %}
     {{ comment_form.content }}
-    <button type="submit" class="comment-btn">Comentar</button>
+    <button type="submit" class="comment-btn">{% trans "Comment" %}</button>
   </form>
   {% endif %}
   {% with comments=post.postcomment_set.all %}

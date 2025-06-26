@@ -126,7 +126,7 @@
         {% if user_profile.bio %}
         <div class="profile-info-box">
           <span class="info-label">{% trans "Biografía:" %}</span>
-          <span class="info-content">{{ user_profile.bio }}</span>
+          <span class="info-content">{{ user_profile.bio|translate }}</span>
         </div>
         {% endif %}
         {% if user_profile.website %}
@@ -140,13 +140,13 @@
         {% if user_profile.location %}
         <div class="profile-info-box">
           <span class="info-label">{% trans "Ubicación:" %}</span>
-          <span class="info-content">{{ user_profile.location }}</span>
+          <span class="info-content">{{ user_profile.location|translate }}</span>
         </div>
         {% endif %}
         {% if user_profile.gender %}
         <div class="profile-info-box">
           <span class="info-label">{% trans "Género:" %}</span>
-          <span class="info-content">{{ user_profile.gender }}</span>
+          <span class="info-content">{{ user_profile.gender|translate }}</span>
         </div>
         {% endif %}
       </div>
@@ -164,7 +164,7 @@
     {% if cat.slug %}
     <li class="nav-item">
       <a class="nav-link {% if selected_category == cat.slug %}active{% endif %}" data-category="{{ cat.slug }}"
-        href="#">{{ cat.name }}</a>
+        href="#">{{ cat.name|translate }}</a>
     </li>
     {% endif %}
     {% endfor %}
@@ -180,7 +180,7 @@
       <div class="col-4">
         {% include 'partials/posts/post_card.html' with post=post %}
       </div> {% empty %}
-      <div class="text-muted">No hay publicaciones en esta categoría.</div>
+      <div class="text-muted">{% trans "No posts in this category." %}</div>
       {% endfor %}
     </div>
     {% endif %}
@@ -193,7 +193,7 @@
       <div class="col-4">
         {% include 'partials/posts/post_card.html' with post=post %}
       </div> {% empty %}
-      <div class="text-muted">No hay publicaciones.</div>
+      <div class="text-muted">{% trans "No posts." %}</div>
       {% endfor %}
     </div>
   </div>

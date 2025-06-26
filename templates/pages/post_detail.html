@@ -1,5 +1,6 @@
 {% extends 'layouts/base.html' %}
 {% load static %}
+{% load custom_filters %}
 
 {% block title %}Publicación de {{ post.user.username }} — SpoonApp{% endblock %}
 
@@ -43,7 +44,7 @@
         <div class="post-title">
             <div class="post-categories">
                 {% for cat in post.categories.all %}
-                <span class="badge bg-secondary me-1">{{ cat.name }}</span>
+                <span class="badge bg-secondary me-1">{{ cat.name|translate }}</span>
                 {% endfor %}
             </div>
         </div>
@@ -70,7 +71,7 @@
     <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
         {% csrf_token %}
         {{ comment_form.content }}
-        <button type="submit" class="comment-btn">Comentar</button>
+        <button type="submit" class="comment-btn">{% trans "Comment" %}</button>
     </form>
     {% endif %}
 
@@ -81,13 +82,13 @@
         {% include 'partials/comments/comments_partial.html' with comments=comments|slice:":3" %}
     </ul>
     {% if comments|length > 3 %}
-    <button class="load-more-comments" data-post-id="{{ post.id }}">Cargar más</button>
+    <button class="load-more-comments" data-post-id="{{ post.id }}">{% trans "Load more" %}</button>
     {% endif %}
     {% endif %}
     {% endwith %}
 
     <div class="back-link mt-4 text-center">
-        <a href="{% url 'profile' request.user.username %}" class="text-muted">← Volver al perfil</a>
+        <a href="{% url 'profile' request.user.username %}" class="text-muted">← {% trans "Back to profile" %}</a>
     </div>
 </div>
 {% endblock %}

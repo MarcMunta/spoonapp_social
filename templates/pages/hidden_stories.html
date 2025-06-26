@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">Historias ocultas</h2>
+  <h2 class="mb-4">{% trans "Hidden stories" %}</h2>
   {% if blocks %}
   <ul class="list-group">
     {% for block in blocks %}
@@ -22,16 +22,16 @@
       </a>
       <form method="post" action="{% url 'unhide_stories' block.hidden_user.username %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-sm btn-danger">Quitar</button>
+        <button type="submit" class="btn btn-sm btn-danger">{% trans "Remove" %}</button>
       </form>
     </li>
     {% endfor %}
   </ul>
   {% else %}
-  <p class="text-muted">No has ocultado historias de nadie.</p>
+  <p class="text-muted">{% trans "You haven't hidden anyone's stories." %}</p>
   {% endif %}
   <div class="text-center mt-4">
-    <a href="{% url 'profile' request.user.username %}" class="text-muted">← Volver al perfil</a>
+    <a href="{% url 'profile' request.user.username %}" class="text-muted">← {% trans "Back to profile" %}</a>
   </div>
 </div>
 {% endblock %}

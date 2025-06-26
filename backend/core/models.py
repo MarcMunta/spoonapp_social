@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
 from django.utils.text import slugify
+from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
 import base64
 
@@ -14,8 +15,18 @@ class PostCategory(models.Model):
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
+    CATEGORY_TRANSLATIONS = {
+        "entrantes": _("Starters"),
+        "primer-plato": _("First course"),
+        "segundo-plato": _("Second course"),
+        "postres": _("Desserts"),
+    }
+
     def __str__(self):
-        return self.name
+        if self.slug:
+            translation = self.CATEGORY_TRANSLATIONS.get(self.slug, self.name)
+            return str(translation)
+        return str(self.name)
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

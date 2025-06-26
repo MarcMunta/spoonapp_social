@@ -420,3 +420,76 @@ msgstr "Seguir de vuelta"
 
 msgid "Follow"
 msgstr "Seguir"
+
+msgid "Comment"
+msgstr "Comentar"
+
+msgid "Blocked users"
+msgstr "Usuarios bloqueados"
+
+msgid "Unblock"
+msgstr "Desbloquear"
+
+msgid "You haven't blocked anyone."
+msgstr "No has bloqueado a nadie."
+
+msgid "Hidden stories"
+msgstr "Historias ocultas"
+
+msgid "Remove"
+msgstr "Quitar"
+
+msgid "You haven't hidden anyone's stories."
+msgstr "No has ocultado historias de nadie."
+
+msgid "No posts in this category."
+msgstr "No hay publicaciones en esta categoría."
+
+msgid "No posts."
+msgstr "No hay publicaciones."
+
+msgid "Starters"
+msgstr "Entrantes"
+
+msgid "First course"
+msgstr "Primer plato"
+
+msgid "Second course"
+msgstr "Segundo plato"
+
+msgid "Desserts"
+msgstr "Postres"
+
+msgid "What's on your spoon?"
+msgstr "¿Qué tienes en tu cuchara?"
+
+msgid "Tell us about yourself..."
+msgstr "Cuéntanos algo sobre ti..."
+
+msgid "Your city"
+msgstr "Tu ciudad"
+
+msgid "Select"
+msgstr "Seleccione"
+
+msgid "Male"
+msgstr "Hombre"
+
+msgid "Female"
+msgstr "Mujer"
+
+msgid "Other"
+msgstr "Otro"
+
+msgid "You can only select one main type: first course, second course or desserts."
+msgstr "Solo puede elegir un tipo principal: primer plato, segundo plato o postres."
+
+# Additional translations for dynamic values
+msgid "Main course"
+msgstr "Primer plato"
+
+msgid "Side dish"
+msgstr "Entrantes"
+
+msgid "Football"
+msgstr "Fútbol"

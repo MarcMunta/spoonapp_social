@@ -5,7 +5,7 @@
 
 {% block content %}
 <div class="container mt-5">
-  <h2 class="mb-4">Usuarios bloqueados</h2>
+  <h2 class="mb-4">{% trans "Blocked users" %}</h2>
   {% if blocks %}
   <ul class="list-group">
     {% for block in blocks %}
@@ -20,16 +20,16 @@
       </div>
       <form method="post" action="{% url 'unblock_user' block.blocked.username %}">
         {% csrf_token %}
-        <button type="submit" class="btn btn-sm btn-danger">Desbloquear</button>
+        <button type="submit" class="btn btn-sm btn-danger">{% trans "Unblock" %}</button>
       </form>
     </li>
     {% endfor %}
   </ul>
   {% else %}
-  <p class="text-muted">No has bloqueado a nadie.</p>
+  <p class="text-muted">{% trans "You haven't blocked anyone." %}</p>
   {% endif %}
   <div class="text-center mt-4">
-    <a href="{% url 'profile' request.user.username %}" class="text-muted">← Volver al perfil</a>
+    <a href="{% url 'profile' request.user.username %}" class="text-muted">← {% trans "Back to profile" %}</a>
   </div>
 </div>
 {% endblock %}

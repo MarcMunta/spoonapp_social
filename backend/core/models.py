@@ -24,8 +24,9 @@ class PostCategory(models.Model):
 
     def __str__(self):
         if self.slug:
-            return self.CATEGORY_TRANSLATIONS.get(self.slug, self.name)
-        return self.name
+            translation = self.CATEGORY_TRANSLATIONS.get(self.slug, self.name)
+            return str(translation)
+        return str(self.name)
 
 class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

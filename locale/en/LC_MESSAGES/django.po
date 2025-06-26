@@ -151,6 +151,10 @@ msgstr "Back to profile"
 msgid "Publish"
 msgstr "Publish"
 
+#: templates/pages/feed.html:21
+msgid "Drag an image here or click"
+msgstr "Drag an image here or click"
+
 #: templates/pages/feed.html:51 templates/pages/feed.html:113
 #: templates/pages/feed.html:120
 #: templates/partials/comments/comments_partial.html:34

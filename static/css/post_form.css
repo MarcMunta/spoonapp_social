@@ -1,0 +1,123 @@
+.post-form-container {
+  position: relative;
+  background: linear-gradient(45deg, #ffc0cb, #d9c6ff);
+  background-size: 200% 200%;
+  animation: gradientMove 8s ease infinite;
+  padding: 2rem;
+  border-radius: 2rem;
+  box-shadow: 0 0 20px rgba(255, 200, 240, 0.5);
+  overflow: hidden;
+}
+
+.post-form-container::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle, rgba(255,255,255,0.3) 1px, transparent 1px);
+  background-size: 40px 40px;
+  animation: floatParticles 10s linear infinite;
+  pointer-events: none;
+}
+
+@keyframes gradientMove {
+  0% {background-position: 0 50%;}
+  50% {background-position: 100% 50%;}
+  100% {background-position: 0 50%;}
+}
+
+@keyframes floatParticles {
+  from {transform: translateY(0);}
+  to {transform: translateY(-40px);}
+}
+
+.post-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.file-drop-zone {
+  position: relative;
+  border: 2px dashed #fff;
+  padding: 2rem;
+  text-align: center;
+  border-radius: 1.5rem;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s, border-color 0.3s;
+  backdrop-filter: blur(5px);
+}
+
+.hidden-file-input {
+  display: none;
+}
+
+.file-drop-zone.drag-over {
+  background-color: rgba(255,255,255,0.2);
+  border-color: #ffe4f7;
+}
+
+.textarea-wrapper {
+  position: relative;
+}
+
+.textarea-wrapper textarea {
+  width: 100%;
+  padding: 1rem;
+  border-radius: 1rem;
+  border: none;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  resize: vertical;
+  min-height: 80px;
+}
+
+.textarea-wrapper label.float-label {
+  position: absolute;
+  left: 1rem;
+  top: 1rem;
+  color: #555;
+  pointer-events: none;
+  transition: transform 0.2s, font-size 0.2s;
+}
+
+.textarea-wrapper.focused label,
+.textarea-wrapper textarea.filled + label {
+  transform: translateY(-1.2rem);
+  font-size: 0.8rem;
+}
+
+.category-wrapper select {
+  border-radius: 1rem;
+  padding: 0.6rem;
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(8px);
+  border: none;
+}
+
+.publish-btn {
+  align-self: flex-end;
+  border: none;
+  border-radius: 1.5rem;
+  padding: 0.6rem 1.6rem;
+  font-weight: bold;
+  color: #fff;
+  background: linear-gradient(45deg,#ff8ec7,#b88ef7);
+  box-shadow: 0 4px 0 #a36dd5;
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+}
+
+.publish-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 0 #915cc1;
+}
+
+.publish-btn:active .rocket-icon {
+  animation: rocketFly 0.6s ease forwards;
+}
+
+@keyframes rocketFly {
+  0% {transform: translate(0,0); opacity:1;}
+  100% {transform: translate(40px,-40px); opacity:0;}
+}

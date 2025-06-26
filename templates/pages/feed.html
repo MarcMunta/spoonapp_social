@@ -7,17 +7,30 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/feed.css' %}">
 <link rel="stylesheet" href="{% static 'css/stories.css' %}">
+<link rel="stylesheet" href="{% static 'css/post_form.css' %}">
+<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
 {% endblock %}
 
 {% block content %}
 {% if user.is_authenticated and show_form %}
-<form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="input-bar mb-3">
-  {% csrf_token %}
-  {{ post_form.image }}
-  {{ post_form.caption }}
-  {{ post_form.categories }}
-  <button type="submit" class="publish-btn">📤 {% trans "Publish" %}</button>
-</form>
+<div class="post-form-container mb-3" data-aos="zoom-in">
+  <form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="post-form">
+    {% csrf_token %}
+    <div id="dropZone" class="file-drop-zone">
+      <span class="file-drop-icon">📎</span>
+      <span class="file-drop-text">{% trans "Drag an image here or click" %}</span>
+      {{ post_form.image.as_widget(attrs={'class': 'hidden-file-input'}) }}
+    </div>
+    <div class="textarea-wrapper">
+      {{ post_form.caption.as_widget(attrs={'placeholder': ''}) }}
+      <label for="id_caption" class="float-label">{% trans "What's on your spoon?" %}</label>
+    </div>
+    <div class="category-wrapper">
+      {{ post_form.categories }}
+    </div>
+    <button type="submit" class="publish-btn"><span class="rocket-icon">🚀</span> {% trans "Publish" %}</button>
+  </form>
+</div>
 {% endif %}
 {% if user.is_authenticated and not show_form %}
 {% include "partials/stories/stories.html" %}
@@ -121,4 +134,10 @@
     <button type="button" class="btn btn-danger" id="confirmDeleteComment">{% trans "Delete" %}</button>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="{% static 'js/post_form.js' %}"></script>
+<script>AOS.init({ once: true });</script>
 {% endblock %}

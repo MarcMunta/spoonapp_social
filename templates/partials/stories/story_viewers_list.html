@@ -1,22 +1,22 @@
 {% load i18n %}
-{% for viewer in viewers %}
-<div class="viewer-item d-flex align-items-center justify-content-between mb-2">
-  <a href="{% url 'start_chat' viewer.user.id %}" class="btn btn-sm btn-outline-primary">💬</a>
-  <a href="{% url 'profile' viewer.user.username %}" class="post-user text-decoration-none flex-grow-1 mx-2" style="background-color: {{ viewer.bubble_color }};">
-    {% if viewer.profile_picture %}
-    <img src="{{ viewer.profile_picture_data_url }}" alt="{{ viewer.user.username }}" class="post-avatar">
+{% for v in viewers %}
+<div class="viewer-item d-flex align-items-center justify-content-between mb-2{% if v.just_seen %} recent-viewer{% endif %}">
+  <a href="{% url 'start_chat' v.profile.user.id %}" class="btn btn-sm btn-outline-primary">💬</a>
+  <a href="{% url 'profile' v.profile.user.username %}" class="post-user text-decoration-none flex-grow-1 mx-2" style="background-color: {{ v.profile.bubble_color }};">
+    {% if v.profile.profile_picture %}
+    <img src="{{ v.profile.profile_picture_data_url }}" alt="{{ v.profile.user.username }}" class="post-avatar">
     {% else %}
     <img src="{{ default_avatar_data_url }}" alt="{% trans 'Default' %}" class="post-avatar">
     {% endif %}
-    <strong>{{ viewer.user.username }}</strong>
+    <strong>{{ v.profile.user.username }}</strong>
   </a>
   <div class="dropdown">
     <button class="dropdown-toggle btn btn-sm" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋯</button>
     <ul class="dropdown-menu">
-      <li><a href="{% url 'block_user' viewer.user.username %}" class="dropdown-item text-danger">{% trans "Block" %}</a></li>
-      <li><a href="{% url 'profile' viewer.user.username %}" class="dropdown-item">{% trans "View profile" %}</a></li>
-      <li><a href="{% url 'hide_stories' viewer.user.username %}" class="dropdown-item">{% trans "Hide stories" %}</a></li>
-      <li><a href="{% url 'remove_follower' viewer.user.username %}" class="dropdown-item">{% trans "Remove follower" %}</a></li>
+      <li><a href="{% url 'block_user' v.profile.user.username %}" class="dropdown-item text-danger">{% trans "Block" %}</a></li>
+      <li><a href="{% url 'profile' v.profile.user.username %}" class="dropdown-item">{% trans "View profile" %}</a></li>
+      <li><a href="{% url 'hide_stories' v.profile.user.username %}" class="dropdown-item">{% trans "Hide stories" %}</a></li>
+      <li><a href="{% url 'remove_follower' v.profile.user.username %}" class="dropdown-item">{% trans "Remove follower" %}</a></li>
     </ul>
   </div>
 </div>

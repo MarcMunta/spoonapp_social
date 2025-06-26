@@ -141,6 +141,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let holdStart = 0;
   let skipNavClick = false;
   const HOLD_THRESHOLD = 200;
+  let touchStartX = 0;
 
   function updateElapsed(createdIso) {
     if (!countdownEl) return;
@@ -240,7 +241,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((data) => {
         if (currentIsOwn && storyViews) {
           const countEl = storyViews.querySelector(".view-count");
-          if (countEl) countEl.textContent = data.views;
+          if (countEl) {
+            const old = parseInt(countEl.textContent) || 0;
+            countEl.textContent = data.views;
+            if (data.views > old) {
+              countEl.classList.add("animate-pop");
+              setTimeout(() => countEl.classList.remove("animate-pop"), 300);
+            }
+          }
         }
       });
   }
@@ -367,12 +375,23 @@ document.addEventListener("DOMContentLoaded", () => {
     resumeProgress();
   });
 
-  modalContent.addEventListener("touchstart", () => {
+  modalContent.addEventListener("touchstart", (e) => {
     holdStart = Date.now();
     pauseProgress();
+    touchStartX = e.touches[0].clientX;
   });
 
-  modalContent.addEventListener("touchend", () => {
+  modalContent.addEventListener("touchend", (e) => {
+    const diffX = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diffX) > 50 && Date.now() - holdStart < HOLD_THRESHOLD) {
+      if (diffX < 0) {
+        nextStory();
+      } else {
+        prevStory();
+      }
+      resumeProgress();
+      return;
+    }
     if (Date.now() - holdStart > HOLD_THRESHOLD) {
       skipNavClick = true;
     }
@@ -550,6 +569,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then((data) => {
           viewsModalBody.innerHTML = data.html;
+          viewsModal.classList.remove("closing");
           viewsModal.classList.add("show");
           pauseProgress();
         })
@@ -560,7 +580,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
-        viewsModal.classList.remove("show");
+        viewsModal.classList.add("closing");
+        setTimeout(() => {
+          viewsModal.classList.remove("show", "closing");
+        }, 300);
       }
     });
   }

@@ -48,7 +48,6 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'core.context_processors.friend_requests_processor',
                 'core.context_processors.base_context',
-                'core.views.base_context',
             ],
         },
     },

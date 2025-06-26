@@ -61,7 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       document.getElementById("storyForm").submit();
     });
     const addBtn = document.querySelector(".story-add");
-    if (addBtn) {
+    if (addBtn && !addBtn.classList.contains("profile-story-add")) {
       addBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         storyInput.click();

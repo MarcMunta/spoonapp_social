@@ -191,7 +191,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const type = currentTypes[idx] || "";
     const direction = idx > prevIndex ? "left" : "right";
     prevIndex = idx;
-    modal.style.setProperty("--bg-url", `url(${url})`);
     img.classList.remove("fade-in", "slide-left", "slide-right");
     video.classList.remove("fade-in", "slide-left", "slide-right");
     if (type.startsWith("video")) {
@@ -274,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (userContainer) {
       const profileUrl = el.dataset.profileUrl;
       const bubbleColor = el.dataset.bubbleColor || "#e0f5ff";
-      userContainer.innerHTML = `<a href="${profileUrl}" class="post-user text-decoration-none" style="background-color:${bubbleColor};">
+      userContainer.innerHTML = `<a href="${profileUrl}" class="post-user text-decoration-none" style="--bubble-color:${bubbleColor};">
             <img src="${el.dataset.avatarUrl}" class="post-avatar" width="40" height="40" alt="${el.dataset.user}">
             <strong>${el.dataset.user}</strong>
          </a>`;
@@ -313,7 +312,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function closeStories() {
     modal.style.display = "none";
     modalContent.classList.remove("open-anim");
-    modal.style.removeProperty("--bg-url");
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
     if (progressBar) progressBar.style.width = "0%";

@@ -364,19 +364,7 @@
     overflow: hidden;
 }
 
-.story-backdrop::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background-image: var(--bg-url);
-    background-size: cover;
-    background-position: center;
-    filter: blur(20px);
-    transform: scale(1.1);
-    opacity: 0.6;
-    transition: opacity 0.4s ease, transform 0.4s ease;
-    will-change: transform;
-}
+
 
 .story-modal.open-anim {
     animation: fadeIn 0.3s ease-out;
@@ -466,8 +454,7 @@
     padding: 4px 10px;
     border-radius: 18px;
     color: #fff;
-    background: linear-gradient(45deg, #ff00c8, #00e0ff);
-    animation: neonGlow 3s linear infinite alternate;
+    background-color: var(--bubble-color, #ff00c8);
 }
 
 .story-modal-user img {

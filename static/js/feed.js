@@ -205,6 +205,8 @@ document.addEventListener("DOMContentLoaded", () => {
       video.pause();
       img.classList.add(direction === "left" ? "slide-left" : "slide-right", "fade-in");
     }
+    modalContent.classList.add("shining");
+    setTimeout(() => modalContent.classList.remove("shining"), 600);
     if (progressBar) {
       progressBar.style.transition = "none";
       progressBar.style.width = "0%";

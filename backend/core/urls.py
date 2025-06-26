@@ -25,7 +25,6 @@ urlpatterns = [
         ),
         name="password_change",
     ),
-    path("profile/edit/privacy/", views.edit_profile, name="settings_privacy"),
     path('profile/<str:username>/', views.profile, name='profile'),
     path('friend-requests/', views.friend_requests_view, name='friend_requests'),
     path('friend-requests/accept/<int:req_id>/', views.accept_friend_request, name='accept_friend_request'),

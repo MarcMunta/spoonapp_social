@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib import messages
+from django.contrib.auth import update_session_auth_hash   # ⬅ lo usaremos
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
@@ -944,46 +945,53 @@ def get_notifications_count(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 @login_required(login_url='/custom-login/')
-def edit_profile(request):
-    user = request.user
-    profile = user.profile
+def edit_profile(request, section="general"):
+    """
+    section puede ser: general | password | privacy
+    """
+    user     = request.user
+    profile  = user.profile
 
+    # =====  Formularios siempre inicializados  =====
+    user_form      = UserForm(instance=user)
+    profile_form   = ProfileForm(instance=profile)
+    password_form  = PasswordChangeForm(user=user)
+    privacy_form   = PrivacySettingsForm(instance=profile)
+
+    # =====  Procesar POST  =====
     if request.method == "POST":
-        # Determina qué pestaña envía datos por la URL
-        target = request.GET.get("panel", "general")
-
-        if target == "password":
-            form = PasswordChangeForm(user, request.POST)
-            if form.is_valid():
-                form.save()
+        if section == "password":
+            password_form = PasswordChangeForm(user=user, data=request.POST)
+            if password_form.is_valid():
+                password_form.save()
+                update_session_auth_hash(request, password_form.user)  # no cerrar sesión
                 messages.success(request, _("Contraseña actualizada"))
-                return redirect("edit_profile")  # GET limpio
-        elif target == "privacy":
-            form = PrivacySettingsForm(request.POST, instance=profile)
-            if form.is_valid():
-                form.save()
-                messages.success(request, _("Privacidad actualizada"))
-                return redirect("edit_profile")
-        else:  # GENERAL
-            uform  = UserForm(request.POST, instance=user)
-            pform  = ProfileForm(request.POST, request.FILES, instance=profile)
-            if uform.is_valid() and pform.is_valid():
-                uform.save(); pform.save()
-                messages.success(request, _("Perfil actualizado"))
-                return redirect("edit_profile")
-    else:
-        uform  = UserForm(instance=user)
-        pform  = ProfileForm(instance=profile)
-        form   = None                         # para paneles secundarios
-        privacy_form  = PrivacySettingsForm(instance=profile)
-        password_form = PasswordChangeForm(user)
+                return redirect("edit_profile_section", section="password")
 
+        elif section == "privacy":
+            privacy_form = PrivacySettingsForm(request.POST, instance=profile)
+            if privacy_form.is_valid():
+                privacy_form.save()
+                messages.success(request, _("Opciones de privacidad guardadas"))
+                return redirect("edit_profile_section", section="privacy")
+
+        else:  # general
+            user_form    = UserForm(request.POST, instance=user)
+            profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+                messages.success(request, _("Perfil actualizado"))
+                return redirect("edit_profile")      # vuelve a pestaña general
+
+    # =====  Render  =====
     context = {
-        "user_form": uform,
-        "profile_form": pform,
-        "profile": profile,
+        "section": section,           # para mostrar pestaña activa
+        "user_form": user_form,
+        "profile_form": profile_form,
         "password_form": password_form,
         "privacy_form": privacy_form,
+        "profile": profile,
     }
     return render(request, "pages/edit_profile.html", context)
 

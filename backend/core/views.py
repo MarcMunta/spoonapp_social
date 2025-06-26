@@ -26,6 +26,9 @@ from django.utils import timezone
 from django.http import HttpResponseForbidden
 from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
+from django.views.i18n import set_language as django_set_language
+from django.core.management import call_command
+import sys
 import json
 
 def test_404_view(request):
@@ -46,6 +49,15 @@ def custom_403(request, exception):
 
 def custom_500(request):
     return render(request, 'errors/500.html', status=500)
+
+def set_language(request):
+    """Run Django's set_language view and compile translations."""
+    response = django_set_language(request)
+    try:
+        call_command('compilemessages', verbosity=0)
+    except Exception as exc:
+        print(f'Error compiling messages: {exc}', file=sys.stderr)
+    return response
 
 def _build_feed_context(request, show_posts=True):
     """Return context for feed-related views."""

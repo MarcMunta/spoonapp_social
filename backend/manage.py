@@ -3,11 +3,23 @@ import os
 import sys
 import shutil
 import subprocess
+from pathlib import Path
 
 def ensure_msgfmt():
     """Ensure the `msgfmt` binary is available, installing gettext if possible."""
     if shutil.which('msgfmt'):
         return
+
+    # Check for a bundled gettext distribution and prepend it to PATH
+    tools_dir = Path(__file__).resolve().parent / 'tools' / 'gettext' / 'bin'
+    for name in ('msgfmt', 'msgfmt.exe'):
+        candidate = tools_dir / name
+        if candidate.exists():
+            os.environ['PATH'] = f"{tools_dir}{os.pathsep}" + os.environ.get('PATH', '')
+            if shutil.which('msgfmt'):
+                return
+            break
+
     print('msgfmt not found. Attempting automatic installation of gettext...')
     try:
         if sys.platform.startswith('linux') and shutil.which('apt-get'):

@@ -318,7 +318,13 @@
     overflow-y: auto;
     transform: translateY(100%);
     opacity: 0;
-    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+    filter: blur(6px);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition:
+        transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.5s ease-out,
+        filter 0.5s ease-out,
+        box-shadow 0.5s ease-out;
 }
 
 .stories-container {
@@ -445,6 +451,8 @@
 .views-list-modal.show .views-list-content {
     transform: translateY(0);
     opacity: 1;
+    filter: blur(0);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 .story-modal-user a {

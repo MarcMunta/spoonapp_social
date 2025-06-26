@@ -17,7 +17,7 @@
   <form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="post-form">
     {% csrf_token %}
     <div id="dropZone" class="file-drop-zone">
-      <span class="file-drop-icon">📎👀</span>
+      <span class="file-drop-icon">📎</span>
       <span class="file-drop-text">{% trans "Drag an image here or click" %}</span>
       {{ post_form.image }}
     </div>

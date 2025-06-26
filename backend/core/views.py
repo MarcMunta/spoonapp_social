@@ -574,7 +574,7 @@ def search_users(request):
 
 @login_required(login_url='/custom-login/')
 def search_locations(request):
-    """Return towns and cities matching a query using Nominatim."""
+    """Return cities, towns or countries matching a query using Nominatim."""
     if request.method == "GET":
         query = request.GET.get("q", "").strip()
         if not query:
@@ -593,9 +593,16 @@ def search_locations(request):
         try:
             resp = requests.get(url, params=params, headers=headers, timeout=5)
             for item in resp.json():
-                if item.get("type") in {"city", "town", "village", "hamlet"}:
+                if item.get("type") in {"city", "town", "village", "hamlet", "administrative", "country"}:
                     addr = item.get("address", {})
-                    name = addr.get("city") or addr.get("town") or addr.get("village") or addr.get("hamlet") or item.get("display_name")
+                    name = (
+                        addr.get("city")
+                        or addr.get("town")
+                        or addr.get("village")
+                        or addr.get("hamlet")
+                        or addr.get("country")
+                        or item.get("display_name")
+                    )
                     results.append({"name": name, "display_name": item.get("display_name")})
                 if len(results) >= 5:
                     break

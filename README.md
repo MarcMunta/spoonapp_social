@@ -7,8 +7,10 @@ with [esbuild](https://esbuild.github.io/).
 
 ## Features
 * Instagram-style image posts
-* Comments, likes, and share counter
-* Profile view for each user
+* Likes, comments, and share counter
+* Public user profiles with photo, short bio, and counters
+* Follow / unfollow to build your network
+* Save favorites to revisit recipes or ideas later
 
 ## Frontend
 See `frontend/README.md` for setup and build instructions. After building, the

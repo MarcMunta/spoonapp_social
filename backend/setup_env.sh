@@ -1,32 +1,36 @@
 #!/bin/bash
 
+# Remove previous virtual environment if it exists
 if [ -d "env" ]; then
   rm -rf env
-  echo "Entorno virtual anterior eliminado."
+  echo "Previous virtual environment removed."
 fi
 
+# Create a new virtual environment
 python3 -m venv env
-echo "Entorno virtual creado."
+echo "Virtual environment created."
 
+# Activate the virtual environment
 source env/bin/activate
 
+# Install requirements if the file exists
 if [ -f "./backend/requirements.txt" ]; then
   pip3 install -r ./backend/requirements.txt
-  echo "Dependencias instaladas desde requirements.txt"
+  echo "Dependencies installed from requirements.txt"
 else
-  echo "No se encontró requirements.txt"
+  echo "requirements.txt not found"
 fi
 
 # Ensure googletrans is installed even if requirements are missing
 if ! pip3 show googletrans > /dev/null 2>&1; then
   pip3 install googletrans==4.0.0-rc1
-  echo "googletrans instalado."
+  echo "googletrans installed."
 fi
 
 # Ensure requests is installed even if requirements are missing
 if ! pip3 show requests > /dev/null 2>&1; then
   pip3 install requests
-  echo "requests instalado."
+  echo "requests installed."
 fi
 
 # Compile translation files using msgfmt if available
@@ -42,7 +46,7 @@ if command -v "$MSGFMT_CMD" >/dev/null 2>&1 || [ -x "$MSGFMT_CMD" ]; then
     mo_file="${po_file%.po}.mo"
     "$MSGFMT_CMD" "$po_file" -o "$mo_file"
   done
-  echo "Archivos de traducción compilados."
+  echo "Translation files compiled."
 else
-  echo "No se encontró msgfmt; se omitió la compilación de traducciones."
+  echo "msgfmt not found; skipped translation compilation."
 fi

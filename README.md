@@ -6,9 +6,17 @@ the modern JavaScript frontend lives inside the `frontend/` folder and is built
 with [esbuild](https://esbuild.github.io/).
 
 ## Features
-* Instagram-style image posts
-* Comments, likes, and share counter
-* Profile view for each user
+* Image posts with category tags
+* Comments with nested replies and likes
+* Post likes and share counter
+* Stories that disappear after 24 hours
+* Private messaging between friends
+* Friend requests and follower management
+* User profiles with custom avatar, bio and chat bubble color
+* Privacy settings, block list and hidden stories
+* Notifications for messages and friend events
+* User and location search
+* Multi-language support (English/Spanish) with automatic language detection
 
 ## Frontend
 See `frontend/README.md` for setup and build instructions. After building, the
@@ -41,10 +49,11 @@ The translations are automatically compiled whenever `manage.py` is executed,
 so you no longer need to run `django-admin compilemessages` manually. Selecting
 a different language in the app also recompiles the translations automatically.
 
-Run the Django development server:
+Run database migrations and start the development server:
 
 ```bash
 cd backend
+python manage.py migrate
 python manage.py runserver
 ```
 

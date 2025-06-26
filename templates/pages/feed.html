@@ -90,7 +90,7 @@
   <form method="post" action="{% url 'comment_post' post.id %}" class="comment-form mt-2">
     {% csrf_token %}
     {{ comment_form.content }}
-    <button type="submit" class="comment-btn">Comentar</button>
+    <button type="submit" class="comment-btn">{% trans "Comment" %}</button>
   </form>
   {% endif %}
   {% with comments=post.postcomment_set.all %}

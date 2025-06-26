@@ -52,7 +52,11 @@ class AutoLanguageMiddleware:
 
     def __call__(self, request):
         from django.utils import translation
-        from django.utils.translation import LANGUAGE_SESSION_KEY, get_language_from_request
+        try:
+            from django.utils.translation import LANGUAGE_SESSION_KEY
+        except ImportError:  # Django >=4 removed LANGUAGE_SESSION_KEY constant
+            LANGUAGE_SESSION_KEY = 'django_language'
+        from django.utils.translation import get_language_from_request
 
         if not request.session.get(LANGUAGE_SESSION_KEY):
             lang = get_language_from_request(request, check_path=False)

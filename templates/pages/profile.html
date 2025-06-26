@@ -159,8 +159,7 @@
   <!-- TABS DINÁMICAS -->
   <ul class="nav nav-tabs mb-4" id="categoryTabs">
     <li class="nav-item">
-      <a class="nav-link {% if selected_category == 'all' %}active{% endif %}" data-category="all" href="#">{% trans
-        "All Posts" %}</a>
+      <a class="nav-link {% if selected_category == 'all' %}active{% endif %}" data-category="all" href="#">{% trans "All Posts" %}</a>
     </li>
     {% for cat in categories %}
     {% if cat.slug %}

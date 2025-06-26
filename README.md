@@ -36,13 +36,13 @@ Ensure Python and Node.js are installed, then install Python dependencies from
 
 ```mermaid
 graph TD
-    A["📂 Root folder: `spoonapp_social`"] --> B{Sistema operativo}
-    B -->|Windows| C["Ejecuta<br/>`.\backend\setup_env.ps1`"]
-    B -->|macOS / Linux| D["Ejecuta<br/>`./backend/setup_env.sh`"]
-    C --> E["Entorno virtual activo"]
+    A["📂 Root folder:\nspoonapp_social"] --> B{Sistema operativo}
+    B -->|Windows| C["Ejecuta\n.\backend\setup_env.ps1"]
+    B -->|macOS / Linux| D["Ejecuta\n./backend/setup_env.sh"]
+    C --> E["Entorno virtual\nactivo"]
     D --> E
-    E --> F["`cd backend`"]
-    F --> G["`python manage.py runserver`"]
+    E --> F["cd backend"]
+    F --> G["python manage.py\nrunserver"]
 ```
 
 Build the frontend:

@@ -21,7 +21,12 @@ document.addEventListener('DOMContentLoaded', () => {
           const li = document.createElement('li');
           li.textContent = loc.display_name;
           li.addEventListener('click', () => {
-            input.value = loc.name;
+            let val = loc.display_name;
+            const max = input.getAttribute('maxlength');
+            if (max && val.length > parseInt(max)) {
+              val = val.slice(0, max);
+            }
+            input.value = val;
             list.innerHTML = '';
             list.style.display = 'none';
           });

@@ -21,10 +21,11 @@ urlpatterns = [
         "settings/password/",
         auth_views.PasswordChangeView.as_view(
             template_name="accounts/password_change.html",
-            success_url=reverse_lazy("edit_profile"),  # ⬅ redirige a tu panel
+            success_url=reverse_lazy("edit_profile"),
         ),
         name="password_change",
     ),
+    path("profile/edit/privacy/", views.edit_profile, name="settings_privacy"),
     path('profile/<str:username>/', views.profile, name='profile'),
     path('friend-requests/', views.friend_requests_view, name='friend_requests'),
     path('friend-requests/accept/<int:req_id>/', views.accept_friend_request, name='accept_friend_request'),

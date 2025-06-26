@@ -44,6 +44,8 @@
             <div class="post-categories">
                 {% for cat in post.categories.all %}
                 <span class="badge bg-secondary me-1">{{ cat.name|translate }}</span>
+
+                <span class="badge bg-secondary me-1">{{ cat }}</span>
                 {% endfor %}
             </div>
         </div>

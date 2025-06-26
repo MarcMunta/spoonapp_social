@@ -268,3 +268,23 @@ msgstr "Feicthe ag"
 #: templates/partials/stories/stories.html:95
 msgid "Delete this story permanently?"
 msgstr "Scrios an scéal seo go buan?"
+
+#: templates/partials/stories/story_viewers_list.html:21
+msgid "Block"
+msgstr "Bac a chur ar"
+
+#: templates/partials/stories/story_viewers_list.html:22
+msgid "View profile"
+msgstr "Féach Próifíl"
+
+#: templates/partials/stories/story_viewers_list.html:23
+msgid "Hide stories"
+msgstr "Folaigh scéalta"
+
+#: templates/partials/stories/story_viewers_list.html:24
+msgid "Remove follower"
+msgstr "Bain an leantóir"
+
+#: templates/partials/stories/story_viewers_list.html:27
+msgid "No views yet"
+msgstr "Níl aon amharc fós"

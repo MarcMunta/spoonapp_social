@@ -62,8 +62,21 @@ class CommentForm(forms.ModelForm):
 
 class UserForm(forms.ModelForm):
     class Meta:
-        model = User
-        fields = ['username'] 
+        model  = User
+        fields = ["username", "first_name", "last_name", "email"]
+        widgets = {
+            "username":   forms.TextInput(attrs={"class": "form-control"}),
+            "first_name": forms.TextInput(attrs={"class": "form-control"}),
+            "last_name":  forms.TextInput(attrs={"class": "form-control"}),
+            "email":      forms.EmailInput(attrs={"class": "form-control"}),
+        }
+        
+class PrivacySettingsForm(forms.ModelForm):
+    class Meta:
+        model  = Profile
+        fields = ["is_private", "email_notifications", "push_notifications"]
+        widgets = {f: forms.CheckboxInput() for f in fields}
+
 
 class ProfileForm(forms.ModelForm):
     profile_picture = forms.ImageField(required=False)

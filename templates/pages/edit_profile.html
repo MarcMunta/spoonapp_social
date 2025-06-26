@@ -4,54 +4,117 @@
 
 {% block title %}SpoonApp Social{% endblock %}
 
-{% block content %}
+{% block extra_css %}
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
-
 <link rel="stylesheet" href="{% static 'css/edit_profile.css' %}">
+{% endblock %}
 
-<div class="profile-card">
-    <div class="profile-header">
-        <h2>{% trans "Edit Profile" %}</h2>
-        <form method="post" enctype="multipart/form-data" id="photoUploadForm">
-            {% csrf_token %}
-            <div class="camera-icon-overlay">
-                <label for="id_profile_picture">
-                    {% if profile.profile_picture %}
-                    <img src="{{ profile.profile_picture_data_url }}" class="edit-profile-avatar" alt="Profile Picture">
-                    {% else %}
-                    <img src="{% static 'default-avatar.png' %}" class="edit-profile-avatar" alt="Default Avatar">
-                    {% endif %}
-                </label>
-                <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*"
-                    onchange="this.form.submit()" hidden>
-                <span class="camera-button">📷</span>
-            </div>
-        </form>
+{% block content %}
+<div class="profile-container">
+    <aside class="settings-nav">
+        <ul>
+            <li class="active" data-target="general">{% trans "General" %}</li>
+            <li data-target="password">{% trans "Password" %}</li>
+            <li data-target="privacy">{% trans "Privacy & Notifications" %}</li>
+            <li data-target="delete" class="danger">{% trans "Delete Account" %}</li>
+        </ul>
+    </aside>
 
-    </div>
+    <section class="settings-content">
+        <!-- GENERAL -->
+        <div id="panel-general" class="settings-panel active">
+            <form method="post" enctype="multipart/form-data" action="{% url 'edit_profile' %}" class="profile-form">
+                {% csrf_token %}
+                <div class="avatar-field">
+                    <label for="id_profile_picture" class="avatar-wrapper">
+                        {% if profile.profile_picture %}
+                        <img src="{{ profile.profile_picture_data_url }}" class="edit-profile-avatar"
+                            alt="{% trans 'Profile Picture' %}">
+                        {% else %}
+                        <img src="{% static 'default-avatar.png' %}" class="edit-profile-avatar"
+                            alt="{% trans 'Default Avatar' %}">
+                        {% endif %}
+                        <span class="camera-button">📷</span>
+                    </label>
+                    <input type="file" name="profile_picture" id="id_profile_picture" accept="image/*" hidden>
+                </div>
 
-    <form method="post" enctype="multipart/form-data" class="profile-form">
-        {% csrf_token %}
-        <label for="{{ user_form.username.id_for_label }}">{% trans "Username" %}</label>
-        <input type="text" name="{{ user_form.username.name }}" id="{{ user_form.username.id_for_label }}"
-            value="{{ user_form.username.value }}" class="form-control" placeholder="{% trans 'Your username' %}">
+                {{ user_form.non_field_errors }}
+                <div class="field-group">
+                    {{ user_form.username.label_tag }}
+                    {{ user_form.username }}
+                </div>
+                <div class="field-group">
+                    {{ user_form.email.label_tag }}
+                    {{ user_form.email }}
+                </div>
 
-        <label for="{{ form.bio.id_for_label }}">{% trans "Biography" %}</label>
-        {{ form.bio }}
+                {{ profile_form.non_field_errors }}
+                <div class="field-group">
+                    {{ profile_form.bio.label_tag }}
+                    {{ profile_form.bio }}
+                </div>
+                <div class="field-group">
+                    {{ profile_form.website.label_tag }}
+                    {{ profile_form.website }}
+                </div>
+                <div class="field-group">
+                    {{ profile_form.location.label_tag }}
+                    {{ profile_form.location }}
+                </div>
+                <div class="field-group">
+                    {{ profile_form.gender.label_tag }}
+                    {{ profile_form.gender }}
+                </div>
 
-        <label for="{{ form.website.id_for_label }}">{% trans "Website" %}</label>
-        {{ form.website }}
+                <button type="submit" class="btn-primary">{% trans "Save changes" %}</button>
+            </form>
+        </div>
 
-        <label for="{{ form.location.id_for_label }}">{% trans "Location" %}</label>
-        {{ form.location }}
+        <!-- PASSWORD -->
+        <div id="panel-password" class="settings-panel">
+            <form method="post" action="{% url 'password_change' %}" class="profile-form">
+                {% csrf_token %}
+                {{ password_form.as_p }}
+                <button type="submit" class="btn-primary">{% trans "Change password" %}</button>
+            </form>
+        </div>
 
-        <label for="{{ form.gender.id_for_label }}">{% trans "Gender" %}</label>
-        {{ form.gender }}
+        <!-- PRIVACY -->
+        <div id="panel-privacy" class="settings-panel">
+            <form method="post" action="{% url 'settings_privacy' %}" class="profile-form">
+                {% csrf_token %}
+                {{ privacy_form.as_p }}
+                <button type="submit" class="btn-primary">{% trans "Save settings" %}</button>
+            </form>
+        </div>
 
-        <button type="submit">{% trans "Save changes" %}</button>
-    </form>
-
-    <a href="{% url 'profile' request.user.username %}" class="back-link">← {% trans "Back to profile" %}</a>
+        <!-- DELETE -->
+        <div id="panel-delete" class="settings-panel">
+            <h3>{% trans "Delete your account" %}</h3>
+            <p class="attention-text">{% trans "Deleting your account is permanent. All your photos, comments, likes and
+                followers will be removed." %}</p>
+            <form method="post" action="{% url 'account_delete' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn-danger">{% trans "Yes, delete my account" %}</button>
+            </form>
+        </div>
+    </section>
 </div>
 
+<a href="{% url 'profile' request.user.username %}" class="back-link">← {% trans "Back to profile" %}</a>
+
+<!-- Tiny vanilla JS to switch tabs -->
+<script>
+    document.querySelectorAll('.settings-nav li').forEach(tab => {
+        tab.addEventListener('click', () => {
+            // nav active
+            document.querySelectorAll('.settings-nav li').forEach(el => el.classList.remove('active'));
+            tab.classList.add('active');
+            // panels
+            document.querySelectorAll('.settings-panel').forEach(panel => panel.classList.remove('active'));
+            document.getElementById('panel-' + tab.dataset.target).classList.add('active');
+        });
+    });
+</script>
 {% endblock %}

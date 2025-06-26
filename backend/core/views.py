@@ -1,9 +1,12 @@
 from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
+from .forms import UserForm, ProfileForm, PrivacySettingsForm 
 from .models import (
     Post,
     PostLike,
@@ -28,6 +31,7 @@ from django.db.models import Q, Prefetch, Count
 from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
+from django.utils.translation import gettext as _
 import sys
 import json
 
@@ -941,28 +945,55 @@ def get_notifications_count(request):
 
 @login_required(login_url='/custom-login/')
 def edit_profile(request):
-    profile = request.user.profile
-    if request.method == 'POST':
-        user_form = UserForm(request.POST or None, instance=request.user)
-        profile_form = ProfileForm(request.POST, request.FILES, instance=profile)
-        if 'profile_picture' in request.FILES and not request.POST.get('username'):
-            if profile_form.is_valid():
-                profile_form.save()
-                return redirect('edit_profile')
-        elif user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            profile.refresh_from_db()
-            return redirect('profile', request.user.username)
-    else:
-        user_form = UserForm(instance=request.user)
-        profile_form = ProfileForm(instance=profile)
+    user = request.user
+    profile = user.profile
 
-    return render(request, 'pages/edit_profile.html', {
-        'user_form': user_form,
-        'form': profile_form,
-        'profile': profile
-    })
+    if request.method == "POST":
+        # Determina qué pestaña envía datos por la URL
+        target = request.GET.get("panel", "general")
+
+        if target == "password":
+            form = PasswordChangeForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _("Contraseña actualizada"))
+                return redirect("edit_profile")  # GET limpio
+        elif target == "privacy":
+            form = PrivacySettingsForm(request.POST, instance=profile)
+            if form.is_valid():
+                form.save()
+                messages.success(request, _("Privacidad actualizada"))
+                return redirect("edit_profile")
+        else:  # GENERAL
+            uform  = UserForm(request.POST, instance=user)
+            pform  = ProfileForm(request.POST, request.FILES, instance=profile)
+            if uform.is_valid() and pform.is_valid():
+                uform.save(); pform.save()
+                messages.success(request, _("Perfil actualizado"))
+                return redirect("edit_profile")
+    else:
+        uform  = UserForm(instance=user)
+        pform  = ProfileForm(instance=profile)
+        form   = None                         # para paneles secundarios
+        privacy_form  = PrivacySettingsForm(instance=profile)
+        password_form = PasswordChangeForm(user)
+
+    context = {
+        "user_form": uform,
+        "profile_form": pform,
+        "profile": profile,
+        "password_form": password_form,
+        "privacy_form": privacy_form,
+    }
+    return render(request, "pages/edit_profile.html", context)
+
+@login_required(login_url='/custom-login/')
+def delete_account(request):
+    if request.method == "POST":
+        user = request.user
+        user.delete()
+        return redirect("home")
+    return render(request, "pages/confirm_delete.html")
 
 def custom_404(request, exception):
     return render(request, 'errors/404.html', status=404)

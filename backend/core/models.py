@@ -184,6 +184,8 @@ class FriendRequest(models.Model):
 class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     is_private = models.BooleanField(default=False)
+    email_notifications = models.BooleanField(default=True)
+    push_notifications = models.BooleanField(default=True)
     profile_picture = models.BinaryField(null=True, blank=True, editable=True)
     profile_picture_mime = models.CharField(max_length=100, null=True, blank=True)
     last_seen = models.DateTimeField(auto_now=True)

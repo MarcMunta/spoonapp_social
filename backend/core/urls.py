@@ -1,5 +1,6 @@
-from django.urls import path
+from django.urls import path, reverse_lazy
 from . import views
+from django.contrib.auth import views as auth_views
 
 urlpatterns = [
     path('', views.home, name='home'),
@@ -15,6 +16,16 @@ urlpatterns = [
     path('comment/<int:comment_id>/like/', views.like_comment, name='like_comment'),
     path('comment/<int:comment_id>/delete/', views.delete_comment, name='delete_comment'),
     path('profile/edit/', views.edit_profile, name='edit_profile'),
+    path("settings/delete/", views.delete_account, name="account_delete"),
+    path(
+        "settings/password/",
+        auth_views.PasswordChangeView.as_view(
+            template_name="accounts/password_change.html",
+            success_url=reverse_lazy("edit_profile"),  # ⬅ redirige a tu panel
+        ),
+        name="password_change",
+    ),
+    path("profile/edit/privacy/", views.edit_profile, name="settings_privacy"),
     path('profile/<str:username>/', views.profile, name='profile'),
     path('friend-requests/', views.friend_requests_view, name='friend_requests'),
     path('friend-requests/accept/<int:req_id>/', views.accept_friend_request, name='accept_friend_request'),

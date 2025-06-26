@@ -31,10 +31,11 @@ See `frontend/README.md` for setup and build instructions. After building, the
 bundle is placed in `backend/static/js/main.js` and automatically loaded on the home page.
 
 ## Running
-Ensure Python and Node.js are installed, then install Python dependencies:
+Ensure Python and Node.js are installed, then install Python dependencies from
+`requirements.txt`:
 
 ```bash
-pip install Django Pillow
+pip install -r backend/requirements.txt
 ```
 
 Build the frontend:

@@ -16,7 +16,7 @@
         <div class="col-md-4 col-lg-4">
             <div class="spoon-chat-sidebar">
                 <div class="spoon-chat-header">
-                    <h1 class="spoon-chat-title">SpoonChats</h1>
+                    <h1 class="spoon-chat-title">{% trans "SpoonChats" %}</h1>
                 </div>
 
                 {% if chat_data %}
@@ -25,14 +25,14 @@
                     <div class="spoon-chat-item d-flex align-items-center">
                         <div class="spoon-avatar-container">
                             {% if data.other_user.profile.profile_picture %}
-                            <img src="{{ data.other_user.profile.profile_picture_data_url }}" alt="Profile"
+                            <img src="{{ data.other_user.profile.profile_picture_data_url }}" alt="{% trans 'Profile' %}"
                                 class="spoon-avatar"
                                 onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{% url 'profile' data.other_user.username %}';"
-                                title="View {{ data.other_user.username }}'s profile">
+                                title="{% trans 'View' %} {{ data.other_user.username }}'s profile">
                             {% else %}
-                            <img src="{{ default_avatar_data_url }}" alt="Default" class="spoon-avatar"
+                            <img src="{{ default_avatar_data_url }}" alt="{% trans 'Default' %}" class="spoon-avatar"
                                 onclick="event.preventDefault(); event.stopPropagation(); window.location.href='{% url 'profile' data.other_user.username %}';"
-                                title="View {{ data.other_user.username }}'s profile">
+                                title="{% trans 'View' %} {{ data.other_user.username }}'s profile">
                             {% endif %}
 
                             {% if data.other_user.profile.online %}
@@ -50,9 +50,9 @@
 
                             <div class="d-flex justify-content-between align-items-center">
                                 {% if data.last_message %}
-                                <div class="spoon-last-message">Last message at {{ data.last_message.sent_at|localtime|date:"H:i" }}</div>
+                                <div class="spoon-last-message">{% trans 'Last message at' %} {{ data.last_message.sent_at|localtime|date:"H:i" }}</div>
                                 {% else %}
-                                <div class="spoon-last-message">New message</div>
+                                <div class="spoon-last-message">{% trans 'New message' %}</div>
                                 {% endif %}
 
                                 {% if data.unread_count > 0 %}
@@ -61,7 +61,7 @@
                             </div>
 
                             {% if data.other_user.profile.online %}
-                            <div class="spoon-status-indicator mt-1">Online now</div>
+                            <div class="spoon-status-indicator mt-1">{% trans 'Online now' %}</div>
                             {% endif %}
                         </div>
                     </div>
@@ -70,8 +70,8 @@
                 {% else %}
                 <div class="text-center p-4">
                     <div class="spoon-empty-icon">🍴💭</div>
-                    <h6 class="text-muted">No SpoonChats yet</h6>
-                    <p class="text-muted small">Connect with friends and start sharing your culinary adventures!</p>
+                    <h6 class="text-muted">{% trans 'No SpoonChats yet' %}</h6>
+                    <p class="text-muted small">{% blocktrans %}Connect with friends and start sharing your culinary adventures!{% endblocktrans %}</p>
                 </div>
                 {% endif %}
             </div>
@@ -80,9 +80,9 @@
         <div class="col-md-8 col-lg-8">
             <div class="spoon-empty-state">
                 <div class="spoon-empty-icon">🍽️💬✨</div>
-                <h4>Welcome to SpoonChats!</h4>
-                <p class="mb-0">Select a conversation to start sharing your food experiences</p>
-                <small class="text-muted mt-2">Where every message is seasoned with friendship 🧂❤️</small>
+                <h4>{% trans "Welcome to SpoonChats!" %}</h4>
+                <p class="mb-0">{% blocktrans %}Select a conversation to start sharing your food experiences{% endblocktrans %}</p>
+                <small class="text-muted mt-2">{% blocktrans %}Where every message is seasoned with friendship 🧂❤️{% endblocktrans %}</small>
             </div>
         </div>
     </div>

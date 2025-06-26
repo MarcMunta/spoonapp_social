@@ -70,13 +70,13 @@
         <h2>{{ profile_user.username }}</h2>
         {% if request.user != profile_user %}
         {% if is_friend %}
-        <a href="{% url 'unfollow' profile_user.username %}" class="btn btn-danger">Unfollow</a>
+        <a href="{% url 'unfollow' profile_user.username %}" class="btn btn-danger">{% trans 'Unfollow' %}</a>
         {% elif is_following %}
-        <a href="{% url 'cancel_request' profile_user.username %}" class="btn btn-secondary">Cancel Request</a>
+        <a href="{% url 'cancel_request' profile_user.username %}" class="btn btn-secondary">{% trans 'Cancel Request' %}</a>
         {% elif is_followed_by %}
-        <a href="{% url 'follow' profile_user.username %}" class="btn btn-success">Follow back</a>
+        <a href="{% url 'follow' profile_user.username %}" class="btn btn-success">{% trans 'Follow back' %}</a>
         {% else %}
-        <a href="{% url 'follow' profile_user.username %}" class="btn btn-primary">Follow</a>
+        <a href="{% url 'follow' profile_user.username %}" class="btn btn-primary">{% trans 'Follow' %}</a>
         {% endif %}
         {% else %}
         <div class="d-flex align-items-center gap-2">

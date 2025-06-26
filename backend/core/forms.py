@@ -17,7 +17,7 @@ class PostForm(forms.ModelForm):
             'caption': forms.Textarea(
                 attrs={
                     'rows': 3,
-                    'placeholder': '',
+                    'placeholder': _('What\'s on your spoon?'),
                     'class': 'caption-input',
                 }
             ),

@@ -267,7 +267,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (storyOptions)
       storyOptions.style.display = currentIsOwn ? "block" : "none";
     if (storyViews) {
-      storyViews.style.display = currentIsOwn ? "block" : "none";
+      storyViews.style.display = currentIsOwn ? "flex" : "none";
       const countEl = storyViews.querySelector(".view-count");
       if (countEl) countEl.textContent = "";
     }

@@ -454,8 +454,7 @@
     padding: 4px 10px;
     border-radius: 18px;
     color: #fff;
-    background: linear-gradient(45deg, #ff00c8, #00e0ff);
-    animation: neonGlow 3s linear infinite alternate;
+    background-color: var(--bubble-color, #ff00c8);
 }
 
 .story-modal-user img {

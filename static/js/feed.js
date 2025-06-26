@@ -273,7 +273,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (userContainer) {
       const profileUrl = el.dataset.profileUrl;
       const bubbleColor = el.dataset.bubbleColor || "#e0f5ff";
-      userContainer.innerHTML = `<a href="${profileUrl}" class="post-user text-decoration-none" style="background-color:${bubbleColor};">
+      userContainer.innerHTML = `<a href="${profileUrl}" class="post-user text-decoration-none" style="--bubble-color:${bubbleColor};">
             <img src="${el.dataset.avatarUrl}" class="post-avatar" width="40" height="40" alt="${el.dataset.user}">
             <strong>${el.dataset.user}</strong>
          </a>`;

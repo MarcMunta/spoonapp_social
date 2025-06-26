@@ -2,7 +2,10 @@ from django import template
 from django.urls import reverse
 from django.contrib.auth.models import User
 from django.utils.safestring import mark_safe
-from django.utils.translation import gettext
+from django.utils.translation import gettext, get_language
+from googletrans import Translator
+
+_translator = Translator()
 import re
 
 register = template.Library()
@@ -47,10 +50,17 @@ def censor_bad_words(text):
 
 @register.filter
 def translate(value):
-    """Translate a dynamic string if a translation exists."""
+    """Translate a dynamic string using gettext or fallback to Google Translate."""
     if value is None:
         return ''
-    try:
-        return gettext(str(value))
-    except Exception:
-        return value
+
+    value = str(value)
+    translated = gettext(value)
+
+    if translated == value:
+        try:
+            translated = _translator.translate(value, dest=get_language() or 'en').text
+        except Exception:
+            pass
+
+    return translated

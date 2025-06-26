@@ -104,6 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentTypes = [];
   let currentExpires = [];
   let currentIndex = 0;
+  let prevIndex = 0;
   let progressTimeout;
   let countdownInterval;
   let storyStart = 0;
@@ -184,15 +185,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (viewsModal) viewsModal.classList.remove("show");
     const url = currentUrls[idx];
     const type = currentTypes[idx] || "";
+    const direction = idx > prevIndex ? "left" : "right";
+    prevIndex = idx;
+    modal.style.setProperty("--bg-url", `url(${url})`);
+    img.classList.remove("fade-in", "slide-left", "slide-right");
+    video.classList.remove("fade-in", "slide-left", "slide-right");
     if (type.startsWith("video")) {
       video.src = url;
       video.classList.remove("d-none");
       img.classList.add("d-none");
+      video.classList.add(direction === "left" ? "slide-left" : "slide-right", "fade-in");
     } else {
       img.src = url;
       img.classList.remove("d-none");
       video.classList.add("d-none");
       video.pause();
+      img.classList.add(direction === "left" ? "slide-left" : "slide-right", "fade-in");
     }
     if (progressBar) {
       progressBar.style.transition = "none";
@@ -244,6 +252,7 @@ document.addEventListener("DOMContentLoaded", () => {
     currentCreated = el.dataset.created.split("|");
     currentStoryIds = el.dataset.storyId.split("|");
     currentIndex = 0;
+    prevIndex = 0;
     currentStoryElIndex = idx;
     currentIsOwn =
       el.dataset.own === "true" || el.dataset.user === currentUsername;
@@ -290,6 +299,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function closeStories() {
     modal.style.display = "none";
     modalContent.classList.remove("open-anim");
+    modal.style.removeProperty("--bg-url");
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
     if (progressBar) progressBar.style.width = "0%";

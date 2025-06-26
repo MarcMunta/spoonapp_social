@@ -534,6 +534,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then((data) => {
           viewsModalBody.innerHTML = data.html;
+          viewsModal.classList.remove("closing");
           viewsModal.classList.add("show");
           pauseProgress();
         })
@@ -544,7 +545,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
-        viewsModal.classList.remove("show");
+        viewsModal.classList.add("closing");
+        setTimeout(() => {
+          viewsModal.classList.remove("show", "closing");
+        }, 300);
       }
     });
   }

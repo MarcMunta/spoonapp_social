@@ -1,6 +1,8 @@
 // Prefix URLs with the current language code taken from the <html> tag.
 const LANG_PREFIX = `/${document.documentElement.lang}`;
 
+const popSound = new Audio('/static/audio/pop.wav');
+
 // Load dynamic translations from the template if available
 const JS_TRANSLATIONS = (() => {
   const el = document.getElementById('js-translations');
@@ -23,6 +25,7 @@ if (typeof getCSRFToken === "undefined") {
 }
 
 document.addEventListener("DOMContentLoaded", () => {
+  popSound.preload = "auto";
   const updateRelativeTimes = () => {
     document.querySelectorAll(".post-relative").forEach((el) => {
       const created = new Date(el.dataset.created);
@@ -104,6 +107,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentTypes = [];
   let currentExpires = [];
   let currentIndex = 0;
+  let prevIndex = 0;
   let progressTimeout;
   let countdownInterval;
   let storyStart = 0;
@@ -185,15 +189,22 @@ document.addEventListener("DOMContentLoaded", () => {
     if (viewsModal) viewsModal.classList.remove("show");
     const url = currentUrls[idx];
     const type = currentTypes[idx] || "";
+    const direction = idx > prevIndex ? "left" : "right";
+    prevIndex = idx;
+    modal.style.setProperty("--bg-url", `url(${url})`);
+    img.classList.remove("fade-in", "slide-left", "slide-right");
+    video.classList.remove("fade-in", "slide-left", "slide-right");
     if (type.startsWith("video")) {
       video.src = url;
       video.classList.remove("d-none");
       img.classList.add("d-none");
+      video.classList.add(direction === "left" ? "slide-left" : "slide-right", "fade-in");
     } else {
       img.src = url;
       img.classList.remove("d-none");
       video.classList.add("d-none");
       video.pause();
+      img.classList.add(direction === "left" ? "slide-left" : "slide-right", "fade-in");
     }
     if (progressBar) {
       progressBar.style.transition = "none";
@@ -246,12 +257,16 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentStoryElIndex = 0;
 
   function openStories(el, idx) {
+    el.classList.add("viewed");
+    popSound.currentTime = 0;
+    popSound.play().catch(() => { });
     currentUrls = el.dataset.urls.split("|");
     currentTypes = el.dataset.types.split("|");
     currentExpires = el.dataset.expires.split("|");
     currentCreated = el.dataset.created.split("|");
     currentStoryIds = el.dataset.storyId.split("|");
     currentIndex = 0;
+    prevIndex = 0;
     currentStoryElIndex = idx;
     currentIsOwn =
       el.dataset.own === "true" || el.dataset.user === currentUsername;
@@ -298,6 +313,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function closeStories() {
     modal.style.display = "none";
     modalContent.classList.remove("open-anim");
+    modal.style.removeProperty("--bg-url");
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
     if (progressBar) progressBar.style.width = "0%";
@@ -553,6 +569,7 @@ document.addEventListener("DOMContentLoaded", () => {
         })
         .then((data) => {
           viewsModalBody.innerHTML = data.html;
+          viewsModal.classList.remove("closing");
           viewsModal.classList.add("show");
           pauseProgress();
         })
@@ -563,7 +580,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
-        viewsModal.classList.remove("show");
+        viewsModal.classList.add("closing");
+        setTimeout(() => {
+          viewsModal.classList.remove("show", "closing");
+        }, 300);
       }
     });
   }
@@ -960,8 +980,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const container = btn.parentElement;
       const existingMoreBtn = container
         ? container.querySelector(
-            ".load-replies-btn[data-comment-id='" + commentId + "']"
-          )
+          ".load-replies-btn[data-comment-id='" + commentId + "']"
+        )
         : null;
       if (existingMoreBtn) {
         btn.remove();

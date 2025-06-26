@@ -122,7 +122,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: #0d6efd;
+    background: linear-gradient(90deg, #ff00c8, #00e0ff);
+    background-size: 200% 100%;
+    animation: gradientMove 2s linear infinite;
 }
 
 .story-header {
@@ -136,6 +138,20 @@
     width: 100%;
     object-fit: cover;
     border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    opacity: 0;
+}
+
+.fade-in {
+    animation: imageFadeIn 0.4s forwards;
+}
+
+.slide-left {
+    animation: slideLeft 0.35s forwards;
+}
+
+.slide-right {
+    animation: slideRight 0.35s forwards;
 }
 
 .story-views {
@@ -183,7 +199,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: #0d6efd;
+    background: linear-gradient(90deg, #ff00c8, #00e0ff);
+    background-size: 200% 100%;
+    animation: gradientMove 2s linear infinite;
 }
 
 #storyImage,
@@ -333,11 +351,26 @@
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.7);
+    background-color: rgba(0, 0, 0, 0.6);
     align-items: center;
     justify-content: center;
     z-index: 2000;
     padding: 10px;
+    overflow: hidden;
+}
+
+.story-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg-url);
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px);
+    transform: scale(1.1);
+    opacity: 0.6;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    will-change: transform;
 }
 
 .story-modal.open-anim {
@@ -419,9 +452,11 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 4px 8px;
-    border-radius: 20px;
-    background: rgba(0, 0, 0, 0.4);
+    padding: 4px 10px;
+    border-radius: 18px;
+    color: #fff;
+    background: linear-gradient(45deg, #ff00c8, #00e0ff);
+    animation: neonGlow 3s linear infinite alternate;
 }
 
 .story-modal-user img {
@@ -431,6 +466,34 @@
     object-fit: cover;
 }
 
+@keyframes neonGlow {
+    from {
+        box-shadow: 0 0 4px #ff00c8, 0 0 8px #ff00c8;
+    }
+    to {
+        box-shadow: 0 0 4px #00e0ff, 0 0 8px #00e0ff;
+    }
+}
+
+@keyframes imageFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideLeft {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideRight {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes gradientMove {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
+  
 @keyframes rotate-gradient {
     from {
         transform: rotate(0deg);

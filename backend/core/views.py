@@ -33,6 +33,7 @@ from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
 from django.utils.translation import gettext as _
+import requests
 import sys
 import json
 
@@ -567,6 +568,39 @@ def search_users(request):
                 "email": user.email,
                 "avatar": avatar,
             })
+
+        return JsonResponse(results, safe=False)
+
+
+@login_required(login_url='/custom-login/')
+def search_locations(request):
+    """Return towns and cities matching a query using Nominatim."""
+    if request.method == "GET":
+        query = request.GET.get("q", "").strip()
+        if not query:
+            return JsonResponse([], safe=False)
+
+        url = "https://nominatim.openstreetmap.org/search"
+        params = {
+            "q": query,
+            "format": "json",
+            "addressdetails": 1,
+            "limit": 5,
+            "accept-language": request.LANGUAGE_CODE,
+        }
+        headers = {"User-Agent": "SpoonApp Social"}
+        results = []
+        try:
+            resp = requests.get(url, params=params, headers=headers, timeout=5)
+            for item in resp.json():
+                if item.get("type") in {"city", "town", "village", "hamlet"}:
+                    addr = item.get("address", {})
+                    name = addr.get("city") or addr.get("town") or addr.get("village") or addr.get("hamlet") or item.get("display_name")
+                    results.append({"name": name, "display_name": item.get("display_name")})
+                if len(results) >= 5:
+                    break
+        except Exception:
+            results = []
 
         return JsonResponse(results, safe=False)
 

@@ -1,0 +1,42 @@
+document.addEventListener('DOMContentLoaded', () => {
+  const input = document.getElementById('id_location');
+  if (!input) return;
+  input.setAttribute('autocomplete', 'off');
+  const list = document.createElement('ul');
+  list.className = 'autocomplete-list';
+  input.parentNode.appendChild(list);
+
+  input.addEventListener('input', () => {
+    const q = input.value.trim();
+    list.innerHTML = '';
+    if (q.length < 2) {
+      list.style.display = 'none';
+      return;
+    }
+    fetch(`${LANG_PREFIX}/api/location-search/?q=${encodeURIComponent(q)}`)
+      .then(res => res.json())
+      .then(data => {
+        list.innerHTML = '';
+        data.forEach(loc => {
+          const li = document.createElement('li');
+          li.textContent = loc.display_name;
+          li.addEventListener('click', () => {
+            input.value = loc.name;
+            list.innerHTML = '';
+            list.style.display = 'none';
+          });
+          list.appendChild(li);
+        });
+        list.style.display = data.length ? 'block' : 'none';
+      })
+      .catch(() => {
+        list.style.display = 'none';
+      });
+  });
+
+  document.addEventListener('click', (e) => {
+    if (e.target !== input && !list.contains(e.target)) {
+      list.style.display = 'none';
+    }
+  });
+});

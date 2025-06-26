@@ -1,3 +1,4 @@
+{% load i18n %}
 {% for viewer in viewers %}
 <div class="viewer-item d-flex align-items-center justify-content-between mb-2">
   <a href="{% url 'start_chat' viewer.user.id %}" class="btn btn-sm btn-outline-primary">💬</a>

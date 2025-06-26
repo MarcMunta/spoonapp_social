@@ -4,6 +4,7 @@
   background-size: 200% 200%;
   animation: gradientMove 8s ease infinite;
   padding: 2rem;
+  margin-top: 2rem;
   border-radius: 2rem;
   box-shadow: 0 0 20px rgba(255, 200, 240, 0.5);
   overflow: hidden;
@@ -59,6 +60,9 @@
 
 .textarea-wrapper {
   position: relative;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .textarea-wrapper textarea {
@@ -87,12 +91,31 @@
   font-size: 0.8rem;
 }
 
+.category-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
 .category-wrapper select {
+  width: 100%;
+  text-align: center;
   border-radius: 1rem;
-  padding: 0.6rem;
-  background: rgba(255,255,255,0.6);
-  backdrop-filter: blur(8px);
+  padding: 0.8rem;
+  background: linear-gradient(135deg, #f8c5ff, #c9f);
   border: none;
+  font-weight: bold;
+  color: #333;
+}
+
+.category-wrapper select option {
+  text-align: center;
+}
+
+.caption-icon,
+.category-icon {
+  font-size: 1.2rem;
+  margin-right: 0.3rem;
 }
 
 .publish-btn {

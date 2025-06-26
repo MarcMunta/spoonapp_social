@@ -1,0 +1,21 @@
+#!/usr/bin/env bash
+# Compile translation files using msgfmt
+set -e
+
+MSGFMT="./tools/gettext/bin/msgfmt"
+if [ ! -x "$MSGFMT" ]; then
+    MSGFMT="$(command -v msgfmt)"
+fi
+
+if [ -z "$MSGFMT" ]; then
+    echo "msgfmt not found. Please install gettext." >&2
+    exit 1
+fi
+
+for po in $(find locale -name '*.po'); do
+    mo="${po%.po}.mo"
+    echo "Compiling $po -> $mo"
+    "$MSGFMT" "$po" -o "$mo"
+done
+
+echo "Translations compiled successfully."

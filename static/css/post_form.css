@@ -76,20 +76,6 @@
   min-height: 80px;
 }
 
-.textarea-wrapper label.float-label {
-  position: absolute;
-  left: 1rem;
-  top: 1rem;
-  color: #555;
-  pointer-events: none;
-  transition: transform 0.2s, font-size 0.2s;
-}
-
-.textarea-wrapper.focused label,
-.textarea-wrapper textarea.filled + label {
-  transform: translateY(-1.2rem);
-  font-size: 0.8rem;
-}
 
 .category-wrapper {
   display: flex;

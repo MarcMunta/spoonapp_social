@@ -126,7 +126,7 @@
         {% if user_profile.bio %}
         <div class="profile-info-box">
           <span class="info-label">{% trans "Biografía:" %}</span>
-          <span class="info-content">{{ user_profile.bio }}</span>
+          <span class="info-content">{{ user_profile.bio|translate }}</span>
         </div>
         {% endif %}
         {% if user_profile.website %}

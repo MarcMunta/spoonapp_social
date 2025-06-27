@@ -146,8 +146,9 @@ class StoryForm(forms.ModelForm):
                     img = Image.open(BytesIO(data))
                     img = ImageOps.exif_transpose(img)
                     buffer = BytesIO()
-                    img.save(buffer, format=img.format or "JPEG")
+                    img.convert("RGB").save(buffer, format="JPEG")
                     data = buffer.getvalue()
+                    mime = "image/jpeg"
                 except Exception:
                     pass
             instance.media_data = data

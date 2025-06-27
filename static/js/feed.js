@@ -112,9 +112,10 @@ onReady(() => {
   }
 
   document.querySelectorAll(".story-thumb").forEach((el) => {
-    const color = el.dataset.bubbleColor;
-    if (color) {
-      el.style.setProperty("--story-color", color);
+    if (el.classList.contains("open-story")) {
+      el.style.setProperty("--story-color", "#0d6efd");
+    } else {
+      el.style.setProperty("--story-color", "#adb5bd");
     }
   });
 

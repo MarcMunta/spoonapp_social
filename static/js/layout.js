@@ -214,3 +214,18 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 });
+
+document.addEventListener("DOMContentLoaded", () => {
+  if (!document.body.classList.contains("home-page")) return;
+  const bubbles = document.querySelectorAll(
+    ".friends-bubbles .friend-bubble"
+  );
+  bubbles.forEach((bubble, idx) => {
+    bubble.style.opacity = "0";
+    bubble.style.transform = "translateY(40px)";
+    bubble.style.setProperty("--delay", `${idx * 0.1}s`);
+  });
+  requestAnimationFrame(() => {
+    bubbles.forEach((bubble) => bubble.classList.add("friend-bounce"));
+  });
+});

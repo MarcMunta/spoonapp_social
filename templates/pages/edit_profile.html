@@ -92,8 +92,7 @@
         <!-- DELETE -->
         <div id="panel-delete" class="settings-panel">
             <h3>{% trans "Delete your account" %}</h3>
-            <p class="attention-text">{% trans "Deleting your account is permanent. All your photos, comments, likes and
-                followers will be removed." %}</p>
+            <p class="attention-text">{% trans "Deleting your account is permanent. All your photos, comments, likes and followers will be removed." %}</p>
             <form method="post" action="{% url 'account_delete' %}">
                 {% csrf_token %}
                 <button type="submit" class="btn-danger">{% trans "Yes, delete my account" %}</button>

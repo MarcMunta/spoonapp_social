@@ -50,15 +50,18 @@
 }
 
 .spoon-see-all {
-    color: #d48ac1;
+    color: #333;
+    background-color: #ffe066;
     text-decoration: none;
     font-size: 0.8rem;
-    padding: 6px 12px;
-    border: 1px solid #d48ac1;
-    border-radius: 5px;
+    padding: 10px 20px;
+    border: 1px solid #f2c94c;
+    border-radius: 12px;
     display: inline-block;
     white-space: nowrap;
     line-height: 1;
+    text-align: center;
+    font-weight: 600;
 }
 
 .spoon-notification-list {
@@ -380,15 +383,18 @@
 }
 
 .see-all {
-    color: #d48ac1;
+    color: #333;
+    background-color: #ffe066;
     text-decoration: none;
     font-size: 0.8rem;
-    padding: 6px 12px;
-    border: 1px solid #d48ac1;
-    border-radius: 5px;
+    padding: 10px 20px;
+    border: 1px solid #f2c94c;
+    border-radius: 12px;
     display: inline-block;
     white-space: nowrap;
     line-height: 1;
+    text-align: center;
+    font-weight: 600;
 }
 
 .notification-list {

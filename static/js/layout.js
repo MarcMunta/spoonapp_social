@@ -237,12 +237,17 @@ onReady(() => {
       (e) => {
         if (e.animationName === "friendBounce") {
           bubble.classList.add("friend-glow");
+          bubble.removeAttribute("style");
         }
       },
       { once: true }
     );
   });
   requestAnimationFrame(() => {
-    bubbles.forEach((bubble) => bubble.classList.add("friend-bounce"));
+    bubbles.forEach((bubble) => {
+      bubble.classList.remove("friend-bounce", "friend-glow");
+      void bubble.offsetWidth;
+      bubble.classList.add("friend-bounce");
+    });
   });
 });

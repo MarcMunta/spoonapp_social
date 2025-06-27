@@ -10,7 +10,7 @@ with [esbuild](https://esbuild.github.io/).
 * Comments with nested replies and likes
 * Post likes and share counter
 * Stories that disappear after 24 hours
-* Private messaging between friends
+* Private messaging between friends (non-friends can only send one message)
 * Friend requests and follower management
 * User profiles with custom avatar, bio and chat bubble color
 * Privacy settings, block list and hidden stories

@@ -568,17 +568,30 @@ def search_users(request):
         if not query:
             return JsonResponse([], safe=False)
 
-        users = User.objects.filter(
+        # Base queryset for matching users
+        qs = User.objects.filter(
             Q(username__icontains=query)
             | Q(email__icontains=query)
             | Q(first_name__icontains=query)
             | Q(last_name__icontains=query)
-        ).exclude(id=request.user.id)[:10]
+        ).exclude(id=request.user.id)
 
-        if request.user.is_authenticated:
-            blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
-            blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
-            users = users.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
+        qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+
+        # Gather friends of current user
+        friends_ids = list(get_friends(request.user).values_list('id', flat=True))
+
+        # Calculate mutual friends for ranking
+        candidates = list(qs[:20])
+        ranked = []
+        for u in candidates:
+            mutual_count = get_friends(u).filter(id__in=friends_ids).count()
+            ranked.append((mutual_count, u))
+
+        ranked.sort(key=lambda x: (-x[0], x[1].username))
+        users = [u for _, u in ranked][:10]
 
         results = []
         for user in users:

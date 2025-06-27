@@ -95,7 +95,7 @@ body {
     border-radius: 50%;
     border: 3px solid white;
     box-shadow: 0 2px 8px rgba(34, 197, 94, 0.5);
-    animation: pulse-online 2.5s infinite;
+    animation: pulse-online 5s infinite;
 }
 
 .spoon-friend-name {

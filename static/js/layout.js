@@ -61,6 +61,19 @@ function getCSRFToken() {
   return cookie ? cookie.split("=")[1] : "";
 }
 
+function buildLangUrl(url, lang) {
+  try {
+    const u = new URL(url, window.location.origin);
+    const prefixPattern = /^\/(?:en|es)(?=\/|$)/;
+    u.pathname = u.pathname.replace(prefixPattern, "");
+    if (!u.pathname.startsWith("/")) u.pathname = "/" + u.pathname;
+    u.pathname = `/${lang}${u.pathname}`;
+    return u.pathname + u.search + u.hash;
+  } catch (e) {
+    return url;
+  }
+}
+
 onReady(() => {
   document
     .querySelectorAll("form.language-form select[name='language']")
@@ -68,13 +81,16 @@ onReady(() => {
       select.addEventListener("change", () => {
         const form = select.closest("form");
         const data = new FormData(form);
+        const lang = data.get("language");
+        const nextUrl = data.get("next") || window.location.href;
+        const redirectUrl = buildLangUrl(nextUrl, lang);
+        data.set("next", redirectUrl);
         fetch(form.action, {
           method: "POST",
           headers: { "X-CSRFToken": getCSRFToken() },
           body: data,
         }).then(() => {
-          const next = data.get("next") || window.location.href;
-          window.location.href = next;
+          window.location.href = redirectUrl;
         });
       });
     });

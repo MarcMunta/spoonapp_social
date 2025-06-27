@@ -64,7 +64,8 @@
                     {% for message in messages %}
                     <div class="d-flex {% if message.sender == user %}justify-content-end{% endif %} mb-3"
                         data-message-id="{{ message.id }}">
-                        <div class="chat-bubble {% if message.sender == user %}user{% else %}other{% endif %}">
+                        <div class="chat-bubble {% if message.sender == user %}user{% else %}other{% endif %}"
+                            style="--bubble-color: {{ message.sender.profile.bubble_color }};">
                             {% if message.story %}
                             {% if message.story.expires_at > now %}
                             {% if message.story.is_video %}

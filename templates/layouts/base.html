@@ -18,6 +18,7 @@
 </head>
 
 <body data-current-user="{% if user.is_authenticated %}{{ user.username }}{% endif %}"
+  data-bubble-color="{% if user.is_authenticated %}{{ user.profile.bubble_color }}{% endif %}"
   class="{% block body_class %}{% endblock %}">
   <div class="topbar">
     <div class="app-title">

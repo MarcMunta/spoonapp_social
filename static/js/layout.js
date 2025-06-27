@@ -231,7 +231,16 @@ onReady(() => {
   bubbles.forEach((bubble, idx) => {
     bubble.style.opacity = "0";
     bubble.style.transform = "translateY(40px)";
-    bubble.style.animationDelay = `${idx * 0.1}s`;
+    bubble.style.animationDelay = `${idx * 0.15}s`;
+    bubble.addEventListener(
+      "animationend",
+      (e) => {
+        if (e.animationName === "friendBounce") {
+          bubble.classList.add("friend-glow");
+        }
+      },
+      { once: true }
+    );
   });
   requestAnimationFrame(() => {
     bubbles.forEach((bubble) => bubble.classList.add("friend-bounce"));

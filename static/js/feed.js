@@ -550,6 +550,7 @@ onReady(() => {
                 "storyId",
                 "own",
               ].forEach((attr) => clone.removeAttribute(`data-${attr}`));
+              clone.removeAttribute("style");
               storyEl.parentNode.replaceChild(clone, storyEl);
               storyEls.splice(currentStoryElIndex, 1);
             } else {

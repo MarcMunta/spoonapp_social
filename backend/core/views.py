@@ -847,6 +847,17 @@ def chat_detail(request, chat_id):
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
         if content:
+            are_friends = FriendRequest.objects.filter(
+                ((Q(from_user=request.user) & Q(to_user=other_user)) |
+                 (Q(from_user=other_user) & Q(to_user=request.user))) & Q(accepted=True)
+            ).exists()
+
+            # Limit non-friends to a single message
+            if not are_friends and Message.objects.filter(chat=chat, sender=request.user).exists():
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({'error': _('You can only send one message to non-friends.')}, status=403)
+                return redirect('chat_detail', chat_id=chat.id)
+
             message = Message.objects.create(
                 chat=chat,
                 sender=request.user,
@@ -976,6 +987,17 @@ def reply_story(request, story_id):
         if not chat:
             chat = Chat.objects.create()
             chat.participants.add(request.user, story.user)
+
+        are_friends = FriendRequest.objects.filter(
+            ((Q(from_user=request.user) & Q(to_user=story.user)) |
+             (Q(from_user=story.user) & Q(to_user=request.user))) & Q(accepted=True)
+        ).exists()
+
+        if not are_friends and Message.objects.filter(chat=chat, sender=request.user).exists():
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({'error': _('You can only send one message to non-friends.')}, status=403)
+            return redirect('chat_detail', chat_id=chat.id)
+
         Message.objects.create(chat=chat, sender=request.user, content=content, story=story)
         chat.last_message_at = now()
         chat.save()

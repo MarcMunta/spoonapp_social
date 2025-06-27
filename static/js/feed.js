@@ -1,6 +1,16 @@
 // Prefix URLs with the current language code taken from the <html> tag.
 const LANG_PREFIX = `/${document.documentElement.lang}`;
 
+function onReady(fn) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fn);
+  } else {
+    fn();
+  }
+}
+
+const popSound = new Audio('/static/audio/pop.wav');
+
 // Load dynamic translations from the template if available
 const JS_TRANSLATIONS = (() => {
   const el = document.getElementById('js-translations');
@@ -22,7 +32,8 @@ if (typeof getCSRFToken === "undefined") {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+onReady(() => {
+  popSound.preload = "auto";
   const updateRelativeTimes = () => {
     document.querySelectorAll(".post-relative").forEach((el) => {
       const created = new Date(el.dataset.created);
@@ -138,6 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let holdStart = 0;
   let skipNavClick = false;
   const HOLD_THRESHOLD = 200;
+  let touchStartX = 0;
 
   function updateElapsed(createdIso) {
     if (!countdownEl) return;
@@ -237,7 +249,14 @@ document.addEventListener("DOMContentLoaded", () => {
       .then((data) => {
         if (currentIsOwn && storyViews) {
           const countEl = storyViews.querySelector(".view-count");
-          if (countEl) countEl.textContent = data.views;
+          if (countEl) {
+            const old = parseInt(countEl.textContent) || 0;
+            countEl.textContent = data.views;
+            if (data.views > old) {
+              countEl.classList.add("animate-pop");
+              setTimeout(() => countEl.classList.remove("animate-pop"), 300);
+            }
+          }
         }
       });
   }
@@ -246,6 +265,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let currentStoryElIndex = 0;
 
   function openStories(el, idx) {
+    el.classList.add("viewed");
+    popSound.currentTime = 0;
+    popSound.play().catch(() => { });
     currentUrls = el.dataset.urls.split("|");
     currentTypes = el.dataset.types.split("|");
     currentExpires = el.dataset.expires.split("|");
@@ -260,7 +282,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (userContainer) {
       const profileUrl = el.dataset.profileUrl;
       const bubbleColor = el.dataset.bubbleColor || "#e0f5ff";
-      userContainer.innerHTML = `<a href="${profileUrl}" class="post-user text-decoration-none" style="background-color:${bubbleColor};">
+      userContainer.innerHTML = `<a href="${profileUrl}" class="post-user text-decoration-none" style="--bubble-color:${bubbleColor};">
             <img src="${el.dataset.avatarUrl}" class="post-avatar" width="40" height="40" alt="${el.dataset.user}">
             <strong>${el.dataset.user}</strong>
          </a>`;
@@ -279,6 +301,12 @@ document.addEventListener("DOMContentLoaded", () => {
       storyViews.style.display = currentIsOwn ? "flex" : "none";
       const countEl = storyViews.querySelector(".view-count");
       if (countEl) countEl.textContent = "";
+      const eye = storyViews.querySelector("span:first-child");
+      if (currentIsOwn && eye) {
+        eye.style.animation = "none";
+        void eye.offsetWidth;
+        eye.style.animation = "";
+      }
     }
     if (replyContainer) {
       if (currentIsOwn) {
@@ -361,12 +389,23 @@ document.addEventListener("DOMContentLoaded", () => {
     resumeProgress();
   });
 
-  modalContent.addEventListener("touchstart", () => {
+  modalContent.addEventListener("touchstart", (e) => {
     holdStart = Date.now();
     pauseProgress();
+    touchStartX = e.touches[0].clientX;
   });
 
-  modalContent.addEventListener("touchend", () => {
+  modalContent.addEventListener("touchend", (e) => {
+    const diffX = e.changedTouches[0].clientX - touchStartX;
+    if (Math.abs(diffX) > 50 && Date.now() - holdStart < HOLD_THRESHOLD) {
+      if (diffX < 0) {
+        nextStory();
+      } else {
+        prevStory();
+      }
+      resumeProgress();
+      return;
+    }
     if (Date.now() - holdStart > HOLD_THRESHOLD) {
       skipNavClick = true;
     }
@@ -951,8 +990,8 @@ document.addEventListener("DOMContentLoaded", () => {
       const container = btn.parentElement;
       const existingMoreBtn = container
         ? container.querySelector(
-            ".load-replies-btn[data-comment-id='" + commentId + "']"
-          )
+          ".load-replies-btn[data-comment-id='" + commentId + "']"
+        )
         : null;
       if (existingMoreBtn) {
         btn.remove();

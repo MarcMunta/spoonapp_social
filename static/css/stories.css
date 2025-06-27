@@ -12,9 +12,51 @@
     overflow: hidden;
     position: relative;
     cursor: pointer;
-    border: 2px solid #f4d0e4;
+    background: #fff;
+    border: 2px solid transparent;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
-    background-color: white;
+}
+
+.story-thumb::before {
+    content: "";
+    position: absolute;
+    inset: -2px;
+    border-radius: 50%;
+    padding: 2px;
+    background: conic-gradient(#ff73fa,
+            #73faff,
+            #ff73fa);
+    -webkit-mask: linear-gradient(#0000 0 0) padding-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    animation: rotate-gradient 6s linear infinite;
+    z-index: -1;
+}
+
+.story-thumb::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 8px 3px rgba(255, 115, 250, 0.6);
+    filter: blur(4px);
+    opacity: 0.7;
+    z-index: -2;
+}
+
+.story-thumb.viewed::before {
+    filter: grayscale(1);
+    opacity: 0.4;
+    animation-duration: 12s;
+}
+
+.story-thumb.viewed::after {
+    box-shadow: 0 0 4px 2px rgba(0, 0, 0, 0.1);
+}
+
+.story-thumb:hover {
+    animation: vibrate 0.3s linear;
 }
 
 .story-img {
@@ -52,6 +94,12 @@
     overflow: hidden;
     text-overflow: ellipsis;
     max-width: 64px;
+    transition: transform 0.3s ease, text-shadow 0.3s ease;
+}
+
+.story-item:hover .story-username {
+    transform: translateY(-3px);
+    text-shadow: 0 0 4px #fff;
 }
 
 .story-modal {
@@ -109,6 +157,11 @@
 .story-views {
     font-size: 0.9rem;
     cursor: pointer;
+}
+
+.story-views span:first-child {
+    display: inline-block;
+    animation: eye-pulse 2s infinite;
 }
 
 .story-prev,
@@ -265,7 +318,13 @@
     overflow-y: auto;
     transform: translateY(100%);
     opacity: 0;
-    transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
+    filter: blur(6px);
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+    transition:
+        transform 1.5s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.5s ease-out,
+        filter 0.5s ease-out,
+        box-shadow 0.5s ease-out;
 }
 
 .stories-container {
@@ -325,6 +384,8 @@
     will-change: transform;
 }
 
+
+
 .story-modal.open-anim {
     animation: fadeIn 0.3s ease-out;
 }
@@ -346,10 +407,10 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 4px;
+    height: 6px;
     background: rgba(255, 255, 255, 0.3);
     overflow: hidden;
-    border-radius: 2px;
+    border-radius: 3px;
 }
 
 
@@ -374,6 +435,12 @@
     font-size: 1.5rem;
     cursor: pointer;
     z-index: 1;
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.story-modal-close:hover {
+    transform: rotate(45deg);
+    color: #ff0055;
 }
 
 .story-modal-user {
@@ -398,6 +465,8 @@
 .views-list-modal.show .views-list-content {
     transform: translateY(0);
     opacity: 1;
+    filter: blur(0);
+    box-shadow: 0 0 4px rgba(255, 255, 255, 0.4);
 }
 
 .story-modal-user a {

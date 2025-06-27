@@ -1178,7 +1178,7 @@ body.profile-page .nav-tabs .nav-link {
 @keyframes friendBounce {
     0% {
         opacity: 0;
-        transform: translateY(40px);
+        transform: translateY(100vh);
     }
     60% {
         opacity: 1;

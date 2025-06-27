@@ -123,7 +123,7 @@ class ProfileForm(forms.ModelForm):
         return instance
 
 class StoryForm(forms.ModelForm):
-    media_file = forms.FileField(required=False, widget=forms.ClearableFileInput(attrs={
+    media_file = forms.FileField(required=True, widget=forms.ClearableFileInput(attrs={
         'accept': 'image/*,video/*',
         'hidden': True,
     }))

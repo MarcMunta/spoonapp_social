@@ -16,7 +16,7 @@
             <li class="active" data-target="general">{% trans "General" %}</li>
             <li data-target="password">{% trans "Password" %}</li>
             <li data-target="privacy">{% trans "Privacy & Notifications" %}</li>
-            <li data-target="delete" class="danger">{% trans "Delete Account" %}</li>
+            <li data-target="delete" class="danger">Eliminar cuenta</li>
         </ul>
     </aside>
 
@@ -91,11 +91,11 @@
 
         <!-- DELETE -->
         <div id="panel-delete" class="settings-panel">
-            <h3>{% trans "Delete your account" %}</h3>
-            <p class="attention-text">{% trans "Deleting your account is permanent. All your photos, comments, likes and followers will be removed." %}</p>
+            <h3>Eliminar tu cuenta</h3>
+            <p class="attention-text">Eliminar tu cuenta es permanente. Todas tus fotos, comentarios, me gusta y seguidores se eliminarán.</p>
             <form method="post" action="{% url 'account_delete' %}">
                 {% csrf_token %}
-                <button type="submit" class="btn-danger">{% trans "Yes, delete my account" %}</button>
+                <button type="submit" class="btn-danger">Sí, eliminar mi cuenta</button>
             </form>
         </div>
     </section>

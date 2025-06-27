@@ -34,7 +34,7 @@ msgstr "Notificaciones"
 
 #: templates/layouts/base.html:49
 msgid "See All"
-msgstr "Ver todas"
+msgstr "Ver"
 
 #: templates/layouts/base.html:67
 msgid "No new notifications"

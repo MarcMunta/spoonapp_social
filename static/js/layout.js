@@ -68,9 +68,16 @@ function toggleNotifications(event) {
 
   if (dropdown.classList.contains("show")) {
     dropdown.classList.remove("show");
-    setTimeout(() => {
-      dropdown.style.display = "none";
-    }, 300);
+    dropdown.classList.add("hide");
+    dropdown.addEventListener(
+      "animationend",
+      function handler() {
+        dropdown.style.display = "none";
+        dropdown.classList.remove("hide");
+        dropdown.removeEventListener("animationend", handler);
+      },
+      { once: true }
+    );
   } else {
     dropdown.style.display = "block";
     // trigger reflow to restart animation
@@ -132,8 +139,18 @@ setInterval(() => {
 document.addEventListener("click", function (event) {
   const dropdown = document.getElementById("notificationDropdown");
   const bell = document.querySelector(".notification-bell");
-  if (dropdown && !bell.contains(event.target)) {
-    dropdown.style.display = "none";
+  if (dropdown && !bell.contains(event.target) && dropdown.classList.contains("show")) {
+    dropdown.classList.remove("show");
+    dropdown.classList.add("hide");
+    dropdown.addEventListener(
+      "animationend",
+      function handler() {
+        dropdown.style.display = "none";
+        dropdown.classList.remove("hide");
+        dropdown.removeEventListener("animationend", handler);
+      },
+      { once: true }
+    );
   }
 });
 

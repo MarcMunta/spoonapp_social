@@ -389,3 +389,6 @@ msgstr "Deleting your account is permanent. All your photos, comments, likes and
 
 msgid "Yes, delete my account"
 msgstr "Yes, delete my account"
+
+msgid "Delete Account"
+msgstr "Delete Account"

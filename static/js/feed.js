@@ -977,7 +977,8 @@ onReady(() => {
       const replyContainer = actions
         ? actions.querySelector(".reply-inline-container")
         : null;
-      if (replyContainer) closeReply(replyContainer);
+      // Keep the reply input visible when loading more replies
+      // so the user can continue writing without interruption.
       const commentId = btn.dataset.commentId;
       let list = document.getElementById("replies-" + commentId);
       const offset = list ? list.children.length : 0;

@@ -294,10 +294,9 @@ onReady(animateTopMenuIcons);
 
 
 function animateFriendBubbles() {
-  if (!document.body.classList.contains("home-page")) return;
-  const bubbles = document.querySelectorAll(
-    ".friends-bubbles .friend-bubble"
-  );
+  const container = document.querySelector(".friends-bubbles");
+  if (!container) return;
+  const bubbles = container.querySelectorAll(".friend-bubble");
   bubbles.forEach((bubble, idx) => {
     bubble.style.opacity = "0";
     bubble.style.transform = "translateY(100vh)";

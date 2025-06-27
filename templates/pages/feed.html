@@ -38,7 +38,7 @@
 {% include "partials/stories/stories.html" %}
 {% endif %}
 {% for post in posts %}
-<div class="post mb-3">
+<div class="post mb-3" data-post-index="{{ forloop.counter0 }}">
   <div class="d-flex justify-content-between align-items-center mb-1 post-top">
     <a href="{% url 'profile' post.user.username %}" class="post-user text-decoration-none" style="background-color: {{ post.user.profile.bubble_color }};">
       {% if post.user.profile.profile_picture %}
@@ -141,5 +141,6 @@
 {% block extra_js %}
 <script src="{% static 'js/aos.js' %}"></script>
 <script src="{% static 'js/post_form.js' %}"></script>
+<script src="{% static 'js/post_animations.js' %}"></script>
 <script>AOS.init({ once: true });</script>
 {% endblock %}

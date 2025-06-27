@@ -9,7 +9,7 @@
 <link rel="stylesheet" href="{% static 'css/feed.css' %}">
 <link rel="stylesheet" href="{% static 'css/stories.css' %}">
 <link rel="stylesheet" href="{% static 'css/post_form.css' %}">
-<link rel="stylesheet" href="https://unpkg.com/aos@2.3.4/dist/aos.css" />
+<link rel="stylesheet" href="{% static 'css/aos.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -139,7 +139,7 @@
 {% endblock %}
 
 {% block extra_js %}
-<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script src="{% static 'js/aos.js' %}"></script>
 <script src="{% static 'js/post_form.js' %}"></script>
 <script>AOS.init({ once: true });</script>
 {% endblock %}

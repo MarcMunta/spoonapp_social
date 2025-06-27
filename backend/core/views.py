@@ -33,6 +33,7 @@ from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
 from django.utils.translation import gettext as _
+from .default_avatar import DEFAULT_AVATAR_DATA_URL
 import requests
 import sys
 import json
@@ -846,6 +847,17 @@ def chat_detail(request, chat_id):
     if request.method == 'POST':
         content = request.POST.get('content', '').strip()
         if content:
+            are_friends = FriendRequest.objects.filter(
+                ((Q(from_user=request.user) & Q(to_user=other_user)) |
+                 (Q(from_user=other_user) & Q(to_user=request.user))) & Q(accepted=True)
+            ).exists()
+
+            # Limit non-friends to a single message
+            if not are_friends and Message.objects.filter(chat=chat, sender=request.user).exists():
+                if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                    return JsonResponse({'error': _('You can only send one message to non-friends.')}, status=403)
+                return redirect('chat_detail', chat_id=chat.id)
+
             message = Message.objects.create(
                 chat=chat,
                 sender=request.user,
@@ -975,6 +987,17 @@ def reply_story(request, story_id):
         if not chat:
             chat = Chat.objects.create()
             chat.participants.add(request.user, story.user)
+
+        are_friends = FriendRequest.objects.filter(
+            ((Q(from_user=request.user) & Q(to_user=story.user)) |
+             (Q(from_user=story.user) & Q(to_user=request.user))) & Q(accepted=True)
+        ).exists()
+
+        if not are_friends and Message.objects.filter(chat=chat, sender=request.user).exists():
+            if request.headers.get("x-requested-with") == "XMLHttpRequest":
+                return JsonResponse({'error': _('You can only send one message to non-friends.')}, status=403)
+            return redirect('chat_detail', chat_id=chat.id)
+
         Message.objects.create(chat=chat, sender=request.user, content=content, story=story)
         chat.last_message_at = now()
         chat.save()
@@ -1013,6 +1036,21 @@ def get_notifications_count(request):
         count = Notification.objects.filter(user=request.user, is_read=False).count()
         return JsonResponse({'unread_count': count})
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+@login_required(login_url='/custom-login/')
+def friends_list_partial(request):
+    """Return rendered friends list for AJAX updates"""
+    friends = get_friends(request.user)
+    html = render_to_string(
+        "partials/friends/list.html",
+        {
+            "friends": friends,
+            "default_avatar_data_url": DEFAULT_AVATAR_DATA_URL,
+        },
+        request=request,
+    )
+    return JsonResponse({"html": html})
 
 @login_required(login_url='/custom-login/')
 def edit_profile(request, section="general"):

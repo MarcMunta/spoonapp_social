@@ -64,8 +64,19 @@ function getCSRFToken() {
 function toggleNotifications(event) {
   event.preventDefault();
   const dropdown = document.getElementById("notificationDropdown");
-  dropdown.style.display =
-    dropdown.style.display === "block" ? "none" : "block";
+  if (!dropdown) return;
+
+  if (dropdown.classList.contains("show")) {
+    dropdown.classList.remove("show");
+    setTimeout(() => {
+      dropdown.style.display = "none";
+    }, 300);
+  } else {
+    dropdown.style.display = "block";
+    // trigger reflow to restart animation
+    dropdown.offsetHeight;
+    dropdown.classList.add("show");
+  }
 }
 
 function markAsRead(notificationId) {
@@ -252,4 +263,21 @@ onReady(() => {
       bubble.classList.add("friend-bounce");
     });
   });
+});
+
+function updateFriendsList() {
+  const container = document.querySelector(".friends-bubbles");
+  if (!container) return;
+  fetch(`${LANG_PREFIX}/api/friends/`, {
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      container.innerHTML = data.html;
+    });
+}
+
+onReady(() => {
+  updateFriendsList();
+  setInterval(updateFriendsList, 30000);
 });

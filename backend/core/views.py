@@ -564,9 +564,15 @@ def profile(request, username):
 @login_required(login_url='/custom-login/')
 def search_users(request):
     if request.method == "GET":
-        query = request.GET.get("q", "")
+        query = request.GET.get("q", "").strip()
+        if not query:
+            return JsonResponse([], safe=False)
+
         users = User.objects.filter(
-            Q(username__icontains=query) | Q(email__icontains=query)
+            Q(username__icontains=query)
+            | Q(email__icontains=query)
+            | Q(first_name__icontains=query)
+            | Q(last_name__icontains=query)
         ).exclude(id=request.user.id)[:10]
 
         if request.user.is_authenticated:

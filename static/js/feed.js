@@ -199,6 +199,7 @@ onReady(() => {
     const type = currentTypes[idx] || "";
     const direction = idx > prevIndex ? "left" : "right";
     prevIndex = idx;
+    modal.style.setProperty("--bg-url", `url(${url})`);
     img.classList.remove("fade-in", "slide-left", "slide-right");
     video.classList.remove("fade-in", "slide-left", "slide-right");
     if (type.startsWith("video")) {
@@ -326,6 +327,7 @@ onReady(() => {
   function closeStories() {
     modal.style.display = "none";
     modalContent.classList.remove("open-anim");
+    modal.style.removeProperty("--bg-url");
     clearTimeout(progressTimeout);
     clearInterval(countdownInterval);
     if (progressBar) progressBar.style.width = "0%";

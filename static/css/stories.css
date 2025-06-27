@@ -122,9 +122,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #0d6efd, #6610f2);
+    background: linear-gradient(90deg, #ff00c8, #00e0ff);
     background-size: 200% 100%;
-    animation: progress-slide 1s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 .story-header {
@@ -204,9 +204,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #0d6efd, #6610f2);
+    background: linear-gradient(90deg, #ff00c8, #00e0ff);
     background-size: 200% 100%;
-    animation: progress-slide 1s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 #storyImage,
@@ -370,6 +370,20 @@
     overflow: hidden;
 }
 
+.story-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg-url);
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px);
+    transform: scale(1.1);
+    opacity: 0.6;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    will-change: transform;
+}
+
 
 
 .story-modal.open-anim {
@@ -462,7 +476,8 @@
     padding: 4px 10px;
     border-radius: 18px;
     color: #fff;
-    background-color: var(--bubble-color, #ff00c8);
+    background: linear-gradient(45deg, #ff00c8, #00e0ff);
+    animation: neonGlow 3s linear infinite alternate;
 }
 
 .story-modal-user img {
@@ -470,24 +485,6 @@
     height: 32px;
     border-radius: 50%;
     object-fit: cover;
-}
-
-@keyframes progress-slide {
-    from {
-        background-position: 0 0;
-    }
-    to {
-        background-position: -40px 0;
-    }
-}
-
-@keyframes eye-pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
 }
 
 @keyframes neonGlow {
@@ -517,39 +514,4 @@
 @keyframes gradientMove {
     from { background-position: 0% 50%; }
     to { background-position: 100% 50%; }
-  
-@keyframes rotate-gradient {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes vibrate {
-    0% {
-        transform: translate(0);
-    }
-
-    20% {
-        transform: translate(-1px, 1px);
-    }
-
-    40% {
-        transform: translate(-1px, -1px);
-    }
-
-    60% {
-        transform: translate(1px, 1px);
-    }
-
-    80% {
-        transform: translate(1px, -1px);
-    }
-
-    100% {
-        transform: translate(0);
-    }
 }

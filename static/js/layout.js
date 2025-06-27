@@ -61,6 +61,25 @@ function getCSRFToken() {
   return cookie ? cookie.split("=")[1] : "";
 }
 
+onReady(() => {
+  document
+    .querySelectorAll("form.language-form select[name='language']")
+    .forEach((select) => {
+      select.addEventListener("change", () => {
+        const form = select.closest("form");
+        const data = new FormData(form);
+        fetch(form.action, {
+          method: "POST",
+          headers: { "X-CSRFToken": getCSRFToken() },
+          body: data,
+        }).then(() => {
+          const next = data.get("next") || window.location.href;
+          window.location.href = next;
+        });
+      });
+    });
+});
+
 function toggleNotifications(event) {
   event.preventDefault();
   const dropdown = document.getElementById("notificationDropdown");

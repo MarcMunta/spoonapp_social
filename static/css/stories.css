@@ -370,6 +370,20 @@
     overflow: hidden;
 }
 
+.story-backdrop::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: var(--bg-url);
+    background-size: cover;
+    background-position: center;
+    filter: blur(20px);
+    transform: scale(1.1);
+    opacity: 0.6;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    will-change: transform;
+}
+
 
 
 .story-modal.open-anim {
@@ -462,7 +476,8 @@
     padding: 4px 10px;
     border-radius: 18px;
     color: #fff;
-    background-color: var(--bubble-color, #ff00c8);
+    background: linear-gradient(45deg, #ff00c8, #00e0ff);
+    animation: neonGlow 3s linear infinite alternate;
 }
 
 .story-modal-user img {
@@ -487,69 +502,5 @@
     }
     50% {
         transform: scale(1.1);
-    }
-}
-
-@keyframes neonGlow {
-    from {
-        box-shadow: 0 0 4px #ff00c8, 0 0 8px #ff00c8;
-    }
-    to {
-        box-shadow: 0 0 4px #00e0ff, 0 0 8px #00e0ff;
-    }
-}
-
-@keyframes imageFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideLeft {
-    from { transform: translateX(100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes slideRight {
-    from { transform: translateX(-100%); opacity: 0; }
-    to { transform: translateX(0); opacity: 1; }
-}
-
-@keyframes gradientMove {
-    from { background-position: 0% 50%; }
-    to { background-position: 100% 50%; }
-  
-@keyframes rotate-gradient {
-    from {
-        transform: rotate(0deg);
-    }
-
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-@keyframes vibrate {
-    0% {
-        transform: translate(0);
-    }
-
-    20% {
-        transform: translate(-1px, 1px);
-    }
-
-    40% {
-        transform: translate(-1px, -1px);
-    }
-
-    60% {
-        transform: translate(1px, 1px);
-    }
-
-    80% {
-        transform: translate(1px, -1px);
-    }
-
-    100% {
-        transform: translate(0);
     }
 }

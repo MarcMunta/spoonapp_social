@@ -232,8 +232,8 @@ onReady(() => {
   );
   bubbles.forEach((bubble, idx) => {
     bubble.style.opacity = "0";
-    bubble.style.transform = "translateY(40px)";
-    bubble.style.animationDelay = `${idx * 0.15}s`;
+    bubble.style.transform = "translateY(100vh)";
+    bubble.style.animationDelay = `${idx * 0.1}s`;
     bubble.addEventListener(
       "animationend",
       (e) => {

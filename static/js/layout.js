@@ -1,9 +1,11 @@
 // Functions from base.html
 
 // Prefix URLs with the current language code extracted from the
-// <html> tag. This ensures links and API calls automatically use
-// the proper /es, /en, etc. prefix based on the active language.
-const LANG_PREFIX = `/${document.documentElement.lang}`;
+// <html> tag. Reuse the global variable if already defined to avoid
+// redeclaration errors when multiple scripts are loaded.
+if (!window.LANG_PREFIX) {
+  window.LANG_PREFIX = `/${document.documentElement.lang}`;
+}
 
 function onReady(fn) {
   if (document.readyState === "loading") {

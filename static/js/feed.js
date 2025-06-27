@@ -71,14 +71,19 @@ onReady(() => {
     storyInput.addEventListener("change", () => {
       document.getElementById("storyForm").submit();
     });
+  }
+
+  function attachStoryAddListener() {
     const addBtn = document.querySelector(".story-add");
-    if (addBtn && !addBtn.classList.contains("profile-story-add")) {
+    if (storyInput && addBtn && !addBtn.classList.contains("profile-story-add")) {
       addBtn.addEventListener("click", (e) => {
         e.stopPropagation();
         storyInput.click();
       });
     }
   }
+
+  attachStoryAddListener();
 
   const storiesContainer = document.querySelector(".stories-container");
   const prevStories = document.querySelector(".stories-prev");
@@ -560,11 +565,13 @@ onReady(() => {
             }
           }
           closeStories();
+          attachStoryAddListener();
         })
         .catch(() => {
           deleteConfirm.style.display = "none";
           pendingDeleteId = null;
           resumeProgress();
+          attachStoryAddListener();
         });
     });
 

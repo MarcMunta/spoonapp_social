@@ -33,6 +33,7 @@ from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
 from django.utils.translation import gettext as _
+from .default_avatar import DEFAULT_AVATAR_DATA_URL
 import requests
 import sys
 import json
@@ -1013,6 +1014,21 @@ def get_notifications_count(request):
         count = Notification.objects.filter(user=request.user, is_read=False).count()
         return JsonResponse({'unread_count': count})
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+@login_required(login_url='/custom-login/')
+def friends_list_partial(request):
+    """Return rendered friends list for AJAX updates"""
+    friends = get_friends(request.user)
+    html = render_to_string(
+        "partials/friends/list.html",
+        {
+            "friends": friends,
+            "default_avatar_data_url": DEFAULT_AVATAR_DATA_URL,
+        },
+        request=request,
+    )
+    return JsonResponse({"html": html})
 
 @login_required(login_url='/custom-login/')
 def edit_profile(request, section="general"):

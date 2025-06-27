@@ -514,3 +514,6 @@ msgstr "Eliminar tu cuenta es permanente. Todas tus fotos, comentarios, me gusta
 
 msgid "Yes, delete my account"
 msgstr "Sí, eliminar mi cuenta"
+
+msgid "Delete Account"
+msgstr "Eliminar cuenta"

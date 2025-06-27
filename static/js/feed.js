@@ -973,6 +973,11 @@ onReady(() => {
     const btn = e.target.closest(".load-replies-btn");
     if (btn) {
       e.preventDefault();
+      const actions = btn.parentElement;
+      const replyContainer = actions
+        ? actions.querySelector(".reply-inline-container")
+        : null;
+      if (replyContainer) closeReply(replyContainer);
       const commentId = btn.dataset.commentId;
       let list = document.getElementById("replies-" + commentId);
       const offset = list ? list.children.length : 0;

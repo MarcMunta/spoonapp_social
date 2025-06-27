@@ -156,6 +156,21 @@ onReady(() => {
 
   const countdownEl = document.querySelector(".story-countdown");
 
+  function hideViewsModal() {
+    if (!viewsModal || !viewsModal.classList.contains("show")) return;
+    viewsModal.classList.remove("visible");
+    const content = viewsModal.querySelector(".views-list-content");
+    const hide = () => {
+      viewsModal.classList.remove("show");
+      resumeProgress();
+    };
+    if (content) {
+      content.addEventListener("transitionend", hide, { once: true });
+    } else {
+      hide();
+    }
+  }
+
   let currentStoryIds = [];
   let currentCreated = [];
   let currentIsOwn = false;
@@ -438,6 +453,10 @@ onReady(() => {
       skipNavClick = false;
       return;
     }
+    if (viewsModal && viewsModal.classList.contains("show")) {
+      hideViewsModal();
+      return;
+    }
     if (e.target === modalContent || e.target === img || e.target === video) {
       const rect = modalContent.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
@@ -617,17 +636,7 @@ onReady(() => {
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
         e.stopPropagation();
-        viewsModal.classList.remove("visible");
-        const content = viewsModal.querySelector(".views-list-content");
-        const hide = () => {
-          viewsModal.classList.remove("show");
-          resumeProgress();
-        };
-        if (content) {
-          content.addEventListener("transitionend", hide, { once: true });
-        } else {
-          hide();
-        }
+        hideViewsModal();
       }
     });
   }

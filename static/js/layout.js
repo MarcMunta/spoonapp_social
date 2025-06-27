@@ -246,12 +246,51 @@ onReady(() => {
       .forEach((link) => link.classList.remove("active"));
     tab.classList.add("active");
 
-    document.querySelectorAll(".category-group").forEach((group) => {
+  document.querySelectorAll(".category-group").forEach((group) => {
       group.style.display =
         group.getAttribute("data-category") === selected ? "flex" : "none";
-    });
+  });
   });
 });
+
+function animateTopMenuIcons() {
+  const container = document.querySelector('.topbar-icons');
+  if (!container) return;
+  const icons = [];
+  container.childNodes.forEach((node) => {
+    if (node.nodeType !== 1) return;
+    if (node.matches('a, span')) {
+      icons.push(node);
+    } else {
+      const bell = node.querySelector('.notification-bell');
+      if (bell) icons.push(bell);
+    }
+  });
+  icons.forEach((icon, idx) => {
+    icon.style.opacity = '0';
+    icon.style.transform = 'translateY(100vh)';
+    icon.style.animationDelay = `${idx * 0.12}s`;
+    icon.addEventListener(
+      'animationend',
+      (e) => {
+        if (e.animationName === 'menuIconBounce') {
+          icon.classList.add('menu-icon-glow');
+          icon.removeAttribute('style');
+        }
+      },
+      { once: true }
+    );
+  });
+  requestAnimationFrame(() => {
+    icons.forEach((icon) => {
+      icon.classList.remove('menu-icon-bounce', 'menu-icon-glow');
+      void icon.offsetWidth;
+      icon.classList.add('menu-icon-bounce');
+    });
+  });
+}
+
+onReady(animateTopMenuIcons);
 
 
 function animateFriendBubbles() {

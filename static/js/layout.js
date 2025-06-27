@@ -231,7 +231,7 @@ onReady(() => {
   bubbles.forEach((bubble, idx) => {
     bubble.style.opacity = "0";
     bubble.style.transform = "translateY(40px)";
-    bubble.style.setProperty("--delay", `${idx * 0.1}s`);
+    bubble.style.animationDelay = `${idx * 0.1}s`;
   });
   requestAnimationFrame(() => {
     bubbles.forEach((bubble) => bubble.classList.add("friend-bounce"));

@@ -23,7 +23,7 @@
 .comment-list .list-group-item {
     border: none;
     padding: 0.5rem 0.75rem;
-    background-color: #f7f7f7;
+    background-color: #e5e5e5;
     border-bottom: 1px solid #eee;
     border-radius: 8px;
     margin-bottom: 0.5rem;
@@ -31,7 +31,7 @@
 
 .comment-list .reply-item {
     margin-left: 0;
-    background-color: #fcfcfc;
+    background-color: #ffffff;
 }
 
 .comment-user img.comment-avatar {

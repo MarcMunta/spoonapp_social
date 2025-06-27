@@ -535,6 +535,10 @@ body:has(.spoon-chat-container) .rightbar {
     gap: 12px;
 }
 
+.friend-bubble.friend-bounce {
+    animation: friendBounce 0.8s cubic-bezier(0.22, 1, 0.36, 1) var(--delay, 0s) forwards;
+}
+
 
 .friend-bubble:hover {
     transform: translateY(-2px);
@@ -1152,4 +1156,22 @@ body.profile-page .nav-tabs .nav-link {
 .spoon-messages-area {
     flex: 1;
     overflow-y: auto;
+}
+
+@keyframes friendBounce {
+    0% {
+        opacity: 0;
+        transform: translateY(40px);
+    }
+    60% {
+        opacity: 1;
+        transform: translateY(-10px);
+    }
+    80% {
+        transform: translateY(5px);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }

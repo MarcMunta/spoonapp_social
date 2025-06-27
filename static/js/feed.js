@@ -132,6 +132,7 @@ onReady(() => {
   let progressTimeout;
   let countdownInterval;
   let storyStart = 0;
+  let elapsedTime = 0;
   let remainingTime = 5000;
   let progressPaused = false;
 
@@ -199,9 +200,10 @@ onReady(() => {
     progressPaused = true;
     clearTimeout(progressTimeout);
     const elapsed = Date.now() - storyStart;
-    remainingTime = Math.max(0, 5000 - elapsed);
+    elapsedTime += elapsed;
+    remainingTime = Math.max(0, 5000 - elapsedTime);
     if (progressBar) {
-      const percent = Math.min(100, (elapsed / 5000) * 100);
+      const percent = Math.min(100, (elapsedTime / 5000) * 100);
       progressBar.style.transition = "none";
       progressBar.style.width = `${percent}%`;
     }
@@ -250,6 +252,7 @@ onReady(() => {
         progressBar.style.width = "100%";
       });
     }
+    elapsedTime = 0;
     storyStart = Date.now();
     remainingTime = 5000;
     progressPaused = false;

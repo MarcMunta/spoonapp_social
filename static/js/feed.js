@@ -616,10 +616,12 @@ onReady(() => {
 
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
+        e.stopPropagation();
         viewsModal.classList.remove("visible");
         const content = viewsModal.querySelector(".views-list-content");
         const hide = () => {
           viewsModal.classList.remove("show");
+          resumeProgress();
         };
         if (content) {
           content.addEventListener("transitionend", hide, { once: true });

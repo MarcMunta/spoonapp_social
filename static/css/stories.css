@@ -465,7 +465,11 @@
     padding: 4px 10px;
     border-radius: 18px;
     color: #fff;
-    background: linear-gradient(45deg, #ff00c8, #00e0ff);
+    background: linear-gradient(
+        45deg,
+        var(--bubble-color, #ff00c8),
+        var(--bubble-color, #00e0ff)
+    );
     animation: neonGlow 3s linear infinite alternate;
 }
 

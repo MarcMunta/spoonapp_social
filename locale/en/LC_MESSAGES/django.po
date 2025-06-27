@@ -379,3 +379,13 @@ msgstr "Login"
 
 msgid "Sign in"
 msgstr "Sign in"
+
+# Account deletion
+msgid "Delete your account"
+msgstr "Delete your account"
+
+msgid "Deleting your account is permanent. All your photos, comments, likes and followers will be removed."
+msgstr "Deleting your account is permanent. All your photos, comments, likes and followers will be removed."
+
+msgid "Yes, delete my account"
+msgstr "Yes, delete my account"

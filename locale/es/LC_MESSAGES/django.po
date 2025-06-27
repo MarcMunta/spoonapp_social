@@ -504,3 +504,13 @@ msgstr "Iniciar sesión"
 
 msgid "Sign in"
 msgstr "Acceder"
+
+# Account deletion
+msgid "Delete your account"
+msgstr "Eliminar tu cuenta"
+
+msgid "Deleting your account is permanent. All your photos, comments, likes and followers will be removed."
+msgstr "Eliminar tu cuenta es permanente. Todas tus fotos, comentarios, me gusta y seguidores se eliminarán."
+
+msgid "Yes, delete my account"
+msgstr "Sí, eliminar mi cuenta"

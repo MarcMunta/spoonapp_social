@@ -20,9 +20,7 @@
             data-story-id="{{ user_story_data.ids|join:'|' }}"
             data-own="true"
            {% endif %}>
-        {% if user_story_data.thumb %}
-        <img src="{{ user_story_data.thumb }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
-        {% elif user.profile.profile_picture %}
+        {% if user.profile.profile_picture %}
         <img src="{{ user.profile.profile_picture_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% else %}
         <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">

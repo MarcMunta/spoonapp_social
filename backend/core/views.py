@@ -150,16 +150,22 @@ def home(request):
             'expires': [st.expires_at.isoformat() for st in user_story_list],
             'created': [st.created_at.isoformat() for st in user_story_list],
             'ids': [st.id for st in user_story_list],
+            'thumb': user_story_list[0].media_data_url if user_story_list else None,
         }
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'created': [], 'ids': []})
+            entry = friend_story_map.setdefault(
+                st.user,
+                {'urls': [], 'types': [], 'expires': [], 'created': [], 'ids': [], 'thumb': None},
+            )
             entry['urls'].append(st.media_data_url)
             entry['types'].append(st.media_mime or '')
             entry['expires'].append(st.expires_at.isoformat())
             entry['created'].append(st.created_at.isoformat())
             entry['ids'].append(st.id)
+            if entry['thumb'] is None:
+                entry['thumb'] = st.media_data_url
         context['friend_stories'] = friend_story_map
         context['story_form'] = StoryForm()
 
@@ -193,16 +199,22 @@ def feed(request):
             'expires': [st.expires_at.isoformat() for st in user_story_list],
             'created': [st.created_at.isoformat() for st in user_story_list],
             'ids': [st.id for st in user_story_list],
+            'thumb': user_story_list[0].media_data_url if user_story_list else None,
         }
 
         friend_story_map = {}
         for st in active_stories.filter(user__in=context['friends']).exclude(user=request.user):
-            entry = friend_story_map.setdefault(st.user, {'urls': [], 'types': [], 'expires': [], 'created': [], 'ids': []})
+            entry = friend_story_map.setdefault(
+                st.user,
+                {'urls': [], 'types': [], 'expires': [], 'created': [], 'ids': [], 'thumb': None},
+            )
             entry['urls'].append(st.media_data_url)
             entry['types'].append(st.media_mime or '')
             entry['expires'].append(st.expires_at.isoformat())
             entry['created'].append(st.created_at.isoformat())
             entry['ids'].append(st.id)
+            if entry['thumb'] is None:
+                entry['thumb'] = st.media_data_url
         context['friend_stories'] = friend_story_map
         context['story_form'] = StoryForm()
 
@@ -495,6 +507,7 @@ def profile(request, username):
         'expires': [st.expires_at.isoformat() for st in story_qs],
         'created': [st.created_at.isoformat() for st in story_qs],
         'ids': [st.id for st in story_qs],
+        'thumb': story_qs[0].media_data_url if story_qs else None,
     }
 
     is_following = False

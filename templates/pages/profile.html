@@ -34,7 +34,8 @@
             data-own="true"
             {% endif %}>
             {% if user_profile.profile_picture %}
-            <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture" alt="{{ profile_user.username }}">
+            <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture"
+              alt="{{ profile_user.username }}">
             {% else %}
             <img src="{{ default_avatar_data_url }}" class="profile-picture" alt="{{ profile_user.username }}">
             {% endif %}
@@ -53,7 +54,8 @@
           data-bubble-color="{{ user_profile.bubble_color }}" data-story-id="{{ profile_story_data.ids|join:'|' }}"
           {% endif %}>
           {% if user_profile.profile_picture %}
-          <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture" alt="{{ profile_user.username }}">
+          <img src="{{ user_profile.profile_picture_data_url }}" class="profile-picture"
+            alt="{{ profile_user.username }}">
           {% else %}
           <img src="{{ default_avatar_data_url }}" class="profile-picture" alt="{{ profile_user.username }}">
           {% endif %}

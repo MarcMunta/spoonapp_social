@@ -30,7 +30,7 @@ document
     fetch(`${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}`)
       .then((res) => res.json())
       .then((users) => {
-        users.forEach((user) => {
+        users.slice(0, 4).forEach((user) => {
           const li = document.createElement("li");
           li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">

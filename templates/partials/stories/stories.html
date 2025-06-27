@@ -20,7 +20,9 @@
             data-story-id="{{ user_story_data.ids|join:'|' }}"
             data-own="true"
            {% endif %}>
-        {% if user.profile.profile_picture %}
+        {% if user_story_data.thumb %}
+        <img src="{{ user_story_data.thumb }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
+        {% elif user.profile.profile_picture %}
         <img src="{{ user.profile.profile_picture_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
         {% else %}
         <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
@@ -42,7 +44,9 @@
          data-avatar-url="{% if friend.profile.profile_picture %}{{ friend.profile.profile_picture_data_url }}{% else %}{{ default_avatar_data_url }}{% endif %}"
          data-bubble-color="{{ friend.profile.bubble_color }}"
          data-story-id="{{ data.ids|join:'|' }}">
-      {% if friend.profile.profile_picture %}
+      {% if data.thumb %}
+      <img src="{{ data.thumb }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
+      {% elif friend.profile.profile_picture %}
       <img src="{{ friend.profile.profile_picture_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
       {% else %}
       <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">

@@ -33,7 +33,7 @@ msgid "Notifications"
 msgstr "Notificaciones"
 
 #: templates/layouts/base.html:49
-msgid "See All"
+msgid "All"
 msgstr "Ver todas"
 
 #: templates/layouts/base.html:67

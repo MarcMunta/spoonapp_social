@@ -111,13 +111,6 @@ onReady(() => {
     });
   }
 
-  document.querySelectorAll(".story-thumb").forEach((el) => {
-    const color = el.dataset.bubbleColor;
-    if (color) {
-      el.style.setProperty("--story-color", color);
-    }
-  });
-
   let currentUrls = [];
   let currentTypes = [];
   let currentExpires = [];

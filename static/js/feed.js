@@ -132,6 +132,7 @@ onReady(() => {
   let progressTimeout;
   let countdownInterval;
   let storyStart = 0;
+  let elapsedTime = 0;
   let remainingTime = 5000;
   let progressPaused = false;
 
@@ -155,6 +156,21 @@ onReady(() => {
   const currentUsername = document.body.dataset.currentUser || "";
 
   const countdownEl = document.querySelector(".story-countdown");
+
+  function hideViewsModal() {
+    if (!viewsModal || !viewsModal.classList.contains("show")) return;
+    viewsModal.classList.remove("visible");
+    const content = viewsModal.querySelector(".views-list-content");
+    const hide = () => {
+      viewsModal.classList.remove("show");
+      resumeProgress();
+    };
+    if (content) {
+      content.addEventListener("transitionend", hide, { once: true });
+    } else {
+      hide();
+    }
+  }
 
   let currentStoryIds = [];
   let currentCreated = [];
@@ -184,9 +200,10 @@ onReady(() => {
     progressPaused = true;
     clearTimeout(progressTimeout);
     const elapsed = Date.now() - storyStart;
-    remainingTime = Math.max(0, 5000 - elapsed);
+    elapsedTime += elapsed;
+    remainingTime = Math.max(0, 5000 - elapsedTime);
     if (progressBar) {
-      const percent = Math.min(100, (elapsed / 5000) * 100);
+      const percent = Math.min(100, (elapsedTime / 5000) * 100);
       progressBar.style.transition = "none";
       progressBar.style.width = `${percent}%`;
     }
@@ -235,6 +252,7 @@ onReady(() => {
         progressBar.style.width = "100%";
       });
     }
+    elapsedTime = 0;
     storyStart = Date.now();
     remainingTime = 5000;
     progressPaused = false;
@@ -438,6 +456,10 @@ onReady(() => {
       skipNavClick = false;
       return;
     }
+    if (viewsModal && viewsModal.classList.contains("show")) {
+      hideViewsModal();
+      return;
+    }
     if (e.target === modalContent || e.target === img || e.target === video) {
       const rect = modalContent.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
@@ -617,17 +639,7 @@ onReady(() => {
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
         e.stopPropagation();
-        viewsModal.classList.remove("visible");
-        const content = viewsModal.querySelector(".views-list-content");
-        const hide = () => {
-          viewsModal.classList.remove("show");
-          resumeProgress();
-        };
-        if (content) {
-          content.addEventListener("transitionend", hide, { once: true });
-        } else {
-          hide();
-        }
+        hideViewsModal();
       }
     });
   }

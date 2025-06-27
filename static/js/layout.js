@@ -253,7 +253,8 @@ onReady(() => {
   });
 });
 
-onReady(() => {
+
+function animateFriendBubbles() {
   if (!document.body.classList.contains("home-page")) return;
   const bubbles = document.querySelectorAll(
     ".friends-bubbles .friend-bubble"
@@ -280,7 +281,9 @@ onReady(() => {
       bubble.classList.add("friend-bounce");
     });
   });
-});
+}
+
+onReady(animateFriendBubbles);
 
 function updateFriendsList() {
   const container = document.querySelector(".friends-bubbles");
@@ -291,6 +294,7 @@ function updateFriendsList() {
     .then((res) => res.json())
     .then((data) => {
       container.innerHTML = data.html;
+      animateFriendBubbles();
     });
 }
 

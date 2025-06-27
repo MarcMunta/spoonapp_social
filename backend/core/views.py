@@ -783,7 +783,8 @@ def load_messages(request, chat_id):
             'sender': msg.sender.username,
             'content': msg.content,
             'sent_at': msg.sent_at.strftime('%H:%M'),
-            'is_mine': msg.sender == request.user
+            'is_mine': msg.sender == request.user,
+            'bubble_color': msg.sender.profile.bubble_color,
         })
     
     return JsonResponse({

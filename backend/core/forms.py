@@ -136,8 +136,22 @@ class StoryForm(forms.ModelForm):
         instance = super().save(commit=False)
         media = self.cleaned_data.get('media_file')
         if media and hasattr(media, "read"):
-            instance.media_data = media.read()
-            instance.media_mime = media.content_type
+            data = media.read()
+            mime = media.content_type
+            if mime and mime.startswith("image"):
+                try:
+                    from PIL import Image, ImageOps
+                    from io import BytesIO
+
+                    img = Image.open(BytesIO(data))
+                    img = ImageOps.exif_transpose(img)
+                    buffer = BytesIO()
+                    img.save(buffer, format=img.format or "JPEG")
+                    data = buffer.getvalue()
+                except Exception:
+                    pass
+            instance.media_data = data
+            instance.media_mime = mime
         if commit:
             instance.save()
         return instance

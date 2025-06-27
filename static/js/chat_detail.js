@@ -18,6 +18,7 @@ function initChatDetail() {
   const chatId = messagesArea ? messagesArea.dataset.chatId : null;
   let isUserScrolling = false;
   let scrollTimer = null;
+  const userBubbleColor = document.body.dataset.bubbleColor || "#db6ec4";
 
   const blockedWords = ["cola", "gay", "puta"];
   function isValidMessage(msg) {
@@ -320,7 +321,7 @@ function initChatDetail() {
             messageWrapper.innerHTML = `
                         <div class="chat-bubble ${
                           msg.is_mine ? "user" : "other"
-                        } spoon-message-loaded">
+                        } spoon-message-loaded" style="--bubble-color:${msg.bubble_color}">
                             <div>${escapeHtml(msg.content)}</div>
                             <span class="timestamp">${msg.sent_at}</span>
                         </div>
@@ -405,7 +406,7 @@ function initChatDetail() {
             messageWrapper.innerHTML = `
                         <div class="chat-bubble ${
                           msg.is_mine ? "user" : "other"
-                        }" data-new="true">
+                        }" data-new="true" style="--bubble-color:${msg.bubble_color}">
                             <div>${escapeHtml(msg.content)}</div>
                             <span class="timestamp">${msg.sent_at}</span>
                         </div>
@@ -556,7 +557,7 @@ function initChatDetail() {
       messageWrapper.className = "d-flex justify-content-end mb-3";
       messageWrapper.dataset.messageId = tempId;
       messageWrapper.innerHTML = `
-                <div class="chat-bubble user" data-new="true">
+                <div class="chat-bubble user" data-new="true" style="--bubble-color:${userBubbleColor}">
                     <div>${escapeHtml(content)}</div>
                     <span class="timestamp">${new Date().toLocaleTimeString(
                       "en-US",

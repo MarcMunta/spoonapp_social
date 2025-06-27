@@ -135,7 +135,7 @@ def home(request):
         blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
         blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
         active_stories = (
-            Story.objects.filter(expires_at__gt=timezone.now())
+            Story.objects.filter(expires_at__gt=timezone.now(), media_data__isnull=False)
             .exclude(user__in=hidden_owners)
             .exclude(user__id__in=blocked_ids)
             .exclude(user__id__in=blocking_ids)
@@ -184,7 +184,7 @@ def feed(request):
         blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
         blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
         active_stories = (
-            Story.objects.filter(expires_at__gt=timezone.now())
+            Story.objects.filter(expires_at__gt=timezone.now(), media_data__isnull=False)
             .exclude(user__in=hidden_owners)
             .exclude(user__id__in=blocked_ids)
             .exclude(user__id__in=blocking_ids)
@@ -492,7 +492,11 @@ def profile(request, username):
             posts_all.filter(categories__slug=category.slug)
         )
 
-    story_qs = Story.objects.filter(user=profile_user, expires_at__gt=timezone.now()).order_by('created_at')
+    story_qs = Story.objects.filter(
+        user=profile_user,
+        expires_at__gt=timezone.now(),
+        media_data__isnull=False,
+    ).order_by('created_at')
     if request.user.is_authenticated:
         hidden_owners = StoryVisibilityBlock.objects.filter(
             hidden_user=request.user

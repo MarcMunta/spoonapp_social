@@ -1,0 +1,21 @@
+{% load i18n %}
+{% for f in friends %}
+<div class="friend-bubble">
+  <a href="{% url 'profile' f.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
+    {% if f.profile.profile_picture %}
+    <img src="{{ f.profile.profile_picture_data_url }}" alt="{{ f.username }}" style="border-color: {{ f.profile.bubble_color }};">
+    {% else %}
+    <img src="{{ default_avatar_data_url }}" alt="{{ f.username }}" style="border-color: {{ f.profile.bubble_color }};">
+    {% endif %}
+    <div class="friend-info">
+      <div class="friend-name">{{ f.username }}</div>
+      {% if f.profile.online %}
+      <div class="friend-status text-success">{% trans "Online" %}</div>
+      {% elif f.profile.last_seen %}
+      <div class="friend-status text-muted">{% blocktrans %}Last seen: {{ f.profile.last_seen|naturaltime }}{% endblocktrans %}</div>
+      {% endif %}
+    </div>
+  </a>
+  <a href="{% url 'start_chat' f.id %}" class="message-icon">💬</a>
+</div>
+{% endfor %}

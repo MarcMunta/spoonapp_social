@@ -253,3 +253,20 @@ onReady(() => {
     });
   });
 });
+
+function updateFriendsList() {
+  const container = document.querySelector(".friends-bubbles");
+  if (!container) return;
+  fetch(`${LANG_PREFIX}/api/friends/`, {
+    headers: { "X-Requested-With": "XMLHttpRequest" },
+  })
+    .then((res) => res.json())
+    .then((data) => {
+      container.innerHTML = data.html;
+    });
+}
+
+onReady(() => {
+  updateFriendsList();
+  setInterval(updateFriendsList, 30000);
+});

@@ -581,7 +581,14 @@ onReady(() => {
         })
         .then((data) => {
           viewsModalBody.innerHTML = data.html;
+          const items = viewsModalBody.querySelectorAll(".viewer-item");
+          items.forEach((item, idx) => {
+            item.style.transitionDelay = `${idx * 50}ms`;
+          });
           viewsModal.classList.add("show");
+          requestAnimationFrame(() => {
+            viewsModal.classList.add("visible");
+          });
           pauseProgress();
         })
         .catch(() => {
@@ -591,7 +598,16 @@ onReady(() => {
 
     viewsModal.addEventListener("click", (e) => {
       if (e.target === viewsModal) {
-        viewsModal.classList.remove("show");
+        viewsModal.classList.remove("visible");
+        const content = viewsModal.querySelector(".views-list-content");
+        const hide = () => {
+          viewsModal.classList.remove("show");
+        };
+        if (content) {
+          content.addEventListener("transitionend", hide, { once: true });
+        } else {
+          hide();
+        }
       }
     });
   }

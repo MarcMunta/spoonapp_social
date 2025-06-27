@@ -122,9 +122,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #0d6efd, #6610f2);
+    background: linear-gradient(90deg, #ff00c8, #00e0ff);
     background-size: 200% 100%;
-    animation: progress-slide 1s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 .story-header {
@@ -204,9 +204,9 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #0d6efd, #6610f2);
+    background: linear-gradient(90deg, #ff00c8, #00e0ff);
     background-size: 200% 100%;
-    animation: progress-slide 1s linear infinite;
+    animation: gradientMove 2s linear infinite;
 }
 
 #storyImage,
@@ -487,20 +487,31 @@
     object-fit: cover;
 }
 
-@keyframes progress-slide {
+@keyframes neonGlow {
     from {
-        background-position: 0 0;
+        box-shadow: 0 0 4px #ff00c8, 0 0 8px #ff00c8;
     }
     to {
-        background-position: -40px 0;
+        box-shadow: 0 0 4px #00e0ff, 0 0 8px #00e0ff;
     }
 }
 
-@keyframes eye-pulse {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.1);
-    }
+@keyframes imageFadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideLeft {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slideRight {
+    from { transform: translateX(-100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes gradientMove {
+    from { background-position: 0% 50%; }
+    to { background-position: 100% 50%; }
 }

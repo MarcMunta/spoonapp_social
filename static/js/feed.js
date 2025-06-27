@@ -1,6 +1,14 @@
 // Prefix URLs with the current language code taken from the <html> tag.
 const LANG_PREFIX = `/${document.documentElement.lang}`;
 
+function onReady(fn) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fn);
+  } else {
+    fn();
+  }
+}
+
 const popSound = new Audio('/static/audio/pop.wav');
 
 // Load dynamic translations from the template if available
@@ -24,7 +32,7 @@ if (typeof getCSRFToken === "undefined") {
   }
 }
 
-document.addEventListener("DOMContentLoaded", () => {
+onReady(() => {
   popSound.preload = "auto";
   const updateRelativeTimes = () => {
     document.querySelectorAll(".post-relative").forEach((el) => {
@@ -292,6 +300,12 @@ document.addEventListener("DOMContentLoaded", () => {
       storyViews.style.display = currentIsOwn ? "flex" : "none";
       const countEl = storyViews.querySelector(".view-count");
       if (countEl) countEl.textContent = "";
+      const eye = storyViews.querySelector("span:first-child");
+      if (currentIsOwn && eye) {
+        eye.style.animation = "none";
+        void eye.offsetWidth;
+        eye.style.animation = "";
+      }
     }
     if (replyContainer) {
       if (currentIsOwn) {

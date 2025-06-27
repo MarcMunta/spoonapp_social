@@ -5,6 +5,14 @@
 // the proper /es, /en, etc. prefix based on the active language.
 const LANG_PREFIX = `/${document.documentElement.lang}`;
 
+function onReady(fn) {
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", fn);
+  } else {
+    fn();
+  }
+}
+
 document
   .getElementById("searchFriendInput")
   ?.addEventListener("input", function () {
@@ -192,7 +200,7 @@ document
     document.getElementById("photoUploadForm").submit();
   });
 
-document.addEventListener("DOMContentLoaded", () => {
+onReady(() => {
   const tabsContainer = document.getElementById("categoryTabs");
   if (!tabsContainer) return;
 
@@ -215,7 +223,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-document.addEventListener("DOMContentLoaded", () => {
+onReady(() => {
   if (!document.body.classList.contains("home-page")) return;
   const bubbles = document.querySelectorAll(
     ".friends-bubbles .friend-bubble"

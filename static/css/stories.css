@@ -68,7 +68,6 @@
     object-fit: cover;
     border-radius: 50%;
     transition: transform 0.2s ease;
-    border: 2px dashed var(--story-color);
 }
 
 .story-add {
@@ -355,14 +354,10 @@
     display: none;
 }
 
-.open-story .story-img {
-    border-style: solid;
-    border-color: var(--story-color);
-}
+
 
 .story-thumb:hover .story-img {
     transform: scale(1.05);
-    border-color: var(--story-color);
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 

@@ -108,7 +108,9 @@
       <!-- ESTADÍSTICAS -->
       <div class="d-flex gap-4 mb-2">
         <div><strong>{{ total_matches }}</strong> {% trans "Matches" %}</div>
+        {% if not hide_friends_section %}
         <div><strong>{{ total_friends }}</strong> {% trans "Friends" %}</div>
+        {% endif %}
         <div><strong>{{ posts|length }}</strong> {% trans "Posts" %}</div>
       </div>
 

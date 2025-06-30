@@ -653,12 +653,13 @@ onReady(() => {
   const cancelDeletePostBtn = document.getElementById("cancelDeletePost");
   let pendingPostDeleteId = null;
 
-  document.querySelectorAll(".delete-post-btn").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".delete-post-btn");
+    if (btn) {
       e.preventDefault();
       pendingPostDeleteId = btn.dataset.postId;
       if (postDeleteConfirm) postDeleteConfirm.style.display = "flex";
-    });
+    }
   });
 
   if (postDeleteConfirm && confirmDeletePostBtn && cancelDeletePostBtn) {
@@ -835,8 +836,9 @@ onReady(() => {
     });
   }
 
-  document.querySelectorAll(".like-post").forEach((btn) => {
-    btn.addEventListener("click", (e) => {
+  document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".like-post");
+    if (btn) {
       e.preventDefault();
       fetch(btn.dataset.url, {
         headers: { "X-Requested-With": "XMLHttpRequest" },
@@ -848,7 +850,7 @@ onReady(() => {
           btn.classList.add("animate-pop");
           setTimeout(() => btn.classList.remove("animate-pop"), 300);
         });
-    });
+    }
   });
 
   function closeReply(container) {

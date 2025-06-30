@@ -359,6 +359,25 @@ function animateFriendBubbles() {
 }
 
 onReady(animateFriendBubbles);
+onReady(applyUserListLimit);
+
+function applyUserListLimit() {
+  const container = document.querySelector(".friends-bubbles");
+  if (!container) return;
+  const bubbles = container.querySelectorAll(".friend-bubble");
+  const moreBtn = container.querySelector(".show-more-users");
+  const lessBtn = container.querySelector(".show-less-users");
+  if (bubbles.length <= 5) {
+    if (moreBtn) moreBtn.style.display = "none";
+    if (lessBtn) lessBtn.style.display = "none";
+    return;
+  }
+  bubbles.forEach((b, idx) => {
+    b.style.display = idx < 5 ? "" : "none";
+  });
+  if (moreBtn) moreBtn.style.display = "";
+  if (lessBtn) lessBtn.style.display = "none";
+}
 
 function updateFriendsList() {
   const container = document.querySelector(".friends-bubbles");
@@ -370,12 +389,36 @@ function updateFriendsList() {
     .then((data) => {
       container.innerHTML = data.html;
       animateFriendBubbles();
+      applyUserListLimit();
     });
 }
 
 onReady(() => {
   updateFriendsList();
   setInterval(updateFriendsList, 30000);
+});
+
+onReady(() => {
+  document.addEventListener("click", (e) => {
+    const moreBtn = e.target.closest(".show-more-users");
+    if (moreBtn) {
+      e.preventDefault();
+      const container = moreBtn.closest(".friends-bubbles");
+      if (container) {
+        container.querySelectorAll(".friend-bubble").forEach((b) => {
+          b.style.display = "";
+        });
+        moreBtn.classList.add("d-none");
+        const lessBtn = container.querySelector(".show-less-users");
+        if (lessBtn) lessBtn.classList.remove("d-none");
+      }
+    }
+    const lessBtn = e.target.closest(".show-less-users");
+    if (lessBtn) {
+      e.preventDefault();
+      applyUserListLimit();
+    }
+  });
 });
 
 onReady(() => {

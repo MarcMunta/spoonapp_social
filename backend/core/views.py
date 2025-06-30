@@ -35,6 +35,7 @@ from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
 from django.utils.translation import gettext as _
 from .default_avatar import DEFAULT_AVATAR_DATA_URL
+from .context_processors import get_random_users
 import requests
 import sys
 import json
@@ -1039,12 +1040,12 @@ def get_notifications_count(request):
 
 @login_required(login_url='/custom-login/')
 def friends_list_partial(request):
-    """Return rendered friends list for AJAX updates"""
-    friends = get_friends(request.user)
+    """Return random users for AJAX updates"""
+    friends = get_random_users(request.user)
     html = render_to_string(
         "partials/friends/list.html",
         {
-            "friends": friends,
+            "users": friends,
             "default_avatar_data_url": DEFAULT_AVATAR_DATA_URL,
         },
         request=request,

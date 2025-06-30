@@ -521,6 +521,7 @@ def profile(request, username):
         'posts_by_category': posts_by_category,
         'selected_category': selected_slug or 'all',
         'profile_story_data': profile_story_data,
+        'hide_friends_section': user_profile.account_type == 'individual',
     }
 
     if request.user == profile_user:
@@ -536,12 +537,16 @@ def search_users(request):
             return JsonResponse([], safe=False)
 
         # Base queryset for matching users
-        qs = User.objects.filter(
-            Q(username__icontains=query)
-            | Q(email__icontains=query)
-            | Q(first_name__icontains=query)
-            | Q(last_name__icontains=query)
-        ).exclude(id=request.user.id)
+        qs = (
+            User.objects.filter(
+                Q(username__icontains=query)
+                | Q(email__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(last_name__icontains=query)
+            )
+            .filter(profile__account_type="individual")
+            .exclude(id=request.user.id)
+        )
 
         blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
         blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)

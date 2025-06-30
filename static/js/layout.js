@@ -377,3 +377,34 @@ onReady(() => {
   updateFriendsList();
   setInterval(updateFriendsList, 30000);
 });
+
+onReady(() => {
+  const btn = document.getElementById('menuToggle');
+  const sidebar = document.querySelector('.sidebar');
+  if (!btn || !sidebar) return;
+  const icon = btn.querySelector('i');
+
+  function animateSidebarItems() {
+    const items = sidebar.querySelectorAll('.menu-item, .restaurants-section > *');
+    items.forEach((el, idx) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(-20px)';
+      el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      el.style.transitionDelay = `${idx * 50}ms`;
+    });
+    requestAnimationFrame(() => {
+      items.forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateX(0)';
+      });
+    });
+  }
+
+  btn.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('sidebar-hidden');
+    if (icon) {
+      icon.className = hidden ? 'fas fa-bars' : 'fas fa-times';
+    }
+    if (!hidden) animateSidebarItems();
+  });
+});

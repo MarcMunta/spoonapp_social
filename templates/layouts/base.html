@@ -19,8 +19,11 @@
 
 <body data-current-user="{% if user.is_authenticated %}{{ user.username }}{% endif %}"
   data-bubble-color="{% if user.is_authenticated %}{{ user.profile.bubble_color }}{% endif %}"
-  class="{% block body_class %}{% endblock %}">
+  class="{% block body_class %}{% endblock %} sidebar-hidden">
   <div class="topbar">
+    <button id="menuToggle" class="menu-toggle-btn" aria-label="Toggle menu">
+      <i class="fas fa-bars"></i>
+    </button>
     <div class="app-title">
       <a href="{% url 'home' %}" class="spoonapp-logo-link">
         <img src="{% static 'img/spoonapp.png' %}" alt="{% trans "SpoonApp Logo" %}" class="spoonapp-logo-large" />

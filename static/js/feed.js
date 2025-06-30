@@ -463,7 +463,7 @@ onReady(() => {
       hideViewsModal();
       return;
     }
-    if (e.target === modalContent || e.target === img || e.target === video) {
+    if (e.target === modalContent) {
       const rect = modalContent.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       if (clickX > rect.width / 2) {

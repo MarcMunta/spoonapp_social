@@ -466,6 +466,35 @@ body:has(.spoon-chat-container) .rightbar {
     margin-bottom: 10px;
 }
 
+/* Community search styling mirrors friend search */
+.search-communities-container {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    position: relative;
+}
+
+#searchCommunityInput {
+    width: 100%;
+    padding: 6px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+}
+
+#searchCommunityResults {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    max-height: 250px;
+    overflow-y: auto;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    position: absolute;
+    z-index: 99;
+}
+
 #searchFriendInput {
     width: 100%;
     padding: 6px;

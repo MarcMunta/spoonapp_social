@@ -48,6 +48,10 @@ if (searchInput) {
 
   searchInput.addEventListener("input", updateFriendSuggestions);
   searchInput.addEventListener("focus", updateFriendSuggestions);
+
+  onReady(() => {
+    updateFriendSuggestions();
+  });
 }
 
 function getCSRFToken() {

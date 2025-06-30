@@ -20,11 +20,16 @@ if (searchInput) {
   const updateFriendSuggestions = () => {
     const query = searchInput.value.trim();
     const resultsList = document.getElementById("searchResults");
-    resultsList.innerHTML = "";
+    if (!query) {
+      resultsList.innerHTML = "";
+      resultsList.style.display = "none";
+      return;
+    }
 
     fetch(`${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}`)
       .then((res) => res.json())
       .then((users) => {
+        resultsList.innerHTML = "";
         users.slice(0, 5).forEach((user) => {
           const li = document.createElement("li");
           li.innerHTML = `
@@ -47,11 +52,6 @@ if (searchInput) {
   };
 
   searchInput.addEventListener("input", updateFriendSuggestions);
-  searchInput.addEventListener("focus", updateFriendSuggestions);
-
-  onReady(() => {
-    updateFriendSuggestions();
-  });
 }
 
 function getCSRFToken() {

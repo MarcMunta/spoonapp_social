@@ -743,11 +743,9 @@ body:has(.spoon-chat-container) .rightbar {
     max-height: 200px;
     overflow-y: auto;
     padding: 0;
-    margin: 0;
+    margin: 10px 0;
     background: white;
-    position: absolute;
-    width: 300px;
-    z-index: 1000;
+    width: 100%;
     display: none;
 }
 

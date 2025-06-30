@@ -91,7 +91,11 @@
     {% endwith %}
 
     <div class="back-link mt-4 text-center">
+        {% if user.is_authenticated %}
         <a href="{% url 'profile' request.user.username %}" class="text-muted">← {% trans "Back to profile" %}</a>
+        {% else %}
+        <a href="{% url 'home' %}" class="text-muted">← {% trans "Back to home" %}</a>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

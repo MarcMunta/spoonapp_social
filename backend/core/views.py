@@ -7,7 +7,7 @@ from django.contrib.auth import update_session_auth_hash   # ⬅ lo usaremos
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
-from .forms import UserForm, ProfileForm, PrivacySettingsForm 
+from .forms import UserForm, ProfileForm, PrivacySettingsForm, SignupForm
 from .models import (
     Post,
     PostLike,
@@ -65,6 +65,19 @@ def set_language(request):
     except Exception as exc:
         print(f'Error compiling messages: {exc}', file=sys.stderr)
     return response
+
+
+def signup(request):
+    if request.method == "POST":
+        form = SignupForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            user.profile.account_type = form.cleaned_data["account_type"]
+            user.profile.save(update_fields=["account_type"])
+            return redirect("custom_login")
+    else:
+        form = SignupForm()
+    return render(request, "pages/signup.html", {"form": form})
 
 def _build_feed_context(request, show_posts=True):
     """Return context for feed-related views."""
@@ -374,46 +387,6 @@ def delete_comment(request, comment_id):
         return redirect('home')
     return JsonResponse({'error': 'Invalid method'}, status=405)
 
-@login_required(login_url='/custom-login/')
-def follow_user(request, username):
-    target_user = get_object_or_404(User, username=username)
-
-    if request.user == target_user:
-        return redirect('profile', username=username)
-
-    # Evita duplicados
-    existing_request = FriendRequest.objects.filter(from_user=request.user, to_user=target_user).first()
-    if not existing_request:
-        # No crees solicitud aceptada automática: simplemente se envía
-        FriendRequest.objects.create(from_user=request.user, to_user=target_user, accepted=False)
-
-    return redirect('profile', username=username)
-
-@login_required(login_url='/custom-login/')
-def unfollow_user(request, username):
-    target_user = get_object_or_404(User, username=username)
-
-    FriendRequest.objects.filter(from_user=request.user, to_user=target_user).delete()
-
-    reverse = FriendRequest.objects.filter(from_user=target_user, to_user=request.user, accepted=True).first()
-    if reverse:
-        reverse.accepted = False
-        reverse.save()
-
-    return redirect('profile', username=username)
-
-@login_required(login_url='/custom-login/')
-def cancel_follow_request(request, username):
-    target_user = get_object_or_404(User, username=username)
-    FriendRequest.objects.filter(from_user=request.user, to_user=target_user, accepted=False).delete()
-    return redirect('profile', username=username)
-
-
-@login_required(login_url='/custom-login/')
-def remove_follower(request, username):
-    follower = get_object_or_404(User, username=username)
-    FriendRequest.objects.filter(from_user=follower, to_user=request.user).delete()
-    return redirect('profile', request.user.username)
 
 
 @login_required(login_url='/custom-login/')
@@ -515,16 +488,11 @@ def profile(request, username):
         'thumb': story_qs[0].media_data_url if story_qs else None,
     }
 
-    is_following = False
-    is_followed_by = False
     is_friend = False
 
     if request.user.is_authenticated and request.user != profile_user:
         req_sent = FriendRequest.objects.filter(from_user=request.user, to_user=profile_user).first()
         req_received = FriendRequest.objects.filter(from_user=profile_user, to_user=request.user).first()
-
-        is_following = req_sent is not None
-        is_followed_by = req_received is not None
 
         is_friend = (
             req_sent is not None and req_received is not None and
@@ -545,8 +513,6 @@ def profile(request, username):
         'user_profile': user_profile,
         'posts': posts,
         'form': form,
-        'is_following': is_following,
-        'is_followed_by': is_followed_by,
         'is_friend': is_friend,
         'total_matches': PostLike.objects.filter(post__user=profile_user).count(),
         'total_friends': get_friends(profile_user).count(),

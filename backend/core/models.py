@@ -114,11 +114,6 @@ class StoryLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liked_at = models.DateTimeField(auto_now_add=True)
 
-class Follow(models.Model):
-    follower = models.ForeignKey(User, on_delete=models.CASCADE, related_name='following')
-    followed = models.ForeignKey(User, on_delete=models.CASCADE, related_name='followers')
-    followed_at = models.DateTimeField(auto_now_add=True)
-
 class Chat(models.Model):
     participants = models.ManyToManyField(User, related_name='chats')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -193,8 +188,13 @@ class FriendRequest(models.Model):
         unique_together = ('from_user', 'to_user')
 
 class Profile(models.Model):
+    ACCOUNT_TYPES = [
+        ("individual", "Individual"),
+        ("community", "Comunidad"),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    is_private = models.BooleanField(default=False)
+    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPES, default="individual")
     email_notifications = models.BooleanField(default=True)
     push_notifications = models.BooleanField(default=True)
     profile_picture = models.BinaryField(null=True, blank=True, editable=True)

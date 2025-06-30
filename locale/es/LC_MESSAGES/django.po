@@ -84,6 +84,14 @@ msgstr "Patrocinado"
 msgid "Search users..."
 msgstr "Buscar usuarios..."
 
+#: templates/layouts/base.html:196
+msgid "Search communities..."
+msgstr "Buscar comunidades..."
+
+#: templates/layouts/base.html:197
+msgid "Communities"
+msgstr "Comunidades"
+
 #: templates/layouts/base.html:173
 msgid "Online"
 msgstr "En línea"

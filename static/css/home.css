@@ -46,7 +46,8 @@ body {
 }
 
 .topbar-icons a,
-.topbar-icons span {
+.topbar-icons span,
+.topbar-icons .notification-bell {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -62,8 +63,9 @@ body {
 }
 
 .topbar-icons a:hover,
-.topbar-icons span:hover {
-    transform: translateY(-2px);
+.topbar-icons span:hover,
+.topbar-icons .notification-bell:hover {
+    transform: translateY(-5px);
 }
 
 .topbar-icons a::after,

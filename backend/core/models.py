@@ -133,6 +133,7 @@ class Notification(models.Model):
         ('message', 'New Message'),
         ('friend_request', 'Friend Request'),
         ('friend_accepted', 'Friend Request Accepted'),
+        ('community_post', 'Community Post'),
     ]
     
     user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='notifications')
@@ -143,6 +144,7 @@ class Notification(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     related_user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True, related_name='related_notifications')
     related_chat = models.ForeignKey('Chat', on_delete=models.CASCADE, null=True, blank=True)
+    target_url = models.CharField(max_length=200, null=True, blank=True)
     
     class Meta:
         ordering = ['-created_at']
@@ -187,6 +189,20 @@ class FriendRequest(models.Model):
     class Meta:
         unique_together = ('from_user', 'to_user')
 
+
+class CommunityFollow(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    community = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='community_followers',
+        limit_choices_to={'profile__account_type': 'community'},
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        unique_together = ('user', 'community')
+
 class Profile(models.Model):
     ACCOUNT_TYPES = [
         ("individual", "Individual"),
@@ -206,6 +222,7 @@ class Profile(models.Model):
     location = models.CharField(max_length=100, blank=True, null=True)
     gender = models.CharField(max_length=20, blank=True, null=True)
     bubble_color = models.CharField(max_length=7, default="#ff0000")
+    followers = models.PositiveIntegerField(default=0)
 
     def __str__(self):
         return self.user.username

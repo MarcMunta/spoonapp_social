@@ -13,18 +13,41 @@ def get_friends(user):
     return User.objects.filter(id__in=mutual_ids)
 
 def get_random_users(user, limit=None):
-    """Return random users excluding the given user and blocks."""
+    """Return random users near the user if possible."""
     if not user.is_authenticated:
-        qs = User.objects.none()
+        return []
+
+    qs = User.objects.exclude(id=user.id)
+    blocked_ids = Block.objects.filter(blocker=user).values_list("blocked_id", flat=True)
+    blocking_ids = Block.objects.filter(blocked=user).values_list("blocker_id", flat=True)
+    qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+
+    # Try to find nearby users based on the city portion of the location
+    city = ""
+    if hasattr(user, "profile") and user.profile.location:
+        city = user.profile.location.split(",")[0].strip()
+
+    users = []
+    if city:
+        nearby_qs = qs.filter(profile__location__istartswith=city)
+        if limit is not None:
+            nearby = list(nearby_qs.order_by("?")[:limit])
+        else:
+            nearby = list(nearby_qs.order_by("?"))
+        users.extend(nearby)
+
+        if limit is not None:
+            remaining = limit - len(nearby)
+            if remaining > 0:
+                others = qs.exclude(id__in=[u.id for u in nearby]).order_by("?")[:remaining]
+                users.extend(list(others))
     else:
-        qs = User.objects.exclude(id=user.id)
-        blocked_ids = Block.objects.filter(blocker=user).values_list('blocked_id', flat=True)
-        blocking_ids = Block.objects.filter(blocked=user).values_list('blocker_id', flat=True)
-        qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
-    qs = qs.order_by('?')
-    if limit:
-        qs = qs[:limit]
-    return qs
+        if limit is not None:
+            users = list(qs.order_by("?")[:limit])
+        else:
+            users = list(qs.order_by("?"))
+
+    return users
 
 def friend_requests_processor(request):
     context = {}

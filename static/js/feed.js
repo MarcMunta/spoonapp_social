@@ -818,6 +818,9 @@ onReady(() => {
       if (deleteBtn) deleteBtn.style.display = optionsOpen ? "block" : "none";
       if (optionsOpen) {
         pauseProgress();
+        // Prevent the next click (used to close the menu) from
+        // triggering navigation that would close the story.
+        skipNavClick = true;
       } else {
         resumeProgress();
       }

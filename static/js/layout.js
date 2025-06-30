@@ -375,7 +375,7 @@ function animateFriendBubbles() {
   const bubbles = container.querySelectorAll(".friend-bubble");
   bubbles.forEach((bubble, idx) => {
     bubble.style.opacity = "0";
-    bubble.style.transform = "translateY(100vh)";
+    bubble.style.transform = "translateY(50px)";
     bubble.style.animationDelay = `${idx * 0.1}s`;
     bubble.addEventListener(
       "animationend",

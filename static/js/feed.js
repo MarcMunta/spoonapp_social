@@ -452,6 +452,9 @@ onReady(() => {
 
   // allow clicking on the content to navigate left/right
   modalContent.addEventListener("click", (e) => {
+    if (optionsOpen) {
+      return;
+    }
     if (skipNavClick) {
       skipNavClick = false;
       return;
@@ -460,7 +463,7 @@ onReady(() => {
       hideViewsModal();
       return;
     }
-    if (e.target === modalContent || e.target === img || e.target === video) {
+    if (e.target === modalContent) {
       const rect = modalContent.getBoundingClientRect();
       const clickX = e.clientX - rect.left;
       if (clickX > rect.width / 2) {
@@ -815,6 +818,9 @@ onReady(() => {
       if (deleteBtn) deleteBtn.style.display = optionsOpen ? "block" : "none";
       if (optionsOpen) {
         pauseProgress();
+        // Prevent the next click (used to close the menu) from
+        // triggering navigation that would close the story.
+        skipNavClick = true;
       } else {
         resumeProgress();
       }

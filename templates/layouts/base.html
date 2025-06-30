@@ -158,7 +158,6 @@
 
       <div class="search-friends-container">
         <input type="text" id="searchFriendInput" placeholder="{% trans 'Search users...' %}" autocomplete="off" />
-        <ul id="searchResults" class="autocomplete-list"></ul>
       </div>
 
       <div class="friends-bubbles">
@@ -187,6 +186,7 @@
         </div>
         {% endfor %}
       </div>
+      <ul id="searchResults" class="autocomplete-list"></ul>
     </div>
     {% endif %}
   </div>

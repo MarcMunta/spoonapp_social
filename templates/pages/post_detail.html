@@ -3,7 +3,7 @@
 {% load i18n %}
 {% load custom_filters %}
 
-{% block title %}Publicación de {{ post.user.username }} — SpoonApp{% endblock %}
+{% block title %}{% trans "Post by" %} {{ post.user.username }} — SpoonApp{% endblock %}
 
 {% block body_class %}home-page{% endblock %}
 
@@ -13,15 +13,11 @@
 {% endblock %}
 
 {% block content %}
-<div class="post mb-3">
+<div class="post mb-3" data-post-index="0">
     <div class="d-flex justify-content-between align-items-center mb-1 post-top">
-        <a href="{% url 'profile' post.user.username %}" class="post-user text-decoration-none"
-            {% if post.user.profile and post.user.profile.bubble_color %}
-                style="background-color: {{ post.user.profile.bubble_color }};"
-            {% endif %}>
+        <a href="{% url 'profile' post.user.username %}" class="post-user text-decoration-none"{% if post.user.profile and post.user.profile.bubble_color %} style="background-color: {{ post.user.profile.bubble_color }};"{% endif %}>
             {% if post.user.profile.profile_picture %}
-            <img src="{{ post.user.profile.profile_picture_data_url }}" alt="{{ post.user.username }}"
-                class="post-avatar">
+            <img src="{{ post.user.profile.profile_picture_data_url }}" alt="{{ post.user.username }}" class="post-avatar">
             {% else %}
             <img src="{{ default_avatar_data_url }}" alt="Por defecto" class="post-avatar">
             {% endif %}
@@ -32,6 +28,16 @@
                 <span class="post-info-bubble">
                     <span class="post-date">{{ post.created_at|date:"H:i d/m/Y" }}</span>
                 </span>
+                {% if post.user == request.user %}
+                <span class="post-info-bubble">
+                    <div class="dropdown">
+                        <button class="dropdown-toggle btn btn-sm p-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">⋯</button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" class="dropdown-item text-danger delete-post-btn" data-post-id="{{ post.id }}">{% trans "Delete" %}</a></li>
+                        </ul>
+                    </div>
+                </span>
+                {% endif %}
             </div>
         </div>
     </div>
@@ -53,14 +59,11 @@
         </div>
         <div class="post-stats" id="like-btn-{{ post.id }}">
             {% if user.is_authenticated %}
-            <a href="{% url 'like_post' post.id %}" data-url="{% url 'like_post' post.id %}"
-                class="spoon-like like-post"><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</a>
+            <a href="{% url 'like_post' post.id %}" data-url="{% url 'like_post' post.id %}" class="spoon-like like-post"><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</a>
             {% else %}
             <span><span class="like-count">{{ post.postlike_set.count }}</span> 🥄</span>
             {% endif %}
-            <span class="comment-count-wrapper" data-post-id="{{ post.id }}">
-                <span class="comment-count">{{ post.postcomment_set.count }}</span> 💬
-            </span>
+            <span class="comment-count-wrapper" data-post-id="{{ post.id }}"><span class="comment-count">{{ post.postcomment_set.count }}</span> 💬</span>
             <button type="button" class="share-btn btn btn-link p-0">📤</button>
             <span class="bookmark-btn">🔖</span>
         </div>
@@ -80,8 +83,7 @@
 
     {% with comments=post.postcomment_set.all %}
     {% if comments %}
-    <ul id="comments-{{ post.id }}" data-post-id="{{ post.id }}" data-expanded="false"
-        class="list-group list-group-flush mt-2 comment-list">
+    <ul id="comments-{{ post.id }}" data-post-id="{{ post.id }}" data-expanded="false" class="list-group list-group-flush mt-2 comment-list">
         {% include 'partials/comments/comments_partial.html' with comments=comments|slice:":3" %}
     </ul>
     {% if comments|length > 3 %}
@@ -98,10 +100,25 @@
         {% endif %}
     </div>
 </div>
+
+<div id="postDeleteConfirm" class="delete-confirm-modal">
+  <div class="delete-confirm-content">
+    <p class="mb-3">{% trans "Delete this post permanently?" %}</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeletePost">{% trans "Cancel" %}</button>
+    <button type="button" class="btn btn-danger" id="confirmDeletePost">{% trans "Delete" %}</button>
+  </div>
+</div>
+<div id="commentDeleteConfirm" class="delete-confirm-modal">
+  <div class="delete-confirm-content">
+    <p class="mb-3">{% trans "Delete this comment permanently?" %}</p>
+    <button type="button" class="btn btn-secondary me-2" id="cancelDeleteComment">{% trans "Cancel" %}</button>
+    <button type="button" class="btn btn-danger" id="confirmDeleteComment">{% trans "Delete" %}</button>
+  </div>
+</div>
 {% endblock %}
 
 {% block extra_js %}
 <script src="https://unpkg.com/htmx.org@1.9.2"></script>
-<script src="{% static 'js/feed.js' %}"></script>  {# ESTO FALTABA #}
+<script src="{% static 'js/feed.js' %}"></script>
 <script src="{% static 'js/post_animations.js' %}"></script>
 {% endblock %}

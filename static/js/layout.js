@@ -15,17 +15,12 @@ function onReady(fn) {
   }
 }
 
-document
-  .getElementById("searchFriendInput")
-  ?.addEventListener("input", function () {
-    const query = this.value.trim();
+const searchInput = document.getElementById("searchFriendInput");
+if (searchInput) {
+  const updateFriendSuggestions = () => {
+    const query = searchInput.value.trim();
     const resultsList = document.getElementById("searchResults");
     resultsList.innerHTML = "";
-
-    if (query.length === 0) {
-      resultsList.style.display = "none";
-      return;
-    }
 
     fetch(`${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}`)
       .then((res) => res.json())
@@ -35,9 +30,7 @@ document
           li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
-      <img src="${
-        user.avatar || "https://via.placeholder.com/40"
-      }" alt="avatar" />
+      <img src="${user.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
       <span>${user.username}</span>
     </div>
   </a>
@@ -45,14 +38,17 @@ document
           resultsList.appendChild(li);
         });
 
-        // Mostrar u ocultar el contenedor según haya resultados o no
         if (users.length > 0) {
           resultsList.style.display = "block";
         } else {
           resultsList.style.display = "none";
         }
       });
-  });
+  };
+
+  searchInput.addEventListener("input", updateFriendSuggestions);
+  searchInput.addEventListener("focus", updateFriendSuggestions);
+}
 
 function getCSRFToken() {
   const cookie = document.cookie

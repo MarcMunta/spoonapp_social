@@ -190,16 +190,16 @@
         <button type="button" class="show-less-users btn btn-secondary btn-sm mt-2 d-none">{% trans 'Show less' %}</button>
         {% endif %}
       </div>
-      <ul id="searchResults" class="autocomplete-list"></ul>
-      <div class="search-communities-container mt-2">
-        <input type="text" id="searchCommunityInput" placeholder="{% trans 'Search communities...' %}" autocomplete="off" />
-      </div>
-      <ul id="searchCommunityResults" class="autocomplete-list"></ul>
+        <ul id="searchResults" class="autocomplete-list"></ul>
 
-      <h3 class="section-title d-flex align-items-center mt-3">
-        {% trans "Communities" %}
-        <span class="friend-icon">👥</span>
-      </h3>
+        <h3 class="section-title d-flex align-items-center mt-3">
+          {% trans "Communities" %}
+          <span class="friend-icon">👥</span>
+        </h3>
+        <div class="search-communities-container mt-2">
+          <input type="text" id="searchCommunityInput" placeholder="{% trans 'Search communities...' %}" autocomplete="off" />
+        </div>
+        <ul id="searchCommunityResults" class="autocomplete-list"></ul>
       <div class="friends-bubbles">
         {% for c in suggested_communities %}
         <div class="friend-bubble{% if forloop.counter > 5 %} extra-user d-none{% endif %}">

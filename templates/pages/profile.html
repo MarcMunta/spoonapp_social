@@ -102,6 +102,20 @@
             </ul>
           </div>
         </div>
+        {% elif user_profile.account_type == 'community' %}
+        <div>
+          {% if is_following %}
+          <form method="post" action="{% url 'unfollow_community' profile_user.username %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-secondary">{% trans "Dejar de seguir" %}</button>
+          </form>
+          {% else %}
+          <form method="post" action="{% url 'follow_community' profile_user.username %}">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-sm btn-primary">{% trans "Seguir" %}</button>
+          </form>
+          {% endif %}
+        </div>
         {% endif %}
       </div>
 
@@ -112,6 +126,9 @@
         <div><strong>{{ total_friends }}</strong> {% trans "Friends" %}</div>
         {% endif %}
         <div><strong>{{ posts|length }}</strong> {% trans "Posts" %}</div>
+        {% if user_profile.account_type == 'community' %}
+        <div><strong>{{ user_profile.followers }}</strong> {% trans "Followers" %}</div>
+        {% endif %}
       </div>
 
       <!-- INFORMACION DEL PERFIL -->

@@ -7,6 +7,7 @@ from django.contrib.auth import update_session_auth_hash   # ⬅ lo usaremos
 from django.contrib.auth.models import User
 from django.contrib.sessions.models import Session
 from django.utils.timezone import now
+from django.urls import reverse
 from .forms import UserForm, ProfileForm, PrivacySettingsForm, SignupForm
 from .models import (
     Post,
@@ -20,6 +21,7 @@ from .models import (
     Notification,
     Story,
     FriendRequest,
+    CommunityFollow,
     StoryView,
     PostCategory,
     Block,
@@ -28,7 +30,7 @@ from .models import (
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
 from django.utils import timezone
 from django.http import HttpResponseForbidden
-from django.db.models import Q, Prefetch, Count
+from django.db.models import Q, Prefetch, Count, F
 import random
 from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
@@ -255,6 +257,19 @@ def create_post(request):
             new_post.user = request.user
             new_post.save()
             form.save_m2m()
+            if request.user.profile.account_type == 'community':
+                followers = CommunityFollow.objects.filter(community=request.user).select_related('user')
+                url = request.build_absolute_uri(reverse('post_detail', args=[new_post.id]))
+                snippet = new_post.caption[:50] + ('...' if len(new_post.caption) > 50 else '') if new_post.caption else _('Ha subido una nueva publicación.')
+                for f in followers:
+                    Notification.objects.create(
+                        user=f.user,
+                        notification_type='community_post',
+                        title=_('Nueva publicación en %(name)s') % {'name': request.user.username},
+                        message=snippet,
+                        related_user=request.user,
+                        target_url=url,
+                    )
     return redirect('home')
 
 @login_required(login_url='/custom-login/')
@@ -276,6 +291,18 @@ def upload_story(request):
             story = form.save(commit=False)
             story.user = request.user
             story.save()
+            if request.user.profile.account_type == 'community':
+                followers = CommunityFollow.objects.filter(community=request.user).select_related('user')
+                url = request.build_absolute_uri(reverse('profile', args=[request.user.username]))
+                for f in followers:
+                    Notification.objects.create(
+                        user=f.user,
+                        notification_type='community_post',
+                        title=_('Nueva publicación en %(name)s') % {'name': request.user.username},
+                        message=_('Ha subido una nueva historia.'),
+                        related_user=request.user,
+                        target_url=url,
+                    )
     return redirect('home')
 
 @login_required(login_url='/custom-login/')
@@ -363,6 +390,28 @@ def reject_friend_request(request, req_id):
     req = get_object_or_404(FriendRequest, id=req_id, to_user=request.user)
     req.delete()
     return redirect('friend_requests')
+
+
+@login_required(login_url='/custom-login/')
+def follow_community(request, username):
+    community = get_object_or_404(User, username=username, profile__account_type='community')
+    if request.user == community:
+        return redirect('profile', username=username)
+    follow, created = CommunityFollow.objects.get_or_create(user=request.user, community=community)
+    if created:
+        Profile.objects.filter(user=community).update(followers=F('followers') + 1)
+    return redirect('profile', username=username)
+
+
+@login_required(login_url='/custom-login/')
+def unfollow_community(request, username):
+    community = get_object_or_404(User, username=username, profile__account_type='community')
+    if request.user == community:
+        return redirect('profile', username=username)
+    deleted, _ = CommunityFollow.objects.filter(user=request.user, community=community).delete()
+    if deleted:
+        Profile.objects.filter(user=community, followers__gt=0).update(followers=F('followers') - 1)
+    return redirect('profile', username=username)
 
 @login_required(login_url='/custom-login/')
 def like_comment(request, comment_id):
@@ -491,6 +540,7 @@ def profile(request, username):
     }
 
     is_friend = False
+    is_following = False
 
     if request.user.is_authenticated and request.user != profile_user:
         req_sent = FriendRequest.objects.filter(from_user=request.user, to_user=profile_user).first()
@@ -501,6 +551,10 @@ def profile(request, username):
             req_sent.accepted and req_received.accepted
         )
 
+        is_following = False
+        if profile_user.profile.account_type == 'community':
+            is_following = CommunityFollow.objects.filter(user=request.user, community=profile_user).exists()
+    
 
     if request.method == 'POST' and request.user == profile_user:
         form = ProfileForm(request.POST, request.FILES, instance=user_profile)
@@ -516,6 +570,7 @@ def profile(request, username):
         'posts': posts,
         'form': form,
         'is_friend': is_friend,
+        'is_following': is_following,
         'total_matches': PostLike.objects.filter(post__user=profile_user).count(),
         'total_friends': get_friends(profile_user).count(),
         'friends': get_friends(request.user) if request.user.is_authenticated else [],

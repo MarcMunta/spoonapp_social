@@ -85,6 +85,14 @@ msgstr "Sponsored"
 msgid "Search users..."
 msgstr "Search users..."
 
+#: templates/layouts/base.html:196
+msgid "Search communities..."
+msgstr "Search communities..."
+
+#: templates/layouts/base.html:197
+msgid "Communities"
+msgstr "Communities"
+
 #: templates/layouts/base.html:173
 msgid "Online"
 msgstr "Online"

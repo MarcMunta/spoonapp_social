@@ -195,6 +195,27 @@
         <input type="text" id="searchCommunityInput" placeholder="{% trans 'Search communities...' %}" autocomplete="off" />
       </div>
       <ul id="searchCommunityResults" class="autocomplete-list"></ul>
+
+      <h3 class="section-title d-flex align-items-center mt-3">
+        {% trans "Communities" %}
+        <span class="friend-icon">👥</span>
+      </h3>
+      <div class="friends-bubbles">
+        {% for c in suggested_communities %}
+        <div class="friend-bubble{% if forloop.counter > 5 %} extra-user d-none{% endif %}">
+          <a href="{% url 'profile' c.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
+            {% if c.profile.profile_picture %}
+            <img src="{{ c.profile.profile_picture_data_url }}" alt="{{ c.username }}" style="border-color: {{ c.profile.bubble_color }};">
+            {% else %}
+            <img src="{{ default_avatar_data_url }}" alt="{{ c.username }}" style="border-color: {{ c.profile.bubble_color }};">
+            {% endif %}
+            <div class="friend-info">
+              <div class="friend-name">{{ c.username }}</div>
+            </div>
+          </a>
+        </div>
+        {% endfor %}
+      </div>
     </div>
     {% endif %}
   </div>

@@ -303,7 +303,6 @@ function animateTopMenuIcons() {
   });
   icons.forEach((icon, idx) => {
     icon.style.opacity = '0';
-    icon.style.transform = 'translateY(0)';
     icon.style.animationDelay = `${idx * 0.12}s`;
     icon.addEventListener(
       'animationend',
@@ -315,6 +314,9 @@ function animateTopMenuIcons() {
       },
       { once: true }
     );
+    setTimeout(() => {
+      icon.removeAttribute('style');
+    }, 1200);
   });
   requestAnimationFrame(() => {
     icons.forEach((icon) => {

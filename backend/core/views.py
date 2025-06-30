@@ -521,6 +521,7 @@ def profile(request, username):
         'posts_by_category': posts_by_category,
         'selected_category': selected_slug or 'all',
         'profile_story_data': profile_story_data,
+        'hide_friends_section': user_profile.account_type == 'individual',
     }
 
     if request.user == profile_user:

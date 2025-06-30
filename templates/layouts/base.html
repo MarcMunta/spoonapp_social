@@ -144,6 +144,7 @@
         <div>Pizza with Pepperoni<br>Lorem ipsum dolor sit amet. -30%</div>
       </div>
     </div>
+    {% if not hide_friends_section %}
     <div class="friends">
       <h3 class="section-title d-flex align-items-center justify-content-between">
         {% trans "Friends" %}
@@ -187,6 +188,7 @@
         {% endfor %}
       </div>
     </div>
+    {% endif %}
   </div>
   <script id="js-translations" type="application/json">
     {

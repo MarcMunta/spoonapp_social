@@ -288,13 +288,14 @@ msgstr "Bloquear"
 msgid "View profile"
 msgstr "Ver perfil"
 
+#: templates/pages/profile.html:118
+msgid "Tipo de cuenta:"
+msgstr "Tipo de cuenta:"
+
 #: templates/partials/stories/story_viewers_list.html:23
 msgid "Hide stories"
 msgstr "Ocultar historias"
 
-#: templates/partials/stories/story_viewers_list.html:24
-msgid "Remove follower"
-msgstr "Cancelar seguido"
 
 #: templates/partials/stories/story_viewers_list.html:27
 msgid "No views yet"
@@ -413,17 +414,11 @@ msgstr "Avatar por defecto"
 msgid "Post image"
 msgstr "Imagen de la publicación"
 
-msgid "Unfollow"
-msgstr "Dejar de seguir"
 
 msgid "Cancel Request"
 msgstr "Cancelar solicitud"
 
-msgid "Follow back"
-msgstr "Seguir de vuelta"
 
-msgid "Follow"
-msgstr "Seguir"
 
 msgid "Comment"
 msgstr "Comentar"
@@ -505,12 +500,18 @@ msgstr "Iniciar sesión"
 msgid "Sign in"
 msgstr "Acceder"
 
+msgid "Sign up"
+msgstr "Registrarse"
+
+msgid "Create account"
+msgstr "Crear cuenta"
+
 # Account deletion
 msgid "Delete your account"
 msgstr "Eliminar tu cuenta"
 
-msgid "Deleting your account is permanent. All your photos, comments, likes and followers will be removed."
-msgstr "Eliminar tu cuenta es permanente. Todas tus fotos, comentarios, me gusta y seguidores se eliminarán."
+msgid "Deleting your account is permanent. All your photos, comments and likes will be removed."
+msgstr "Eliminar tu cuenta es permanente. Todas tus fotos, comentarios y me gusta se eliminarán."
 
 msgid "Yes, delete my account"
 msgstr "Sí, eliminar mi cuenta"

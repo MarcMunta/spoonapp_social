@@ -3,6 +3,7 @@ from django.db.models import Case, When, IntegerField
 from django.utils.translation import gettext_lazy as _
 from .models import Post, PostComment, Profile, PostCategory, Story
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserCreationForm
 
 class PostForm(forms.ModelForm):
     image = forms.ImageField(
@@ -79,7 +80,7 @@ class UserForm(forms.ModelForm):
 class PrivacySettingsForm(forms.ModelForm):
     class Meta:
         model  = Profile
-        fields = ["is_private", "email_notifications", "push_notifications"]
+        fields = ["email_notifications", "push_notifications"]
         widgets = {f: forms.CheckboxInput() for f in fields}
 
 
@@ -101,8 +102,9 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ['bio', 'website', 'location', 'gender', 'bubble_color']
+        fields = ['account_type', 'bio', 'website', 'location', 'gender', 'bubble_color']
         widgets = {
+            'account_type': forms.Select(),
             'bio': forms.Textarea(attrs={'rows': 3, 'placeholder': _('Tell us about yourself...')}),
             'website': forms.URLInput(attrs={'placeholder': 'https://'}),
             'location': forms.TextInput(attrs={'placeholder': _('Your city')}),
@@ -156,3 +158,11 @@ class StoryForm(forms.ModelForm):
         if commit:
             instance.save()
         return instance
+
+
+class SignupForm(UserCreationForm):
+    account_type = forms.ChoiceField(choices=Profile.ACCOUNT_TYPES, initial="individual")
+
+    class Meta(UserCreationForm.Meta):
+        model = User
+        fields = UserCreationForm.Meta.fields + ("account_type",)

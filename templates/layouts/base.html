@@ -161,30 +161,34 @@
       </div>
 
       <div class="friends-bubbles">
-        {% for f in friends %}
-        <div class="friend-bubble">
-          <a href="{% url 'profile' f.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
-            {% if f.profile.profile_picture %}
-            <img src="{{ f.profile.profile_picture_data_url }}" alt="{{ f.username }}"
-              style="border-color: {{ f.profile.bubble_color }};">
+        {% for u in suggested_users %}
+        <div class="friend-bubble{% if forloop.counter > 5 %} extra-user d-none{% endif %}">
+          <a href="{% url 'profile' u.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
+            {% if u.profile.profile_picture %}
+            <img src="{{ u.profile.profile_picture_data_url }}" alt="{{ u.username }}"
+              style="border-color: {{ u.profile.bubble_color }};">
             {% else %}
-            <img src="{{ default_avatar_data_url }}" alt="{{ f.username }}"
-              style="border-color: {{ f.profile.bubble_color }};">
+            <img src="{{ default_avatar_data_url }}" alt="{{ u.username }}"
+              style="border-color: {{ u.profile.bubble_color }};">
             {% endif %}
 
             <div class="friend-info">
-              <div class="friend-name">{{ f.username }}</div>
-              {% if f.profile.online %}
+              <div class="friend-name">{{ u.username }}</div>
+              {% if u.profile.online %}
               <div class="friend-status text-success">{% trans "Online" %}</div>
-              {% elif f.profile.last_seen %}
-              <div class="friend-status text-muted">{% blocktrans %}Last seen: {{ f.profile.last_seen|naturaltime }}{% endblocktrans %}</div>
+              {% elif u.profile.last_seen %}
+              <div class="friend-status text-muted">{% blocktrans %}Last seen: {{ u.profile.last_seen|naturaltime }}{% endblocktrans %}</div>
               {% endif %}
             </div>
           </a>
 
-          <a href="{% url 'start_chat' f.id %}" class="message-icon">💬</a>
+          <a href="{% url 'start_chat' u.id %}" class="message-icon">💬</a>
         </div>
         {% endfor %}
+        {% if suggested_users|length > 5 %}
+        <button type="button" class="show-more-users btn btn-primary btn-sm mt-2">{% trans 'Show more' %}</button>
+        <button type="button" class="show-less-users btn btn-secondary btn-sm mt-2 d-none">{% trans 'Show less' %}</button>
+        {% endif %}
       </div>
       <ul id="searchResults" class="autocomplete-list"></ul>
     </div>

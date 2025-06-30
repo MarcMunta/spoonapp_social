@@ -868,6 +868,42 @@ body:has(.spoon-chat-container) .rightbar {
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+.show-more-users {
+    background-color: #87cefa;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 25px;
+    cursor: pointer;
+    display: block;
+    margin: 0.5rem auto;
+    box-shadow: 0 4px 0 #7ab8e6;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.show-more-users:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #5fa8d3;
+}
+
+.show-less-users {
+    background-color: #f08080;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.4rem;
+    border-radius: 25px;
+    cursor: pointer;
+    display: block;
+    margin: 0.5rem auto;
+    box-shadow: 0 4px 0 #e76c6c;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.show-less-users:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 0 #d45f5f;
+}
+
 .show-more-comments:hover {
     transform: translateY(-2px);
     box-shadow: 0 6px 0 #5fa8d3;

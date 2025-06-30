@@ -665,6 +665,74 @@ def search_users(request):
 
 
 @login_required(login_url='/custom-login/')
+def search_communities(request):
+    if request.method == "GET":
+        query = request.GET.get("q", "").strip()
+
+        qs = User.objects.filter(profile__account_type="community").exclude(
+            id=request.user.id
+        )
+
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list(
+            "blocked_id", flat=True
+        )
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list(
+            "blocker_id", flat=True
+        )
+        qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+
+        communities = []
+        if query:
+            qs = qs.filter(
+                Q(username__icontains=query)
+                | Q(email__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(last_name__icontains=query)
+            )
+
+            candidates = list(qs)
+            ranked = []
+            for u in candidates:
+                follower_count = CommunityFollow.objects.filter(community=u).count()
+                ranked.append((follower_count, u))
+
+            ranked.sort(key=lambda x: (-x[0], x[1].username))
+            communities = [u for _, u in ranked]
+        else:
+            candidates = list(qs)
+            scored = []
+            for u in candidates:
+                likes = PostLike.objects.filter(user=request.user, post__user=u).count()
+                comments = PostComment.objects.filter(user=request.user, post__user=u).count()
+                scored.append((likes + comments, u))
+
+            if scored:
+                scored.sort(key=lambda x: x[0], reverse=True)
+                top_user = scored.pop(0)[1]
+                remaining = [u for _, u in scored]
+                random.shuffle(remaining)
+                communities = [top_user] + remaining
+            else:
+                communities = []
+
+        results = []
+        for comm in communities[:5]:
+            avatar = ""
+            if hasattr(comm, "profile") and comm.profile.profile_picture:
+                avatar = comm.profile.profile_picture_data_url
+            results.append(
+                {
+                    "id": comm.id,
+                    "username": comm.username,
+                    "email": comm.email,
+                    "avatar": avatar,
+                }
+            )
+
+        return JsonResponse(results, safe=False)
+
+
+@login_required(login_url='/custom-login/')
 def search_locations(request):
     """Return cities, towns or countries matching a query using Nominatim."""
     if request.method == "GET":

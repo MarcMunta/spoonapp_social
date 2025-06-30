@@ -537,12 +537,16 @@ def search_users(request):
             return JsonResponse([], safe=False)
 
         # Base queryset for matching users
-        qs = User.objects.filter(
-            Q(username__icontains=query)
-            | Q(email__icontains=query)
-            | Q(first_name__icontains=query)
-            | Q(last_name__icontains=query)
-        ).exclude(id=request.user.id)
+        qs = (
+            User.objects.filter(
+                Q(username__icontains=query)
+                | Q(email__icontains=query)
+                | Q(first_name__icontains=query)
+                | Q(last_name__icontains=query)
+            )
+            .filter(profile__account_type="individual")
+            .exclude(id=request.user.id)
+        )
 
         blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
         blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)

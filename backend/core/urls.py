@@ -38,6 +38,7 @@ urlpatterns = [
     path('send-friend-request/', views.send_friend_request, name='send_friend_request'),
     path('update-bubble-color/', views.update_bubble_color, name='update_bubble_color'),
     path("api/search-users/", views.search_users, name="search_users"),
+    path("api/search-communities/", views.search_communities, name="search_communities"),
     path("api/location-search/", views.search_locations, name="location_search"),
     path('community/<str:username>/follow/', views.follow_community, name='follow_community'),
     path('community/<str:username>/unfollow/', views.unfollow_community, name='unfollow_community'),

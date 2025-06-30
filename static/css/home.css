@@ -58,12 +58,12 @@ body {
     color: #7e7e7e;
     text-decoration: none;
     position: relative;
-    transition: transform 0.2s ease;
+    transition: transform 0.25s ease;
 }
 
 .topbar-icons a:hover,
 .topbar-icons span:hover {
-    transform: translateY(-2px);
+    transform: translateY(-5px);
 }
 
 .topbar-icons a::after,

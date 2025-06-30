@@ -68,17 +68,7 @@
     <div class="col-md-9">
       <div class="d-flex justify-content-between align-items-center mb-2">
         <h2>{{ profile_user.username }}</h2>
-        {% if request.user != profile_user %}
-        {% if is_friend %}
-        <a href="{% url 'unfollow' profile_user.username %}" class="btn btn-danger">{% trans 'Unfollow' %}</a>
-        {% elif is_following %}
-        <a href="{% url 'cancel_request' profile_user.username %}" class="btn btn-secondary">{% trans 'Cancel Request' %}</a>
-        {% elif is_followed_by %}
-        <a href="{% url 'follow' profile_user.username %}" class="btn btn-success">{% trans 'Follow back' %}</a>
-        {% else %}
-        <a href="{% url 'follow' profile_user.username %}" class="btn btn-primary">{% trans 'Follow' %}</a>
-        {% endif %}
-        {% else %}
+        {% if request.user == profile_user %}
         <div class="d-flex align-items-center gap-2">
           <div class="color-picker-wrapper position-relative">
             <span id="profileColorBubble" class="user-color-bubble"
@@ -124,6 +114,10 @@
 
       <!-- INFORMACION DEL PERFIL -->
       <div class="profile-info">
+        <div class="profile-info-box">
+          <span class="info-label">{% trans "Tipo de cuenta:" %}</span>
+          <span class="info-content">{{ user_profile.get_account_type_display }}</span>
+        </div>
         {% if user_profile.bio %}
         <div class="profile-info-box">
           <span class="info-label">{% trans "Biografía:" %}</span>

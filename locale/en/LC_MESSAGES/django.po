@@ -289,13 +289,14 @@ msgstr "Block"
 msgid "View profile"
 msgstr "View profile"
 
+#: templates/pages/profile.html:118
+msgid "Tipo de cuenta:"
+msgstr "Account type:"
+
 #: templates/partials/stories/story_viewers_list.html:23
 msgid "Hide stories"
 msgstr "Hide stories"
 
-#: templates/partials/stories/story_viewers_list.html:24
-msgid "Remove follower"
-msgstr "Remove follower"
 
 #: templates/partials/stories/story_viewers_list.html:27
 msgid "No views yet"
@@ -380,12 +381,18 @@ msgstr "Login"
 msgid "Sign in"
 msgstr "Sign in"
 
+msgid "Sign up"
+msgstr "Sign up"
+
+msgid "Create account"
+msgstr "Create account"
+
 # Account deletion
 msgid "Delete your account"
 msgstr "Delete your account"
 
-msgid "Deleting your account is permanent. All your photos, comments, likes and followers will be removed."
-msgstr "Deleting your account is permanent. All your photos, comments, likes and followers will be removed."
+msgid "Deleting your account is permanent. All your photos, comments and likes will be removed."
+msgstr "Deleting your account is permanent. All your photos, comments and likes will be removed."
 
 msgid "Yes, delete my account"
 msgstr "Yes, delete my account"

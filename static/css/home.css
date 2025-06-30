@@ -46,7 +46,8 @@ body {
 }
 
 .topbar-icons a,
-.topbar-icons span {
+.topbar-icons span,
+.topbar-icons .notification-bell {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,11 +59,12 @@ body {
     color: #7e7e7e;
     text-decoration: none;
     position: relative;
-    transition: transform 0.25s ease;
+    transition: transform 0.2s ease;
 }
 
 .topbar-icons a:hover,
-.topbar-icons span:hover {
+.topbar-icons span:hover,
+.topbar-icons .notification-bell:hover {
     transform: translateY(-5px);
 }
 

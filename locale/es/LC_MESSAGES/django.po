@@ -53,7 +53,7 @@ msgstr "Eventos"
 #: templates/layouts/base.html:118 templates/layouts/base.html:145
 #: templates/pages/profile.html:115
 msgid "Friends"
-msgstr "Amigos"
+msgstr "Usuarios"
 
 #: templates/layouts/base.html:119
 msgid "Memories"

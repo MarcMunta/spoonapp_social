@@ -29,6 +29,7 @@ from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
 from django.utils import timezone
 from django.http import HttpResponseForbidden
 from django.db.models import Q, Prefetch, Count
+import random
 from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
@@ -541,8 +542,17 @@ def search_users(request):
             id=request.user.id
         )
 
-        # Apply filtering when a query is provided
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list(
+            "blocked_id", flat=True
+        )
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list(
+            "blocker_id", flat=True
+        )
+        qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+
+        users = []
         if query:
+            # Apply filtering when a query is provided
             qs = qs.filter(
                 Q(username__icontains=query)
                 | Q(email__icontains=query)
@@ -550,34 +560,50 @@ def search_users(request):
                 | Q(last_name__icontains=query)
             )
 
-        blocked_ids = Block.objects.filter(blocker=request.user).values_list('blocked_id', flat=True)
-        blocking_ids = Block.objects.filter(blocked=request.user).values_list('blocker_id', flat=True)
-        qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+            friends_ids = list(
+                get_friends(request.user).values_list("id", flat=True)
+            )
 
-        # Gather friends of current user
-        friends_ids = list(get_friends(request.user).values_list('id', flat=True))
+            # Rank by mutual friends
+            candidates = list(qs)
+            ranked = []
+            for u in candidates:
+                mutual_count = get_friends(u).filter(id__in=friends_ids).count()
+                ranked.append((mutual_count, u))
 
-        # Calculate mutual friends for ranking
-        candidates = list(qs)
-        ranked = []
-        for u in candidates:
-            mutual_count = get_friends(u).filter(id__in=friends_ids).count()
-            ranked.append((mutual_count, u))
+            ranked.sort(key=lambda x: (-x[0], x[1].username))
+            users = [u for _, u in ranked]
+        else:
+            # Suggest users based on interactions when no query provided
+            candidates = list(qs)
+            scored = []
+            for u in candidates:
+                likes = PostLike.objects.filter(user=request.user, post__user=u).count()
+                comments = PostComment.objects.filter(user=request.user, post__user=u).count()
+                scored.append((likes + comments, u))
 
-        ranked.sort(key=lambda x: (-x[0], x[1].username))
-        users = [u for _, u in ranked]
+            if scored:
+                scored.sort(key=lambda x: x[0], reverse=True)
+                top_user = scored.pop(0)[1]
+                remaining = [u for _, u in scored]
+                random.shuffle(remaining)
+                users = [top_user] + remaining
+            else:
+                users = []
 
         results = []
-        for user in users:
+        for user in users[:5]:
             avatar = ""
             if hasattr(user, "profile") and user.profile.profile_picture:
                 avatar = user.profile.profile_picture_data_url
-            results.append({
-                "id": user.id,
-                "username": user.username,
-                "email": user.email,
-                "avatar": avatar,
-            })
+            results.append(
+                {
+                    "id": user.id,
+                    "username": user.username,
+                    "email": user.email,
+                    "avatar": avatar,
+                }
+            )
 
         return JsonResponse(results, safe=False)
 

@@ -65,6 +65,32 @@ def get_random_users(user, limit=None):
     return users
 
 
+def get_random_communities(user, limit=None):
+    """Return random community accounts."""
+    if not user.is_authenticated:
+        return []
+
+    qs = (
+        User.objects.filter(profile__account_type="community")
+        .exclude(id=user.id)
+    )
+
+    blocked_ids = Block.objects.filter(blocker=user).values_list(
+        "blocked_id", flat=True
+    )
+    blocking_ids = Block.objects.filter(blocked=user).values_list(
+        "blocker_id", flat=True
+    )
+    qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+
+    if limit is not None:
+        communities = list(qs.order_by("?")[:limit])
+    else:
+        communities = list(qs.order_by("?"))
+
+    return communities
+
+
 def friend_requests_processor(request):
     context = {}
     if hasattr(request, "user") and request.user.is_authenticated:
@@ -147,6 +173,7 @@ def base_context(request):
         # Get friends list
         friends = get_friends(request.user)
         suggested_users = get_random_users(request.user)
+        suggested_communities = get_random_communities(request.user)
 
         context.update(
             {
@@ -155,6 +182,7 @@ def base_context(request):
                 "pending_requests": pending_requests,
                 "friends": friends,
                 "suggested_users": suggested_users,
+                "suggested_communities": suggested_communities,
             }
         )
 

@@ -30,7 +30,7 @@ if (searchInput) {
       .then((res) => res.json())
       .then((users) => {
         resultsList.innerHTML = "";
-        users.slice(0, 5).forEach((user) => {
+        users.slice(0, 3).forEach((user) => {
           const li = document.createElement("li");
           li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">
@@ -52,6 +52,45 @@ if (searchInput) {
   };
 
   searchInput.addEventListener("input", updateFriendSuggestions);
+}
+
+const searchCommunityInput = document.getElementById("searchCommunityInput");
+if (searchCommunityInput) {
+  const updateCommunitySuggestions = () => {
+    const query = searchCommunityInput.value.trim();
+    const resultsList = document.getElementById("searchCommunityResults");
+    if (!query) {
+      resultsList.innerHTML = "";
+      resultsList.style.display = "none";
+      return;
+    }
+
+    fetch(`${LANG_PREFIX}/api/search-communities/?q=${encodeURIComponent(query)}`)
+      .then((res) => res.json())
+      .then((communities) => {
+        resultsList.innerHTML = "";
+        communities.slice(0, 3).forEach((comm) => {
+          const li = document.createElement("li");
+          li.innerHTML = `
+  <a href="${LANG_PREFIX}/profile/${comm.username}/" class="user-suggestion-link">
+    <div class="user-suggestion">
+      <img src="${comm.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
+      <span>${comm.username}</span>
+    </div>
+  </a>
+`;
+          resultsList.appendChild(li);
+        });
+
+        if (communities.length > 0) {
+          resultsList.style.display = "block";
+        } else {
+          resultsList.style.display = "none";
+        }
+      });
+  };
+
+  searchCommunityInput.addEventListener("input", updateCommunitySuggestions);
 }
 
 function getCSRFToken() {

@@ -452,6 +452,9 @@ onReady(() => {
 
   // allow clicking on the content to navigate left/right
   modalContent.addEventListener("click", (e) => {
+    if (optionsOpen) {
+      return;
+    }
     if (skipNavClick) {
       skipNavClick = false;
       return;

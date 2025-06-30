@@ -1,5 +1,5 @@
 from django.contrib.auth.models import User
-from .models import FriendRequest, Notification
+from .models import FriendRequest, Notification, Block
 from .default_avatar import DEFAULT_AVATAR_DATA_URL
 from django.db.models import Q
 
@@ -11,6 +11,20 @@ def get_friends(user):
     received_ids = FriendRequest.objects.filter(to_user=user, accepted=True).values_list('from_user', flat=True)
     mutual_ids = set(sent_ids).intersection(received_ids)
     return User.objects.filter(id__in=mutual_ids)
+
+def get_random_users(user, limit=None):
+    """Return random users excluding the given user and blocks."""
+    if not user.is_authenticated:
+        qs = User.objects.none()
+    else:
+        qs = User.objects.exclude(id=user.id)
+        blocked_ids = Block.objects.filter(blocker=user).values_list('blocked_id', flat=True)
+        blocking_ids = Block.objects.filter(blocked=user).values_list('blocker_id', flat=True)
+        qs = qs.exclude(id__in=blocked_ids).exclude(id__in=blocking_ids)
+    qs = qs.order_by('?')
+    if limit:
+        qs = qs[:limit]
+    return qs
 
 def friend_requests_processor(request):
     context = {}
@@ -84,12 +98,14 @@ def base_context(request):
         
         # Get friends list
         friends = get_friends(request.user)
+        suggested_users = get_random_users(request.user)
         
         context.update({
             'unread_notifications': unread_notifications,
             'notification_count': notification_count,
             'pending_requests': pending_requests,
             'friends': friends,
+            'suggested_users': suggested_users,
         })
     
     return context

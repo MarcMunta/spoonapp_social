@@ -109,7 +109,11 @@ if (searchInput) {
   }
 
   if (moreBtn) {
-    // Allow default link behavior to open the full search page
+    // Navigate explicitly to ensure the link works even when DOM updates hide the button
+    moreBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      window.location.href = moreBtn.href;
+    });
   }
 
   if (lessBtn)

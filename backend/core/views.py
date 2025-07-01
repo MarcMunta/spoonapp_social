@@ -647,8 +647,12 @@ def search_users(request):
             else:
                 users = []
 
+        offset = int(request.GET.get("offset", 0))
+        limit = int(request.GET.get("limit", 5))
+
+        total = len(users)
         results = []
-        for user in users[:5]:
+        for user in users[offset : offset + limit]:
             avatar = ""
             if hasattr(user, "profile") and user.profile.profile_picture:
                 avatar = user.profile.profile_picture_data_url
@@ -661,7 +665,7 @@ def search_users(request):
                 }
             )
 
-        return JsonResponse(results, safe=False)
+        return JsonResponse({"results": results, "has_more": total > offset + limit})
 
 
 @login_required(login_url='/custom-login/')
@@ -723,6 +727,10 @@ def search_communities(request):
             else:
                 communities = []
 
+        offset = int(request.GET.get("offset", 0))
+        limit = int(request.GET.get("limit", 5))
+
+        total = len(communities)
         results = []
         for comm in communities[offset : offset + limit]:
             avatar = ""
@@ -737,7 +745,7 @@ def search_communities(request):
                 }
             )
 
-        return JsonResponse(results, safe=False)
+        return JsonResponse({"results": results, "has_more": total > offset + limit})
 
 
 @login_required(login_url='/custom-login/')

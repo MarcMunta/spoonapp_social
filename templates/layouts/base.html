@@ -191,7 +191,7 @@
         {% endif %}
       </div>
         <ul id="searchResults" class="autocomplete-list"></ul>
-        <a id="searchShowMore" class="search-show-more mt-2 d-none" href="#">{% trans 'Show more' %}</a>
+        <a id="searchShowMore" class="search-show-more mt-2 d-none" href="{% url 'user_search_page' %}">{% trans 'Show more' %}</a>
         <button type="button" id="searchShowLess" class="search-show-less mt-2 d-none">{% trans 'Show less' %}</button>
 
         <h3 class="section-title d-flex align-items-center mt-3">

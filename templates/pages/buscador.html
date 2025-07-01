@@ -5,6 +5,29 @@
 
 {% block content %}
 <div class="container mt-5">
-  <!-- Empty page for now -->
+  <div class="search-communities-container mb-3">
+    <input type="text" id="searchCommunityInput" value="{{ query }}" placeholder="{% trans 'Search communities...' %}" autocomplete="off" />
+  </div>
+  <ul id="searchCommunityResults" class="autocomplete-list"></ul>
+
+  <h3 class="section-title mt-4">{% trans 'Suggested Communities' %}</h3>
+  <div class="friends-bubbles mt-2">
+    {% for c in random_communities %}
+    <div class="friend-bubble">
+      <a href="{% url 'profile' c.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
+        {% if c.profile.profile_picture %}
+        <img src="{{ c.profile.profile_picture_data_url }}" alt="{{ c.username }}" style="border-color: {{ c.profile.bubble_color }};">
+        {% else %}
+        <img src="{{ default_avatar_data_url }}" alt="{{ c.username }}" style="border-color: {{ c.profile.bubble_color }};">
+        {% endif %}
+        <div class="friend-info">
+          <div class="friend-name">{{ c.username }}</div>
+        </div>
+      </a>
+    </div>
+    {% empty %}
+    <p>{% trans 'No communities available.' %}</p>
+    {% endfor %}
+  </div>
 </div>
 {% endblock %}

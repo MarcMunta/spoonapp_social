@@ -158,6 +158,9 @@
 
       <div class="search-friends-container">
         <input type="text" id="searchFriendInput" placeholder="{% trans 'Search users...' %}" autocomplete="off" />
+        <ul id="searchResults" class="autocomplete-list"></ul>
+        <a id="searchShowMore" class="search-show-more mt-2 d-none" href="{% url 'buscador_page' %}">{% trans 'Show more' %}</a>
+        <button type="button" id="searchShowLess" class="search-show-less mt-2 d-none">{% trans 'Show less' %}</button>
       </div>
 
       <div class="friends-bubbles communities-bubbles">

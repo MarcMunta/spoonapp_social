@@ -1194,6 +1194,17 @@ def user_search_page(request):
 
 
 @login_required(login_url='/custom-login/')
+def buscador_page(request):
+    """Blank search page to be implemented later."""
+    query = request.GET.get("q", "").strip()
+    return render(
+        request,
+        "pages/buscador.html",
+        {"query": query, "hide_friends_section": True},
+    )
+
+
+@login_required(login_url='/custom-login/')
 def friends_list_partial(request):
     """Return random users for AJAX updates"""
     friends = get_random_users(request.user)

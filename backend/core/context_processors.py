@@ -23,7 +23,7 @@ def get_random_users(user, limit=None):
     if not user.is_authenticated:
         return []
 
-    qs = User.objects.exclude(id=user.id)
+    qs = User.objects.filter(profile__account_type="individual").exclude(id=user.id)
     blocked_ids = Block.objects.filter(blocker=user).values_list(
         "blocked_id", flat=True
     )

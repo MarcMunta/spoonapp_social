@@ -85,8 +85,12 @@ if (searchInput) {
         renderUsers(data.results, !reset && offset > 0);
         resultsList.style.display = data.results.length > 0 ? "block" : "none";
         if (moreBtn) {
-          if (data.has_more) moreBtn.classList.remove("d-none");
-          else moreBtn.classList.add("d-none");
+          if (data.has_more) {
+            moreBtn.classList.remove("d-none");
+            moreBtn.href = `${LANG_PREFIX}/user-search/?q=${encodeURIComponent(query)}`;
+          } else {
+            moreBtn.classList.add("d-none");
+          }
         }
         if (lessBtn) {
           if (offset > 0) lessBtn.classList.remove("d-none");
@@ -98,12 +102,12 @@ if (searchInput) {
 
   searchInput.addEventListener("input", () => fetchUsers(true));
 
-  if (moreBtn)
-    moreBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      offset += 5;
-      fetchUsers(false);
-    });
+  // If the input already has a value (e.g. from query param), fetch results on load
+  if (searchInput.value.trim()) {
+    fetchUsers(true);
+  }
+
+  // "Show more" now links to the dedicated search page, so no click handler.
 
   if (lessBtn)
     lessBtn.addEventListener("click", (e) => {

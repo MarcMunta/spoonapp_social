@@ -1178,6 +1178,22 @@ def get_notifications_count(request):
 
 
 @login_required(login_url='/custom-login/')
+def user_search_page(request):
+    """Display user search page with random user suggestions."""
+    query = request.GET.get("q", "").strip()
+    random_users = get_random_users(request.user)
+    return render(
+        request,
+        "pages/user_search.html",
+        {
+            "query": query,
+            "random_users": random_users,
+            "hide_friends_section": True,
+        },
+    )
+
+
+@login_required(login_url='/custom-login/')
 def friends_list_partial(request):
     """Return random users for AJAX updates"""
     friends = get_random_users(request.user)

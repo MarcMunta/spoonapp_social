@@ -85,9 +85,9 @@ if (searchInput) {
         renderUsers(data.results, !reset && offset > 0);
         resultsList.style.display = data.results.length > 0 ? "block" : "none";
         if (moreBtn) {
-          if (data.has_more) {
+          if (data.results.length > 0) {
             moreBtn.classList.remove("d-none");
-            moreBtn.href = `${LANG_PREFIX}/user-search/?q=${encodeURIComponent(currentQuery)}`;
+            moreBtn.href = `${LANG_PREFIX}/buscador/?q=${encodeURIComponent(currentQuery)}`;
           } else {
             moreBtn.classList.add("d-none");
           }

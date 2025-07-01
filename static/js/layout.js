@@ -406,13 +406,13 @@ function applyUserListLimit() {
   const bubbles = container.querySelectorAll(".friend-bubble");
   const moreBtn = container.querySelector(".show-more-users");
   const lessBtn = container.querySelector(".show-less-users");
-  if (bubbles.length <= 5) {
+  if (bubbles.length <= 3) {
     if (moreBtn) moreBtn.style.display = "none";
     if (lessBtn) lessBtn.style.display = "none";
     return;
   }
   bubbles.forEach((b, idx) => {
-    b.style.display = idx < 5 ? "" : "none";
+    b.style.display = idx < 3 ? "" : "none";
   });
   if (moreBtn) moreBtn.style.display = "";
   if (lessBtn) lessBtn.style.display = "none";

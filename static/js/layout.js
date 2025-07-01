@@ -17,22 +17,43 @@ function onReady(fn) {
 
 const searchInput = document.getElementById("searchFriendInput");
 if (searchInput) {
-  const updateFriendSuggestions = () => {
-    const query = searchInput.value.trim();
-    const resultsList = document.getElementById("searchResults");
-    if (!query) {
-      resultsList.innerHTML = "";
-      resultsList.style.display = "none";
-      return;
-    }
+  const resultsList = document.getElementById("searchResults");
+  const moreBtn = document.getElementById("searchShowMore");
+  const lessBtn = document.getElementById("searchShowLess");
+  let currentQuery = "";
+  let offset = 0;
 
-    fetch(`${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}`)
-      .then((res) => res.json())
-      .then((users) => {
-        resultsList.innerHTML = "";
-        users.slice(0, 3).forEach((user) => {
-          const li = document.createElement("li");
-          li.innerHTML = `
+  const animateSearchItems = () => {
+    const items = resultsList.querySelectorAll("li, .search-show-more, .search-show-less");
+    items.forEach((item, idx) => {
+      item.style.opacity = "0";
+      item.style.transform = "translateY(50px)";
+      item.style.animationDelay = `${idx * 0.1}s`;
+      item.addEventListener(
+        "animationend",
+        (e) => {
+          if (e.animationName === "friendBounce") {
+            if (!item.matches("li")) item.classList.add("friend-glow");
+            item.removeAttribute("style");
+          }
+        },
+        { once: true }
+      );
+    });
+    requestAnimationFrame(() => {
+      items.forEach((item) => {
+        item.classList.remove("friend-bounce", "friend-glow");
+        void item.offsetWidth;
+        item.classList.add("friend-bounce");
+      });
+    });
+  };
+
+  const renderUsers = (users, append = false) => {
+    if (!append) resultsList.innerHTML = "";
+    users.forEach((user) => {
+      const li = document.createElement("li");
+      li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
       <img src="${user.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
@@ -40,57 +61,152 @@ if (searchInput) {
     </div>
   </a>
 `;
-          resultsList.appendChild(li);
-        });
+      resultsList.appendChild(li);
+    });
+  };
 
-        if (users.length > 0) {
-          resultsList.style.display = "block";
-        } else {
-          resultsList.style.display = "none";
+  const fetchUsers = (reset = false) => {
+    if (reset) offset = 0;
+    const query = searchInput.value.trim();
+    currentQuery = query;
+    if (!query) {
+      resultsList.innerHTML = "";
+      resultsList.style.display = "none";
+      if (moreBtn) moreBtn.classList.add("d-none");
+      if (lessBtn) lessBtn.classList.add("d-none");
+      return;
+    }
+
+    fetch(
+      `${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}&offset=${offset}&limit=5`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        renderUsers(data.results, !reset && offset > 0);
+        resultsList.style.display = data.results.length > 0 ? "block" : "none";
+        if (moreBtn) {
+          if (data.has_more) moreBtn.classList.remove("d-none");
+          else moreBtn.classList.add("d-none");
         }
+        if (lessBtn) {
+          if (offset > 0) lessBtn.classList.remove("d-none");
+          else lessBtn.classList.add("d-none");
+        }
+        animateSearchItems();
       });
   };
 
-  searchInput.addEventListener("input", updateFriendSuggestions);
+  searchInput.addEventListener("input", () => fetchUsers(true));
+
+  if (moreBtn)
+    moreBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      offset += 5;
+      fetchUsers(false);
+    });
+
+  if (lessBtn)
+    lessBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      offset = 0;
+      fetchUsers(true);
+    });
 }
 
 const searchCommunityInput = document.getElementById("searchCommunityInput");
 if (searchCommunityInput) {
-  const updateCommunitySuggestions = () => {
-    const query = searchCommunityInput.value.trim();
-    const resultsList = document.getElementById("searchCommunityResults");
-    if (!query) {
-      resultsList.innerHTML = "";
-      resultsList.style.display = "none";
-      return;
-    }
+  const resultsList = document.getElementById("searchCommunityResults");
+  const LIMIT = 5;
+  let currentQuery = "";
+  let offset = 0;
 
-    fetch(`${LANG_PREFIX}/api/search-communities/?q=${encodeURIComponent(query)}`)
-      .then((res) => res.json())
-      .then((communities) => {
-        resultsList.innerHTML = "";
-        communities.slice(0, 3).forEach((comm) => {
-          const li = document.createElement("li");
-          li.innerHTML = `
+  function createCommunityItem(comm) {
+    const li = document.createElement("li");
+    li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${comm.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
       <img src="${comm.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
       <span>${comm.username}</span>
     </div>
-  </a>
-`;
-          resultsList.appendChild(li);
+  </a>`;
+    return li;
+  }
+
+  function clearButtons() {
+    resultsList
+      .querySelectorAll(
+        ".show-more-community-results, .show-less-community-results"
+      )
+      .forEach((b) => b.remove());
+  }
+
+  function addMoreButton() {
+    clearButtons();
+    const btn = document.createElement("button");
+    btn.className = "show-more-community-results friend-bounce";
+    btn.textContent = JS_TRANSLATIONS.show_more || "Show more";
+    resultsList.appendChild(btn);
+  }
+
+  function addLessButton() {
+    clearButtons();
+    const btn = document.createElement("button");
+    btn.className = "show-less-community-results friend-bounce";
+    btn.textContent = JS_TRANSLATIONS.show_less || "Show less";
+    resultsList.appendChild(btn);
+  }
+
+  function fetchCommunities(reset = false) {
+    if (reset) {
+      currentQuery = searchCommunityInput.value.trim();
+      offset = 0;
+      resultsList.innerHTML = "";
+    }
+
+    const q = currentQuery;
+    if (!q) {
+      resultsList.innerHTML = "";
+      resultsList.style.display = "none";
+      return;
+    }
+
+    fetch(
+      `${LANG_PREFIX}/api/search-communities/?q=${encodeURIComponent(
+        q
+      )}&offset=${offset}&limit=${LIMIT}`
+    )
+      .then((res) => res.json())
+      .then((communities) => {
+        communities.forEach((comm) => {
+          resultsList.appendChild(createCommunityItem(comm));
         });
-
-        if (communities.length > 0) {
-          resultsList.style.display = "block";
+        offset += communities.length;
+        if (communities.length === LIMIT) {
+          addMoreButton();
+        } else if (offset > LIMIT) {
+          addLessButton();
         } else {
-          resultsList.style.display = "none";
+          clearButtons();
         }
+        resultsList.style.display = offset > 0 ? "block" : "none";
       });
-  };
+  }
 
-  searchCommunityInput.addEventListener("input", updateCommunitySuggestions);
+  searchCommunityInput.addEventListener("input", () => fetchCommunities(true));
+
+  document.addEventListener("click", (e) => {
+    const moreBtn = e.target.closest(".show-more-community-results");
+    if (moreBtn) {
+      e.preventDefault();
+      moreBtn.remove();
+      fetchCommunities(false);
+    }
+    const lessBtn = e.target.closest(".show-less-community-results");
+    if (lessBtn) {
+      e.preventDefault();
+      fetchCommunities(true);
+    }
+  });
 }
 
 function getCSRFToken() {

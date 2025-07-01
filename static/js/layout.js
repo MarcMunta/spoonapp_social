@@ -24,7 +24,9 @@ if (searchInput) {
   let offset = 0;
 
   const animateSearchItems = () => {
-    const items = resultsList.querySelectorAll("li, .search-show-more, .search-show-less");
+    const items = Array.from(resultsList.querySelectorAll("li"));
+    if (moreBtn && !moreBtn.classList.contains("d-none")) items.push(moreBtn);
+    if (lessBtn && !lessBtn.classList.contains("d-none")) items.push(lessBtn);
     items.forEach((item, idx) => {
       item.style.opacity = "0";
       item.style.transform = "translateY(50px)";

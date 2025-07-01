@@ -3,10 +3,16 @@ import base64
 
 def _b64decode_padded(data: str) -> bytes:
     """Return decoded bytes even if the input is missing padding."""
-    missing = len(data) % 4
-    if missing:
-        data += "=" * (4 - missing)
-    return base64.b64decode(data)
+    # Normalize and pad the string before decoding to avoid
+    # ``Incorrect padding`` errors when stray whitespace or
+    # missing characters are present.
+    data = "".join(data.split())
+    data += "=" * (-len(data) % 4)
+    try:
+        return base64.b64decode(data)
+    except Exception:
+        # Return empty bytes on failure to keep default avatar logic safe
+        return b""
 
 DEFAULT_AVATAR_BASE64 = (
     "iVBORw0KGgoAAAANSUhEUgAAAGQAAABkCAIAAAD/gAIDAAAA6ElEQVR4nO3QwQ3AIBDAsNLJb3RWIC+E"

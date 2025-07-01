@@ -935,6 +935,25 @@ body:has(.spoon-chat-container) .rightbar {
     transform: scaleX(1);
 }
 
+.show-more-users.friend-bounce {
+    animation: friendBounce 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.show-more-users.friend-glow {
+    animation: friendFlash 0.3s ease-out forwards;
+}
+
+.show-more-users.friend-glow::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0;
+    animation: friendGlow 0.3s ease-out forwards;
+}
+
 .show-less-users {
     background: none;
     color: #444;

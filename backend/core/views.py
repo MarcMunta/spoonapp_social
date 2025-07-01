@@ -1200,7 +1200,11 @@ def buscador_page(request):
     return render(
         request,
         "pages/buscador.html",
-        {"query": query, "hide_friends_section": True},
+        {
+            "query": query,
+            # show the right sidebar with the community search
+            "hide_friends_section": False,
+        },
     )
 
 

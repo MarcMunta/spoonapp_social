@@ -87,6 +87,7 @@ if (searchInput) {
         if (moreBtn) {
           if (data.has_more) {
             moreBtn.classList.remove("d-none");
+            moreBtn.href = `${LANG_PREFIX}/user-search/?q=${encodeURIComponent(currentQuery)}`;
           } else {
             moreBtn.classList.add("d-none");
           }
@@ -107,11 +108,9 @@ if (searchInput) {
     fetchUsers(true);
   }
 
-  if (moreBtn)
-    moreBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      fetchUsers(false);
-    });
+  if (moreBtn) {
+    // Allow default link behavior to open the full search page
+  }
 
   if (lessBtn)
     lessBtn.addEventListener("click", (e) => {

@@ -620,15 +620,17 @@ onReady(() => {
   document.addEventListener("click", (e) => {
     const moreUserBtn = e.target.closest(".show-more-users");
     if (moreUserBtn) {
-      e.preventDefault();
-      const container = moreUserBtn.closest(".friends-bubbles");
-      if (container) {
-        container.querySelectorAll(".friend-bubble").forEach((b) => {
-          b.style.display = "";
-        });
-        moreUserBtn.classList.add("d-none");
-        const lessBtn = container.querySelector(".show-less-users");
-        if (lessBtn) lessBtn.classList.remove("d-none");
+      if (moreUserBtn.tagName === "BUTTON") {
+        e.preventDefault();
+        const container = moreUserBtn.closest(".friends-bubbles");
+        if (container) {
+          container.querySelectorAll(".friend-bubble").forEach((b) => {
+            b.style.display = "";
+          });
+          moreUserBtn.classList.add("d-none");
+          const lessBtn = container.querySelector(".show-less-users");
+          if (lessBtn) lessBtn.classList.remove("d-none");
+        }
       }
     }
     const lessUserBtn = e.target.closest(".show-less-users");

@@ -30,7 +30,8 @@ from .models import (
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
 from django.utils import timezone
 from django.http import HttpResponseForbidden
-from django.db.models import Q, Prefetch, Count, F
+from django.db.models import Q, Prefetch, Count, F, FloatField, ExpressionWrapper
+from django.db.models.functions import Random
 import random
 from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
@@ -1195,17 +1196,45 @@ def user_search_page(request):
 
 @login_required(login_url='/custom-login/')
 def buscador_page(request):
-    """Display community search page with suggestions."""
+    """Display a discovery page with random users and posts."""
     query = request.GET.get("q", "").strip()
-    random_communities = get_random_communities(request.user)
+
+    random_users = get_random_users(request.user, limit=5)
+
+    posts_qs = Post.objects.all()
+    if request.user.is_authenticated:
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list(
+            "blocked_id", flat=True
+        )
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list(
+            "blocker_id", flat=True
+        )
+        posts_qs = posts_qs.exclude(user__id__in=blocked_ids).exclude(
+            user__id__in=blocking_ids
+        )
+
+    posts_qs = posts_qs.annotate(
+        like_count=Count("postlike", distinct=True),
+        comment_count=Count("postcomment", distinct=True),
+    ).annotate(
+        weight=ExpressionWrapper(
+            F("like_count") + F("comment_count") + 1,
+            output_field=FloatField(),
+        )
+    ).annotate(
+        weighted_random=ExpressionWrapper(
+            F("weight") * Random(), output_field=FloatField()
+        )
+    ).order_by("-weighted_random")[:12]
+
     return render(
         request,
         "pages/buscador.html",
         {
             "query": query,
-            "random_communities": random_communities,
-            # show the right sidebar with the community search
-            "hide_friends_section": False,
+            "random_users": random_users,
+            "random_posts": posts_qs,
+            "hide_friends_section": True,
         },
     )
 

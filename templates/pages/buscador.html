@@ -1,33 +1,52 @@
 {% extends "layouts/base.html" %}
+{% load static %}
 {% load i18n %}
 
 {% block title %}SpoonApp Social{% endblock %}
+{% block body_class %}buscador-page{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/feed.css' %}">
+{% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-  <div class="search-communities-container mb-3">
-    <input type="text" id="searchCommunityInput" value="{{ query }}" placeholder="{% trans 'Search communities...' %}" autocomplete="off" />
+  <div class="mb-3">
+    <!-- Future filter controls -->
+    <input type="text" class="form-control" placeholder="{% trans 'Filter...' %}" disabled>
   </div>
-  <ul id="searchCommunityResults" class="autocomplete-list"></ul>
-
-  <h3 class="section-title mt-4">{% trans 'Suggested Communities' %}</h3>
-  <div class="friends-bubbles mt-2">
-    {% for c in random_communities %}
-    <div class="friend-bubble">
-      <a href="{% url 'profile' c.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
-        {% if c.profile.profile_picture %}
-        <img src="{{ c.profile.profile_picture_data_url }}" alt="{{ c.username }}" style="border-color: {{ c.profile.bubble_color }};">
-        {% else %}
-        <img src="{{ default_avatar_data_url }}" alt="{{ c.username }}" style="border-color: {{ c.profile.bubble_color }};">
-        {% endif %}
-        <div class="friend-info">
-          <div class="friend-name">{{ c.username }}</div>
+  <div class="row">
+    <div class="col-md-3 mb-4">
+      <div class="friends-bubbles">
+        {% for u in random_users %}
+        <div class="friend-bubble">
+          <a href="{% url 'profile' u.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
+            {% if u.profile.profile_picture %}
+            <img src="{{ u.profile.profile_picture_data_url }}" alt="{{ u.username }}" style="border-color: {{ u.profile.bubble_color }};">
+            {% else %}
+            <img src="{{ default_avatar_data_url }}" alt="{{ u.username }}" style="border-color: {{ u.profile.bubble_color }};">
+            {% endif %}
+            <div class="friend-info">
+              <div class="friend-name">{{ u.username }}</div>
+            </div>
+          </a>
         </div>
-      </a>
+        {% empty %}
+        <p>{% trans 'No users available.' %}</p>
+        {% endfor %}
+      </div>
     </div>
-    {% empty %}
-    <p>{% trans 'No communities available.' %}</p>
-    {% endfor %}
+    <div class="col-md-9">
+      <div class="row g-3">
+        {% for post in random_posts %}
+        <div class="col-md-6">
+          {% include 'partials/posts/post_card.html' with post=post %}
+        </div>
+        {% empty %}
+        <p>{% trans 'No posts available.' %}</p>
+        {% endfor %}
+      </div>
+    </div>
   </div>
 </div>
 {% endblock %}

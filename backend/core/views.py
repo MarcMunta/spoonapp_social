@@ -1195,13 +1195,15 @@ def user_search_page(request):
 
 @login_required(login_url='/custom-login/')
 def buscador_page(request):
-    """Blank search page to be implemented later."""
+    """Display community search page with suggestions."""
     query = request.GET.get("q", "").strip()
+    random_communities = get_random_communities(request.user)
     return render(
         request,
         "pages/buscador.html",
         {
             "query": query,
+            "random_communities": random_communities,
             # show the right sidebar with the community search
             "hide_friends_section": False,
         },

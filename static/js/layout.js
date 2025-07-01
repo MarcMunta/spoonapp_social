@@ -397,8 +397,40 @@ function animateFriendBubbles() {
   });
 }
 
+function animateCommunityBubbles() {
+  const container = document.querySelector(".communities-bubbles");
+  if (!container) return;
+  const bubbles = container.querySelectorAll(
+    ".friend-bubble, .show-more-communities"
+  );
+  bubbles.forEach((bubble, idx) => {
+    bubble.style.opacity = "0";
+    bubble.style.transform = "translateY(50px)";
+    bubble.style.animationDelay = `${idx * 0.1}s`;
+    bubble.addEventListener(
+      "animationend",
+      (e) => {
+        if (e.animationName === "friendBounce") {
+          bubble.classList.add("friend-glow");
+          bubble.removeAttribute("style");
+        }
+      },
+      { once: true }
+    );
+  });
+  requestAnimationFrame(() => {
+    bubbles.forEach((bubble) => {
+      bubble.classList.remove("friend-bounce", "friend-glow");
+      void bubble.offsetWidth;
+      bubble.classList.add("friend-bounce");
+    });
+  });
+}
+
 onReady(animateFriendBubbles);
 onReady(applyUserListLimit);
+onReady(animateCommunityBubbles);
+onReady(applyCommunityListLimit);
 
 function applyUserListLimit() {
   const container = document.querySelector(".friends-bubbles");
@@ -406,6 +438,24 @@ function applyUserListLimit() {
   const bubbles = container.querySelectorAll(".friend-bubble");
   const moreBtn = container.querySelector(".show-more-users");
   const lessBtn = container.querySelector(".show-less-users");
+  if (bubbles.length <= 3) {
+    if (moreBtn) moreBtn.style.display = "none";
+    if (lessBtn) lessBtn.style.display = "none";
+    return;
+  }
+  bubbles.forEach((b, idx) => {
+    b.style.display = idx < 3 ? "" : "none";
+  });
+  if (moreBtn) moreBtn.style.display = "";
+  if (lessBtn) lessBtn.style.display = "none";
+}
+
+function applyCommunityListLimit() {
+  const container = document.querySelector(".communities-bubbles");
+  if (!container) return;
+  const bubbles = container.querySelectorAll(".friend-bubble");
+  const moreBtn = container.querySelector(".show-more-communities");
+  const lessBtn = container.querySelector(".show-less-communities");
   if (bubbles.length <= 3) {
     if (moreBtn) moreBtn.style.display = "none";
     if (lessBtn) lessBtn.style.display = "none";
@@ -439,23 +489,42 @@ onReady(() => {
 
 onReady(() => {
   document.addEventListener("click", (e) => {
-    const moreBtn = e.target.closest(".show-more-users");
-    if (moreBtn) {
+    const moreUserBtn = e.target.closest(".show-more-users");
+    if (moreUserBtn) {
       e.preventDefault();
-      const container = moreBtn.closest(".friends-bubbles");
+      const container = moreUserBtn.closest(".friends-bubbles");
       if (container) {
         container.querySelectorAll(".friend-bubble").forEach((b) => {
           b.style.display = "";
         });
-        moreBtn.classList.add("d-none");
+        moreUserBtn.classList.add("d-none");
         const lessBtn = container.querySelector(".show-less-users");
         if (lessBtn) lessBtn.classList.remove("d-none");
       }
     }
-    const lessBtn = e.target.closest(".show-less-users");
-    if (lessBtn) {
+    const lessUserBtn = e.target.closest(".show-less-users");
+    if (lessUserBtn) {
       e.preventDefault();
       applyUserListLimit();
+    }
+
+    const moreCommBtn = e.target.closest(".show-more-communities");
+    if (moreCommBtn) {
+      e.preventDefault();
+      const container = moreCommBtn.closest(".communities-bubbles");
+      if (container) {
+        container.querySelectorAll(".friend-bubble").forEach((b) => {
+          b.style.display = "";
+        });
+        moreCommBtn.classList.add("d-none");
+        const lessBtn = container.querySelector(".show-less-communities");
+        if (lessBtn) lessBtn.classList.remove("d-none");
+      }
+    }
+    const lessCommBtn = e.target.closest(".show-less-communities");
+    if (lessCommBtn) {
+      e.preventDefault();
+      applyCommunityListLimit();
     }
   });
 });

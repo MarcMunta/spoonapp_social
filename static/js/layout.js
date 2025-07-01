@@ -56,41 +56,98 @@ if (searchInput) {
 
 const searchCommunityInput = document.getElementById("searchCommunityInput");
 if (searchCommunityInput) {
-  const updateCommunitySuggestions = () => {
-    const query = searchCommunityInput.value.trim();
-    const resultsList = document.getElementById("searchCommunityResults");
-    if (!query) {
-      resultsList.innerHTML = "";
-      resultsList.style.display = "none";
-      return;
-    }
+  const resultsList = document.getElementById("searchCommunityResults");
+  const LIMIT = 5;
+  let currentQuery = "";
+  let offset = 0;
 
-    fetch(`${LANG_PREFIX}/api/search-communities/?q=${encodeURIComponent(query)}`)
-      .then((res) => res.json())
-      .then((communities) => {
-        resultsList.innerHTML = "";
-        communities.slice(0, 3).forEach((comm) => {
-          const li = document.createElement("li");
-          li.innerHTML = `
+  function createCommunityItem(comm) {
+    const li = document.createElement("li");
+    li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${comm.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
       <img src="${comm.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
       <span>${comm.username}</span>
     </div>
-  </a>
-`;
-          resultsList.appendChild(li);
+  </a>`;
+    return li;
+  }
+
+  function clearButtons() {
+    resultsList
+      .querySelectorAll(
+        ".show-more-community-results, .show-less-community-results"
+      )
+      .forEach((b) => b.remove());
+  }
+
+  function addMoreButton() {
+    clearButtons();
+    const btn = document.createElement("button");
+    btn.className = "show-more-community-results friend-bounce";
+    btn.textContent = JS_TRANSLATIONS.show_more || "Show more";
+    resultsList.appendChild(btn);
+  }
+
+  function addLessButton() {
+    clearButtons();
+    const btn = document.createElement("button");
+    btn.className = "show-less-community-results friend-bounce";
+    btn.textContent = JS_TRANSLATIONS.show_less || "Show less";
+    resultsList.appendChild(btn);
+  }
+
+  function fetchCommunities(reset = false) {
+    if (reset) {
+      currentQuery = searchCommunityInput.value.trim();
+      offset = 0;
+      resultsList.innerHTML = "";
+    }
+
+    const q = currentQuery;
+    if (!q) {
+      resultsList.innerHTML = "";
+      resultsList.style.display = "none";
+      return;
+    }
+
+    fetch(
+      `${LANG_PREFIX}/api/search-communities/?q=${encodeURIComponent(
+        q
+      )}&offset=${offset}&limit=${LIMIT}`
+    )
+      .then((res) => res.json())
+      .then((communities) => {
+        communities.forEach((comm) => {
+          resultsList.appendChild(createCommunityItem(comm));
         });
-
-        if (communities.length > 0) {
-          resultsList.style.display = "block";
+        offset += communities.length;
+        if (communities.length === LIMIT) {
+          addMoreButton();
+        } else if (offset > LIMIT) {
+          addLessButton();
         } else {
-          resultsList.style.display = "none";
+          clearButtons();
         }
+        resultsList.style.display = offset > 0 ? "block" : "none";
       });
-  };
+  }
 
-  searchCommunityInput.addEventListener("input", updateCommunitySuggestions);
+  searchCommunityInput.addEventListener("input", () => fetchCommunities(true));
+
+  document.addEventListener("click", (e) => {
+    const moreBtn = e.target.closest(".show-more-community-results");
+    if (moreBtn) {
+      e.preventDefault();
+      moreBtn.remove();
+      fetchCommunities(false);
+    }
+    const lessBtn = e.target.closest(".show-less-community-results");
+    if (lessBtn) {
+      e.preventDefault();
+      fetchCommunities(true);
+    }
+  });
 }
 
 function getCSRFToken() {

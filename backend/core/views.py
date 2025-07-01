@@ -668,6 +668,14 @@ def search_users(request):
 def search_communities(request):
     if request.method == "GET":
         query = request.GET.get("q", "").strip()
+        try:
+            limit = int(request.GET.get("limit", 5))
+        except ValueError:
+            limit = 5
+        try:
+            offset = int(request.GET.get("offset", 0))
+        except ValueError:
+            offset = 0
 
         qs = User.objects.filter(profile__account_type="community").exclude(
             id=request.user.id
@@ -716,7 +724,7 @@ def search_communities(request):
                 communities = []
 
         results = []
-        for comm in communities[:5]:
+        for comm in communities[offset : offset + limit]:
             avatar = ""
             if hasattr(comm, "profile") and comm.profile.profile_picture:
                 avatar = comm.profile.profile_picture_data_url

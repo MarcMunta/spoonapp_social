@@ -87,7 +87,6 @@ if (searchInput) {
         if (moreBtn) {
           if (data.has_more) {
             moreBtn.classList.remove("d-none");
-            moreBtn.href = `${LANG_PREFIX}/user-search/?q=${encodeURIComponent(query)}`;
           } else {
             moreBtn.classList.add("d-none");
           }
@@ -96,6 +95,7 @@ if (searchInput) {
           if (offset > 0) lessBtn.classList.remove("d-none");
           else lessBtn.classList.add("d-none");
         }
+        offset += data.results.length;
         animateSearchItems();
       });
   };
@@ -107,7 +107,11 @@ if (searchInput) {
     fetchUsers(true);
   }
 
-  // "Show more" now links to the dedicated search page, so no click handler.
+  if (moreBtn)
+    moreBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      fetchUsers(false);
+    });
 
   if (lessBtn)
     lessBtn.addEventListener("click", (e) => {

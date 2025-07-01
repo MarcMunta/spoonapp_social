@@ -1175,33 +1175,41 @@ def get_notifications_count(request):
         count = Notification.objects.filter(user=request.user, is_read=False).count()
         return JsonResponse({'unread_count': count})
     return JsonResponse({'error': 'Invalid request'}, status=400)
+@login_required(login_url="/custom-login/")
 
-
-@login_required(login_url='/custom-login/')
-def user_search_page(request):
-    """Display user search page with random user suggestions."""
+def buscador_page(request):
+    """Display search explorer with random users and posts."""
     query = request.GET.get("q", "").strip()
-    random_users = get_random_users(request.user)
-    return render(
-        request,
-        "pages/user_search.html",
-        {
-            "query": query,
-            "random_users": random_users,
-            "hide_friends_section": True,
-        },
+
+    random_users = get_random_users(request.user, limit=8)
+
+    posts_qs = Post.objects.all().annotate(
+        like_count=Count("postlike"),
+        comment_count=Count("postcomment"),
     )
 
+    if request.user.is_authenticated:
+        blocked_ids = Block.objects.filter(blocker=request.user).values_list(
+            "blocked_id", flat=True
+        )
+        blocking_ids = Block.objects.filter(blocked=request.user).values_list(
+            "blocker_id", flat=True
+        )
+        posts_qs = posts_qs.exclude(user__id__in=blocked_ids).exclude(
+            user__id__in=blocking_ids
+        )
 
-@login_required(login_url='/custom-login/')
-def buscador_page(request):
-    """Blank search page to be implemented later."""
-    query = request.GET.get("q", "").strip()
+    posts_list = list(posts_qs)
+    posts_list.sort(key=lambda p: (-(p.like_count + p.comment_count), random.random()))
+    posts = posts_list[:20]
+
     return render(
         request,
         "pages/buscador.html",
         {
             "query": query,
+            "random_users": random_users,
+            "posts": posts,
             # show the right sidebar with the community search
             "hide_friends_section": False,
         },

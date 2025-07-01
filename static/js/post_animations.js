@@ -1,8 +1,8 @@
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
-  if (!body.classList.contains('home-page')) return;
+  if (!body.classList.contains('home-page') && !body.classList.contains('buscador-page')) return;
 
-  const posts = document.querySelectorAll('.home-page .post');
+  const posts = document.querySelectorAll('.post');
   posts.forEach((post, index) => {
     post.style.setProperty('--delay', `${index * 100}ms`);
   });

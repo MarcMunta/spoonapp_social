@@ -372,7 +372,7 @@ onReady(animateTopMenuIcons);
 function animateFriendBubbles() {
   const container = document.querySelector(".friends-bubbles");
   if (!container) return;
-  const bubbles = container.querySelectorAll(".friend-bubble");
+  const bubbles = container.querySelectorAll(".friend-bubble, .show-more-users");
   bubbles.forEach((bubble, idx) => {
     bubble.style.opacity = "0";
     bubble.style.transform = "translateY(50px)";

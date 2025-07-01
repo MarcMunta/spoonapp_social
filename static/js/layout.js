@@ -109,10 +109,12 @@ if (searchInput) {
   }
 
   if (moreBtn) {
-    // Navigate explicitly to ensure the link works even when DOM updates hide the button
-    moreBtn.addEventListener("click", (e) => {
-      e.preventDefault();
-      window.location.href = moreBtn.href;
+    // Fallback navigation handler. Using assign avoids issues if the
+    // default link behavior is suppressed by other scripts.
+    moreBtn.addEventListener("click", () => {
+      if (moreBtn.href) {
+        window.location.assign(moreBtn.href);
+      }
     });
   }
 

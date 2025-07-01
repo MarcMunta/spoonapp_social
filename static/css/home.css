@@ -898,39 +898,43 @@ body:has(.spoon-chat-container) .rightbar {
 }
 
 .show-more-users {
-    background-color: #87cefa;
-    color: #ffffff;
+    background: none;
+    color: #444;
     border: none;
-    padding: 0.6rem 1.4rem;
-    border-radius: 25px;
+    padding: 0;
     cursor: pointer;
     display: block;
-    margin: 0.5rem auto;
-    box-shadow: 0 4px 0 #7ab8e6;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 0.25rem auto;
+    font-size: 0.85rem;
+    box-shadow: none;
+    transition: color 0.2s ease;
 }
 
 .show-more-users:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 #5fa8d3;
+    color: #222;
+    text-decoration: underline;
+    transform: none;
+    box-shadow: none;
 }
 
 .show-less-users {
-    background-color: #f08080;
-    color: #ffffff;
+    background: none;
+    color: #444;
     border: none;
-    padding: 0.6rem 1.4rem;
-    border-radius: 25px;
+    padding: 0;
     cursor: pointer;
     display: block;
-    margin: 0.5rem auto;
-    box-shadow: 0 4px 0 #e76c6c;
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    margin: 0.25rem auto;
+    font-size: 0.85rem;
+    box-shadow: none;
+    transition: color 0.2s ease;
 }
 
 .show-less-users:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 0 #d45f5f;
+    color: #222;
+    text-decoration: underline;
+    transform: none;
+    box-shadow: none;
 }
 
 .show-more-comments:hover {

@@ -374,8 +374,7 @@
 }
 
 /* Futuristic post styling for home and search pages */
-.home-page .post,
-.buscador-page .post {
+.home-page .post {
     position: relative;
     border: 2px solid transparent;
     background-clip: padding-box;
@@ -384,8 +383,7 @@
     transition: transform 0.6s ease var(--delay, 0ms), opacity 0.6s ease var(--delay, 0ms), box-shadow 0.3s ease;
 }
 
-.home-page .post::before,
-.buscador-page .post::before {
+.home-page .post::before {
     content: "";
     position: absolute;
     inset: 0;
@@ -401,8 +399,7 @@
     transition: opacity 0.3s ease;
 }
 
-.home-page .post::after,
-.buscador-page .post::after {
+.home-page .post::after {
     content: "";
     position: absolute;
     top: 0;
@@ -415,14 +412,12 @@
     opacity: 0;
 }
 
-.home-page .post-visible,
-.buscador-page .post-visible {
+.home-page .post-visible {
     opacity: 1;
     transform: translateY(0);
 }
 
-.home-page .post-visible::after,
-.buscador-page .post-visible::after {
+.home-page .post-visible::after {
     animation: post-shine 0.7s forwards;
 }
 
@@ -459,13 +454,11 @@
     }
 }
 
-.home-page .post:hover,
-.buscador-page .post:hover {
+.home-page .post:hover {
     transform: translateY(-3px) scale(1.02);
     box-shadow: 0 6px 14px rgba(0, 0, 0, 0.12);
 }
 
-.home-page .post:hover::before,
-.buscador-page .post:hover::before {
+.home-page .post:hover::before {
     opacity: 1;
 }

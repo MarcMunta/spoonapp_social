@@ -18,14 +18,11 @@ function onReady(fn) {
 const searchInput = document.getElementById("searchFriendInput");
 if (searchInput) {
   const resultsList = document.getElementById("searchResults");
-  const moreBtn = document.getElementById("searchShowMore");
   const lessBtn = document.getElementById("searchShowLess");
   let currentQuery = "";
-  let offset = 0;
 
   const animateSearchItems = () => {
     const items = Array.from(resultsList.querySelectorAll("li"));
-    if (moreBtn && !moreBtn.classList.contains("d-none")) items.push(moreBtn);
     if (lessBtn && !lessBtn.classList.contains("d-none")) items.push(lessBtn);
     items.forEach((item, idx) => {
       item.style.opacity = "0";
@@ -67,37 +64,25 @@ if (searchInput) {
     });
   };
 
-  const fetchUsers = (reset = false) => {
-    if (reset) offset = 0;
+  const fetchUsers = () => {
     const query = searchInput.value.trim();
     currentQuery = query;
     if (!query) {
       resultsList.innerHTML = "";
       resultsList.style.display = "none";
-      if (moreBtn) moreBtn.classList.add("d-none");
       if (lessBtn) lessBtn.classList.add("d-none");
       return;
     }
 
     fetch(
-      `${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}&offset=${offset}&limit=5`
+      `${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(query)}&limit=5`
     )
       .then((res) => res.json())
       .then((data) => {
-        renderUsers(data.results, !reset && offset > 0);
+        renderUsers(data.results);
         resultsList.style.display = data.results.length > 0 ? "block" : "none";
-        if (moreBtn) {
-          if (data.results.length > 0) {
-            moreBtn.classList.remove("d-none");
-            moreBtn.style.display = "inline-block";
-            moreBtn.href = `${LANG_PREFIX}/buscador/?q=${encodeURIComponent(currentQuery)}`;
-          } else {
-            moreBtn.classList.add("d-none");
-            moreBtn.style.display = "none";
-          }
-        }
         if (lessBtn) {
-          if (offset > 0) {
+          if (data.results.length > 0) {
             lessBtn.classList.remove("d-none");
             lessBtn.style.display = "block";
           } else {
@@ -105,33 +90,24 @@ if (searchInput) {
             lessBtn.style.display = "none";
           }
         }
-        offset += data.results.length;
         animateSearchItems();
       });
   };
 
-  searchInput.addEventListener("input", () => fetchUsers(true));
+  searchInput.addEventListener("input", fetchUsers);
 
   // If the input already has a value (e.g. from query param), fetch results on load
   if (searchInput.value.trim()) {
-    fetchUsers(true);
-  }
-
-  if (moreBtn) {
-    // Fallback navigation handler. Using assign avoids issues if the
-    // default link behavior is suppressed by other scripts.
-    moreBtn.addEventListener("click", () => {
-      if (moreBtn.href) {
-        window.location.assign(moreBtn.href);
-      }
-    });
+    fetchUsers();
   }
 
   if (lessBtn)
     lessBtn.addEventListener("click", (e) => {
       e.preventDefault();
-      offset = 0;
-      fetchUsers(true);
+      resultsList.innerHTML = "";
+      resultsList.style.display = "none";
+      lessBtn.classList.add("d-none");
+      currentQuery = "";
     });
 }
 

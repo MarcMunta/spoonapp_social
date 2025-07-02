@@ -536,4 +536,4 @@ msgstr "Todas las categorías"
 
 #: backend/core/urls.py:??
 msgid "user-search/"
-msgstr "buscador/"
+msgstr "user-search/"

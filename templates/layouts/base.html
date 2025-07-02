@@ -159,9 +159,6 @@
       <div class="search-friends-container">
         <input type="text" id="searchFriendInput" placeholder="{% trans 'Search users...' %}" autocomplete="off" />
         <ul id="searchResults" class="autocomplete-list"></ul>
-        {% if request.resolver_match.url_name != 'buscador_page' %}
-        <a id="searchShowMore" class="search-show-more mt-2 d-none" href="{% url 'buscador_page' %}">{% trans 'Show more' %}</a>
-        {% endif %}
         <button type="button" id="searchShowLess" class="search-show-less mt-2 d-none">{% trans 'Show less' %}</button>
       </div>
 
@@ -190,8 +187,7 @@
           <a href="{% url 'start_chat' u.id %}" class="message-icon">💬</a>
         </div>
         {% endfor %}
-        {% if suggested_users|length > 3 and request.resolver_match.url_name != 'buscador_page' %}
-        <a href="{% url 'buscador_page' %}" class="show-more-users mt-2">{% trans 'Show more' %}</a>
+        {% if suggested_users|length > 3 %}
         <button type="button" class="show-less-users mt-2 d-none">{% trans 'Show less' %}</button>
         {% endif %}
       </div>

@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const body = document.body;
-  if (!body.classList.contains('home-page') && !body.classList.contains('buscador-page')) return;
+  if (!body.classList.contains('home-page')) return;
 
   const posts = document.querySelectorAll('.post');
   posts.forEach((post, index) => {

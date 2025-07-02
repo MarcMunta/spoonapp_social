@@ -31,12 +31,13 @@ document.addEventListener('DOMContentLoaded', () => {
     users.forEach(u => {
       const col = document.createElement('div');
       col.className = 'col-6 col-md-4 col-lg-2 mb-4';
+      const statusHtml = u.status ? `<p class="card-text text-muted small">${u.status}</p>` : '';
       col.innerHTML = `
         <div class="card user-card text-center h-100" style="--profile-color:${u.bubble_color}">
           <img src="${u.avatar || DEFAULT_AVATAR}" class="card-img-top mx-auto mt-3 user-avatar" alt="${u.username}">
           <div class="card-body p-2">
             <h5 class="card-title mb-1">${u.username}</h5>
-            <p class="card-text text-muted small">${u.status}</p>
+            ${statusHtml}
           </div>
         </div>`;
       container.appendChild(col);

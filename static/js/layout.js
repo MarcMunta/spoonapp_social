@@ -89,14 +89,21 @@ if (searchInput) {
         if (moreBtn) {
           if (data.results.length > 0) {
             moreBtn.classList.remove("d-none");
+            moreBtn.style.display = "inline-block";
             moreBtn.href = `${LANG_PREFIX}/buscador/?q=${encodeURIComponent(currentQuery)}`;
           } else {
             moreBtn.classList.add("d-none");
+            moreBtn.style.display = "none";
           }
         }
         if (lessBtn) {
-          if (offset > 0) lessBtn.classList.remove("d-none");
-          else lessBtn.classList.add("d-none");
+          if (offset > 0) {
+            lessBtn.classList.remove("d-none");
+            lessBtn.style.display = "block";
+          } else {
+            lessBtn.classList.add("d-none");
+            lessBtn.style.display = "none";
+          }
         }
         offset += data.results.length;
         animateSearchItems();

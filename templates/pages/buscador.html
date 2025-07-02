@@ -26,12 +26,11 @@
         {% endif %}
         <div class="card-body p-2">
           <h5 class="card-title mb-1">{{ u.username }}</h5>
-          <p class="card-text text-muted small">
-            {% if u.profile.online %}{% trans "Online" %}
-            {% elif u.profile.last_seen %}{% blocktrans %}Last seen: {{ u.profile.last_seen|naturaltime }}{% endblocktrans %}
-            {% else %}{% trans "Offline" %}
-            {% endif %}
-          </p>
+          {% if u.profile.online %}
+          <p class="card-text text-muted small">{% trans "Online" %}</p>
+          {% elif u.profile.last_seen %}
+          <p class="card-text text-muted small">{% blocktrans %}Last seen: {{ u.profile.last_seen|naturaltime }}{% endblocktrans %}</p>
+          {% endif %}
         </div>
       </div>
     </div>

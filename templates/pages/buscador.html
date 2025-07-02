@@ -6,8 +6,13 @@
 
 {% block content %}
 <div class="container my-5">
-  <div class="row justify-content-center">
-    {% for u in random_users %}
+  <div class="row mb-4">
+    <div class="col-12 text-center">
+      <input type="text" id="userSearchInput" class="form-control mx-auto" style="max-width:300px" placeholder="{% trans 'Search users...' %}" autocomplete="off">
+    </div>
+  </div>
+  <div class="row justify-content-center" id="userCardsContainer">
+{% for u in random_users %}
     <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
       <div class="card text-center h-100">
         {% if u.profile.profile_picture %}
@@ -31,4 +36,43 @@
     {% endfor %}
   </div>
 </div>
+<script>
+  const DEFAULT_AVATAR = "{{ default_avatar_data_url }}";
+  const LANG_PREFIX = window.LANG_PREFIX || "/{{ LANGUAGE_CODE }}";
+  const searchInput = document.getElementById('userSearchInput');
+  const container = document.getElementById('userCardsContainer');
+  const initialHtml = container.innerHTML;
+
+  function renderCards(users) {
+    if (!users.length) {
+      container.innerHTML = `<p>{% trans 'No users available.' %}</p>`;
+      return;
+    }
+    container.innerHTML = '';
+    users.forEach(u => {
+      const col = document.createElement('div');
+      col.className = 'col-12 col-sm-6 col-md-4 col-lg-3 mb-4';
+      col.innerHTML = `
+        <div class="card text-center h-100">
+          <img src="${u.avatar || DEFAULT_AVATAR}" class="card-img-top mx-auto mt-3 rounded-circle" alt="${u.username}" style="border: 4px solid ${u.bubble_color}; width: 100px; height: 100px; object-fit: cover;">
+          <div class="card-body">
+            <h5 class="card-title">${u.username}</h5>
+            <p class="card-text text-muted">${u.status}</p>
+          </div>
+        </div>`;
+      container.appendChild(col);
+    });
+  }
+
+  searchInput.addEventListener('input', () => {
+    const q = searchInput.value.trim();
+    if (!q) {
+      container.innerHTML = initialHtml;
+      return;
+    }
+    fetch(`${LANG_PREFIX}/api/search-users/?q=${encodeURIComponent(q)}&limit=12`)
+      .then(res => res.json())
+      .then(data => renderCards(data.results));
+  });
+</script>
 {% endblock %}

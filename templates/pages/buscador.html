@@ -25,9 +25,9 @@
   </div>
   <div class="row">
     <div class="col-md-3 mb-4">
-      <div class="friends-bubbles" data-show-all="true" data-no-auto-update="true">
-        {% for u in random_users %}
-        <div class="friend-bubble position-relative">
+        <div class="friends-bubbles" data-show-all="true" data-no-auto-update="true">
+          {% for u in random_users|slice:":10" %}
+          <div class="friend-bubble position-relative">
           <a href="{% url 'profile' u.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
             {% if u.profile.profile_picture %}
             <img src="{{ u.profile.profile_picture_data_url }}" alt="{{ u.username }}" style="border-color: {{ u.profile.bubble_color }};">

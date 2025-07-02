@@ -102,7 +102,7 @@ msgstr "Desconectado"
 #: templates/layouts/base.html:175
 #, python-format
 msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
-msgstr "Visto por última vez: %(f.profile.last_seen|naturaltime)s"
+msgstr "Activo por última vez: %(f.profile.last_seen|naturaltime)s"
 
 #: templates/pages/chat_detail.html:102
 msgid "Share your food thoughts... 🍽️"
@@ -390,7 +390,7 @@ msgid "Home"
 msgstr "Inicio"
 
 msgid "Last seen"
-msgstr "Visto por última vez"
+msgstr "Activo por última vez"
 
 msgid "Scroll up for older messages"
 msgstr "Desplázate arriba para ver mensajes antiguos"

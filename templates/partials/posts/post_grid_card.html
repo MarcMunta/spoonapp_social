@@ -1,0 +1,20 @@
+{% load static %}
+{% load i18n %}
+<div class="post">
+  <a href="{% url 'post_detail' post.id %}" class="post-card-link">
+    <div class="post-card" style="background-image: url('{{ post.image_data_url }}');">
+      {% if post.image %}
+      <img src="{{ post.image_data_url }}" alt="{% trans 'Post image' %}" class="post-main-img">
+      {% endif %}
+      <div class="post-overlay">
+        <div class="post-stats">
+          <span>🥄 {{ post.postlike_set.count }}</span>
+          <span>💬 {{ post.postcomment_set.count }}</span>
+        </div>
+      </div>
+    </div>
+  </a>
+  {% if post.caption %}
+  <p class="post-caption small mb-0 mt-1">{{ post.caption|truncatechars:80 }}</p>
+  {% endif %}
+</div>

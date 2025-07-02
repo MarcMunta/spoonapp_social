@@ -1,5 +1,5 @@
 {% extends "layouts/base.html" %}
-{% load i18n humanize static %}
+{% load i18n humanize static custom_filters %}
 
 {% block title %}{% trans "User Finder" %}{% endblock %}
 {% block body_class %}buscador-page{% endblock %}
@@ -29,7 +29,11 @@
           {% if u.profile.online %}
           <p class="card-text text-muted small">{% trans "Online" %}</p>
           {% elif u.profile.last_seen %}
-          <p class="card-text text-muted small">{% blocktrans %}Last seen: {{ u.profile.last_seen|naturaltime }}{% endblocktrans %}</p>
+          {% with ts=u.profile.last_seen|format_last_seen %}
+          {% if ts %}
+          <p class="card-text text-muted small">{% blocktrans %}Last seen: {{ ts }}{% endblocktrans %}</p>
+          {% endif %}
+          {% endwith %}
           {% endif %}
         </div>
       </div>

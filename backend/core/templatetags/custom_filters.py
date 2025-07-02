@@ -110,3 +110,15 @@ def translate(value):
                 pass
 
     return translated
+
+@register.filter
+def format_last_seen(value):
+    """Return naturaltime string if value is truthy, else empty string."""
+    if not value:
+        return ""
+    from django.contrib.humanize.templatetags.humanize import naturaltime
+    try:
+        text = naturaltime(value)
+    except Exception:
+        return ""
+    return text if text != "None" else ""

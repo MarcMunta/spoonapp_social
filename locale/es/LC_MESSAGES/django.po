@@ -104,6 +104,10 @@ msgstr "Desconectado"
 msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
 msgstr "Activo por última vez: %(f.profile.last_seen|naturaltime)s"
 
+#: templates/pages/buscador.html:34
+msgid "Last seen:"
+msgstr "Visto por última vez:"
+
 #: templates/pages/chat_detail.html:102
 msgid "Share your food thoughts... 🍽️"
 msgstr "Comparte tus pensamientos culinarios... 🍽️"

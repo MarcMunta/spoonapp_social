@@ -28,10 +28,10 @@
           <h5 class="card-title mb-1">{{ u.username }}</h5>
           {% if u.profile.online %}
           <p class="card-text text-muted small">{% trans "Online" %}</p>
-          {% elif u.profile.last_seen %}
+          {% else %}
           {% with ts=u.profile.last_seen|format_last_seen %}
           {% if ts %}
-          <p class="card-text text-muted small">{% blocktrans %}Last seen: {{ ts }}{% endblocktrans %}</p>
+          <p class="card-text text-muted small">{% trans "Last seen" %}: {{ ts }}</p>
           {% endif %}
           {% endwith %}
           {% endif %}

@@ -990,7 +990,7 @@ body:has(.spoon-chat-container) .rightbar {
     box-shadow: none;
     position: relative;
     text-decoration: none;
-    transition: color 0.2s ease;
+    transition: color 0.2s ease, transform 0.2s ease;
 }
 
 .search-show-more::after {
@@ -1008,7 +1008,7 @@ body:has(.spoon-chat-container) .rightbar {
 
 .search-show-more:hover {
     color: #222;
-    transform: none;
+    transform: translateY(-2px);
     box-shadow: none;
 }
 

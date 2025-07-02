@@ -102,6 +102,10 @@ msgstr "Online"
 msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
 msgstr "Last seen: %(f.profile.last_seen|naturaltime)s"
 
+#: templates/pages/buscador.html:34
+msgid "Last seen:"
+msgstr "Last seen:"
+
 #: templates/pages/chat_detail.html:102
 msgid "Share your food thoughts... 🍽️"
 msgstr "Share your food thoughts... 🍽️"

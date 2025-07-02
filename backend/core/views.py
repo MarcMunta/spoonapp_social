@@ -37,6 +37,7 @@ from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
 from django.utils.translation import gettext as _
+from django.contrib.humanize.templatetags.humanize import naturaltime
 from .default_avatar import DEFAULT_AVATAR_DATA_URL
 from .context_processors import get_random_users
 import requests
@@ -655,14 +656,28 @@ def search_users(request):
         results = []
         for user in users[offset : offset + limit]:
             avatar = ""
-            if hasattr(user, "profile") and user.profile.profile_picture:
-                avatar = user.profile.profile_picture_data_url
+            bubble = ""
+            status = ""
+            if hasattr(user, "profile"):
+                if user.profile.profile_picture:
+                    avatar = user.profile.profile_picture_data_url
+                bubble = user.profile.bubble_color
+                if user.profile.online:
+                    status = _("Online")
+                elif user.profile.last_seen:
+                    status = _("Last seen: %(time)s") % {
+                        "time": naturaltime(user.profile.last_seen)
+                    }
+                else:
+                    status = _("Offline")
             results.append(
                 {
                     "id": user.id,
                     "username": user.username,
                     "email": user.email,
                     "avatar": avatar,
+                    "bubble_color": bubble,
+                    "status": status,
                 }
             )
 
@@ -1196,8 +1211,8 @@ def user_search_page(request):
 
 @login_required(login_url='/custom-login/')
 def buscador_page(request):
-    """Display 10 random users with minimal layout."""
-    random_users = get_random_users(request.user, limit=10)
+    """Display 12 random users with minimal layout."""
+    random_users = get_random_users(request.user, limit=12)
     return render(
         request,
         "pages/buscador.html",

@@ -527,6 +527,13 @@ msgstr "Sí, eliminar mi cuenta"
 msgid "Delete Account"
 msgstr "Eliminar cuenta"
 
+# Filters
+msgid "Search users"
+msgstr "Buscar usuarios"
+
+msgid "All categories"
+msgstr "Todas las categorías"
+
 #: backend/core/urls.py:??
 msgid "user-search/"
 msgstr "buscador/"

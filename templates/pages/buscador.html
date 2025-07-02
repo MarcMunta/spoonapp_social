@@ -7,13 +7,20 @@
 
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/feed.css' %}">
+<link rel="stylesheet" href="{% static 'css/profile.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="container mt-5">
-  <div class="mb-3">
-    <!-- Future filter controls -->
-    <input type="text" class="form-control" placeholder="{% trans 'Filter...' %}" disabled>
+  <div class="row mb-3">
+    <div class="col-md-6 mb-2">
+      <input type="text" class="form-control" placeholder="{% trans 'Search users' %}" disabled>
+    </div>
+    <div class="col-md-6 mb-2">
+      <select class="form-select" disabled>
+        <option selected>{% trans 'All categories' %}</option>
+      </select>
+    </div>
   </div>
   <div class="row">
     <div class="col-md-3 mb-4">
@@ -40,7 +47,7 @@
       <div class="row g-3">
         {% for post in random_posts %}
         <div class="col-md-6">
-          {% include 'partials/posts/post_card.html' with post=post %}
+          {% include 'partials/posts/post_grid_card.html' with post=post %}
         </div>
         {% empty %}
         <p>{% trans 'No posts available.' %}</p>

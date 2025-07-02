@@ -989,62 +989,6 @@ body:has(.spoon-chat-container) .rightbar {
     box-shadow: none;
 }
 
-.search-show-more {
-    background: none;
-    color: #444;
-    border: none;
-    padding: 0;
-    cursor: pointer;
-    display: inline-block;
-    margin: 0.25rem auto;
-    font-size: 0.85rem;
-    box-shadow: none;
-    position: relative;
-    text-decoration: none;
-    transition: color 0.2s ease, transform 0.2s ease;
-}
-
-.search-show-more::after {
-    content: "";
-    position: absolute;
-    left: 0;
-    bottom: -2px;
-    height: 1px;
-    width: 100%;
-    background-color: currentColor;
-    transform: scaleX(0);
-    transform-origin: left;
-    transition: transform 0.3s ease;
-}
-
-.search-show-more:hover {
-    color: #222;
-    transform: translateY(-2px);
-    box-shadow: none;
-}
-
-.search-show-more:hover::after {
-    transform: scaleX(1);
-}
-
-.search-show-more.friend-bounce {
-    animation: friendBounce 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
-.search-show-more.friend-glow {
-    animation: friendFlash 0.3s ease-out forwards;
-}
-
-.search-show-more.friend-glow::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    pointer-events: none;
-    border-radius: inherit;
-    background: radial-gradient(circle, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0) 70%);
-    opacity: 0;
-    animation: friendGlow 0.3s ease-out forwards;
-}
 
 .search-show-less {
     background: none;

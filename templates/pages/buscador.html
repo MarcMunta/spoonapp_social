@@ -8,6 +8,7 @@
 {% block extra_css %}
 <link rel="stylesheet" href="{% static 'css/feed.css' %}">
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/aos.css' %}">
 {% endblock %}
 
 {% block content %}
@@ -26,7 +27,7 @@
     <div class="col-md-3 mb-4">
       <div class="friends-bubbles">
         {% for u in random_users %}
-        <div class="friend-bubble">
+        <div class="friend-bubble position-relative">
           <a href="{% url 'profile' u.username %}" class="d-flex align-items-center text-decoration-none flex-grow-1">
             {% if u.profile.profile_picture %}
             <img src="{{ u.profile.profile_picture_data_url }}" alt="{{ u.username }}" style="border-color: {{ u.profile.bubble_color }};">
@@ -37,6 +38,7 @@
               <div class="friend-name">{{ u.username }}</div>
             </div>
           </a>
+          <span class="profile-color-indicator" style="background-color: {{ u.profile.bubble_color }};"></span>
         </div>
         {% empty %}
         <p>{% trans 'No users available.' %}</p>
@@ -56,4 +58,10 @@
     </div>
   </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/aos.js' %}"></script>
+<script src="{% static 'js/post_animations.js' %}"></script>
+<script>AOS.init({ once: true });</script>
 {% endblock %}

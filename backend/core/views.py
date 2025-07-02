@@ -667,8 +667,7 @@ def search_users(request):
                 elif user.profile.last_seen:
                     time_str = naturaltime(user.profile.last_seen)
                     if time_str and time_str != "None":
-                        prefix = _("Last seen")
-                        status = f"{prefix}: {time_str}"
+                        status = _("Last seen: %(time)s") % {"time": time_str}
             results.append(
                 {
                     "id": user.id,

@@ -668,8 +668,6 @@ def search_users(request):
                     status = _("Last seen: %(time)s") % {
                         "time": naturaltime(user.profile.last_seen)
                     }
-                else:
-                    status = _("Offline")
             results.append(
                 {
                     "id": user.id,

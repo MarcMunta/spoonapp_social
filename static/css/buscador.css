@@ -1,0 +1,51 @@
+.buscador-page #userSearchInput,
+.buscador-page .search-input {
+  width: 100%;
+  max-width: none;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.buscador-page .user-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 18px;
+  background: linear-gradient(135deg, var(--profile-color, #d48ac1), #ffffff);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  color: #333;
+  font-family: 'Poppins', sans-serif;
+  min-height: 180px;
+  opacity: 0;
+  transform: translateY(30px);
+}
+
+.buscador-page .user-card.visible {
+  animation: card-fade-up 0.6s ease-out forwards;
+  animation-delay: var(--delay, 0ms);
+}
+
+.buscador-page .user-card:hover {
+  transform: scale(1.02);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1), 0 0 8px var(--profile-color, #d48ac1);
+}
+
+.buscador-page .user-avatar {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 4px solid var(--profile-color, #d48ac1);
+  animation: avatar-pulse 3s infinite;
+}
+
+@keyframes avatar-pulse {
+  0% { box-shadow: 0 0 0 0 var(--profile-color, #d48ac1); }
+  70% { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+@keyframes card-fade-up {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}

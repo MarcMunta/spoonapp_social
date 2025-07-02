@@ -572,7 +572,7 @@ onReady(applyCommunityListLimit);
 
 function applyUserListLimit() {
   const container = document.querySelector(".friends-bubbles");
-  if (!container) return;
+  if (!container || container.dataset.showAll === "true") return;
   const bubbles = container.querySelectorAll(".friend-bubble");
   const moreBtn = container.querySelector(".show-more-users");
   const lessBtn = container.querySelector(".show-less-users");
@@ -608,7 +608,7 @@ function applyCommunityListLimit() {
 
 function updateFriendsList() {
   const container = document.querySelector(".friends-bubbles");
-  if (!container) return;
+  if (!container || container.dataset.noAutoUpdate === "true") return;
   fetch(`${LANG_PREFIX}/api/friends/`, {
     headers: { "X-Requested-With": "XMLHttpRequest" },
   })

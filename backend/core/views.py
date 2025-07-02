@@ -1199,7 +1199,7 @@ def buscador_page(request):
     """Display a discovery page with random users and posts."""
     query = request.GET.get("q", "").strip()
 
-    random_users = get_random_users(request.user, limit=5)
+    random_users = get_random_users(request.user, limit=10)
 
     posts_qs = Post.objects.all()
     if request.user.is_authenticated:

@@ -6,9 +6,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
 
 class PostForm(forms.ModelForm):
-    image = forms.ImageField(
+    image = forms.FileField(
         required=False,
-        widget=forms.ClearableFileInput(attrs={"class": "hidden-file-input"}),
+        widget=forms.ClearableFileInput(
+            attrs={"class": "hidden-file-input", "accept": "image/*,video/*"}
+        ),
     )
 
     class Meta:
@@ -25,13 +27,48 @@ class PostForm(forms.ModelForm):
             'categories': forms.SelectMultiple(attrs={'class': 'category-select'}),
         }
 
+    def clean_image(self):
+        file = self.cleaned_data.get('image')
+        if file and file.content_type and file.content_type.startswith('video'):
+            import tempfile, subprocess, json, os
+            with tempfile.NamedTemporaryFile(delete=False) as tmp:
+                for chunk in file.chunks():
+                    tmp.write(chunk)
+                tmp.flush()
+                tmp_path = tmp.name
+            try:
+                result = subprocess.run(
+                    [
+                        'ffprobe',
+                        '-v',
+                        'error',
+                        '-show_entries',
+                        'format=duration',
+                        '-of',
+                        'json',
+                        tmp_path,
+                    ],
+                    capture_output=True,
+                    text=True,
+                )
+                duration = 0
+                if result.stdout:
+                    info = json.loads(result.stdout)
+                    duration = float(info.get('format', {}).get('duration', 0))
+                if duration > 180:
+                    raise forms.ValidationError(_('Video must be 3 minutes or shorter.'))
+            finally:
+                os.unlink(tmp_path)
+            file.seek(0)
+        return file
+
     def save(self, commit=True):
         instance = super().save(commit=False)
-        img = self.cleaned_data.get('image')
-        if img and hasattr(img, "read"):
-            data = img.read()
-            mime = img.content_type
-            if mime and mime.startswith("image"):
+        media = self.cleaned_data.get('image')
+        if media and hasattr(media, 'read'):
+            data = media.read()
+            mime = media.content_type
+            if mime and mime.startswith('image'):
                 try:
                     from PIL import Image, ImageOps
                     from io import BytesIO
@@ -39,19 +76,63 @@ class PostForm(forms.ModelForm):
                     im = Image.open(BytesIO(data))
                     im = ImageOps.exif_transpose(im)
                     buffer = BytesIO()
-                    im.save(buffer, format="WEBP", quality=85)
+                    im.save(buffer, format='WEBP', quality=85)
                     data = buffer.getvalue()
-                    mime = "image/webp"
+                    mime = 'image/webp'
                 except Exception:
                     try:
                         buffer = BytesIO()
-                        im.convert("RGB").save(buffer, format="JPEG", quality=85, progressive=True)
+                        im.convert('RGB').save(buffer, format='JPEG', quality=85, progressive=True)
                         data = buffer.getvalue()
-                        mime = "image/jpeg"
+                        mime = 'image/jpeg'
                     except Exception:
                         pass
-            instance.image = data
-            instance.image_mime = mime
+                instance.image = data
+                instance.image_mime = mime
+                instance.video = None
+                instance.video_mime = None
+            elif mime and mime.startswith('video'):
+                import tempfile, subprocess, os
+                with tempfile.NamedTemporaryFile(delete=False) as tmp_in:
+                    tmp_in.write(data)
+                    tmp_in.flush()
+                    tmp_in_path = tmp_in.name
+                with tempfile.NamedTemporaryFile(delete=False, suffix='.mp4') as tmp_out:
+                    tmp_out_path = tmp_out.name
+                try:
+                    subprocess.run(
+                        [
+                            'ffmpeg',
+                            '-i',
+                            tmp_in_path,
+                            '-c:v',
+                            'libx264',
+                            '-preset',
+                            'fast',
+                            '-crf',
+                            '28',
+                            '-movflags',
+                            '+faststart',
+                            '-an',
+                            tmp_out_path,
+                        ],
+                        check=True,
+                        stdout=subprocess.DEVNULL,
+                        stderr=subprocess.DEVNULL,
+                    )
+                    with open(tmp_out_path, 'rb') as f:
+                        data = f.read()
+                    mime = 'video/mp4'
+                except Exception:
+                    pass
+                finally:
+                    os.unlink(tmp_in_path)
+                    if os.path.exists(tmp_out_path):
+                        os.unlink(tmp_out_path)
+                instance.video = data
+                instance.video_mime = mime
+                instance.image = None
+                instance.image_mime = None
         if commit:
             instance.save()
             self.save_m2m()
@@ -154,6 +235,41 @@ class StoryForm(forms.ModelForm):
     class Meta:
         model = Story
         fields = ['media_file']
+
+    def clean_media_file(self):
+        media = self.cleaned_data.get('media_file')
+        if media and media.content_type and media.content_type.startswith('video'):
+            import tempfile, subprocess, json, os
+            with tempfile.NamedTemporaryFile(delete=False) as tmp:
+                for chunk in media.chunks():
+                    tmp.write(chunk)
+                tmp.flush()
+                tmp_path = tmp.name
+            try:
+                result = subprocess.run(
+                    [
+                        'ffprobe',
+                        '-v',
+                        'error',
+                        '-show_entries',
+                        'format=duration',
+                        '-of',
+                        'json',
+                        tmp_path,
+                    ],
+                    capture_output=True,
+                    text=True,
+                )
+                duration = 0
+                if result.stdout:
+                    info = json.loads(result.stdout)
+                    duration = float(info.get('format', {}).get('duration', 0))
+                if duration > 180:
+                    raise forms.ValidationError(_('Video must be 3 minutes or shorter.'))
+            finally:
+                os.unlink(tmp_path)
+            media.seek(0)
+        return media
 
     def save(self, commit=True):
         instance = super().save(commit=False)

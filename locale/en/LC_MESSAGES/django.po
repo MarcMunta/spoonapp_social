@@ -169,8 +169,8 @@ msgid "Publish"
 msgstr "Publish"
 
 #: templates/pages/feed.html:21
-msgid "Drag an image here or click"
-msgstr "Drag an image here or click"
+msgid "Drag an image or video here or click"
+msgstr "Drag an image or video here or click"
 
 #: templates/pages/feed.html:51 templates/pages/feed.html:113
 #: templates/pages/feed.html:120
@@ -419,3 +419,7 @@ msgstr "Yes, delete my account"
 
 msgid "Delete Account"
 msgstr "Delete Account"
+
+# Validation messages
+msgid "Video must be 3 minutes or shorter."
+msgstr "Video must be 3 minutes or shorter."

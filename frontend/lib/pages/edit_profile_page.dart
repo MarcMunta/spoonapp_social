@@ -4,6 +4,8 @@ import 'package:go_router/go_router.dart';
 
 import '../providers/auth_provider.dart';
 import '../providers/profile_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class EditProfilePage extends ConsumerStatefulWidget {
   const EditProfilePage({super.key});
@@ -44,8 +46,9 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     final auth = ref.watch(authProvider);
     if (auth == null) return const SizedBox.shrink();
     final profileAsync = ref.watch(profileProvider(auth.username));
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Editar perfil')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'edit_profile'))),
       body: profileAsync.when(
         data: (profile) => Padding(
           padding: const EdgeInsets.all(16.0),
@@ -53,7 +56,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
             children: [
               TextField(
                 controller: _bioController,
-                decoration: const InputDecoration(labelText: 'Biografía'),
+                decoration: InputDecoration(labelText: L10n.of(locale, 'bio')),
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
@@ -78,7 +81,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
                 onPressed: _saving ? null : _save,
                 child: _saving
                     ? const CircularProgressIndicator()
-                    : const Text('Guardar'),
+                    : Text(L10n.of(locale, 'save')),
               ),
             ],
           ),

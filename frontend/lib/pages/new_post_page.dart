@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/post_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/category_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class NewPostPage extends ConsumerStatefulWidget {
   const NewPostPage({super.key});
@@ -43,8 +45,9 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Nuevo post')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'new_post'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Consumer(
@@ -55,14 +58,17 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
                 children: [
                   TextField(
                     controller: _captionController,
-                    decoration: const InputDecoration(labelText: 'Título'),
+                    decoration:
+                        InputDecoration(labelText: L10n.of(locale, 'title')),
                   ),
                   TextField(
                     controller: _imageController,
-                    decoration: const InputDecoration(labelText: 'URL de la imagen (opcional)'),
+                    decoration: InputDecoration(
+                        labelText: L10n.of(locale, 'image_url_optional')),
                   ),
                   const SizedBox(height: 16),
-                  Text('Categorías', style: Theme.of(context).textTheme.titleMedium),
+                  Text(L10n.of(locale, 'categories'),
+                      style: Theme.of(context).textTheme.titleMedium),
                   ...cats.map((c) => CheckboxListTile(
                         title: Text(c.name),
                         value: _selectedCategories.contains(c.name),
@@ -83,7 +89,7 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
                     onPressed: _sending ? null : _submit,
                     child: _sending
                         ? const CircularProgressIndicator()
-                        : const Text('Publicar'),
+                        : Text(L10n.of(locale, 'publish')),
                   ),
                 ],
               ),

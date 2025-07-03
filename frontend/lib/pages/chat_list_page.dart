@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../providers/chat_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class ChatListPage extends ConsumerWidget {
   const ChatListPage({super.key});
@@ -10,8 +12,9 @@ class ChatListPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final chatsAsync = ref.watch(chatsProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Chats')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'chats'))),
       body: chatsAsync.when(
         data: (chats) => ListView.builder(
           itemCount: chats.length,

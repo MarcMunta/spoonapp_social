@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/post_provider.dart';
 import '../providers/story_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/story_circle.dart';
 import '../widgets/post_card.dart';
@@ -19,9 +21,14 @@ class FeedPage extends ConsumerWidget {
     final storiesAsync = ref.watch(storiesNotifierProvider);
     final auth = ref.watch(authProvider);
     final category = ref.watch(selectedCategoryProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text(category == null ? 'Feed' : 'Feed (${category})'),
+        title: Text(
+          category == null
+              ? L10n.of(locale, 'feed')
+              : '${L10n.of(locale, 'feed')} ($category)',
+        ),
         actions: [
           IconButton(
             icon: const Icon(Icons.filter_list),

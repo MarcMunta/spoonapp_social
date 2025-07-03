@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/block_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class BlockedUsersPage extends ConsumerWidget {
   const BlockedUsersPage({super.key});
@@ -9,8 +11,9 @@ class BlockedUsersPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final blocksAsync = ref.watch(blocksProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Blocked users')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'blocked_users'))),
       body: blocksAsync.when(
         data: (blocks) => ListView.builder(
           itemCount: blocks.length,

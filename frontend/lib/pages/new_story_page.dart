@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/story_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class NewStoryPage extends ConsumerStatefulWidget {
   const NewStoryPage({super.key});
@@ -35,15 +37,17 @@ class _NewStoryPageState extends ConsumerState<NewStoryPage> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Nueva historia')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'new_story'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             TextField(
               controller: _imageController,
-              decoration: const InputDecoration(labelText: 'URL de la imagen'),
+              decoration:
+                  InputDecoration(labelText: L10n.of(locale, 'image_url')),
             ),
             const SizedBox(height: 16),
             if (_error != null)
@@ -52,7 +56,7 @@ class _NewStoryPageState extends ConsumerState<NewStoryPage> {
               onPressed: _sending ? null : _submit,
               child: _sending
                   ? const CircularProgressIndicator()
-                  : const Text('Publicar'),
+                  : Text(L10n.of(locale, 'publish')),
             ),
           ],
         ),

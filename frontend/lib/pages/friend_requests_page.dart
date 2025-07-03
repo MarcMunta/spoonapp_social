@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/friend_request_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class FriendRequestsPage extends ConsumerWidget {
   const FriendRequestsPage({super.key});
@@ -9,8 +11,9 @@ class FriendRequestsPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final requestsAsync = ref.watch(friendRequestsProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Solicitudes de amistad')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'friend_requests'))),
       body: requestsAsync.when(
         data: (reqs) => ListView.builder(
           itemCount: reqs.length,
@@ -22,6 +25,7 @@ class FriendRequestsPage extends ConsumerWidget {
               subtitle: Text(r.createdAt.toLocal().toString()),
               trailing: IconButton(
                 icon: const Icon(Icons.check),
+                tooltip: L10n.of(locale, 'accept'),
                 onPressed: () =>
                     ref.read(acceptFriendRequestProvider)(r.id),
               ),

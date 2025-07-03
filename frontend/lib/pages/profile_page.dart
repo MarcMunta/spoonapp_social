@@ -50,7 +50,7 @@ class ProfilePage extends ConsumerWidget {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => context.push('/profile/edit'),
-                      child: const Text('Editar perfil'),
+                      child: Text(L10n.of(locale, 'edit_profile')),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
@@ -70,7 +70,7 @@ class ProfilePage extends ConsumerWidget {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => context.push('/categories'),
-                      child: const Text('Categories'),
+                      child: Text(L10n.of(locale, 'categories')),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(

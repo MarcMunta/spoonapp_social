@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/chat_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class ChatDetailPage extends ConsumerStatefulWidget {
   final int chatId;
@@ -20,8 +22,9 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
     final messagesAsync = ref.watch(messagesProvider(widget.chatId));
     final sendMessage = ref.read(sendMessageProvider);
     final auth = ref.watch(authProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: Text('Chat ${widget.chatId}')),
+      appBar: AppBar(title: Text('${L10n.of(locale, 'chat')} ${widget.chatId}')),
       body: Column(
         children: [
           Expanded(

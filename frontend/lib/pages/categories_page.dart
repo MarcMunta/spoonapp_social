@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/category_provider.dart';
 import '../providers/post_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 import 'package:go_router/go_router.dart';
 
 class CategoriesPage extends ConsumerWidget {
@@ -11,15 +13,16 @@ class CategoriesPage extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final asyncCategories = ref.watch(categoriesProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Categories')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'categories'))),
       body: asyncCategories.when(
         data: (cats) => ListView.builder(
           itemCount: cats.length + 1,
           itemBuilder: (context, index) {
             if (index == 0) {
               return ListTile(
-                title: const Text('All'),
+                title: Text(L10n.of(locale, 'all')),
                 onTap: () {
                   ref.read(selectedCategoryProvider.notifier).state = null;
                   context.go('/');

@@ -14,16 +14,12 @@
     <div class="row justify-content-center">
         <div class="col-lg-8">
             <!-- SpoonApp Header -->
-            <div class="spoon-notification-header mb-4">
-                <div class="d-flex align-items-center">
-                    <div class="spoon-header-icon me-3">
-                        <span class="fs-2">🔔</span>
-                    </div>
-                    <div>
-                        <h2 class="spoon-notification-title mb-1">{% trans "Notifications" %}</h2>
-                        <p class="spoon-notification-subtitle mb-0">{% trans "Stay updated with your SpoonApp activity" %}</p>
-                    </div>
+            <div class="spoon-notification-header mb-4 text-center">
+                <div class="spoon-header-icon mx-auto mb-2">
+                    <span class="fs-2">🔔</span>
                 </div>
+                <h2 class="spoon-notification-title-main mb-1">{% trans "Notifications" %}</h2>
+                <p class="spoon-notification-subtitle mb-0">{% trans "Stay updated with your SpoonApp activity" %}</p>
             </div>
 
             {% if notifications %}

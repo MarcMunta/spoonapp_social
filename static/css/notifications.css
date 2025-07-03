@@ -36,17 +36,31 @@
 }
 
 .spoon-notification-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 20px 10px;
+    text-align: center;
+    padding: 15px 0 10px;
     border-bottom: 1px solid #eee;
 }
 
-.spoon-notification-header h4 {
+.spoon-header-icon {
+    background: linear-gradient(135deg, #d48ac1 0%, #b86ba3 100%);
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(212, 138, 193, 0.3);
+}
+
+.spoon-notification-title-main {
+    color: #6b21a8;
+    font-weight: 700;
     margin: 0;
-    color: #333;
-    font-size: 1.1rem;
+}
+
+.spoon-notification-subtitle {
+    color: #8b5a96;
+    font-size: 0.95rem;
 }
 
 .spoon-see-all {
@@ -126,7 +140,8 @@
 }
 
 .spoon-notifications-container {
-    max-width: 600px;
+    max-width: 650px;
+    width: 100%;
     margin: 0 auto;
 }
 

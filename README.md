@@ -57,6 +57,8 @@ cada círculo y los posts se renderizan mediante el widget personalizado
 `Hero` para la imagen. Las imágenes se cargan usando `cached_network_image` para
 mejorar el rendimiento. Se añadieron páginas de **login** y **registro** en Flutter
 que consumen los endpoints `/login` y `/signup`.
+El token de autenticación se persiste localmente usando
+`shared_preferences` para mantener la sesión entre reinicios.
 
 ## Estructura
 

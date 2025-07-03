@@ -74,6 +74,8 @@ También existe una página de **notificaciones** que consume `/notifications`.
 La pantalla **Nuevo Post** permite publicar mensajes con una imagen opcional.
 Se añadieron pantallas de **chats** para enviar y recibir mensajes usando los
 endpoints `/chats` y `/chats/{id}/messages`.
+La página de perfil ahora tiene un interruptor para activar el tema oscuro o
+claro. La preferencia se guarda localmente con `shared_preferences`.
 
 ## Estructura
 
@@ -87,7 +89,7 @@ SpoonApp
 │   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
-│   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth)
+│   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)
 │   │   └── widgets/           # Widgets reutilizables (StoryCircle, PostCard)
 │   └── pubspec.yaml
 │

@@ -14,6 +14,7 @@ import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 import 'models/post.dart';
 import 'providers/auth_provider.dart';
+import 'providers/theme_provider.dart';
 GoRouter _buildRouter(AuthState? auth) {
   return GoRouter(
     initialLocation: auth == null ? '/login' : '/',
@@ -61,10 +62,13 @@ class SpoonApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
+    final themeMode = ref.watch(themeProvider);
     final router = _buildRouter(auth);
     return MaterialApp.router(
       title: 'SpoonApp',
       theme: ThemeData(primarySwatch: Colors.deepOrange),
+      darkTheme: ThemeData.dark(),
+      themeMode: themeMode,
       routerConfig: router,
     );
   }

@@ -308,25 +308,23 @@ body.sidebar-hidden .sidebar {
 }
 
 body.sidebar-hidden .main-content {
-    margin-left: 0;
+    margin-left: auto;
 }
 
 .main-content {
-    margin-left: 240px;
-    margin-right: 300px;
+    margin: 0 auto;
     padding: 1rem;
     flex: 1;
     border-left: 1px solid rgba(0, 0, 0, 0.1);
     border-right: 1px solid rgba(0, 0, 0, 0.1);
     overflow-y: auto;
     box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.05);
-    transition: margin-left 0.3s ease;
+    transition: margin 0.3s ease;
 }
 
 .main-content:has(.spoon-chat-container) {
-    margin-left: 220px;
+    margin: 0 auto;
     padding: 8px;
-    margin-right: 0;
     overflow: hidden;
     border-right: none;
     background: linear-gradient(135deg, #e8eaf0 0%, #d4d8e0 100%);
@@ -476,7 +474,7 @@ body.rightbar-hidden .rightbar {
 }
 
 body.rightbar-hidden .main-content {
-    margin-right: 0;
+    margin-right: auto;
 }
 
 body:not(.rightbar-hidden) .profile-icon {

@@ -1,5 +1,6 @@
 # SpoonApp Social
 
+
 Este repositorio contiene la migración en curso de **SpoonApp** a un stack
 compuesto por **Flutter** en el frontend y **FastAPI** para el backend. La
 antigua aplicación Django se conserva solo como referencia.

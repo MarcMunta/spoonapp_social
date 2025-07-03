@@ -39,7 +39,6 @@
         <i class="fas fa-plus"></i>
       </a>
       {% if user.is_authenticated %}
-      <a href="{% url 'chat_list' %}">💬</a>
       <div class="notification-dropdown">
         <a href="#" class="notification-bell" onclick="toggleNotifications(event)">
           🔔
@@ -74,16 +73,12 @@
 
         </div>
       </div>
-      {% else %}
-      <span>💬</span>
       {% endif %}
       <span>🍴</span>
-      <a href="{% url 'admin:index' %}" target="_blank" rel="noopener">
-        ⚙️
-      </a>
-    </div>
-    {% if not hide_profile_icon %}
-    <div class="profile-icon">
+      </div>
+      {% if not hide_profile_icon %}
+      <button id="themeToggle" class="theme-toggle" aria-label="{% trans 'Activar modo noche/día' %}"></button>
+      <div class="profile-icon">
       {% if user.is_authenticated %}
       <a href="{% url 'profile' user.username %}">
         {% if user.profile.profile_picture %}

@@ -35,7 +35,9 @@
   </form>
 </div>
 {% endif %}
+{% if not show_form %}
 {% include "partials/stories/stories.html" %}
+{% endif %}
 {% endif %}
 {% for post in posts %}
 <div class="post mb-3" data-post-index="{{ forloop.counter0 }}">

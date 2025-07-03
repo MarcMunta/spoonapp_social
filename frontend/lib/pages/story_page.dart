@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/story.dart';
 
@@ -13,7 +14,7 @@ class StoryPage extends StatelessWidget {
       body: Center(
         child: Hero(
           tag: 'story_${story.id}',
-          child: Image.network(story.imageUrl),
+          child: CachedNetworkImage(imageUrl: story.imageUrl),
         ),
       ),
     );

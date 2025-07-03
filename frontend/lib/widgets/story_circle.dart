@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/story.dart';
 import '../pages/story_page.dart';
@@ -19,7 +20,7 @@ class StoryCircle extends StatelessWidget {
             tag: 'story_${story.id}',
             child: CircleAvatar(
               radius: 30,
-              backgroundImage: NetworkImage(story.imageUrl),
+              backgroundImage: CachedNetworkImageProvider(story.imageUrl),
             ),
           ),
           const SizedBox(height: 4),

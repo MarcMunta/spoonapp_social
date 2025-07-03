@@ -51,7 +51,9 @@ GET /stories  # Lista de historias de ejemplo
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo y los posts se renderizan mediante el widget personalizado
-`PostCard`.
+`PostCard`. Al pulsar sobre un post se abre un `PostDetailPage` con transición
+`Hero` para la imagen. Las imágenes se cargan usando `cached_network_image` para
+mejorar el rendimiento.
 
 ## Estructura
 
@@ -62,7 +64,7 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Profile, Story...)
+│   │   ├── pages/             # Vistas (Feed, Profile, Story, PostDetail...)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado

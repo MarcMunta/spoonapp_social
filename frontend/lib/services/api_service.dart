@@ -23,6 +23,21 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
+  
+  Future<String> signup(String username, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/signup'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'username': username, 'password': password}),
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data =
+          json.decode(response.body) as Map<String, dynamic>;
+      return data['token'] as String;
+    } else {
+      throw Exception('Signup failed');
+    }
+  }
 
   Future<List<Post>> fetchPosts() async {
     final response = await http.get(Uri.parse('$baseUrl/posts'));

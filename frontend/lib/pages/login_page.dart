@@ -59,6 +59,10 @@ class _LoginPageState extends ConsumerState<LoginPage> {
               child:
                   _loading ? const CircularProgressIndicator() : const Text('Entrar'),
             ),
+            TextButton(
+              onPressed: () => context.go('/signup'),
+              child: const Text('Crear cuenta'),
+            ),
           ],
         ),
       ),

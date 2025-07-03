@@ -2,7 +2,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'post_provider.dart';
 
-class AuthNotifier extends StateNotifier<String?> {
+class AuthState {
+  final String token;
+  final String username;
+  const AuthState({required this.token, required this.username});
+}
+
+class AuthNotifier extends StateNotifier<AuthState?> {
   AuthNotifier(this.ref) : super(null);
 
   final Ref ref;
@@ -11,7 +17,18 @@ class AuthNotifier extends StateNotifier<String?> {
     try {
       final token =
           await ref.read(apiServiceProvider).login(username, password);
-      state = token;
+      state = AuthState(token: token, username: username);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
+  Future<bool> signup(String username, String password) async {
+    try {
+      final token =
+          await ref.read(apiServiceProvider).signup(username, password);
+      state = AuthState(token: token, username: username);
       return true;
     } catch (_) {
       return false;
@@ -22,4 +39,4 @@ class AuthNotifier extends StateNotifier<String?> {
 }
 
 final authProvider =
-    StateNotifierProvider<AuthNotifier, String?>((ref) => AuthNotifier(ref));
+    StateNotifierProvider<AuthNotifier, AuthState?>((ref) => AuthNotifier(ref));

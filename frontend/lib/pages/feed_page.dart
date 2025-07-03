@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/post_provider.dart';
 import '../providers/story_provider.dart';
+import '../providers/auth_provider.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/story_circle.dart';
 import '../widgets/post_card.dart';
 
@@ -13,6 +15,7 @@ class FeedPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final postsAsync = ref.watch(postsProvider);
     final storiesAsync = ref.watch(storiesProvider);
+    final auth = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Feed')),
       body: Column(
@@ -51,6 +54,12 @@ class FeedPage extends ConsumerWidget {
           ),
         ],
       ),
+      floatingActionButton: auth == null
+          ? null
+          : FloatingActionButton(
+              onPressed: () => context.push('/new'),
+              child: const Icon(Icons.add),
+            ),
     );
   }
 }

@@ -25,6 +25,7 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
+  
   Future<String> signup(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/signup'),
@@ -48,6 +49,23 @@ class ApiService {
       return data.map((e) => Post.fromJson(e as Map<String, dynamic>)).toList();
     } else {
       throw Exception('Failed to load posts');
+    }
+  }
+  
+  Future<Post> createPost(String user, String caption, [String? imageUrl]) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/posts'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({
+        'user': user,
+        'caption': caption,
+        'image_url': imageUrl,
+      }),
+    );
+    if (response.statusCode == 200) {
+      return Post.fromJson(json.decode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to create post');
     }
   }
 

@@ -1,4 +1,4 @@
-from .post import Post
+from .post import Post, PostRequest
 from .story import Story
 from .user import LoginRequest, User
 from .notification import Notification

@@ -11,6 +11,7 @@ from .models import (
     Comment,
     CommentRequest,
     LikeRequest,
+    PostRequest,
 )
 from .data import (
     fake_posts,
@@ -38,6 +39,20 @@ def list_posts(user: str | None = None):
         posts.append(Post(**p.dict(), likes=likes, liked=liked))
     return posts
 
+
+@app.post("/posts", response_model=Post)
+def create_post(data: PostRequest):
+    post = Post(
+        id=len(fake_posts) + 1,
+        user=data.user,
+        caption=data.caption,
+        created_at=datetime.utcnow(),
+        image_url=data.image_url,
+        likes=0,
+    )
+    fake_posts.append(post)
+    fake_likes[post.id] = set()
+    return post
 
 
 @app.get("/stories", response_model=List[Story])

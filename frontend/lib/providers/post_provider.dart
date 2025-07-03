@@ -23,3 +23,13 @@ final toggleLikeProvider = Provider(
     ref.invalidate(postsProvider);
   },
 );
+
+final addPostProvider = Provider((ref) => (
+      String user,
+      String caption,
+      [String? imageUrl],
+    ) async {
+      final api = ref.read(apiServiceProvider);
+      await api.createPost(user, caption, imageUrl);
+      ref.invalidate(postsProvider);
+    });

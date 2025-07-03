@@ -46,6 +46,7 @@ El backend FastAPI expone endpoints de prueba para la app Flutter:
 
 ```text
 GET /posts    # Lista de posts de ejemplo
+POST /posts   # Crear un post nuevo
 GET /stories  # Lista de historias de ejemplo
 GET /notifications  # Lista de notificaciones de ejemplo
 POST /login   # Devuelve un token si la contraseña es "password"
@@ -56,7 +57,7 @@ POST /posts/{id}/likes     # Marcar me gusta
 DELETE /posts/{id}/likes   # Quitar me gusta
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
-
+El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo y los posts se renderizan mediante el widget personalizado
@@ -67,6 +68,7 @@ que consumen los endpoints `/login` y `/signup`.
 El token de autenticación se persiste localmente usando
 `shared_preferences` para mantener la sesión entre reinicios.
 También existe una página de **notificaciones** que consume `/notifications`.
+La pantalla **Nuevo Post** permite publicar mensajes con una imagen opcional.
 
 ## Estructura
 
@@ -77,7 +79,7 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Notifications, Profile, Story, PostDetail, Login, Signup)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Profile, Story, PostDetail, Login, Signup, NewPost)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, auth)

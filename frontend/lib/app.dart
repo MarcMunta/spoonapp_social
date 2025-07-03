@@ -7,6 +7,7 @@ import 'pages/home_page.dart';
 import 'pages/profile_page.dart';
 import 'pages/notifications_page.dart';
 import 'pages/post_detail_page.dart';
+import 'pages/new_post_page.dart';
 import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 import 'models/post.dart';
@@ -23,6 +24,7 @@ GoRouter _buildRouter(AuthState? auth) {
           GoRoute(path: '/', builder: (context, state) => const FeedPage()),
           GoRoute(path: '/notifications', builder: (_, __) => const NotificationsPage()),
           GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
+          GoRoute(path: '/new', builder: (_, __) => const NewPostPage()),
           GoRoute(
             path: '/post/:id',
             builder: (context, state) {

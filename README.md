@@ -60,6 +60,9 @@ POST /posts/{id}/likes     # Marcar me gusta
 DELETE /posts/{id}/likes   # Quitar me gusta
 GET /users/{username}      # Obtener perfil de usuario
 PUT /users/{username}      # Actualizar perfil (bio, avatar)
+GET /friend-requests       # Solicitudes de amistad (opcional ?user=)
+POST /friend-requests      # Enviar solicitud de amistad
+POST /friend-requests/{id}/accept  # Aceptar solicitud
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
@@ -80,6 +83,8 @@ La página de perfil ahora tiene un interruptor para activar el tema oscuro o
 claro. La preferencia se guarda localmente con `shared_preferences`.
 Desde la página de perfil es posible acceder a **Editar Perfil** para cambiar la
 biografía y el avatar mediante los endpoints `/users/{username}`.
+Existe también una pantalla de **solicitudes de amistad** que muestra las
+peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
 
 ## Estructura
 
@@ -90,7 +95,7 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, FriendRequests)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)

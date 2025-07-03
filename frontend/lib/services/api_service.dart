@@ -8,6 +8,7 @@ import '../models/notification.dart';
 import '../models/comment.dart';
 import '../models/chat.dart';
 import '../models/user.dart';
+import '../models/friend_request.dart';
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -200,6 +201,41 @@ class ApiService {
           json.decode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to update user');
+    }
+  }
+
+  Future<List<FriendRequest>> fetchFriendRequests([String? user]) async {
+    final url = user == null
+        ? '$baseUrl/friend-requests'
+        : '$baseUrl/friend-requests?user=$user';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data
+          .map((e) => FriendRequest.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw Exception('Failed to load requests');
+    }
+  }
+
+  Future<void> sendFriendRequest(String from, String to) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/friend-requests'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'from_user': from, 'to_user': to}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to send request');
+    }
+  }
+
+  Future<void> acceptFriendRequest(int id) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/friend-requests/$id/accept'),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to accept request');
     }
   }
 }

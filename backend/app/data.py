@@ -7,6 +7,7 @@ from .models import (
     Comment,
     Chat,
     Message,
+    FriendRequest,
 )
 
 fake_posts = [
@@ -82,3 +83,13 @@ fake_messages = {
         ),
     ]
 }
+
+# Simple friend request storage
+fake_friend_requests: list[FriendRequest] = [
+    FriendRequest(
+        id=1,
+        from_user="bob",
+        to_user="alice",
+        created_at=datetime.utcnow(),
+    )
+]

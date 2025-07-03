@@ -17,6 +17,8 @@ from .models import (
     MessageRequest,
     UserProfile,
     ProfileUpdate,
+    FriendRequest,
+    FriendRequestCreate,
 )
 from .data import (
     fake_posts,
@@ -27,6 +29,7 @@ from .data import (
     fake_likes,
     fake_chats,
     fake_messages,
+    fake_friend_requests,
 )
 
 app = FastAPI(title="SpoonApp API")
@@ -175,3 +178,32 @@ def add_message(chat_id: int, data: MessageRequest):
     )
     messages.append(msg)
     return msg
+
+
+@app.get("/friend-requests", response_model=List[FriendRequest])
+def list_friend_requests(user: str | None = None):
+    if user:
+        return [fr for fr in fake_friend_requests if fr.to_user == user]
+    return fake_friend_requests
+
+
+@app.post("/friend-requests", response_model=FriendRequest)
+def create_friend_request(data: FriendRequestCreate):
+    fr = FriendRequest(
+        id=len(fake_friend_requests) + 1,
+        from_user=data.from_user,
+        to_user=data.to_user,
+        created_at=datetime.utcnow(),
+    )
+    fake_friend_requests.append(fr)
+    return fr
+
+
+@app.post("/friend-requests/{fr_id}/accept")
+def accept_friend_request(fr_id: int):
+    for i, fr in enumerate(fake_friend_requests):
+        if fr.id == fr_id:
+            fake_friend_requests.pop(i)
+            return {"accepted": True}
+    raise HTTPException(status_code=404, detail="Request not found")
+

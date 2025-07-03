@@ -40,6 +40,11 @@ class ProfilePage extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
+                      onPressed: () => context.push('/friend-requests'),
+                      child: const Text('Solicitudes de amistad'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
                       onPressed: () =>
                           ref.read(authProvider.notifier).logout(),
                       child: const Text('Cerrar sesión'),

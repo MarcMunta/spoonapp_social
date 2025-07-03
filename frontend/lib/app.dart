@@ -13,6 +13,7 @@ import 'pages/chat_detail_page.dart';
 import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/edit_profile_page.dart';
+import 'pages/friend_requests_page.dart';
 import 'models/post.dart';
 import 'providers/auth_provider.dart';
 import 'providers/theme_provider.dart';
@@ -28,6 +29,9 @@ GoRouter _buildRouter(AuthState? auth) {
           GoRoute(path: '/', builder: (context, state) => const FeedPage()),
           GoRoute(path: '/notifications', builder: (_, __) => const NotificationsPage()),
           GoRoute(path: '/chats', builder: (_, __) => const ChatListPage()),
+          GoRoute(
+              path: '/friend-requests',
+              builder: (_, __) => const FriendRequestsPage()),
           GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
           GoRoute(path: '/profile/edit', builder: (_, __) => const EditProfilePage()),
           GoRoute(path: '/new', builder: (_, __) => const NewPostPage()),

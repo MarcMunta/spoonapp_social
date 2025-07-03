@@ -11,4 +11,11 @@ pip install -r requirements.txt
 
 cp .env.example .env 2>/dev/null || true
 
+if command -v flutter >/dev/null 2>&1; then
+  echo "Installing Flutter dependencies"
+  (cd "$SCRIPT_DIR/frontend" && flutter pub get)
+else
+  echo "Flutter not found. Skipping flutter pub get"
+fi
+
 echo "Environment ready. Activate with: source backend/app/env/bin/activate"

@@ -51,6 +51,7 @@ GET /stories  # Lista de historias de ejemplo
 POST /stories # Crear una historia
 DELETE /stories/{id}?user=alice  # Borrar historia (propietario)
 GET /notifications  # Lista de notificaciones de ejemplo
+POST /notifications/{id}/read  # Marcar notificación como leída
 GET /chats               # Lista de chats del usuario
 GET /chats/{id}/messages  # Mensajes de un chat
 POST /chats/{id}/messages # Enviar mensaje
@@ -95,6 +96,7 @@ que consumen los endpoints `/login` y `/signup`.
 El token de autenticación se persiste localmente usando
 `shared_preferences` para mantener la sesión entre reinicios.
 También existe una página de **notificaciones** que consume `/notifications`.
+Ahora se pueden marcar como leídas enviando `POST /notifications/{id}/read`.
 La pantalla **Nuevo Post** permite publicar mensajes con una imagen opcional.
 De igual forma existe **Nueva Historia** para crear historias con `/stories`.
 Se añadieron pantallas de **chats** para enviar y recibir mensajes usando los

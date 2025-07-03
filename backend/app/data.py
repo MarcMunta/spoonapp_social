@@ -70,8 +70,20 @@ fake_stories = [
 ]
 
 fake_notifications = [
-    Notification(id=1, message="alice te siguió", created_at=datetime.utcnow()),
-    Notification(id=2, message="bob comentó tu post", created_at=datetime.utcnow()),
+    Notification(
+        id=1,
+        message="alice te siguió",
+        created_at=datetime.utcnow(),
+        title="Nuevo seguidor",
+        notification_type="friend_request",
+    ),
+    Notification(
+        id=2,
+        message="bob comentó tu post",
+        created_at=datetime.utcnow(),
+        title="Nuevo comentario",
+        notification_type="comment",
+    ),
 ]
 
 fake_comments = {

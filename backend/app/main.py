@@ -103,10 +103,23 @@ def delete_story(story_id: int, user: str):
             return Response(status_code=204)
     raise HTTPException(status_code=404, detail="Story not found")
 
+
+
+
 @app.get("/notifications", response_model=List[Notification])
 def list_notifications():
     """Return sample list of notifications."""
     return fake_notifications
+
+
+@app.post("/notifications/{nid}/read")
+def mark_notification_read(nid: int):
+    for i, n in enumerate(fake_notifications):
+        if n.id == nid:
+            fake_notifications[i] = n.copy(update={"is_read": True})
+            return {"read": True}
+    raise HTTPException(status_code=404, detail="Notification not found")
+
 
 
 @app.get("/posts/{post_id}/comments", response_model=List[Comment])

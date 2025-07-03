@@ -7,3 +7,11 @@ final notificationsProvider = FutureProvider<List<NotificationItem>>((ref) async
   final api = ref.watch(apiServiceProvider);
   return api.fetchNotifications();
 });
+
+final markNotificationReadProvider = Provider(
+  (ref) => (int id) async {
+    final api = ref.read(apiServiceProvider);
+    await api.markNotificationRead(id);
+    ref.invalidate(notificationsProvider);
+  },
+);

@@ -29,6 +29,9 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
+
+
+
   Future<String> signup(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/signup'),
@@ -60,7 +63,6 @@ class ApiService {
       throw Exception('Failed to load posts');
     }
   }
-
 
 
   Future<Post> createPost(String user, String caption, [String? imageUrl]) async {
@@ -122,6 +124,15 @@ class ApiService {
           .toList();
     } else {
       throw Exception('Failed to load notifications');
+    }
+  }
+
+  Future<void> markNotificationRead(int id) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/notifications/$id/read'),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to mark notification read');
     }
   }
 

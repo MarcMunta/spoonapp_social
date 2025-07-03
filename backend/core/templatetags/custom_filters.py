@@ -116,9 +116,9 @@ def format_last_seen(value):
     """Return naturaltime string if value is truthy, else empty string."""
     if not value:
         return ""
-    from django.contrib.humanize.templatetags.humanize import naturaltime
+    from django.utils.timesince import timesince
     try:
-        text = naturaltime(value)
+        text = timesince(value)
     except Exception:
         return ""
     return text if text != "None" else ""

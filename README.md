@@ -49,6 +49,9 @@ GET /posts    # Lista de posts de ejemplo
 POST /posts   # Crear un post nuevo
 GET /stories  # Lista de historias de ejemplo
 GET /notifications  # Lista de notificaciones de ejemplo
+GET /chats               # Lista de chats del usuario
+GET /chats/{id}/messages  # Mensajes de un chat
+POST /chats/{id}/messages # Enviar mensaje
 POST /login   # Devuelve un token si la contraseña es "password"
 POST /signup  # Registra un usuario nuevo en memoria
 GET /posts/{id}/comments  # Comentarios de un post
@@ -69,6 +72,8 @@ El token de autenticación se persiste localmente usando
 `shared_preferences` para mantener la sesión entre reinicios.
 También existe una página de **notificaciones** que consume `/notifications`.
 La pantalla **Nuevo Post** permite publicar mensajes con una imagen opcional.
+Se añadieron pantallas de **chats** para enviar y recibir mensajes usando los
+endpoints `/chats` y `/chats/{id}/messages`.
 
 ## Estructura
 
@@ -79,10 +84,10 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Notifications, Profile, Story, PostDetail, Login, Signup, NewPost)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
-│   │   ├── providers/         # Gestión de estado (posts, stories, notifications, auth)
+│   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth)
 │   │   └── widgets/           # Widgets reutilizables (StoryCircle, PostCard)
 │   └── pubspec.yaml
 │

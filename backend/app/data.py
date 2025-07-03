@@ -1,5 +1,13 @@
 from datetime import datetime
-from .models import Post, Story, User, Notification, Comment
+from .models import (
+    Post,
+    Story,
+    User,
+    Notification,
+    Comment,
+    Chat,
+    Message,
+)
 
 fake_posts = [
     Post(
@@ -39,4 +47,28 @@ fake_comments = {
 fake_likes = {
     1: {"bob"},
     2: set(),
+}
+
+# Simple chat and message storage
+fake_chats = [
+    Chat(id=1, participants=["alice", "bob"], created_at=datetime.utcnow()),
+]
+
+fake_messages = {
+    1: [
+        Message(
+            id=1,
+            chat_id=1,
+            sender="alice",
+            content="Hola Bob!",
+            created_at=datetime.utcnow(),
+        ),
+        Message(
+            id=2,
+            chat_id=1,
+            sender="bob",
+            content="Hola Alice!",
+            created_at=datetime.utcnow(),
+        ),
+    ]
 }

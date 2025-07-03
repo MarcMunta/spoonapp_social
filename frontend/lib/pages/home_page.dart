@@ -27,6 +27,9 @@ class _HomePageState extends State<HomePage> {
             case 1:
               context.go('/notifications');
               break;
+            case 2:
+              context.go('/chats');
+              break;
             default:
               context.go('/profile');
           }
@@ -34,6 +37,7 @@ class _HomePageState extends State<HomePage> {
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Feed'),
           BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notifs'),
+          BottomNavigationBarItem(icon: Icon(Icons.chat), label: 'Chats'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

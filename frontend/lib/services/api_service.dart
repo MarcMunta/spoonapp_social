@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import '../models/post.dart';
 import '../models/story.dart';
 import '../models/notification.dart';
-
 import '../models/comment.dart';
+import '../models/chat.dart';
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -25,7 +25,6 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
-  
   Future<String> signup(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/signup'),
@@ -51,7 +50,6 @@ class ApiService {
       throw Exception('Failed to load posts');
     }
   }
-  
   Future<Post> createPost(String user, String caption, [String? imageUrl]) async {
     final response = await http.post(
       Uri.parse('$baseUrl/posts'),
@@ -142,6 +140,40 @@ class ApiService {
       return Post.fromJson(json.decode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to unlike post');
+    }
+  }
+
+  Future<List<Chat>> fetchChats([String? user]) async {
+    final url = user == null ? '$baseUrl/chats' : '$baseUrl/chats?user=$user';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data.map((e) => Chat.fromJson(e as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception('Failed to load chats');
+    }
+  }
+
+  Future<List<Message>> fetchMessages(int chatId) async {
+    final response = await http.get(Uri.parse('$baseUrl/chats/$chatId/messages'));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data.map((e) => Message.fromJson(e as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception('Failed to load messages');
+    }
+  }
+
+  Future<Message> sendMessage(int chatId, String sender, String content) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/chats/$chatId/messages'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'sender': sender, 'content': content}),
+    );
+    if (response.statusCode == 200) {
+      return Message.fromJson(json.decode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to send message');
     }
   }
 }

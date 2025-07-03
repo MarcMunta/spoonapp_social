@@ -12,6 +12,9 @@ from .models import (
     CommentRequest,
     LikeRequest,
     PostRequest,
+    Chat,
+    Message,
+    MessageRequest,
 )
 from .data import (
     fake_posts,
@@ -20,6 +23,8 @@ from .data import (
     fake_users,
     fake_comments,
     fake_likes,
+    fake_chats,
+    fake_messages,
 )
 
 app = FastAPI(title="SpoonApp API")
@@ -121,3 +126,29 @@ def signup(data: LoginRequest):
     user = User(username=data.username, password=data.password)
     fake_users.append(user)
     return {"token": "fake-token", "username": user.username}
+
+
+@app.get("/chats", response_model=List[Chat])
+def list_chats(user: str | None = None):
+    if user:
+        return [c for c in fake_chats if user in c.participants]
+    return fake_chats
+
+
+@app.get("/chats/{chat_id}/messages", response_model=List[Message])
+def get_messages(chat_id: int):
+    return fake_messages.get(chat_id, [])
+
+
+@app.post("/chats/{chat_id}/messages", response_model=Message)
+def add_message(chat_id: int, data: MessageRequest):
+    messages = fake_messages.setdefault(chat_id, [])
+    msg = Message(
+        id=len(messages) + 1,
+        chat_id=chat_id,
+        sender=data.sender,
+        content=data.content,
+        created_at=datetime.utcnow(),
+    )
+    messages.append(msg)
+    return msg

@@ -8,6 +8,8 @@ import 'pages/profile_page.dart';
 import 'pages/notifications_page.dart';
 import 'pages/post_detail_page.dart';
 import 'pages/new_post_page.dart';
+import 'pages/chat_list_page.dart';
+import 'pages/chat_detail_page.dart';
 import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 import 'models/post.dart';
@@ -23,6 +25,7 @@ GoRouter _buildRouter(AuthState? auth) {
         routes: [
           GoRoute(path: '/', builder: (context, state) => const FeedPage()),
           GoRoute(path: '/notifications', builder: (_, __) => const NotificationsPage()),
+          GoRoute(path: '/chats', builder: (_, __) => const ChatListPage()),
           GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
           GoRoute(path: '/new', builder: (_, __) => const NewPostPage()),
           GoRoute(
@@ -30,6 +33,13 @@ GoRouter _buildRouter(AuthState? auth) {
             builder: (context, state) {
               final post = state.extra as Post;
               return PostDetailPage(post: post);
+            },
+          ),
+          GoRoute(
+            path: '/chat/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return ChatDetailPage(chatId: id);
             },
           ),
         ],

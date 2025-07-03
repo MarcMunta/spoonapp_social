@@ -16,9 +16,12 @@ import 'pages/edit_profile_page.dart';
 import 'pages/friend_requests_page.dart';
 import 'pages/blocked_users_page.dart';
 import 'pages/user_search_page.dart';
+import 'pages/settings_page.dart';
 import 'models/post.dart';
 import 'providers/auth_provider.dart';
 import 'providers/theme_provider.dart';
+import 'providers/language_provider.dart';
+import 'utils/l10n.dart';
 GoRouter _buildRouter(AuthState? auth) {
   return GoRouter(
     initialLocation: auth == null ? '/login' : '/',
@@ -39,6 +42,7 @@ GoRouter _buildRouter(AuthState? auth) {
           GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
           GoRoute(path: '/profile/edit', builder: (_, __) => const EditProfilePage()),
           GoRoute(path: '/new', builder: (_, __) => const NewPostPage()),
+          GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
           GoRoute(
             path: '/post/:id',
             builder: (context, state) {
@@ -73,12 +77,20 @@ class SpoonApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
     final themeMode = ref.watch(themeProvider);
+    final locale = ref.watch(languageProvider);
     final router = _buildRouter(auth);
     return MaterialApp.router(
       title: 'SpoonApp',
       theme: ThemeData(primarySwatch: Colors.deepOrange),
       darkTheme: ThemeData.dark(),
       themeMode: themeMode,
+      locale: locale,
+      supportedLocales: L10n.supportedLocales,
+      localizationsDelegates: const [
+        DefaultWidgetsLocalizations.delegate,
+        DefaultMaterialLocalizations.delegate,
+        DefaultCupertinoLocalizations.delegate,
+      ],
       routerConfig: router,
     );
   }

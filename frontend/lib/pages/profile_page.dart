@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/auth_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/profile_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -13,10 +15,11 @@ class ProfilePage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
     final themeMode = ref.watch(themeProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Perfil')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'profile'))),
       body: auth == null
-          ? const Center(child: Text('No autenticado'))
+          ? Center(child: Text(L10n.of(locale, 'not_authenticated')))
           : Consumer(builder: (context, ref, _) {
               final profileAsync = ref.watch(profileProvider(auth.username));
               return profileAsync.when(
@@ -41,26 +44,31 @@ class ProfilePage extends ConsumerWidget {
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => context.push('/friend-requests'),
-                      child: const Text('Solicitudes de amistad'),
+                      child: Text(L10n.of(locale, 'friend_requests')),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => context.push('/blocked-users'),
-                      child: const Text('Usuarios bloqueados'),
+                      child: Text(L10n.of(locale, 'blocked_users')),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () => context.push('/search'),
-                      child: const Text('Buscar usuarios'),
+                      child: Text(L10n.of(locale, 'search_users')),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context.push('/settings'),
+                      child: Text(L10n.of(locale, 'settings')),
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
                       onPressed: () =>
                           ref.read(authProvider.notifier).logout(),
-                      child: const Text('Cerrar sesión'),
+                      child: Text(L10n.of(locale, 'logout')),
                     ),
                     SwitchListTile(
-                      title: const Text('Tema oscuro'),
+                      title: Text(L10n.of(locale, 'dark_theme')),
                       value: themeMode == ThemeMode.dark,
                       onChanged: (_) =>
                           ref.read(themeProvider.notifier).toggle(),

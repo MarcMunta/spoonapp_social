@@ -91,6 +91,9 @@ Existe también una pantalla de **solicitudes de amistad** que muestra las
 peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
 Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que
 consumen los endpoints `/blocks` y `/users` respectivamente.
+Ahora la aplicación soporta **cambio de idioma** entre inglés y español. Un
+nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
+`shared_preferences`.
 
 ## Estructura
 
@@ -101,7 +104,7 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, FriendRequests, BlockedUsers, UserSearch)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, FriendRequests, BlockedUsers, UserSearch, Settings)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)

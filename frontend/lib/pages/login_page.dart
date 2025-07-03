@@ -3,6 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../providers/auth_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   const LoginPage({super.key});
@@ -35,8 +37,9 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final locale = ref.watch(languageProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Login')),
+      appBar: AppBar(title: Text(L10n.of(locale, 'login'))),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
@@ -57,11 +60,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             ElevatedButton(
               onPressed: _loading ? null : _submit,
               child:
-                  _loading ? const CircularProgressIndicator() : const Text('Entrar'),
+                  _loading ? const CircularProgressIndicator() : Text(L10n.of(locale, 'login')),
             ),
             TextButton(
               onPressed: () => context.go('/signup'),
-              child: const Text('Crear cuenta'),
+              child: Text(L10n.of(locale, 'signup')),
             ),
           ],
         ),

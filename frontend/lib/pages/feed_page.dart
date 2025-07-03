@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../providers/post_provider.dart';
 import '../providers/story_provider.dart';
 import '../widgets/story_circle.dart';
+import '../widgets/post_card.dart';
 
 class FeedPage extends ConsumerWidget {
   const FeedPage({super.key});
@@ -41,10 +42,7 @@ class FeedPage extends ConsumerWidget {
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
                   final post = posts[index];
-                  return ListTile(
-                    title: Text(post.user),
-                    subtitle: Text(post.caption),
-                  );
+                  return PostCard(post: post);
                 },
               ),
               loading: () => const Center(child: CircularProgressIndicator()),

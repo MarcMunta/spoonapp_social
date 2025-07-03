@@ -49,6 +49,10 @@ GET /posts    # Lista de posts de ejemplo
 GET /stories  # Lista de historias de ejemplo
 ```
 
+El frontend Flutter muestra estas historias con una animación **Hero** al tocar
+cada círculo y los posts se renderizan mediante el widget personalizado
+`PostCard`.
+
 ## Estructura
 
 ```
@@ -58,11 +62,11 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Profile...)
+│   │   ├── pages/             # Vistas (Feed, Profile, Story...)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado
-│   │   └── widgets/           # Widgets reutilizables
+│   │   └── widgets/           # Widgets reutilizables (StoryCircle, PostCard)
 │   └── pubspec.yaml
 │
 ├── backend/

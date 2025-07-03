@@ -15,6 +15,7 @@ class EditProfilePage extends ConsumerStatefulWidget {
 class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   final _bioController = TextEditingController();
   bool _saving = false;
+  String? _bubbleColor;
 
   @override
   void initState() {
@@ -23,6 +24,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     if (auth != null) {
       ref.read(profileProvider(auth.username)).whenData((profile) {
         _bioController.text = profile.bio;
+        _bubbleColor = profile.bubbleColor;
       });
     }
   }
@@ -31,7 +33,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
     final auth = ref.read(authProvider);
     if (auth == null) return;
     setState(() => _saving = true);
-    await ref.read(updateProfileProvider)(auth.username, _bioController.text, null);
+    await ref
+        .read(updateProfileProvider)(auth.username, _bioController.text, null, _bubbleColor);
     setState(() => _saving = false);
     if (mounted) context.pop();
   }
@@ -51,6 +54,24 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               TextField(
                 controller: _bioController,
                 decoration: const InputDecoration(labelText: 'Biografía'),
+              ),
+              const SizedBox(height: 16),
+              DropdownButtonFormField<String>(
+                value: _bubbleColor,
+                decoration: const InputDecoration(labelText: 'Bubble Color'),
+                items: const [
+                  '#ff0000',
+                  '#ffa500',
+                  '#ffff00',
+                  '#008000',
+                  '#00ffff',
+                  '#0000ff',
+                  '#800080',
+                  '#ff00ff',
+                  '#ffc0cb',
+                  '#a52a2a',
+                ].map((c) => DropdownMenuItem(value: c, child: Text(c))).toList(),
+                onChanged: (value) => setState(() => _bubbleColor = value),
               ),
               const SizedBox(height: 16),
               ElevatedButton(

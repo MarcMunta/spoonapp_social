@@ -65,7 +65,7 @@ DELETE /posts/{id}/likes   # Quitar me gusta
 DELETE /posts/{id}         # Borrar un post (propietario)
 DELETE /posts/{id}/comments/{cid}  # Borrar comentario (propietario)
 GET /users/{username}      # Obtener perfil de usuario
-PUT /users/{username}      # Actualizar perfil (bio, avatar)
+PUT /users/{username}      # Actualizar perfil (bio, avatar, bubble_color)
 GET /friend-requests       # Solicitudes de amistad (opcional ?user=)
 POST /friend-requests      # Enviar solicitud de amistad
 POST /friend-requests/{id}/accept  # Aceptar solicitud
@@ -107,7 +107,7 @@ endpoints `/chats` y `/chats/{id}/messages`.
 La página de perfil ahora tiene un interruptor para activar el tema oscuro o
 claro. La preferencia se guarda localmente con `shared_preferences`.
 Desde la página de perfil es posible acceder a **Editar Perfil** para cambiar la
-biografía y el avatar mediante los endpoints `/users/{username}`.
+biografía, el avatar y el color de burbuja mediante los endpoints `/users/{username}`.
 Existe también una pantalla de **solicitudes de amistad** que muestra las
 peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
 Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que

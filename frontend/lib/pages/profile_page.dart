@@ -32,8 +32,19 @@ class ProfilePage extends ConsumerWidget {
                         backgroundImage: NetworkImage(profile.avatarUrl!),
                       ),
                     const SizedBox(height: 8),
-                    Text(profile.username,
-                        style: Theme.of(context).textTheme.headlineSmall),
+                    Container(
+                      padding: const EdgeInsets.all(8),
+                      decoration: BoxDecoration(
+                        color: profile.bubbleColor != null
+                            ? Color(int.parse(profile.bubbleColor!.substring(1), radix: 16) + 0xFF000000)
+                            : null,
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: Text(
+                        profile.username,
+                        style: Theme.of(context).textTheme.headlineSmall,
+                      ),
+                    ),
                     const SizedBox(height: 8),
                     Text(profile.bio),
                     const SizedBox(height: 16),

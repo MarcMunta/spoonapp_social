@@ -9,8 +9,15 @@ final profileProvider = FutureProvider.family<UserProfile, String>((ref, usernam
   return api.fetchUser(username);
 });
 
-final updateProfileProvider = Provider((ref) => (String username, String bio, String? avatarUrl) async {
-  final api = ref.read(apiServiceProvider);
-  await api.updateUser(username, bio, avatarUrl);
-  ref.invalidate(profileProvider(username));
-});
+final updateProfileProvider = Provider(
+  (ref) => (
+    String username,
+    String bio,
+    String? avatarUrl,
+    String? bubbleColor,
+  ) async {
+    final api = ref.read(apiServiceProvider);
+    await api.updateUser(username, bio, avatarUrl, bubbleColor);
+    ref.invalidate(profileProvider(username));
+  },
+);

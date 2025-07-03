@@ -214,7 +214,7 @@ def signup(data: LoginRequest):
     """Create a new fake user if the username is free."""
     if any(u.username == data.username for u in fake_users):
         raise HTTPException(status_code=400, detail="Username taken")
-    user = User(username=data.username, password=data.password)
+    user = User(username=data.username, password=data.password, bubble_color="#ff0000")
     fake_users.append(user)
     return {"token": "fake-token", "username": user.username}
 
@@ -223,7 +223,12 @@ def signup(data: LoginRequest):
 def get_user(username: str):
     for u in fake_users:
         if u.username == username:
-            return UserProfile(username=u.username, bio=u.bio, avatar_url=u.avatar_url)
+            return UserProfile(
+                username=u.username,
+                bio=u.bio,
+                avatar_url=u.avatar_url,
+                bubble_color=u.bubble_color,
+            )
     raise HTTPException(status_code=404, detail="User not found")
 
 
@@ -234,9 +239,15 @@ def update_user(username: str, data: ProfileUpdate):
             updated = u.copy(update={
                 "bio": data.bio if data.bio is not None else u.bio,
                 "avatar_url": data.avatar_url if data.avatar_url is not None else u.avatar_url,
+                "bubble_color": data.bubble_color if data.bubble_color is not None else u.bubble_color,
             })
             fake_users[i] = updated
-            return UserProfile(username=updated.username, bio=updated.bio, avatar_url=updated.avatar_url)
+            return UserProfile(
+                username=updated.username,
+                bio=updated.bio,
+                avatar_url=updated.avatar_url,
+                bubble_color=updated.bubble_color,
+            )
     raise HTTPException(status_code=404, detail="User not found")
 
 

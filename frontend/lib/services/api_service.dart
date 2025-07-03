@@ -258,11 +258,15 @@ class ApiService {
   }
 
   Future<UserProfile> updateUser(
-      String username, String bio, String? avatarUrl) async {
+      String username, String bio, String? avatarUrl, String? bubbleColor) async {
     final response = await http.put(
       Uri.parse('$baseUrl/users/$username'),
       headers: {'Content-Type': 'application/json'},
-      body: json.encode({'bio': bio, 'avatar_url': avatarUrl}),
+      body: json.encode({
+        'bio': bio,
+        'avatar_url': avatarUrl,
+        'bubble_color': bubbleColor,
+      }),
     );
     if (response.statusCode == 200) {
       return UserProfile.fromJson(

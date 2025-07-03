@@ -56,24 +56,28 @@ fake_users = [
         password="password",
         bio="Me encanta cocinar",
         avatar_url="https://placehold.co/64x64",
+        bubble_color="#ff0000",
     ),
     User(
         username="bob",
         password="password",
         bio="Amante de la comida",
         avatar_url="https://placehold.co/64x64",
+        bubble_color="#ffa500",
     ),
     User(
         username="carol",
         password="password",
         bio="Fotógrafa de comida",
         avatar_url="https://placehold.co/64x64",
+        bubble_color="#00ffff",
     ),
     User(
         username="dave",
         password="password",
         bio="Chef profesional",
         avatar_url="https://placehold.co/64x64",
+        bubble_color="#008000",
     ),
 ]
 

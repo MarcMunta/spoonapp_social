@@ -1,8 +1,9 @@
 # SpoonApp Social
 
-Este repositorio contiene la migración en curso de **SpoonApp** a un nuevo stack
-con **Flutter** en el frontend y **FastAPI** para el backend. La antigua
-aplicación Django sigue presente únicamente como referencia.
+
+Este repositorio contiene la migración en curso de **SpoonApp** a un stack
+compuesto por **Flutter** en el frontend y **FastAPI** para el backend. La
+antigua aplicación Django se conserva solo como referencia.
 
 ## Requisitos
 - Flutter >= 3.x
@@ -15,7 +16,7 @@ aplicación Django sigue presente únicamente como referencia.
 ./setup_env.sh
 ```
 
-Esto creará un entorno virtual en `backend/app/env`, instalará las dependencias y generará un archivo `.env` de ejemplo.
+Este script creará un entorno virtual en `backend/app/env`, instalará todas las dependencias y generará un archivo `.env` de ejemplo. Funciona tanto en macOS como en Windows (Git Bash o PowerShell).
 
 Para el frontend ejecuta:
 
@@ -29,7 +30,7 @@ flutter pub get
 Backend FastAPI:
 
 ```bash
-source backend/app/env/bin/activate
+source backend/app/env/bin/activate  # En Windows: backend\app\env\Scripts\activate
 uvicorn main:app --reload
 ```
 
@@ -129,7 +130,6 @@ SpoonApp
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
 │   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, NewStory, FriendRequests, BlockedUsers, HiddenStories, Categories, UserSearch, Settings)
-
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)

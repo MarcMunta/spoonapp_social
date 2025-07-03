@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
     users.forEach(u => {
       const col = document.createElement('div');
       col.className = 'col-6 col-md-4 col-lg-2 mb-4';
-      const cleanStatus = u.status && u.status !== 'Last seen: None' ? u.status : '';
+      const cleanStatus = u.status && !u.status.includes('None') ? u.status : '';
       const statusHtml = cleanStatus ? `<p class="card-text text-muted small">${cleanStatus}</p>` : '';
       col.innerHTML = `
         <div class="card user-card text-center h-100" style="--profile-color:${u.bubble_color}">

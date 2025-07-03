@@ -37,7 +37,7 @@ from django.template.loader import render_to_string
 from django.views.i18n import set_language as django_set_language
 from django.core.management import call_command
 from django.utils.translation import gettext as _
-from django.contrib.humanize.templatetags.humanize import naturaltime
+from django.utils.timesince import timesince
 from .default_avatar import DEFAULT_AVATAR_DATA_URL
 from .context_processors import get_random_users
 import requests
@@ -665,7 +665,7 @@ def search_users(request):
                 if user.profile.online:
                     status = _("Online")
                 elif user.profile.last_seen:
-                    time_str = naturaltime(user.profile.last_seen)
+                    time_str = timesince(user.profile.last_seen)
                     if time_str and time_str != "None":
                         status = _("Last seen: %(time)s") % {"time": time_str}
             results.append(

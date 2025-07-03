@@ -50,7 +50,10 @@ GET /stories  # Lista de historias de ejemplo
 GET /notifications  # Lista de notificaciones de ejemplo
 POST /login   # Devuelve un token si la contraseña es "password"
 POST /signup  # Registra un usuario nuevo en memoria
+GET /posts/{id}/comments  # Comentarios de un post
+POST /posts/{id}/comments  # Crear un comentario
 ```
+Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios.
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo y los posts se renderizan mediante el widget personalizado

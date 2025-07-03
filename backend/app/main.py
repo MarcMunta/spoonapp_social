@@ -1,8 +1,9 @@
 from fastapi import FastAPI, HTTPException
+from datetime import datetime
 from typing import List
 
-from .models import Post, Story, Notification, LoginRequest, User
-from .data import fake_posts, fake_stories, fake_notifications, fake_users
+from .models import Post, Story, Notification, LoginRequest, User, Comment, CommentRequest
+from .data import fake_posts, fake_stories, fake_notifications, fake_users, fake_comments
 
 app = FastAPI(title="SpoonApp API")
 
@@ -27,6 +28,18 @@ def list_stories():
 def list_notifications():
     """Return sample list of notifications."""
     return fake_notifications
+
+
+@app.get("/posts/{post_id}/comments", response_model=List[Comment])
+def list_comments(post_id: int):
+    return fake_comments.get(post_id, [])
+
+@app.post("/posts/{post_id}/comments", response_model=Comment)
+def add_comment(post_id: int, data: CommentRequest):
+    comments = fake_comments.setdefault(post_id, [])
+    comment = Comment(id=len(comments)+1, post_id=post_id, user=data.user, content=data.content, created_at=datetime.utcnow())
+    comments.append(comment)
+    return comment
 
 
 @app.post("/login")

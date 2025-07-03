@@ -106,7 +106,7 @@ msgstr "Activo por última vez: %(f.profile.last_seen|naturaltime)s"
 
 #: templates/pages/buscador.html:34
 msgid "Last seen:"
-msgstr "Visto por última vez:"
+msgstr "Activos por última vez:"
 
 #: templates/pages/chat_detail.html:102
 msgid "Share your food thoughts... 🍽️"
@@ -394,7 +394,7 @@ msgid "Home"
 msgstr "Inicio"
 
 msgid "Last seen"
-msgstr "Activo por última vez"
+msgstr "Activos por última vez"
 
 msgid "Scroll up for older messages"
 msgstr "Desplázate arriba para ver mensajes antiguos"

@@ -75,3 +75,12 @@ install `gettext` manually. On Windows you can run
 `choco install gettext` or `winget install -e --id GnuWin32.gettext`. Alternatively
 download the prebuilt binaries from
 [mlocati.github.io/gettext-iconv-windows](https://mlocati.github.io/articles/gettext-iconv-windows.html).
+
+## Troubleshooting
+If you get `ModuleNotFoundError: No module named \`PIL\`` when uploading images, Pillow is missing. Activate your virtual environment and run:
+
+```bash
+pip install -r backend/requirements.txt
+```
+
+This installs the Pillow package required by Django's image fields.

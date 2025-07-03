@@ -29,7 +29,6 @@ def list_notifications():
     return fake_notifications
 
 
-
 @app.post("/login")
 def login(data: LoginRequest):
     """Simple login endpoint that validates against fake_users."""

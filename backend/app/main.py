@@ -178,6 +178,7 @@ def add_comment(post_id: int, data: CommentRequest):
     return Comment(**comment.dict(), bubble_color=_user_color(data.user))
 
 
+
 def _get_post(post_id: int) -> Post:
     for p in fake_posts:
         if p.id == post_id:
@@ -194,6 +195,7 @@ def like_post(post_id: int, data: LikeRequest):
     return _post_response(post, True)
 
 
+
 @app.delete("/posts/{post_id}/likes", response_model=Post)
 def unlike_post(post_id: int, data: LikeRequest):
     post = _get_post(post_id)
@@ -201,6 +203,7 @@ def unlike_post(post_id: int, data: LikeRequest):
     likes.discard(data.user)
     post.likes = len(likes)
     return _post_response(post, False)
+
 
 
 @app.delete("/posts/{post_id}")

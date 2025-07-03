@@ -129,6 +129,7 @@ SpoonApp
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
 │   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, NewStory, FriendRequests, BlockedUsers, HiddenStories, Categories, UserSearch, Settings)
+
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)

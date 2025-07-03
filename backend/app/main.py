@@ -107,6 +107,7 @@ def delete_story(story_id: int, user: str):
     raise HTTPException(status_code=404, detail="Story not found")
 
 
+
 @app.get("/notifications", response_model=List[Notification])
 def list_notifications():
     """Return sample list of notifications."""

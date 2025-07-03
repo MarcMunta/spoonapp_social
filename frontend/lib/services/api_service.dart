@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import '../models/post.dart';
 import '../models/story.dart';
 import '../models/notification.dart';
-
 import '../models/comment.dart';
+
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -25,7 +25,6 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
-
   Future<String> signup(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/signup'),

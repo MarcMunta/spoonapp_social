@@ -13,7 +13,8 @@
 {% endblock %}
 
 {% block content %}
-{% if user.is_authenticated and show_form %}
+{% if user.is_authenticated %}
+{% if show_form %}
 <div class="post-form-container mb-3" data-aos="zoom-in">
   <form method="post" enctype="multipart/form-data" action="{% url 'create_post' %}" class="post-form">
     {% csrf_token %}
@@ -34,7 +35,6 @@
   </form>
 </div>
 {% endif %}
-{% if user.is_authenticated and not show_form %}
 {% include "partials/stories/stories.html" %}
 {% endif %}
 {% for post in posts %}

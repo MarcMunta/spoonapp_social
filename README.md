@@ -40,6 +40,15 @@ cd frontend
 flutter run -d chrome
 ```
 
+### Endpoints de ejemplo
+
+El backend FastAPI expone endpoints de prueba para la app Flutter:
+
+```text
+GET /posts    # Lista de posts de ejemplo
+GET /stories  # Lista de historias de ejemplo
+```
+
 ## Estructura
 
 ```
@@ -47,11 +56,13 @@ SpoonApp
 │
 ├── frontend/                  # Código Flutter
 │   ├── lib/
-│   │   ├── main.dart          # Punto de entrada
+│   │   ├── main.dart          # Arranque con ProviderScope
+│   │   ├── app.dart           # Configuración de rutas y tema
 │   │   ├── pages/             # Vistas (Feed, Profile...)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
-│   │   └── providers/         # Gestión de estado
+│   │   ├── providers/         # Gestión de estado
+│   │   └── widgets/           # Widgets reutilizables
 │   └── pubspec.yaml
 │
 ├── backend/

@@ -111,7 +111,7 @@ msgstr "Activos hace:"
 #: backend/core/views.py:670
 #, python-format
 msgid "Last seen: %(time)s"
-msgstr "Activos hace %(time)s"
+msgstr "Activos hace: %(time)s"
 
 #: templates/pages/chat_detail.html:102
 msgid "Share your food thoughts... 🍽️"

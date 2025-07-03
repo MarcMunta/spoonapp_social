@@ -77,7 +77,6 @@
       <span>🍴</span>
       </div>
       {% if not hide_profile_icon %}
-      <button id="themeToggle" class="theme-toggle" aria-label="{% trans 'Activar modo noche/día' %}"></button>
       <div class="profile-icon">
       {% if user.is_authenticated %}
       <a href="{% url 'profile' user.username %}">

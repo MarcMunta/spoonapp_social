@@ -116,6 +116,10 @@ body {
     animation: menuIconBounce 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
+.menu-icon-slide {
+    animation: menuIconSlideIn 0.4s ease-out forwards;
+}
+
 .menu-icon-glow {
     animation: menuIconFlash 0.3s ease-out forwards;
 }
@@ -183,7 +187,7 @@ body {
 }
 
 .profile-icon a:hover {
-    transform: translateY(-5px);
+    transform: none;
 }
 
 .profile-icon a:hover::after {
@@ -1645,5 +1649,16 @@ body.profile-page .nav-tabs .nav-link {
     }
     100% {
         opacity: 0;
+    }
+}
+
+@keyframes menuIconSlideIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
     }
 }

@@ -134,9 +134,9 @@ body {
 .profile-icon {
     top: 34px;
     right: 2rem;
-    background: #f1c9eb;
+    background: #F3E9B5;
     padding: 0.5rem 1rem;
-    border-radius: 1.5rem;
+    border-radius: 10px;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -147,9 +147,7 @@ body {
     margin-top: 0.25rem;
 }
 
-.profile-icon:hover {
-    background: #e6b9df;
-}
+
 
 .profile-icon img {
     width: 40px;
@@ -167,6 +165,30 @@ body {
     font-size: 1.2rem;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     font-weight: bold;
+    position: relative;
+    transition: transform 0.2s ease;
+}
+
+.profile-icon a::after {
+    content: "";
+    position: absolute;
+    bottom: -13px;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background-color: #F3E9B5;
+    opacity: 0;
+    transform: scaleX(0);
+    transition: all 0.3s ease-in-out;
+}
+
+.profile-icon a:hover {
+    transform: translateY(-5px);
+}
+
+.profile-icon a:hover::after {
+    opacity: 1;
+    transform: scaleX(1);
 }
 
 .sidebar {

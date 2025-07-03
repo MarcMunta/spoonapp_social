@@ -91,6 +91,26 @@ body {
     transform: translateY(-5px);
 }
 
+.rightbar-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    font-size: 1.4rem;
+    background-color: #F3E9B5;
+    border: none;
+    border-radius: 10px;
+    color: #7e7e7e;
+    cursor: pointer;
+    transition: background 0.3s ease, box-shadow 0.3s ease;
+    margin-left: 1rem;
+}
+
+.rightbar-toggle:hover {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.8);
+}
+
 .topbar-icons a::after,
 .topbar-icons span::after {
     content: "";
@@ -147,7 +167,7 @@ body {
     gap: 0.6rem;
     height: 48px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-    transition: background 0.3s ease;
+    transition: background 0.3s ease, transform 0.3s ease;
     margin-top: 0.25rem;
 }
 
@@ -447,6 +467,20 @@ body:has(.spoon-chat-container) .rightbar {
     overflow-y: auto;
     height: calc(100vh - 60px);
     padding-top: 3rem;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+body.rightbar-hidden .rightbar {
+    transform: translateX(100%);
+    opacity: 0;
+}
+
+body.rightbar-hidden .main-content {
+    margin-right: 0;
+}
+
+body:not(.rightbar-hidden) .profile-icon {
+    transform: translateX(-40px);
 }
 
 .sponsored h3,

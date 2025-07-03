@@ -52,11 +52,18 @@ if (searchInput) {
     if (!append) resultsList.innerHTML = "";
     users.forEach((user) => {
       const li = document.createElement("li");
+      const status = user.status && user.status !== "Last seen: None" ? user.status : "";
+      const statusHtml = status
+        ? `<div class="friend-status text-muted small">${status}</div>`
+        : "";
       li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
       <img src="${user.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
-      <span>${user.username}</span>
+      <div class="user-suggestion-inner">
+        <span class="username">${user.username}</span>
+        ${statusHtml}
+      </div>
     </div>
   </a>
 `;
@@ -454,13 +461,16 @@ function animateTopMenuIcons() {
       if (bell) icons.push(bell);
     }
   });
+  const profile = document.querySelector('.profile-icon a');
+  if (profile) icons.push(profile);
   icons.forEach((icon, idx) => {
     icon.style.opacity = '0';
+    icon.style.transform = 'translateY(20px)';
     icon.style.animationDelay = `${idx * 0.12}s`;
     icon.addEventListener(
       'animationend',
       (e) => {
-        if (e.animationName === 'menuIconBounce') {
+        if (e.animationName === 'menuIconSlideIn') {
           icon.classList.add('menu-icon-glow');
           icon.removeAttribute('style');
         }
@@ -469,13 +479,13 @@ function animateTopMenuIcons() {
     );
     setTimeout(() => {
       icon.removeAttribute('style');
-    }, 1200);
+    }, 800);
   });
   requestAnimationFrame(() => {
     icons.forEach((icon) => {
-      icon.classList.remove('menu-icon-bounce', 'menu-icon-glow');
+      icon.classList.remove('menu-icon-slide', 'menu-icon-glow');
       void icon.offsetWidth;
-      icon.classList.add('menu-icon-bounce');
+      icon.classList.add('menu-icon-slide');
     });
   });
 }

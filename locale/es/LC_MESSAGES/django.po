@@ -102,7 +102,21 @@ msgstr "Desconectado"
 #: templates/layouts/base.html:175
 #, python-format
 msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
-msgstr "Visto por última vez: %(f.profile.last_seen|naturaltime)s"
+msgstr "Activo hace %(f.profile.last_seen|naturaltime)s"
+
+#: templates/pages/buscador.html:34
+msgid "Last seen:"
+msgstr "Activo hace:"
+
+#: backend/core/views.py:670
+#, python-format
+msgid "Last seen: %(time)s"
+msgstr "Activo hace: %(time)s"
+
+#: templates/layouts/base.html:182
+#, python-format
+msgid "Active %(time)s ago"
+msgstr "Activo hace %(time)s"
 
 #: templates/pages/chat_detail.html:102
 msgid "Share your food thoughts... 🍽️"
@@ -390,7 +404,7 @@ msgid "Home"
 msgstr "Inicio"
 
 msgid "Last seen"
-msgstr "Visto por última vez"
+msgstr "Activo hace"
 
 msgid "Scroll up for older messages"
 msgstr "Desplázate arriba para ver mensajes antiguos"

@@ -133,11 +133,13 @@
     background-color: #ffffff;
     border: 2px solid #f4d0e4;
     border-radius: 16px;
-    margin-bottom: 1.5rem;
+    margin: 1rem auto;
     padding: 1rem 1rem;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
     transition: transform 0.2s;
     overflow: hidden;
+    max-width: 650px;
+    width: 100%;
 }
 
 .post-categories .badge {

@@ -29,7 +29,6 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
-
   Future<String> signup(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/signup'),
@@ -61,6 +60,8 @@ class ApiService {
       throw Exception('Failed to load posts');
     }
   }
+
+
 
   Future<Post> createPost(String user, String caption, [String? imageUrl]) async {
     final response = await http.post(
@@ -321,6 +322,7 @@ class ApiService {
     }
   }
 
+
   Future<List<StoryBlock>> fetchStoryBlocks(String owner) async {
     final response = await http.get(Uri.parse('$baseUrl/story-blocks?owner=$owner'));
     if (response.statusCode == 200) {
@@ -352,6 +354,7 @@ class ApiService {
       throw Exception('Failed to unhide stories');
     }
   }
+
 
   Future<List<UserProfile>> searchUsers(String? query) async {
     final url = query == null || query.isEmpty

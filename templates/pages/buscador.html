@@ -31,7 +31,7 @@
           {% elif u.profile.last_seen %}
           {% with ts=u.profile.last_seen|format_last_seen %}
           {% if ts %}
-          <p class="card-text text-muted small">{{ "Last seen:"|translate }} {{ ts }}</p>
+          <p class="card-text text-muted small">{% blocktrans %}Last seen: {{ ts }}{% endblocktrans %}</p>
           {% endif %}
           {% endwith %}
           {% endif %}

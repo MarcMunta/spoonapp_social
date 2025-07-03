@@ -4,11 +4,16 @@ import '../models/post.dart';
 import '../services/api_service.dart';
 import 'auth_provider.dart';
 
+final selectedCategoryProvider = StateProvider<String?>((ref) => null);
+
 final apiServiceProvider = Provider((ref) => ApiService('http://localhost:8000'));
 
 class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
   PostsNotifier(this.ref) : super(const AsyncValue.loading()) {
     fetch();
+    ref.listen<String?>(selectedCategoryProvider, (prev, next) {
+      fetch(refresh: true);
+    });
   }
 
   final Ref ref;
@@ -27,11 +32,13 @@ class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
     if (!_hasMore) return;
     final api = ref.read(apiServiceProvider);
     final auth = ref.read(authProvider);
+    final category = ref.read(selectedCategoryProvider);
     try {
       final posts = await api.fetchPosts(
         auth?.username,
         offset: _offset,
         limit: _limit,
+        category: category,
       );
       if (refresh) {
         state = AsyncValue.data(posts);

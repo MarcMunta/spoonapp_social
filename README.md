@@ -1,6 +1,5 @@
 # SpoonApp Social
 
-
 Este repositorio contiene la migración en curso de **SpoonApp** a un stack
 compuesto por **Flutter** en el frontend y **FastAPI** para el backend. La
 antigua aplicación Django se conserva solo como referencia.
@@ -46,7 +45,7 @@ flutter run -d chrome
 El backend FastAPI expone endpoints de prueba para la app Flutter:
 
 ```text
-GET /posts?offset=0&limit=10    # Lista paginada de posts
+GET /posts?offset=0&limit=10[&category=food]    # Lista paginada de posts
 POST /posts   # Crear un post nuevo
 GET /stories  # Lista de historias de ejemplo
 POST /stories # Crear una historia
@@ -86,7 +85,8 @@ endpoints `DELETE /posts/{id}` y
 `DELETE /posts/{id}/comments/{cid}`.
 Ahora la lista de posts se obtiene de forma paginada con los parámetros `offset`
 y `limit`, y el feed implementa **scroll infinito** para cargar más contenido al
-bajar.
+bajar. Además, pueden filtrarse por categoría usando `GET /posts?category=<slug>`
+y en el feed existe un botón para elegir la categoría.
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo. Al abrirlas se reproducen en pantalla completa con avance

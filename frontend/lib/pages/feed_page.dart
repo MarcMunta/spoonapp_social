@@ -5,6 +5,7 @@ import '../providers/post_provider.dart';
 import '../providers/story_provider.dart';
 import '../providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
+import 'package:go_router/go_router.dart';
 import '../widgets/story_circle.dart';
 import '../widgets/post_card.dart';
 import '../widgets/add_story_circle.dart';
@@ -18,8 +19,17 @@ class FeedPage extends ConsumerWidget {
     final notifier = ref.read(postsNotifierProvider.notifier);
     final storiesAsync = ref.watch(storiesNotifierProvider);
     final auth = ref.watch(authProvider);
+    final category = ref.watch(selectedCategoryProvider);
     return Scaffold(
-      appBar: AppBar(title: const Text('Feed')),
+      appBar: AppBar(
+        title: Text(category == null ? 'Feed' : 'Feed (${category})'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.filter_list),
+            onPressed: () => context.push('/categories'),
+          )
+        ],
+      ),
       body: Column(
         children: [
           SizedBox(

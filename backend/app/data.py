@@ -27,7 +27,7 @@ fake_posts = [
         created_at=datetime.utcnow(),
         image_url="https://placehold.co/600x400",
         likes=1,
-        categories=["Food"],
+        categories=["food"],
     ),
     Post(
         id=2,
@@ -35,7 +35,7 @@ fake_posts = [
         caption="Second Post",
         created_at=datetime.utcnow(),
         likes=0,
-        categories=["Travel"],
+        categories=["travel"],
     ),
 ] + [
     Post(
@@ -45,7 +45,7 @@ fake_posts = [
         created_at=datetime.utcnow(),
         image_url="https://placehold.co/600x400",
         likes=0,
-        categories=["Food"] if i % 2 else ["Clips"],
+        categories=["food"] if i % 2 else ["clips"],
     )
     for i in range(3, 21)
 ]

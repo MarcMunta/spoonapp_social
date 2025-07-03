@@ -50,10 +50,13 @@ class ApiService {
     String? user, {
     int offset = 0,
     int limit = 10,
+    String? category,
   }) async {
     final params = 'offset=$offset&limit=$limit';
-    final url =
-        user == null ? '$baseUrl/posts?$params' : '$baseUrl/posts?user=$user&$params';
+    final cat = category == null ? '' : '&category=$category';
+    final url = user == null
+        ? '$baseUrl/posts?$params$cat'
+        : '$baseUrl/posts?user=$user&$params$cat';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List data = json.decode(response.body) as List;

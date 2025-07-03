@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
+import 'pages/feed_page.dart';
 
 void main() {
-  runApp(const SpoonApp());
+  runApp(const ProviderScope(child: SpoonApp()));
 }
 
 class SpoonApp extends StatelessWidget {
@@ -14,20 +17,7 @@ class SpoonApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      home: const PlaceholderPage(),
-    );
-  }
-}
-
-class PlaceholderPage extends StatelessWidget {
-  const PlaceholderPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      body: Center(
-        child: Text('SpoonApp Flutter'),
-      ),
+      home: const FeedPage(),
     );
   }
 }

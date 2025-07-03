@@ -63,8 +63,14 @@ Run database migrations and start the development server:
 ```bash
 cd backend
 python manage.py migrate
-python manage.py runserver
+python manage.py runserver 0.0.0.0:8000
 ```
+
+Listening on `0.0.0.0` lets mobile devices on the same network reach the
+development server using your computer's IP address (e.g.
+`http://192.168.1.x:8000`). With `DEBUG` enabled the project accepts
+connections from any host. In production specify allowed hosts via the
+`ALLOWED_HOSTS` environment variable.
 
 If the `msgfmt` binary required for compiling translations is missing, `manage.py`
 will attempt to install `gettext` using the available package manager

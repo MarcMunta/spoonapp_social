@@ -21,9 +21,9 @@
             data-own="true"
            {% endif %}>
         {% if user.profile.profile_picture %}
-        <img src="{{ user.profile.profile_picture_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
+        <img src="{{ user.profile.profile_picture_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50" loading="lazy">
         {% else %}
-        <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50">
+        <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ user.username }}" width="50" height="50" loading="lazy">
         {% endif %}
         <span class="story-add">+</span>
       </div>
@@ -43,9 +43,9 @@
          data-bubble-color="{{ friend.profile.bubble_color }}"
          data-story-id="{{ data.ids|join:'|' }}">
       {% if friend.profile.profile_picture %}
-      <img src="{{ friend.profile.profile_picture_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
+      <img src="{{ friend.profile.profile_picture_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50" loading="lazy">
       {% else %}
-      <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50">
+      <img src="{{ default_avatar_data_url }}" class="story-img" alt="{{ friend.username }}" width="50" height="50" loading="lazy">
       {% endif %}
     </div>
     <div class="story-username">{{ friend.username }}</div>
@@ -73,8 +73,8 @@
     </div>
     <span class="story-prev">&#10094;</span>
     <span class="story-next">&#10095;</span>
-    <img id="storyImage" class="story-image d-none" />
-    <video id="storyVideo" class="story-image d-none" controls></video>
+    <img id="storyImage" class="story-image d-none" loading="lazy" />
+    <video id="storyVideo" class="story-image d-none" controls loading="lazy"></video>
     <div class="story-reply mt-2 d-flex">
         <input type="text" id="storyReplyInput" class="form-control me-2" placeholder="{% trans 'Reply...' %}">
         <button type="button" id="storyReplySend" class="btn btn-primary" data-story-id="">{% trans "Send" %}</button>

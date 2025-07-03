@@ -47,6 +47,7 @@ class RedirectErrorMiddleware:
 
 class AutoLanguageMiddleware:
     """Set language based on the user's browser settings if not chosen yet."""
+
     def __init__(self, get_response):
         self.get_response = get_response
 
@@ -55,11 +56,14 @@ class AutoLanguageMiddleware:
         try:
             from django.utils.translation import LANGUAGE_SESSION_KEY
         except ImportError:  # Django >=4 removed LANGUAGE_SESSION_KEY constant
-            LANGUAGE_SESSION_KEY = 'django_language'
+            LANGUAGE_SESSION_KEY = "django_language"
         from django.utils.translation import get_language_from_request
 
         if not request.session.get(LANGUAGE_SESSION_KEY):
-            lang = get_language_from_request(request, check_path=False)
+            if request.get_host().startswith("192.168.0.118:300"):
+                lang = "es"
+            else:
+                lang = get_language_from_request(request, check_path=False)
             request.session[LANGUAGE_SESSION_KEY] = lang
             translation.activate(lang)
             request.LANGUAGE_CODE = translation.get_language()

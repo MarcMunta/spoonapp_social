@@ -1,52 +1,41 @@
 #!/bin/bash
 
-# Remove previous virtual environment if it exists
-if [ -d "env" ]; then
-  rm -rf env
-  echo "Previous virtual environment removed."
+echo "📦 Configurando SpoonApp en macOS..."
+
+# Verificar si está en macOS
+if [[ "$OSTYPE" != "darwin"* ]]; then
+    echo "❌ Este script está diseñado solo para macOS."
+    exit 1
 fi
 
-# Create a new virtual environment
-python3 -m venv env
-echo "Virtual environment created."
+# Directorio del script
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+cd "$SCRIPT_DIR"
 
-# Activate the virtual environment
+# Usar Python 3.12 si existe
+PYTHON_BIN=$(which python3.12 || which python3)
+echo "🐍 Usando intérprete de Python: $PYTHON_BIN"
+
+# Crear entorno si no existe
+if [ ! -d "env" ]; then
+    echo "✨ Creando entorno virtual 'env'..."
+    $PYTHON_BIN -m venv env
+else
+    echo "✅ Entorno virtual 'env' ya existe."
+fi
+
+# Activar entorno
 source env/bin/activate
 
-# Install requirements if the file exists
-if [ -f "./backend/requirements.txt" ]; then
-  pip3 install -r ./backend/requirements.txt
-  echo "Dependencies installed from requirements.txt"
+# Instalar dependencias
+if [ -f "requirements.txt" ]; then
+    echo "📥 Instalando dependencias desde requirements.txt..."
+    pip install -r requirements.txt
 else
-  echo "requirements.txt not found"
+    echo "⚠️ requirements.txt no encontrado. Instalando dependencias básicas..."
+    pip install django requests googletrans==4.0.0rc1
 fi
 
-# Ensure googletrans is installed even if requirements are missing
-if ! pip3 show googletrans > /dev/null 2>&1; then
-  pip3 install googletrans==4.0.0-rc1
-  echo "googletrans installed."
-fi
-
-# Ensure requests is installed even if requirements are missing
-if ! pip3 show requests > /dev/null 2>&1; then
-  pip3 install requests
-  echo "requests installed."
-fi
-
-# Compile translation files using msgfmt if available
-MSGFMT_CMD="msgfmt"
-if [ -x ./backend/tools/gettext/bin/msgfmt ]; then
-  MSGFMT_CMD=./backend/tools/gettext/bin/msgfmt
-elif [ -x ./backend/tools/gettext/bin/msgfmt.exe ]; then
-  MSGFMT_CMD=./backend/tools/gettext/bin/msgfmt.exe
-fi
-
-if command -v "$MSGFMT_CMD" >/dev/null 2>&1 || [ -x "$MSGFMT_CMD" ]; then
-  find ./locale -name '*.po' | while read -r po_file; do
-    mo_file="${po_file%.po}.mo"
-    "$MSGFMT_CMD" "$po_file" -o "$mo_file"
-  done
-  echo "Translation files compiled."
-else
-  echo "msgfmt not found; skipped translation compilation."
-fi
+# Lanzar servidor
+echo "🚀 Iniciando servidor de desarrollo..."
+python manage.py runserver

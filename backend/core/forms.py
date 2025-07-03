@@ -29,8 +29,29 @@ class PostForm(forms.ModelForm):
         instance = super().save(commit=False)
         img = self.cleaned_data.get('image')
         if img and hasattr(img, "read"):
-            instance.image = img.read()
-            instance.image_mime = img.content_type
+            data = img.read()
+            mime = img.content_type
+            if mime and mime.startswith("image"):
+                try:
+                    from PIL import Image, ImageOps
+                    from io import BytesIO
+
+                    im = Image.open(BytesIO(data))
+                    im = ImageOps.exif_transpose(im)
+                    buffer = BytesIO()
+                    im.save(buffer, format="WEBP", quality=85)
+                    data = buffer.getvalue()
+                    mime = "image/webp"
+                except Exception:
+                    try:
+                        buffer = BytesIO()
+                        im.convert("RGB").save(buffer, format="JPEG", quality=85, progressive=True)
+                        data = buffer.getvalue()
+                        mime = "image/jpeg"
+                    except Exception:
+                        pass
+            instance.image = data
+            instance.image_mime = mime
         if commit:
             instance.save()
             self.save_m2m()
@@ -148,11 +169,39 @@ class StoryForm(forms.ModelForm):
                     img = Image.open(BytesIO(data))
                     img = ImageOps.exif_transpose(img)
                     buffer = BytesIO()
-                    img.convert("RGB").save(buffer, format="JPEG")
+                    img.save(buffer, format="WEBP", quality=85)
                     data = buffer.getvalue()
-                    mime = "image/jpeg"
+                    mime = "image/webp"
+                except Exception:
+                    try:
+                        buffer = BytesIO()
+                        img.convert("RGB").save(buffer, format="JPEG", quality=85, progressive=True)
+                        data = buffer.getvalue()
+                        mime = "image/jpeg"
+                    except Exception:
+                        pass
+            elif mime and mime.startswith("video"):
+                import tempfile, subprocess, os
+                with tempfile.NamedTemporaryFile(delete=False) as tmp_in:
+                    tmp_in.write(data)
+                    tmp_in.flush()
+                    tmp_in_path = tmp_in.name
+                with tempfile.NamedTemporaryFile(delete=False, suffix=".mp4") as tmp_out:
+                    tmp_out_path = tmp_out.name
+                try:
+                    subprocess.run([
+                        "ffmpeg", "-i", tmp_in_path, "-c:v", "libx264", "-preset", "fast", "-crf", "28",
+                        "-movflags", "+faststart", "-an", tmp_out_path
+                    ], check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                    with open(tmp_out_path, "rb") as f:
+                        data = f.read()
+                    mime = "video/mp4"
                 except Exception:
                     pass
+                finally:
+                    os.unlink(tmp_in_path)
+                    if os.path.exists(tmp_out_path):
+                        os.unlink(tmp_out_path)
             instance.media_data = data
             instance.media_mime = mime
         if commit:

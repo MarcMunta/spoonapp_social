@@ -1,6 +1,8 @@
 # SpoonApp Social
 
-Este repositorio contiene el inicio de la migración de SpoonApp a un nuevo stack basado en Flutter para el frontend y FastAPI en el backend.
+Este repositorio contiene la migración en curso de **SpoonApp** a un nuevo stack
+con **Flutter** en el frontend y **FastAPI** para el backend. La antigua
+aplicación Django sigue presente únicamente como referencia.
 
 ## Requisitos
 - Flutter >= 3.x
@@ -38,24 +40,92 @@ cd frontend
 flutter run -d chrome
 ```
 
+### Endpoints de ejemplo
+
+El backend FastAPI expone endpoints de prueba para la app Flutter:
+
+```text
+GET /posts    # Lista de posts de ejemplo
+POST /posts   # Crear un post nuevo
+GET /stories  # Lista de historias de ejemplo
+GET /notifications  # Lista de notificaciones de ejemplo
+GET /chats               # Lista de chats del usuario
+GET /chats/{id}/messages  # Mensajes de un chat
+POST /chats/{id}/messages # Enviar mensaje
+POST /login   # Devuelve un token si la contraseña es "password"
+POST /signup  # Registra un usuario nuevo en memoria
+GET /posts/{id}/comments  # Comentarios de un post
+POST /posts/{id}/comments  # Crear un comentario
+POST /posts/{id}/likes     # Marcar me gusta
+DELETE /posts/{id}/likes   # Quitar me gusta
+DELETE /posts/{id}         # Borrar un post (propietario)
+DELETE /posts/{id}/comments/{cid}  # Borrar comentario (propietario)
+GET /users/{username}      # Obtener perfil de usuario
+PUT /users/{username}      # Actualizar perfil (bio, avatar)
+GET /friend-requests       # Solicitudes de amistad (opcional ?user=)
+POST /friend-requests      # Enviar solicitud de amistad
+POST /friend-requests/{id}/accept  # Aceptar solicitud
+GET /users?q=alice   # Buscar usuarios (opcional)
+GET /blocks?blocker=alice  # Usuarios bloqueados por un usuario
+POST /blocks               # Bloquear usuario
+POST /blocks/{username}/unblock?blocker=alice  # Desbloquear
+```
+Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
+El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
+Los autores pueden **eliminar sus propios posts** y comentarios gracias a los
+endpoints `DELETE /posts/{id}` y
+`DELETE /posts/{id}/comments/{cid}`.
+
+El frontend Flutter muestra estas historias con una animación **Hero** al tocar
+cada círculo y los posts se renderizan mediante el widget personalizado
+`PostCard`. Al pulsar sobre un post se abre un `PostDetailPage` con transición
+`Hero` para la imagen. Las imágenes se cargan usando `cached_network_image` para
+mejorar el rendimiento. Se añadieron páginas de **login** y **registro** en Flutter
+que consumen los endpoints `/login` y `/signup`.
+El token de autenticación se persiste localmente usando
+`shared_preferences` para mantener la sesión entre reinicios.
+También existe una página de **notificaciones** que consume `/notifications`.
+La pantalla **Nuevo Post** permite publicar mensajes con una imagen opcional.
+Se añadieron pantallas de **chats** para enviar y recibir mensajes usando los
+endpoints `/chats` y `/chats/{id}/messages`.
+La página de perfil ahora tiene un interruptor para activar el tema oscuro o
+claro. La preferencia se guarda localmente con `shared_preferences`.
+Desde la página de perfil es posible acceder a **Editar Perfil** para cambiar la
+biografía y el avatar mediante los endpoints `/users/{username}`.
+Existe también una pantalla de **solicitudes de amistad** que muestra las
+peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
+Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que
+consumen los endpoints `/blocks` y `/users` respectivamente.
+Ahora la aplicación soporta **cambio de idioma** entre inglés y español. Un
+nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
+`shared_preferences`.
+
 ## Estructura
 
 ```
 SpoonApp
 │
-├── frontend/            # Código Flutter
+├── frontend/                  # Código Flutter
 │   ├── lib/
-│   │   └── main.dart
+│   │   ├── main.dart          # Arranque con ProviderScope
+│   │   ├── app.dart           # Configuración de rutas y tema
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, FriendRequests, BlockedUsers, UserSearch, Settings)
+│   │   ├── models/            # Modelos Dart
+│   │   ├── services/          # Llamadas HTTP
+│   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)
+│   │   └── widgets/           # Widgets reutilizables (StoryCircle, PostCard)
 │   └── pubspec.yaml
 │
 ├── backend/
-│   ├── app/             # Nuevo backend FastAPI
+│   ├── app/                   # Backend FastAPI
 │   │   ├── main.py
+│   │   ├── models/
+│   │   ├── data.py
 │   │   ├── requirements.txt
 │   │   └── .env.example
-│   └── ...              # Código Django existente
+│   └── ...                    # Código Django existente (referencia)
 │
-├── frontend_legacy/     # Antiguo frontend JavaScript
+├── frontend_legacy/           # Antiguo frontend JavaScript
 └── setup_env.sh
 ```
 

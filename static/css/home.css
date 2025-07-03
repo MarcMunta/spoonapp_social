@@ -479,6 +479,29 @@ body.rightbar-hidden .main-content {
     margin-right: 0;
 }
 
+/* Keep feed width static when toggling sidebars */
+body.home-page .main-content {
+    margin-left: 240px;
+    margin-right: 300px;
+    max-width: calc(100% - 540px);
+}
+
+body.home-page.sidebar-hidden .main-content,
+body.home-page.rightbar-hidden .main-content {
+    margin-left: 240px;
+    margin-right: 300px;
+}
+
+@media (max-width: 768px) {
+    body.home-page .main-content,
+    body.home-page.sidebar-hidden .main-content,
+    body.home-page.rightbar-hidden .main-content {
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
+    }
+}
+
 body:not(.rightbar-hidden) .profile-icon {
     transform: translateX(-40px);
 }

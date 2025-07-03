@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Response
 from datetime import datetime
 from typing import List
 
@@ -115,6 +115,34 @@ def unlike_post(post_id: int, data: LikeRequest):
     likes.discard(data.user)
     post.likes = len(likes)
     return Post(**post.dict(), likes=post.likes, liked=False)
+
+
+@app.delete("/posts/{post_id}")
+def delete_post(post_id: int, user: str):
+    """Delete a post if the requester is the author."""
+    post = _get_post(post_id)
+    if post.user != user:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    for i, p in enumerate(fake_posts):
+        if p.id == post_id:
+            fake_posts.pop(i)
+            break
+    fake_comments.pop(post_id, None)
+    fake_likes.pop(post_id, None)
+    return Response(status_code=204)
+
+
+@app.delete("/posts/{post_id}/comments/{comment_id}")
+def delete_comment(post_id: int, comment_id: int, user: str):
+    """Delete a comment if the requester is the author."""
+    comments = fake_comments.get(post_id, [])
+    for i, c in enumerate(comments):
+        if c.id == comment_id:
+            if c.user != user:
+                raise HTTPException(status_code=403, detail="Forbidden")
+            comments.pop(i)
+            return Response(status_code=204)
+    raise HTTPException(status_code=404, detail="Comment not found")
 
 
 @app.post("/login")

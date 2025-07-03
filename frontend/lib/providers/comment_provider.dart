@@ -12,3 +12,11 @@ final addCommentProvider = Provider((ref) => (int postId, String user, String co
   final api = ref.read(apiServiceProvider);
   return api.addComment(postId, user, content);
 });
+
+final deleteCommentProvider = Provider(
+  (ref) => (int postId, int commentId, String user) async {
+    final api = ref.read(apiServiceProvider);
+    await api.deleteComment(postId, commentId, user);
+    ref.invalidate(commentsProvider(postId));
+  },
+);

@@ -58,6 +58,8 @@ GET /posts/{id}/comments  # Comentarios de un post
 POST /posts/{id}/comments  # Crear un comentario
 POST /posts/{id}/likes     # Marcar me gusta
 DELETE /posts/{id}/likes   # Quitar me gusta
+DELETE /posts/{id}         # Borrar un post (propietario)
+DELETE /posts/{id}/comments/{cid}  # Borrar comentario (propietario)
 GET /users/{username}      # Obtener perfil de usuario
 PUT /users/{username}      # Actualizar perfil (bio, avatar)
 GET /friend-requests       # Solicitudes de amistad (opcional ?user=)
@@ -70,6 +72,9 @@ POST /blocks/{username}/unblock?blocker=alice  # Desbloquear
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
+Los autores pueden **eliminar sus propios posts** y comentarios gracias a los
+endpoints `DELETE /posts/{id}` y
+`DELETE /posts/{id}/comments/{cid}`.
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo y los posts se renderizan mediante el widget personalizado

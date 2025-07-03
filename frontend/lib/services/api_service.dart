@@ -146,6 +146,25 @@ class ApiService {
     }
   }
 
+  Future<void> deletePost(int postId, String user) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/posts/$postId?user=$user'),
+    );
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete post');
+    }
+  }
+
+  Future<void> deleteComment(
+      int postId, int commentId, String user) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/posts/$postId/comments/$commentId?user=$user'),
+    );
+    if (response.statusCode != 204) {
+      throw Exception('Failed to delete comment');
+    }
+  }
+
   Future<List<Chat>> fetchChats([String? user]) async {
     final url = user == null ? '$baseUrl/chats' : '$baseUrl/chats?user=$user';
     final response = await http.get(Uri.parse(url));

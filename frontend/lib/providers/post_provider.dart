@@ -33,3 +33,11 @@ final addPostProvider = Provider((ref) => (
       await api.createPost(user, caption, imageUrl);
       ref.invalidate(postsProvider);
     });
+
+final deletePostProvider = Provider(
+  (ref) => (int postId, String user) async {
+    final api = ref.read(apiServiceProvider);
+    await api.deletePost(postId, user);
+    ref.invalidate(postsProvider);
+  },
+);

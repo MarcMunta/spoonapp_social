@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import '../models/post.dart';
 import '../providers/comment_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/post_provider.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
   final Post post;
@@ -31,8 +32,38 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   @override
   Widget build(BuildContext context) {
     final commentsAsync = ref.watch(commentsProvider(widget.post.id));
+    final auth = ref.watch(authProvider);
     return Scaffold(
-      appBar: AppBar(title: Text(widget.post.user)),
+      appBar: AppBar(
+        title: Text(widget.post.user),
+        actions: [
+          if (auth != null && auth.username == widget.post.user)
+            IconButton(
+              icon: const Icon(Icons.delete),
+              onPressed: () async {
+                final confirmed = await showDialog<bool>(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Delete post?'),
+                    actions: [
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(false),
+                          child: const Text('Cancel')),
+                      TextButton(
+                          onPressed: () => Navigator.of(context).pop(true),
+                          child: const Text('Delete')),
+                    ],
+                  ),
+                );
+                if (confirmed == true) {
+                  await ref
+                      .read(deletePostProvider)(widget.post.id, auth.username);
+                  if (mounted) Navigator.of(context).pop();
+                }
+              },
+            )
+        ],
+      ),
       body: ListView(
         padding: const EdgeInsets.only(bottom: 16),
         children: [
@@ -60,9 +91,40 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                   .map((c) => ListTile(
                         title: Text(c.user),
                         subtitle: Text(c.content),
-                        trailing: Text(
-                          c.createdAt.toLocal().toString(),
-                          style: Theme.of(context).textTheme.bodySmall,
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              c.createdAt.toLocal().toString(),
+                              style: Theme.of(context).textTheme.bodySmall,
+                            ),
+                            if (auth != null && auth.username == c.user)
+                              IconButton(
+                                icon: const Icon(Icons.delete, size: 16),
+                                onPressed: () async {
+                                  final confirmed = await showDialog<bool>(
+                                    context: context,
+                                    builder: (context) => AlertDialog(
+                                      title: const Text('Delete comment?'),
+                                      actions: [
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(false),
+                                            child: const Text('Cancel')),
+                                        TextButton(
+                                            onPressed: () =>
+                                                Navigator.of(context).pop(true),
+                                            child: const Text('Delete')),
+                                      ],
+                                    ),
+                                  );
+                                  if (confirmed == true) {
+                                    await ref.read(deleteCommentProvider)(
+                                        widget.post.id, c.id, auth.username);
+                                  }
+                                },
+                              ),
+                          ],
                         ),
                       ))
                   .toList(),

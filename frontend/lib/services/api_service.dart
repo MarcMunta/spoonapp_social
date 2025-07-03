@@ -228,7 +228,9 @@ class ApiService {
     final response = await http.get(Uri.parse('$baseUrl/chats/$chatId/messages'));
     if (response.statusCode == 200) {
       final List data = json.decode(response.body) as List;
-      return data.map((e) => Message.fromJson(e as Map<String, dynamic>)).toList();
+      return data
+          .map((e) => Message.fromJson(e as Map<String, dynamic>))
+          .toList();
     } else {
       throw Exception('Failed to load messages');
     }
@@ -241,7 +243,8 @@ class ApiService {
       body: json.encode({'sender': sender, 'content': content}),
     );
     if (response.statusCode == 200) {
-      return Message.fromJson(json.decode(response.body) as Map<String, dynamic>);
+      return Message.fromJson(
+          json.decode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to send message');
     }

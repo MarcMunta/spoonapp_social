@@ -16,6 +16,7 @@ class Message {
   final String sender;
   final String content;
   final DateTime createdAt;
+  final String? bubbleColor;
 
   Message({
     required this.id,
@@ -23,6 +24,7 @@ class Message {
     required this.sender,
     required this.content,
     required this.createdAt,
+    this.bubbleColor,
   });
 
   factory Message.fromJson(Map<String, dynamic> json) => Message(
@@ -31,6 +33,7 @@ class Message {
         sender: json['sender'] as String,
         content: json['content'] as String,
         createdAt: DateTime.parse(json['created_at'] as String),
+        bubbleColor: json['bubble_color'] as String?,
       );
 }
 

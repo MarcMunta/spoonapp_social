@@ -13,6 +13,7 @@ class Message(BaseModel):
     sender: str
     content: str
     created_at: datetime
+    bubble_color: str | None = None
 
 class MessageRequest(BaseModel):
     sender: str

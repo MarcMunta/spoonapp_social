@@ -134,6 +134,7 @@ fake_messages = {
             sender="alice",
             content="Hola Bob!",
             created_at=datetime.utcnow(),
+            bubble_color="#ff0000",
         ),
         Message(
             id=2,
@@ -141,6 +142,7 @@ fake_messages = {
             sender="bob",
             content="Hola Alice!",
             created_at=datetime.utcnow(),
+            bubble_color="#ffa500",
         ),
     ]
 }

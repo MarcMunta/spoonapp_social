@@ -178,7 +178,6 @@ def add_comment(post_id: int, data: CommentRequest):
     return Comment(**comment.dict(), bubble_color=_user_color(data.user))
 
 
-
 def _get_post(post_id: int) -> Post:
     for p in fake_posts:
         if p.id == post_id:
@@ -195,7 +194,6 @@ def like_post(post_id: int, data: LikeRequest):
     return _post_response(post, True)
 
 
-
 @app.delete("/posts/{post_id}/likes", response_model=Post)
 def unlike_post(post_id: int, data: LikeRequest):
     post = _get_post(post_id)
@@ -203,7 +201,6 @@ def unlike_post(post_id: int, data: LikeRequest):
     likes.discard(data.user)
     post.likes = len(likes)
     return _post_response(post, False)
-
 
 
 @app.delete("/posts/{post_id}")
@@ -294,7 +291,10 @@ def list_chats(user: str | None = None):
 
 @app.get("/chats/{chat_id}/messages", response_model=List[Message])
 def get_messages(chat_id: int):
-    return fake_messages.get(chat_id, [])
+    messages = fake_messages.get(chat_id, [])
+    return [
+        Message(**m.dict(), bubble_color=_user_color(m.sender)) for m in messages
+    ]
 
 
 @app.post("/chats/{chat_id}/messages", response_model=Message)
@@ -306,6 +306,7 @@ def add_message(chat_id: int, data: MessageRequest):
         sender=data.sender,
         content=data.content,
         created_at=datetime.utcnow(),
+        bubble_color=_user_color(data.sender),
     )
     messages.append(msg)
     return msg

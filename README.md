@@ -77,7 +77,7 @@ GET /story-blocks?owner=alice  # Usuarios a los que ocultas tus historias
 POST /story-blocks             # Ocultar historias a un usuario
 POST /story-blocks/{username}/unhide?owner=alice  # Dejar de ocultar
 ```
-Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts y sus comentarios incluyen ahora un campo `bubble_color` que indica el color elegido por cada usuario. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
+Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts y sus comentarios incluyen ahora un campo `bubble_color` que indica el color elegido por cada usuario. Los mensajes de chat también devuelven `bubble_color` para mostrar los nombres coloreados. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 
 El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
 Al crear un post se pueden seleccionar categorías que luego se muestran en el feed.

@@ -30,8 +30,23 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                 itemCount: messages.length,
                 itemBuilder: (context, index) {
                   final m = messages[index];
+                  final color = m.bubbleColor != null
+                      ? Color(int.parse(m.bubbleColor!.substring(1), radix: 16) +
+                          0xFF000000)
+                      : Colors.grey.shade300;
                   return ListTile(
-                    title: Text(m.sender),
+                    title: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: color,
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        m.sender,
+                        style: const TextStyle(color: Colors.white),
+                      ),
+                    ),
                     subtitle: Text(m.content),
                   );
                 },

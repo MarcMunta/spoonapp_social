@@ -22,7 +22,6 @@ class _UserSearchPageState extends ConsumerState<UserSearchPage> {
   Widget build(BuildContext context) {
     final usersAsync =
         ref.watch(searchUsersProvider(_query.isEmpty ? null : _query));
-    final blocksAsync = ref.watch(blocksProvider);
     final locale = ref.watch(languageProvider);
     final auth = ref.watch(authProvider);
     return Scaffold(

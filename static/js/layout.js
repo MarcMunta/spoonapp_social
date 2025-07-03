@@ -454,13 +454,16 @@ function animateTopMenuIcons() {
       if (bell) icons.push(bell);
     }
   });
+  const profile = document.querySelector('.profile-icon a');
+  if (profile) icons.push(profile);
   icons.forEach((icon, idx) => {
     icon.style.opacity = '0';
+    icon.style.transform = 'translateY(20px)';
     icon.style.animationDelay = `${idx * 0.12}s`;
     icon.addEventListener(
       'animationend',
       (e) => {
-        if (e.animationName === 'menuIconBounce') {
+        if (e.animationName === 'menuIconSlideIn') {
           icon.classList.add('menu-icon-glow');
           icon.removeAttribute('style');
         }
@@ -469,13 +472,13 @@ function animateTopMenuIcons() {
     );
     setTimeout(() => {
       icon.removeAttribute('style');
-    }, 1200);
+    }, 800);
   });
   requestAnimationFrame(() => {
     icons.forEach((icon) => {
-      icon.classList.remove('menu-icon-bounce', 'menu-icon-glow');
+      icon.classList.remove('menu-icon-slide', 'menu-icon-glow');
       void icon.offsetWidth;
-      icon.classList.add('menu-icon-bounce');
+      icon.classList.add('menu-icon-slide');
     });
   });
 }

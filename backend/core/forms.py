@@ -59,7 +59,7 @@ class PostForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        order = ['Entrantes', 'Primer plato', 'Segundo plato', 'Postres']
+        order = ['Entrantes', 'Primer plato', 'Segundo plato', 'Postres', 'Clips']
         when_statements = [When(name=name, then=idx) for idx, name in enumerate(order)]
         queryset = PostCategory.objects.annotate(
             order_priority=Case(*when_statements, default=len(order), output_field=IntegerField())

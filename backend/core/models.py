@@ -20,6 +20,7 @@ class PostCategory(models.Model):
         "primer-plato": _("First course"),
         "segundo-plato": _("Second course"),
         "postres": _("Desserts"),
+        "clips": _("Clips"),
     }
 
     def __str__(self):

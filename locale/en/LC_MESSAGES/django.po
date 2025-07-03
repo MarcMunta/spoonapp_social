@@ -358,6 +358,9 @@ msgstr "Second course"
 msgid "Desserts"
 msgstr "Desserts"
 
+msgid "Clips"
+msgstr "Clips"
+
 msgid "What's on your spoon?"
 msgstr "What's on your spoon?"
 

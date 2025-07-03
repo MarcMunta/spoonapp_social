@@ -45,6 +45,16 @@ class ProfilePage extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
+                      onPressed: () => context.push('/blocked-users'),
+                      child: const Text('Usuarios bloqueados'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
+                      onPressed: () => context.push('/search'),
+                      child: const Text('Buscar usuarios'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
                       onPressed: () =>
                           ref.read(authProvider.notifier).logout(),
                       child: const Text('Cerrar sesión'),

@@ -14,6 +14,8 @@ import 'pages/login_page.dart';
 import 'pages/signup_page.dart';
 import 'pages/edit_profile_page.dart';
 import 'pages/friend_requests_page.dart';
+import 'pages/blocked_users_page.dart';
+import 'pages/user_search_page.dart';
 import 'models/post.dart';
 import 'providers/auth_provider.dart';
 import 'providers/theme_provider.dart';
@@ -32,6 +34,8 @@ GoRouter _buildRouter(AuthState? auth) {
           GoRoute(
               path: '/friend-requests',
               builder: (_, __) => const FriendRequestsPage()),
+          GoRoute(path: '/blocked-users', builder: (_, __) => const BlockedUsersPage()),
+          GoRoute(path: '/search', builder: (_, __) => const UserSearchPage()),
           GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
           GoRoute(path: '/profile/edit', builder: (_, __) => const EditProfilePage()),
           GoRoute(path: '/new', builder: (_, __) => const NewPostPage()),

@@ -63,6 +63,10 @@ PUT /users/{username}      # Actualizar perfil (bio, avatar)
 GET /friend-requests       # Solicitudes de amistad (opcional ?user=)
 POST /friend-requests      # Enviar solicitud de amistad
 POST /friend-requests/{id}/accept  # Aceptar solicitud
+GET /users?q=alice   # Buscar usuarios (opcional)
+GET /blocks?blocker=alice  # Usuarios bloqueados por un usuario
+POST /blocks               # Bloquear usuario
+POST /blocks/{username}/unblock?blocker=alice  # Desbloquear
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
@@ -85,6 +89,8 @@ Desde la página de perfil es posible acceder a **Editar Perfil** para cambiar l
 biografía y el avatar mediante los endpoints `/users/{username}`.
 Existe también una pantalla de **solicitudes de amistad** que muestra las
 peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
+Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que
+consumen los endpoints `/blocks` y `/users` respectivamente.
 
 ## Estructura
 
@@ -95,7 +101,7 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, FriendRequests)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, FriendRequests, BlockedUsers, UserSearch)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)

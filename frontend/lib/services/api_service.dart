@@ -9,6 +9,7 @@ import '../models/comment.dart';
 import '../models/chat.dart';
 import '../models/user.dart';
 import '../models/friend_request.dart';
+import '../models/block.dart';
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -236,6 +237,51 @@ class ApiService {
     );
     if (response.statusCode != 200) {
       throw Exception('Failed to accept request');
+    }
+  }
+
+  Future<List<Block>> fetchBlocks(String blocker) async {
+    final response = await http.get(Uri.parse('$baseUrl/blocks?blocker=$blocker'));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data.map((e) => Block.fromJson(e as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception('Failed to load blocks');
+    }
+  }
+
+  Future<void> blockUser(String blocker, String blocked) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/blocks'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'blocker': blocker, 'blocked': blocked}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to block user');
+    }
+  }
+
+  Future<void> unblockUser(String username, String blocker) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/blocks/$username/unblock?blocker=$blocker'),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to unblock user');
+    }
+  }
+
+  Future<List<UserProfile>> searchUsers(String? query) async {
+    final url = query == null || query.isEmpty
+        ? '$baseUrl/users'
+        : '$baseUrl/users?q=$query';
+    final response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data
+          .map((e) => UserProfile.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw Exception('Failed to search users');
     }
   }
 }

@@ -8,6 +8,7 @@ from .models import (
     Chat,
     Message,
     FriendRequest,
+    Block,
 )
 
 fake_posts = [
@@ -90,6 +91,16 @@ fake_friend_requests: list[FriendRequest] = [
         id=1,
         from_user="bob",
         to_user="alice",
+        created_at=datetime.utcnow(),
+    )
+]
+
+# Blocked users storage
+fake_blocks: list[Block] = [
+    Block(
+        id=1,
+        blocker="alice",
+        blocked="bob",
         created_at=datetime.utcnow(),
     )
 ]

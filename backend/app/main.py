@@ -19,6 +19,8 @@ from .models import (
     ProfileUpdate,
     FriendRequest,
     FriendRequestCreate,
+    Block,
+    BlockCreate,
 )
 from .data import (
     fake_posts,
@@ -30,6 +32,7 @@ from .data import (
     fake_chats,
     fake_messages,
     fake_friend_requests,
+    fake_blocks,
 )
 
 app = FastAPI(title="SpoonApp API")
@@ -206,4 +209,39 @@ def accept_friend_request(fr_id: int):
             fake_friend_requests.pop(i)
             return {"accepted": True}
     raise HTTPException(status_code=404, detail="Request not found")
+
+
+@app.get("/blocks", response_model=List[Block])
+def list_blocks(blocker: str):
+    return [b for b in fake_blocks if b.blocker == blocker]
+
+
+@app.post("/blocks", response_model=Block)
+def block_user(data: BlockCreate):
+    block = Block(
+        id=len(fake_blocks) + 1,
+        blocker=data.blocker,
+        blocked=data.blocked,
+        created_at=datetime.utcnow(),
+    )
+    fake_blocks.append(block)
+    return block
+
+
+@app.post("/blocks/{username}/unblock")
+def unblock_user(username: str, blocker: str):
+    for i, b in enumerate(fake_blocks):
+        if b.blocker == blocker and b.blocked == username:
+            fake_blocks.pop(i)
+            return {"unblocked": True}
+    raise HTTPException(status_code=404, detail="Block not found")
+
+
+@app.get("/users", response_model=List[UserProfile])
+def list_users(q: str | None = None):
+    users = [UserProfile(username=u.username, bio=u.bio, avatar_url=u.avatar_url) for u in fake_users]
+    if q:
+        q_lower = q.lower()
+        return [u for u in users if q_lower in u.username.lower()]
+    return users
 

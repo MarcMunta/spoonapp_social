@@ -176,8 +176,8 @@ msgid "Publish"
 msgstr "Publicar"
 
 #: templates/pages/feed.html:21
-msgid "Drag an image here or click"
-msgstr "Arrastra una imagen aquí o haz clic"
+msgid "Drag an image or video here or click"
+msgstr "Arrastra una imagen o video aquí o haz clic"
 
 #: templates/pages/feed.html:51 templates/pages/feed.html:113
 #: templates/pages/feed.html:120
@@ -546,6 +546,10 @@ msgstr "Sí, eliminar mi cuenta"
 
 msgid "Delete Account"
 msgstr "Eliminar cuenta"
+
+# Validation messages
+msgid "Video must be 3 minutes or shorter."
+msgstr "El video debe durar 3 minutos o menos."
 
 # Filters
 msgid "Search users"

@@ -42,7 +42,12 @@
         </div>
     </div>
 
-    {% if post.image %}
+    {% if post.is_video %}
+    <div class="post-image">
+        <video src="{{ post.video_data_url }}" class="w-100" controls preload="metadata"></video>
+    </div>
+    <hr class="post-divider">
+    {% elif post.image %}
     <div class="post-image">
         <img src="{{ post.image_data_url }}" alt="">
     </div>

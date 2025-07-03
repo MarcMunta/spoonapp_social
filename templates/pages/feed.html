@@ -20,7 +20,7 @@
     {% csrf_token %}
     <div id="dropZone" class="file-drop-zone">
       <span class="file-drop-icon">📎</span>
-      <span class="file-drop-text">{% trans "Drag an image here or click" %}</span>
+      <span class="file-drop-text">{% trans "Drag an image or video here or click" %}</span>
       {{ post_form.image }}
     </div>
     <div class="textarea-wrapper">
@@ -75,7 +75,12 @@
       </div>
     </div>
   </div>
-  {% if post.image %}
+  {% if post.is_video %}
+  <div class="post-image">
+    <video src="{{ post.video_data_url }}" class="w-100" controls preload="metadata"></video>
+  </div>
+  <hr class="post-divider">
+  {% elif post.image %}
   <div class="post-image">
     <img src="{{ post.image_data_url }}" alt="" loading="lazy">
   </div>

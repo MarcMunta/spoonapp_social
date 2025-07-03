@@ -47,13 +47,15 @@ El backend FastAPI expone endpoints de prueba para la app Flutter:
 ```text
 GET /posts    # Lista de posts de ejemplo
 GET /stories  # Lista de historias de ejemplo
+POST /login   # Devuelve un token si la contraseña es "password"
 ```
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo y los posts se renderizan mediante el widget personalizado
 `PostCard`. Al pulsar sobre un post se abre un `PostDetailPage` con transición
 `Hero` para la imagen. Las imágenes se cargan usando `cached_network_image` para
-mejorar el rendimiento.
+mejorar el rendimiento. Se añadió además una página de **login** en Flutter que
+consume el endpoint `/login`.
 
 ## Estructura
 
@@ -64,10 +66,10 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Profile, Story, PostDetail...)
+│   │   ├── pages/             # Vistas (Feed, Profile, Story, PostDetail, Login)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
-│   │   ├── providers/         # Gestión de estado
+│   │   ├── providers/         # Gestión de estado (posts, stories, auth)
 │   │   └── widgets/           # Widgets reutilizables (StoryCircle, PostCard)
 │   └── pubspec.yaml
 │

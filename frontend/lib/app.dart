@@ -5,10 +5,14 @@ import 'pages/feed_page.dart';
 import 'pages/home_page.dart';
 import 'pages/profile_page.dart';
 import 'pages/post_detail_page.dart';
+import 'pages/login_page.dart';
+import 'pages/signup_page.dart';
 import 'models/post.dart';
 
 final _router = GoRouter(
   routes: [
+    GoRoute(path: '/login', builder: (_, __) => const LoginPage()),
+    GoRoute(path: '/signup', builder: (_, __) => const SignupPage()),
     ShellRoute(
       builder: (context, state, child) => HomePage(child: child),
       routes: [

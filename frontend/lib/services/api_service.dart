@@ -9,6 +9,21 @@ class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
 
+  Future<String> login(String username, String password) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/login'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'username': username, 'password': password}),
+    );
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> data =
+          json.decode(response.body) as Map<String, dynamic>;
+      return data['token'] as String;
+    } else {
+      throw Exception('Invalid credentials');
+    }
+  }
+
   Future<List<Post>> fetchPosts() async {
     final response = await http.get(Uri.parse('$baseUrl/posts'));
     if (response.statusCode == 200) {

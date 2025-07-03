@@ -52,7 +52,7 @@ if (searchInput) {
     if (!append) resultsList.innerHTML = "";
     users.forEach((user) => {
       const li = document.createElement("li");
-      const status = user.status && !user.status.includes("None") ? user.status : "";
+      const status = user.status && user.status !== "Last seen: None" ? user.status : "";
       const statusHtml = status
         ? `<div class="friend-status text-muted small">${status}</div>`
         : "";

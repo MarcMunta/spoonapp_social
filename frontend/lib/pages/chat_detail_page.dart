@@ -66,13 +66,14 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
                   Expanded(
                     child: TextField(
                       controller: _controller,
-                      decoration: const InputDecoration(
-                        hintText: 'Escribe un mensaje',
+                      decoration: InputDecoration(
+                        hintText: L10n.of(locale, 'message_hint'),
                       ),
                     ),
                   ),
                   IconButton(
                     icon: const Icon(Icons.send),
+                    tooltip: L10n.of(locale, 'send'),
                     onPressed: () async {
                       final text = _controller.text.trim();
                       if (text.isEmpty) return;

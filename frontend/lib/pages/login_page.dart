@@ -31,7 +31,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
     if (success) {
       if (mounted) context.go('/');
     } else {
-      setState(() => _error = 'Credenciales incorrectas');
+      setState(() => _error = L10n.of(ref.read(languageProvider), 'invalid_credentials'));
     }
   }
 
@@ -47,11 +47,11 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           children: [
             TextField(
               controller: _userController,
-              decoration: const InputDecoration(labelText: 'Usuario'),
+              decoration: InputDecoration(labelText: L10n.of(locale, 'username')),
             ),
             TextField(
               controller: _passController,
-              decoration: const InputDecoration(labelText: 'Contraseña'),
+              decoration: InputDecoration(labelText: L10n.of(locale, 'password')),
               obscureText: true,
             ),
             const SizedBox(height: 16),

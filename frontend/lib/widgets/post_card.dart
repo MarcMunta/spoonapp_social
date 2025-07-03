@@ -7,6 +7,8 @@ import '../models/post.dart';
 import '../pages/post_detail_page.dart';
 import '../providers/post_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class PostCard extends ConsumerWidget {
   final Post post;
@@ -15,6 +17,7 @@ class PostCard extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final auth = ref.watch(authProvider);
+    final locale = ref.watch(languageProvider);
     return GestureDetector(
       onTap: () => context.push('/post/${post.id}', extra: post),
       child: Card(
@@ -45,16 +48,16 @@ class PostCard extends ConsumerWidget {
                           final confirmed = await showDialog<bool>(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: const Text('Delete post?'),
+                              title: Text(L10n.of(locale, 'delete_post_question')),
                               actions: [
                                 TextButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(false),
-                                    child: const Text('Cancel')),
+                                    child: Text(L10n.of(locale, 'cancel'))),
                                 TextButton(
                                     onPressed: () =>
                                         Navigator.of(context).pop(true),
-                                    child: const Text('Delete')),
+                                    child: Text(L10n.of(locale, 'delete'))),
                               ],
                             ),
                           );
@@ -64,8 +67,10 @@ class PostCard extends ConsumerWidget {
                           }
                         }
                       },
-                      itemBuilder: (_) => const [
-                        PopupMenuItem(value: 'delete', child: Text('Delete')),
+                      itemBuilder: (_) => [
+                        PopupMenuItem(
+                            value: 'delete',
+                            child: Text(L10n.of(locale, 'delete'))),
                       ],
                     )
                   : null,

@@ -29,7 +29,7 @@ class _NewStoryPageState extends ConsumerState<NewStoryPage> {
       await ref.read(addStoryProvider)(auth.username, _imageController.text);
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      setState(() => _error = 'Error al crear la historia');
+      setState(() => _error = L10n.of(ref.read(languageProvider), 'story_error'));
     } finally {
       setState(() => _sending = false);
     }

@@ -61,7 +61,7 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
               const SizedBox(height: 16),
               DropdownButtonFormField<String>(
                 value: _bubbleColor,
-                decoration: const InputDecoration(labelText: 'Bubble Color'),
+                decoration: InputDecoration(labelText: L10n.of(locale, 'bubble_color')),
                 items: const [
                   '#ff0000',
                   '#ffa500',

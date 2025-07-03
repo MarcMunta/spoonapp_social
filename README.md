@@ -121,6 +121,8 @@ disponible mediante `GET /categories`.
 Ahora la aplicación soporta **cambio de idioma** entre inglés y español. Un
 nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
 `shared_preferences`.
+Las acciones habituales (borrar posts o comentarios, iniciar sesión o
+registrarse) también están traducidas en ambos idiomas.
 
 ## Estructura
 

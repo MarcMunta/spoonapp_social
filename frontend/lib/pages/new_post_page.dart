@@ -37,7 +37,7 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
       );
       if (mounted) Navigator.of(context).pop();
     } catch (e) {
-      setState(() => _error = 'Error al crear el post');
+      setState(() => _error = L10n.of(ref.read(languageProvider), 'post_error'));
     } finally {
       setState(() => _sending = false);
     }

@@ -5,6 +5,8 @@ import '../models/post.dart';
 import '../providers/comment_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/post_provider.dart';
+import '../providers/language_provider.dart';
+import '../utils/l10n.dart';
 
 class PostDetailPage extends ConsumerStatefulWidget {
   final Post post;
@@ -33,6 +35,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   Widget build(BuildContext context) {
     final commentsAsync = ref.watch(commentsProvider(widget.post.id));
     final auth = ref.watch(authProvider);
+    final locale = ref.watch(languageProvider);
     return Scaffold(
       appBar: AppBar(
         title: Container(
@@ -56,14 +59,14 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 final confirmed = await showDialog<bool>(
                   context: context,
                   builder: (context) => AlertDialog(
-                    title: const Text('Delete post?'),
+                    title: Text(L10n.of(locale, 'delete_post_question')),
                     actions: [
                       TextButton(
                           onPressed: () => Navigator.of(context).pop(false),
-                          child: const Text('Cancel')),
+                          child: Text(L10n.of(locale, 'cancel'))),
                       TextButton(
                           onPressed: () => Navigator.of(context).pop(true),
-                          child: const Text('Delete')),
+                          child: Text(L10n.of(locale, 'delete'))),
                     ],
                   ),
                 );
@@ -132,16 +135,16 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                                   final confirmed = await showDialog<bool>(
                                     context: context,
                                     builder: (context) => AlertDialog(
-                                      title: const Text('Delete comment?'),
+                                      title: Text(L10n.of(locale, 'delete_comment_question')),
                                       actions: [
                                         TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(false),
-                                            child: const Text('Cancel')),
+                                            child: Text(L10n.of(locale, 'cancel'))),
                                         TextButton(
                                             onPressed: () =>
                                                 Navigator.of(context).pop(true),
-                                            child: const Text('Delete')),
+                                            child: Text(L10n.of(locale, 'delete'))),
                                       ],
                                     ),
                                   );

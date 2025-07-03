@@ -33,6 +33,8 @@ class L10n {
       'logout': 'Log out',
       'dark_theme': 'Dark theme',
       'send_request': 'Send request',
+      'block': 'Block',
+      'unblock': 'Unblock',
       'not_authenticated': 'Not authenticated',
     },
     'es': {
@@ -64,6 +66,8 @@ class L10n {
       'logout': 'Cerrar sesión',
       'dark_theme': 'Tema oscuro',
       'send_request': 'Enviar solicitud',
+      'block': 'Bloquear',
+      'unblock': 'Desbloquear',
       'not_authenticated': 'No autenticado',
     },
   };

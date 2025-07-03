@@ -48,6 +48,8 @@ El backend FastAPI expone endpoints de prueba para la app Flutter:
 GET /posts?offset=0&limit=10    # Lista paginada de posts
 POST /posts   # Crear un post nuevo
 GET /stories  # Lista de historias de ejemplo
+POST /stories # Crear una historia
+DELETE /stories/{id}?user=alice  # Borrar historia (propietario)
 GET /notifications  # Lista de notificaciones de ejemplo
 GET /chats               # Lista de chats del usuario
 GET /chats/{id}/messages  # Mensajes de un chat
@@ -80,7 +82,9 @@ y `limit`, y el feed implementa **scroll infinito** para cargar más contenido a
 bajar.
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
-cada círculo y los posts se renderizan mediante el widget personalizado
+cada círculo. Al abrirlas se reproducen en pantalla completa con avance
+automático y se pueden pausar con una pulsación prolongada. Los posts se
+renderizan mediante el widget personalizado
 `PostCard`. Al pulsar sobre un post se abre un `PostDetailPage` con transición
 `Hero` para la imagen. Las imágenes se cargan usando `cached_network_image` para
 mejorar el rendimiento. Se añadieron páginas de **login** y **registro** en Flutter
@@ -89,6 +93,7 @@ El token de autenticación se persiste localmente usando
 `shared_preferences` para mantener la sesión entre reinicios.
 También existe una página de **notificaciones** que consume `/notifications`.
 La pantalla **Nuevo Post** permite publicar mensajes con una imagen opcional.
+De igual forma existe **Nueva Historia** para crear historias con `/stories`.
 Se añadieron pantallas de **chats** para enviar y recibir mensajes usando los
 endpoints `/chats` y `/chats/{id}/messages`.
 La página de perfil ahora tiene un interruptor para activar el tema oscuro o
@@ -112,7 +117,7 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, FriendRequests, BlockedUsers, UserSearch, Settings)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, NewStory, FriendRequests, BlockedUsers, UserSearch, Settings)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)

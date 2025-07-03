@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 
 import '../models/story.dart';
-import '../pages/story_page.dart';
+import 'package:go_router/go_router.dart';
 
 class StoryCircle extends StatelessWidget {
   final Story story;
@@ -11,9 +11,7 @@ class StoryCircle extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () => Navigator.of(context).push(
-        MaterialPageRoute(builder: (_) => StoryPage(story: story)),
-      ),
+      onTap: () => context.push('/story/${story.id}'),
       child: Column(
         children: [
           Hero(

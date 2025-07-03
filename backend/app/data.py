@@ -46,11 +46,26 @@ fake_users = [
         bio="Amante de la comida",
         avatar_url="https://placehold.co/64x64",
     ),
+    User(
+        username="carol",
+        password="password",
+        bio="Fotógrafa de comida",
+        avatar_url="https://placehold.co/64x64",
+    ),
+    User(
+        username="dave",
+        password="password",
+        bio="Chef profesional",
+        avatar_url="https://placehold.co/64x64",
+    ),
 ]
 
 fake_stories = [
     Story(id=1, user="alice", image_url="https://placehold.co/100x100", created_at=datetime.utcnow()),
     Story(id=2, user="bob", image_url="https://placehold.co/100x100", created_at=datetime.utcnow()),
+    Story(id=3, user="alice", image_url="https://placehold.co/100x100", created_at=datetime.utcnow()),
+    Story(id=4, user="carol", image_url="https://placehold.co/100x100", created_at=datetime.utcnow()),
+    Story(id=5, user="dave", image_url="https://placehold.co/100x100", created_at=datetime.utcnow()),
 ]
 
 fake_notifications = [

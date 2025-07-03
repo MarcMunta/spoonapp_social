@@ -7,6 +7,7 @@ import '../providers/auth_provider.dart';
 import 'package:go_router/go_router.dart';
 import '../widgets/story_circle.dart';
 import '../widgets/post_card.dart';
+import '../widgets/add_story_circle.dart';
 
 class FeedPage extends ConsumerWidget {
   const FeedPage({super.key});
@@ -15,7 +16,7 @@ class FeedPage extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final postsAsync = ref.watch(postsNotifierProvider);
     final notifier = ref.read(postsNotifierProvider.notifier);
-    final storiesAsync = ref.watch(storiesProvider);
+    final storiesAsync = ref.watch(storiesNotifierProvider);
     final auth = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(title: const Text('Feed')),
@@ -24,18 +25,24 @@ class FeedPage extends ConsumerWidget {
           SizedBox(
             height: 110,
             child: storiesAsync.when(
-              data: (stories) => ListView.separated(
+              data: (stories) {
+                final items = [
+                  if (auth != null) const AddStoryCircle(),
+                  ...stories.map((s) => StoryCircle(story: s))
+                ];
+                return ListView.separated(
                 scrollDirection: Axis.horizontal,
-                itemCount: stories.length,
+                itemCount: items.length,
                 separatorBuilder: (_, __) => const SizedBox(width: 8),
                 itemBuilder: (context, index) {
-                  final story = stories[index];
+                  final widget = items[index];
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
-                    child: StoryCircle(story: story),
+                    child: widget,
                   );
                 },
-              ),
+              );
+              },
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),
             ),

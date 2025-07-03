@@ -5,6 +5,7 @@ from typing import List
 from .models import (
     Post,
     Story,
+    StoryCreate,
     Notification,
     LoginRequest,
     User,
@@ -70,10 +71,34 @@ def create_post(data: PostRequest):
 
 
 @app.get("/stories", response_model=List[Story])
-def list_stories():
+def list_stories(user: str | None = None):
     """Return sample list of stories."""
+    if user:
+        return [s for s in fake_stories if s.user == user]
     return fake_stories
 
+
+@app.post("/stories", response_model=Story)
+def create_story(data: StoryCreate):
+    story = Story(
+        id=len(fake_stories) + 1,
+        user=data.user,
+        image_url=data.image_url,
+        created_at=datetime.utcnow(),
+    )
+    fake_stories.append(story)
+    return story
+
+
+@app.delete("/stories/{story_id}")
+def delete_story(story_id: int, user: str):
+    for i, s in enumerate(fake_stories):
+        if s.id == story_id:
+            if s.user != user:
+                raise HTTPException(status_code=403, detail="Forbidden")
+            fake_stories.pop(i)
+            return Response(status_code=204)
+    raise HTTPException(status_code=404, detail="Story not found")
 
 @app.get("/notifications", response_model=List[Notification])
 def list_notifications():

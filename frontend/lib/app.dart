@@ -8,6 +8,7 @@ import 'pages/profile_page.dart';
 import 'pages/notifications_page.dart';
 import 'pages/post_detail_page.dart';
 import 'pages/new_post_page.dart';
+import 'pages/new_story_page.dart';
 import 'pages/chat_list_page.dart';
 import 'pages/chat_detail_page.dart';
 import 'pages/login_page.dart';
@@ -42,7 +43,15 @@ GoRouter _buildRouter(AuthState? auth) {
           GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
           GoRoute(path: '/profile/edit', builder: (_, __) => const EditProfilePage()),
           GoRoute(path: '/new', builder: (_, __) => const NewPostPage()),
+          GoRoute(path: '/stories/new', builder: (_, __) => const NewStoryPage()),
           GoRoute(path: '/settings', builder: (_, __) => const SettingsPage()),
+          GoRoute(
+            path: '/story/:id',
+            builder: (context, state) {
+              final id = int.parse(state.pathParameters['id']!);
+              return StoryPage(storyId: id);
+            },
+          ),
           GoRoute(
             path: '/post/:id',
             builder: (context, state) {

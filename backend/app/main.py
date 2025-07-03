@@ -39,6 +39,7 @@ def list_posts(user: str | None = None):
     return posts
 
 
+
 @app.get("/stories", response_model=List[Story])
 def list_stories():
     """Return sample list of stories."""

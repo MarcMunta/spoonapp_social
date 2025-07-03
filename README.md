@@ -57,6 +57,7 @@ DELETE /posts/{id}/likes   # Quitar me gusta
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 
+
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo y los posts se renderizan mediante el widget personalizado
 `PostCard`. Al pulsar sobre un post se abre un `PostDetailPage` con transición

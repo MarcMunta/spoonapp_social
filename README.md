@@ -58,6 +58,8 @@ GET /posts/{id}/comments  # Comentarios de un post
 POST /posts/{id}/comments  # Crear un comentario
 POST /posts/{id}/likes     # Marcar me gusta
 DELETE /posts/{id}/likes   # Quitar me gusta
+GET /users/{username}      # Obtener perfil de usuario
+PUT /users/{username}      # Actualizar perfil (bio, avatar)
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
@@ -76,6 +78,8 @@ Se añadieron pantallas de **chats** para enviar y recibir mensajes usando los
 endpoints `/chats` y `/chats/{id}/messages`.
 La página de perfil ahora tiene un interruptor para activar el tema oscuro o
 claro. La preferencia se guarda localmente con `shared_preferences`.
+Desde la página de perfil es posible acceder a **Editar Perfil** para cambiar la
+biografía y el avatar mediante los endpoints `/users/{username}`.
 
 ## Estructura
 

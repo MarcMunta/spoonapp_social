@@ -7,6 +7,7 @@ import '../models/story.dart';
 import '../models/notification.dart';
 import '../models/comment.dart';
 import '../models/chat.dart';
+import '../models/user.dart';
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -174,6 +175,31 @@ class ApiService {
       return Message.fromJson(json.decode(response.body) as Map<String, dynamic>);
     } else {
       throw Exception('Failed to send message');
+    }
+  }
+
+  Future<UserProfile> fetchUser(String username) async {
+    final response = await http.get(Uri.parse('$baseUrl/users/$username'));
+    if (response.statusCode == 200) {
+      return UserProfile.fromJson(
+          json.decode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to load user');
+    }
+  }
+
+  Future<UserProfile> updateUser(
+      String username, String bio, String? avatarUrl) async {
+    final response = await http.put(
+      Uri.parse('$baseUrl/users/$username'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'bio': bio, 'avatar_url': avatarUrl}),
+    );
+    if (response.statusCode == 200) {
+      return UserProfile.fromJson(
+          json.decode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to update user');
     }
   }
 }

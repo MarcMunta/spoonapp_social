@@ -1,6 +1,6 @@
 from .post import Post, PostRequest
 from .story import Story
-from .user import LoginRequest, User
+from .user import LoginRequest, User, UserProfile, ProfileUpdate
 from .notification import Notification
 from .comment import Comment, CommentRequest
 from .like import LikeRequest

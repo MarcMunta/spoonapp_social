@@ -22,8 +22,18 @@ fake_posts = [
 ]
 
 fake_users = [
-    User(username="alice", password="password"),
-    User(username="bob", password="password"),
+    User(
+        username="alice",
+        password="password",
+        bio="Me encanta cocinar",
+        avatar_url="https://placehold.co/64x64",
+    ),
+    User(
+        username="bob",
+        password="password",
+        bio="Amante de la comida",
+        avatar_url="https://placehold.co/64x64",
+    ),
 ]
 
 fake_stories = [

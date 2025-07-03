@@ -15,6 +15,8 @@ from .models import (
     Chat,
     Message,
     MessageRequest,
+    UserProfile,
+    ProfileUpdate,
 )
 from .data import (
     fake_posts,
@@ -126,6 +128,27 @@ def signup(data: LoginRequest):
     user = User(username=data.username, password=data.password)
     fake_users.append(user)
     return {"token": "fake-token", "username": user.username}
+
+
+@app.get("/users/{username}", response_model=UserProfile)
+def get_user(username: str):
+    for u in fake_users:
+        if u.username == username:
+            return UserProfile(username=u.username, bio=u.bio, avatar_url=u.avatar_url)
+    raise HTTPException(status_code=404, detail="User not found")
+
+
+@app.put("/users/{username}", response_model=UserProfile)
+def update_user(username: str, data: ProfileUpdate):
+    for i, u in enumerate(fake_users):
+        if u.username == username:
+            updated = u.copy(update={
+                "bio": data.bio if data.bio is not None else u.bio,
+                "avatar_url": data.avatar_url if data.avatar_url is not None else u.avatar_url,
+            })
+            fake_users[i] = updated
+            return UserProfile(username=updated.username, bio=updated.bio, avatar_url=updated.avatar_url)
+    raise HTTPException(status_code=404, detail="User not found")
 
 
 @app.get("/chats", response_model=List[Chat])

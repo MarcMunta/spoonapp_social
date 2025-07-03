@@ -463,6 +463,8 @@ function animateTopMenuIcons() {
   });
   const profile = document.querySelector('.profile-icon a');
   if (profile) icons.push(profile);
+  const rightToggle = document.getElementById('rightMenuToggle');
+  if (rightToggle) icons.push(rightToggle);
   icons.forEach((icon, idx) => {
     icon.style.opacity = '0';
     icon.style.transform = 'translateY(20px)';
@@ -683,5 +685,32 @@ onReady(() => {
       icon.className = hidden ? 'fas fa-bars' : 'fas fa-times';
     }
     if (!hidden) animateSidebarItems();
+  });
+});
+
+onReady(() => {
+  const btn = document.getElementById('rightMenuToggle');
+  const panel = document.querySelector('.rightbar');
+  if (!btn || !panel) return;
+
+  function animatePanelItems() {
+    const items = panel.children;
+    Array.from(items).forEach((el, idx) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(20px)';
+      el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      el.style.transitionDelay = `${idx * 50}ms`;
+    });
+    requestAnimationFrame(() => {
+      Array.from(items).forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateX(0)';
+      });
+    });
+  }
+
+  btn.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('rightbar-hidden');
+    if (!hidden) animatePanelItems();
   });
 });

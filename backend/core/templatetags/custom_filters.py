@@ -73,10 +73,12 @@ OFFLINE_TRANSLATIONS = {
     "Primer plato": _("First course"),
     "Segundo plato": _("Second course"),
     "Postres": _("Desserts"),
+    "Clips": _("Clips"),
     "Starters": _("Starters"),
     "First course": _("First course"),
     "Second course": _("Second course"),
     "Desserts": _("Desserts"),
+    "Clips": _("Clips"),
 }
 
 

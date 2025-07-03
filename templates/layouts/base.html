@@ -19,7 +19,7 @@
 
 <body data-current-user="{% if user.is_authenticated %}{{ user.username }}{% endif %}"
   data-bubble-color="{% if user.is_authenticated %}{{ user.profile.bubble_color }}{% endif %}"
-  class="{% block body_class %}{% endblock %} sidebar-hidden">
+  class="{% block body_class %}{% endblock %} sidebar-hidden rightbar-hidden">
   <div class="topbar">
     <button id="menuToggle" class="menu-toggle-btn" aria-label="Toggle menu">
       <i class="fas fa-bars"></i>
@@ -95,6 +95,8 @@
       </a>
       {% endif %}
     </div>
+
+    <button id="rightMenuToggle" class="rightbar-toggle" aria-label="Toggle friends panel">👥</button>
 
     {% endif %}
   </div>

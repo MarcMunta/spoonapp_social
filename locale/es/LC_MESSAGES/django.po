@@ -484,6 +484,9 @@ msgstr "Segundo plato"
 msgid "Desserts"
 msgstr "Postres"
 
+msgid "Clips"
+msgstr "Clips"
+
 msgid "What's on your spoon?"
 msgstr "¿Qué tienes en tu cuchara?"
 

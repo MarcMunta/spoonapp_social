@@ -2,7 +2,7 @@
 env/
 
 # Ignore node modules
-frontend/node_modules/
+frontend_legacy/node_modules/
 
 # Uploaded media
 media/

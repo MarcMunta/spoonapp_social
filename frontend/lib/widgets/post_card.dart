@@ -26,6 +26,37 @@ class PostCard extends ConsumerWidget {
               leading: CircleAvatar(child: Text(post.user[0].toUpperCase())),
               title: Text(post.user),
               subtitle: Text(post.createdAt.toLocal().toString()),
+              trailing: auth != null && auth.username == post.user
+                  ? PopupMenuButton(
+                      onSelected: (value) async {
+                        if (value == 'delete') {
+                          final confirmed = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Delete post?'),
+                              actions: [
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(false),
+                                    child: const Text('Cancel')),
+                                TextButton(
+                                    onPressed: () =>
+                                        Navigator.of(context).pop(true),
+                                    child: const Text('Delete')),
+                              ],
+                            ),
+                          );
+                          if (confirmed == true) {
+                            await ref
+                                .read(deletePostProvider)(post.id, auth.username);
+                          }
+                        }
+                      },
+                      itemBuilder: (_) => const [
+                        PopupMenuItem(value: 'delete', child: Text('Delete')),
+                      ],
+                    )
+                  : null,
             ),
             if (post.imageUrl != null)
               Hero(

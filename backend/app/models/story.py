@@ -6,3 +6,8 @@ class Story(BaseModel):
     user: str
     image_url: str
     created_at: datetime
+
+
+class StoryCreate(BaseModel):
+    user: str
+    image_url: str

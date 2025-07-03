@@ -10,6 +10,7 @@ import '../models/chat.dart';
 import '../models/user.dart';
 import '../models/friend_request.dart';
 import '../models/block.dart';
+import '../models/story_block.dart';
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -42,6 +43,7 @@ class ApiService {
       throw Exception('Signup failed');
     }
   }
+
   Future<List<Post>> fetchPosts(
     String? user, {
     int offset = 0,
@@ -58,6 +60,9 @@ class ApiService {
       throw Exception('Failed to load posts');
     }
   }
+
+
+
   Future<Post> createPost(String user, String caption, [String? imageUrl]) async {
     final response = await http.post(
       Uri.parse('$baseUrl/posts'),
@@ -316,6 +321,40 @@ class ApiService {
       throw Exception('Failed to unblock user');
     }
   }
+
+
+  Future<List<StoryBlock>> fetchStoryBlocks(String owner) async {
+    final response = await http.get(Uri.parse('$baseUrl/story-blocks?owner=$owner'));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data
+          .map((e) => StoryBlock.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw Exception('Failed to load story blocks');
+    }
+  }
+
+  Future<void> createStoryBlock(String owner, String hiddenUser) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/story-blocks'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'story_owner': owner, 'hidden_user': hiddenUser}),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to hide stories');
+    }
+  }
+
+  Future<void> unhideStory(String username, String owner) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/story-blocks/$username/unhide?owner=$owner'),
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to unhide stories');
+    }
+  }
+
 
   Future<List<UserProfile>> searchUsers(String? query) async {
     final url = query == null || query.isEmpty

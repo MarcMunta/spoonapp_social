@@ -16,6 +16,7 @@ import 'pages/signup_page.dart';
 import 'pages/edit_profile_page.dart';
 import 'pages/friend_requests_page.dart';
 import 'pages/blocked_users_page.dart';
+import 'pages/hidden_stories_page.dart';
 import 'pages/user_search_page.dart';
 import 'pages/settings_page.dart';
 import 'models/post.dart';
@@ -39,6 +40,7 @@ GoRouter _buildRouter(AuthState? auth) {
               path: '/friend-requests',
               builder: (_, __) => const FriendRequestsPage()),
           GoRoute(path: '/blocked-users', builder: (_, __) => const BlockedUsersPage()),
+          GoRoute(path: '/hidden-stories', builder: (_, __) => const HiddenStoriesPage()),
           GoRoute(path: '/search', builder: (_, __) => const UserSearchPage()),
           GoRoute(path: '/profile', builder: (context, state) => const ProfilePage()),
           GoRoute(path: '/profile/edit', builder: (_, __) => const EditProfilePage()),

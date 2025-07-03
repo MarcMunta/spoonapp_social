@@ -9,6 +9,7 @@ from .models import (
     Message,
     FriendRequest,
     Block,
+    StoryBlock,
 )
 
 fake_posts = [
@@ -131,3 +132,6 @@ fake_blocks: list[Block] = [
         created_at=datetime.utcnow(),
     )
 ]
+
+# Story visibility blocks
+fake_story_blocks: list[StoryBlock] = []

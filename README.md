@@ -71,6 +71,9 @@ GET /users?q=alice   # Buscar usuarios (opcional)
 GET /blocks?blocker=alice  # Usuarios bloqueados por un usuario
 POST /blocks               # Bloquear usuario
 POST /blocks/{username}/unblock?blocker=alice  # Desbloquear
+GET /story-blocks?owner=alice  # Usuarios a los que ocultas tus historias
+POST /story-blocks             # Ocultar historias a un usuario
+POST /story-blocks/{username}/unhide?owner=alice  # Dejar de ocultar
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
@@ -104,6 +107,8 @@ Existe también una pantalla de **solicitudes de amistad** que muestra las
 peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
 Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que
 consumen los endpoints `/blocks` y `/users` respectivamente.
+Existe también una página de **historias ocultas** para gestionar a quién
+ocultas tus historias, que usa los endpoints `/story-blocks`.
 Ahora la aplicación soporta **cambio de idioma** entre inglés y español. Un
 nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
 `shared_preferences`.

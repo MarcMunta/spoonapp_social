@@ -22,6 +22,8 @@ from .models import (
     FriendRequestCreate,
     Block,
     BlockCreate,
+    StoryBlock,
+    StoryBlockCreate,
 )
 from .data import (
     fake_posts,
@@ -34,6 +36,7 @@ from .data import (
     fake_messages,
     fake_friend_requests,
     fake_blocks,
+    fake_story_blocks,
 )
 
 app = FastAPI(title="SpoonApp API")
@@ -288,6 +291,33 @@ def unblock_user(username: str, blocker: str):
         if b.blocker == blocker and b.blocked == username:
             fake_blocks.pop(i)
             return {"unblocked": True}
+    raise HTTPException(status_code=404, detail="Block not found")
+
+
+@app.get("/story-blocks", response_model=List[StoryBlock])
+def list_story_blocks(owner: str):
+    """Return users from whom the owner hides their stories."""
+    return [b for b in fake_story_blocks if b.story_owner == owner]
+
+
+@app.post("/story-blocks", response_model=StoryBlock)
+def create_story_block(data: StoryBlockCreate):
+    block = StoryBlock(
+        id=len(fake_story_blocks) + 1,
+        story_owner=data.story_owner,
+        hidden_user=data.hidden_user,
+        created_at=datetime.utcnow(),
+    )
+    fake_story_blocks.append(block)
+    return block
+
+
+@app.post("/story-blocks/{username}/unhide")
+def unhide_story(username: str, owner: str):
+    for i, b in enumerate(fake_story_blocks):
+        if b.story_owner == owner and b.hidden_user == username:
+            fake_story_blocks.pop(i)
+            return {"unhidden": True}
     raise HTTPException(status_code=404, detail="Block not found")
 
 

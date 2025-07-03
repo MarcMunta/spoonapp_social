@@ -70,10 +70,11 @@ final toggleLikeProvider = Provider(
 final addPostProvider = Provider((ref) => (
       String user,
       String caption,
+      List<String> categories,
       [String? imageUrl],
     ) async {
       final api = ref.read(apiServiceProvider);
-      await api.createPost(user, caption, imageUrl);
+      await api.createPost(user, caption, categories, imageUrl);
       await ref.read(postsNotifierProvider.notifier).fetch(refresh: true);
     });
 

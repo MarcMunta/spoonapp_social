@@ -7,6 +7,7 @@ class Post {
   final String? videoUrl;
   final int likes;
   final bool liked;
+  final List<String> categories;
 
   Post({
     required this.id,
@@ -17,6 +18,7 @@ class Post {
     this.videoUrl,
     this.likes = 0,
     this.liked = false,
+    this.categories = const [],
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
@@ -28,5 +30,8 @@ class Post {
         videoUrl: json['video_url'] as String?,
         likes: json['likes'] as int? ?? 0,
         liked: json['liked'] as bool? ?? false,
+        categories: (json['categories'] as List? ?? [])
+            .map((e) => e as String)
+            .toList(),
       );
 }

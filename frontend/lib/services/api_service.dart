@@ -11,6 +11,7 @@ import '../models/user.dart';
 import '../models/friend_request.dart';
 import '../models/block.dart';
 import '../models/story_block.dart';
+import '../models/category.dart';
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -29,8 +30,6 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
-
-
 
   Future<String> signup(String username, String password) async {
     final response = await http.post(
@@ -64,8 +63,9 @@ class ApiService {
     }
   }
 
-
-  Future<Post> createPost(String user, String caption, [String? imageUrl]) async {
+  Future<Post> createPost(
+      String user, String caption, List<String> categories,
+      [String? imageUrl]) async {
     final response = await http.post(
       Uri.parse('$baseUrl/posts'),
       headers: {'Content-Type': 'application/json'},
@@ -73,6 +73,7 @@ class ApiService {
         'user': user,
         'caption': caption,
         'image_url': imageUrl,
+        'categories': categories,
       }),
     );
     if (response.statusCode == 200) {
@@ -333,7 +334,6 @@ class ApiService {
     }
   }
 
-
   Future<List<StoryBlock>> fetchStoryBlocks(String owner) async {
     final response = await http.get(Uri.parse('$baseUrl/story-blocks?owner=$owner'));
     if (response.statusCode == 200) {
@@ -366,7 +366,6 @@ class ApiService {
     }
   }
 
-
   Future<List<UserProfile>> searchUsers(String? query) async {
     final url = query == null || query.isEmpty
         ? '$baseUrl/users'
@@ -379,6 +378,16 @@ class ApiService {
           .toList();
     } else {
       throw Exception('Failed to search users');
+    }
+  }
+
+  Future<List<Category>> fetchCategories() async {
+    final response = await http.get(Uri.parse('$baseUrl/categories'));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data.map((e) => Category.fromJson(e as Map<String, dynamic>)).toList();
+    } else {
+      throw Exception('Failed to load categories');
     }
   }
 }

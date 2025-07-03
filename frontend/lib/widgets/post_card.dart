@@ -71,6 +71,17 @@ class PostCard extends ConsumerWidget {
                 padding: const EdgeInsets.all(8.0),
                 child: Text(post.caption),
               ),
+            if (post.categories.isNotEmpty)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                child: Wrap(
+                  spacing: 4,
+                  children: [
+                    for (final c in post.categories)
+                      Chip(label: Text(c), visualDensity: VisualDensity.compact),
+                  ],
+                ),
+              ),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8.0),
               child: Row(

@@ -685,26 +685,3 @@ onReady(() => {
     if (!hidden) animateSidebarItems();
   });
 });
-
-onReady(() => {
-  const toggle = document.getElementById('themeToggle');
-  if (!toggle) return;
-
-  const applyTheme = (night) => {
-    document.body.classList.toggle('dark-mode', night);
-    toggle.classList.toggle('night', night);
-  };
-
-  const stored = localStorage.getItem('theme');
-  applyTheme(stored === 'night');
-
-  toggle.addEventListener('click', () => {
-    const night = !document.body.classList.contains('dark-mode');
-    applyTheme(night);
-    localStorage.setItem('theme', night ? 'night' : 'day');
-    toggle.classList.remove('flash', 'bounce');
-    // trigger reflow to restart animations
-    void toggle.offsetWidth;
-    toggle.classList.add('flash', 'bounce');
-  });
-});

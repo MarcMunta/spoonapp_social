@@ -173,8 +173,8 @@
               <div class="friend-name">{{ u.username }}</div>
               {% if u.profile.online %}
               <div class="friend-status text-success">{% trans "Online" %}</div>
-              {% elif u.profile.last_seen %}
-              <div class="friend-status text-muted">{% blocktrans %}Last seen: {{ u.profile.last_seen|naturaltime }}{% endblocktrans %}</div>
+              {% elif u.last_login %}
+              <div class="friend-status text-muted">{% blocktrans with time=u.last_login|naturaltime %}Active {{ time }} ago{% endblocktrans %}</div>
               {% endif %}
             </div>
           </a>

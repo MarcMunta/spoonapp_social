@@ -20,14 +20,20 @@ class _HomePageState extends State<HomePage> {
         currentIndex: _index,
         onTap: (i) {
           setState(() => _index = i);
-          if (i == 0) {
-            context.go('/');
-          } else {
-            context.go('/profile');
+          switch (i) {
+            case 0:
+              context.go('/');
+              break;
+            case 1:
+              context.go('/notifications');
+              break;
+            default:
+              context.go('/profile');
           }
         },
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Feed'),
+          BottomNavigationBarItem(icon: Icon(Icons.notifications), label: 'Notifs'),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
       ),

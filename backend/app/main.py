@@ -1,8 +1,8 @@
 from fastapi import FastAPI, HTTPException
 from typing import List
 
-from .models import Post, Story, LoginRequest, User
-from .data import fake_posts, fake_stories, fake_users
+from .models import Post, Story, Notification, LoginRequest, User
+from .data import fake_posts, fake_stories, fake_notifications, fake_users
 
 app = FastAPI(title="SpoonApp API")
 
@@ -22,6 +22,11 @@ def list_stories():
     """Return sample list of stories."""
     return fake_stories
 
+
+@app.get("/notifications", response_model=List[Notification])
+def list_notifications():
+    """Return sample list of notifications."""
+    return fake_notifications
 
 
 @app.post("/login")

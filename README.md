@@ -47,6 +47,7 @@ El backend FastAPI expone endpoints de prueba para la app Flutter:
 ```text
 GET /posts    # Lista de posts de ejemplo
 GET /stories  # Lista de historias de ejemplo
+GET /notifications  # Lista de notificaciones de ejemplo
 POST /login   # Devuelve un token si la contraseña es "password"
 POST /signup  # Registra un usuario nuevo en memoria
 ```
@@ -59,6 +60,7 @@ mejorar el rendimiento. Se añadieron páginas de **login** y **registro** en Fl
 que consumen los endpoints `/login` y `/signup`.
 El token de autenticación se persiste localmente usando
 `shared_preferences` para mantener la sesión entre reinicios.
+También existe una página de **notificaciones** que consume `/notifications`.
 
 ## Estructura
 
@@ -69,10 +71,10 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Profile, Story, PostDetail, Login, Signup)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Profile, Story, PostDetail, Login, Signup)
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
-│   │   ├── providers/         # Gestión de estado (posts, stories, auth)
+│   │   ├── providers/         # Gestión de estado (posts, stories, notifications, auth)
 │   │   └── widgets/           # Widgets reutilizables (StoryCircle, PostCard)
 │   └── pubspec.yaml
 │

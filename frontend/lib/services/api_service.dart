@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 
 import '../models/post.dart';
 import '../models/story.dart';
+import '../models/notification.dart';
 
 class ApiService {
   final String baseUrl;
@@ -23,7 +24,6 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
-  
   Future<String> signup(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/signup'),
@@ -56,6 +56,18 @@ class ApiService {
       return data.map((e) => Story.fromJson(e as Map<String, dynamic>)).toList();
     } else {
       throw Exception('Failed to load stories');
+    }
+  }
+
+  Future<List<NotificationItem>> fetchNotifications() async {
+    final response = await http.get(Uri.parse('$baseUrl/notifications'));
+    if (response.statusCode == 200) {
+      final List data = json.decode(response.body) as List;
+      return data
+          .map((e) => NotificationItem.fromJson(e as Map<String, dynamic>))
+          .toList();
+    } else {
+      throw Exception('Failed to load notifications');
     }
   }
 }

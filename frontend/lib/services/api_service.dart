@@ -5,8 +5,8 @@ import 'package:http/http.dart' as http;
 import '../models/post.dart';
 import '../models/story.dart';
 import '../models/notification.dart';
-import '../models/comment.dart';
 
+import '../models/comment.dart';
 class ApiService {
   final String baseUrl;
   ApiService(this.baseUrl);
@@ -40,8 +40,9 @@ class ApiService {
     }
   }
 
-  Future<List<Post>> fetchPosts() async {
-    final response = await http.get(Uri.parse('$baseUrl/posts'));
+  Future<List<Post>> fetchPosts([String? user]) async {
+    final url = user == null ? '$baseUrl/posts' : '$baseUrl/posts?user=$user';
+    final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List data = json.decode(response.body) as List;
       return data.map((e) => Post.fromJson(e as Map<String, dynamic>)).toList();
@@ -97,6 +98,32 @@ class ApiService {
       return Comment.fromJson(data);
     } else {
       throw Exception('Failed to add comment');
+    }
+  }
+
+  Future<Post> likePost(int postId, String user) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/posts/$postId/likes'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'user': user}),
+    );
+    if (response.statusCode == 200) {
+      return Post.fromJson(json.decode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to like post');
+    }
+  }
+
+  Future<Post> unlikePost(int postId, String user) async {
+    final response = await http.delete(
+      Uri.parse('$baseUrl/posts/$postId/likes'),
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode({'user': user}),
+    );
+    if (response.statusCode == 200) {
+      return Post.fromJson(json.decode(response.body) as Map<String, dynamic>);
+    } else {
+      throw Exception('Failed to unlike post');
     }
   }
 }

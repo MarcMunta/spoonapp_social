@@ -2,8 +2,24 @@ from fastapi import FastAPI, HTTPException
 from datetime import datetime
 from typing import List
 
-from .models import Post, Story, Notification, LoginRequest, User, Comment, CommentRequest
-from .data import fake_posts, fake_stories, fake_notifications, fake_users, fake_comments
+from .models import (
+    Post,
+    Story,
+    Notification,
+    LoginRequest,
+    User,
+    Comment,
+    CommentRequest,
+    LikeRequest,
+)
+from .data import (
+    fake_posts,
+    fake_stories,
+    fake_notifications,
+    fake_users,
+    fake_comments,
+    fake_likes,
+)
 
 app = FastAPI(title="SpoonApp API")
 
@@ -13,9 +29,15 @@ def read_root():
 
 
 @app.get("/posts", response_model=List[Post])
-def list_posts():
+def list_posts(user: str | None = None):
     """Return sample list of posts."""
-    return fake_posts
+    posts: List[Post] = []
+    for p in fake_posts:
+        likes = len(fake_likes.get(p.id, set()))
+        liked = user in fake_likes.get(p.id, set()) if user else False
+        posts.append(Post(**p.dict(), likes=likes, liked=liked))
+    return posts
+
 
 
 @app.get("/stories", response_model=List[Story])
@@ -40,6 +62,31 @@ def add_comment(post_id: int, data: CommentRequest):
     comment = Comment(id=len(comments)+1, post_id=post_id, user=data.user, content=data.content, created_at=datetime.utcnow())
     comments.append(comment)
     return comment
+
+
+def _get_post(post_id: int) -> Post:
+    for p in fake_posts:
+        if p.id == post_id:
+            return p
+    raise HTTPException(status_code=404, detail="Post not found")
+
+
+@app.post("/posts/{post_id}/likes", response_model=Post)
+def like_post(post_id: int, data: LikeRequest):
+    post = _get_post(post_id)
+    likes = fake_likes.setdefault(post_id, set())
+    likes.add(data.user)
+    post.likes = len(likes)
+    return Post(**post.dict(), likes=post.likes, liked=True)
+
+
+@app.delete("/posts/{post_id}/likes", response_model=Post)
+def unlike_post(post_id: int, data: LikeRequest):
+    post = _get_post(post_id)
+    likes = fake_likes.setdefault(post_id, set())
+    likes.discard(data.user)
+    post.likes = len(likes)
+    return Post(**post.dict(), likes=post.likes, liked=False)
 
 
 @app.post("/login")

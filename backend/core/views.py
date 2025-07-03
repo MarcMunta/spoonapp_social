@@ -664,10 +664,10 @@ def search_users(request):
                 bubble = user.profile.bubble_color
                 if user.profile.online:
                     status = _("Online")
-                elif user.profile.last_seen:
-                    time_str = naturaltime(user.profile.last_seen)
+                elif user.last_login:
+                    time_str = naturaltime(user.last_login)
                     if time_str and time_str != "None":
-                        status = _("Last seen: %(time)s") % {"time": time_str}
+                        status = _("Active %(time)s ago") % {"time": time_str}
             results.append(
                 {
                     "id": user.id,

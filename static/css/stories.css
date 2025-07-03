@@ -1,3 +1,8 @@
+.stories-wrapper {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
 .story-item {
     text-align: center;
     width: 64px;

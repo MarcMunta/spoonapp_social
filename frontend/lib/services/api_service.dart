@@ -28,7 +28,6 @@ class ApiService {
       throw Exception('Invalid credentials');
     }
   }
-
   Future<String> signup(String username, String password) async {
     final response = await http.post(
       Uri.parse('$baseUrl/signup'),
@@ -43,7 +42,6 @@ class ApiService {
       throw Exception('Signup failed');
     }
   }
-
   Future<List<Post>> fetchPosts(
     String? user, {
     int offset = 0,
@@ -60,7 +58,6 @@ class ApiService {
       throw Exception('Failed to load posts');
     }
   }
-
   Future<Post> createPost(String user, String caption, [String? imageUrl]) async {
     final response = await http.post(
       Uri.parse('$baseUrl/posts'),

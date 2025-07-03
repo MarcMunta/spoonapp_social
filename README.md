@@ -1,6 +1,8 @@
 # SpoonApp Social
 
-Este repositorio contiene el inicio de la migración de SpoonApp a un nuevo stack basado en Flutter para el frontend y FastAPI en el backend.
+Este repositorio contiene la migración en curso de **SpoonApp** a un nuevo stack
+con **Flutter** en el frontend y **FastAPI** para el backend. La antigua
+aplicación Django sigue presente únicamente como referencia.
 
 ## Requisitos
 - Flutter >= 3.x
@@ -43,19 +45,25 @@ flutter run -d chrome
 ```
 SpoonApp
 │
-├── frontend/            # Código Flutter
+├── frontend/                  # Código Flutter
 │   ├── lib/
-│   │   └── main.dart
+│   │   ├── main.dart          # Punto de entrada
+│   │   ├── pages/             # Vistas (Feed, Profile...)
+│   │   ├── models/            # Modelos Dart
+│   │   ├── services/          # Llamadas HTTP
+│   │   └── providers/         # Gestión de estado
 │   └── pubspec.yaml
 │
 ├── backend/
-│   ├── app/             # Nuevo backend FastAPI
+│   ├── app/                   # Backend FastAPI
 │   │   ├── main.py
+│   │   ├── models/
+│   │   ├── data.py
 │   │   ├── requirements.txt
 │   │   └── .env.example
-│   └── ...              # Código Django existente
+│   └── ...                    # Código Django existente (referencia)
 │
-├── frontend_legacy/     # Antiguo frontend JavaScript
+├── frontend_legacy/           # Antiguo frontend JavaScript
 └── setup_env.sh
 ```
 

@@ -21,6 +21,16 @@ fake_posts = [
         likes=1,
     ),
     Post(id=2, user="bob", caption="Second Post", created_at=datetime.utcnow(), likes=0),
+] + [
+    Post(
+        id=i,
+        user="alice" if i % 2 else "bob",
+        caption=f"Extra Post {i}",
+        created_at=datetime.utcnow(),
+        image_url="https://placehold.co/600x400",
+        likes=0,
+    )
+    for i in range(3, 21)
 ]
 
 fake_users = [
@@ -54,12 +64,14 @@ fake_comments = {
     ],
     2: []
 }
+fake_comments.update({i: [] for i in range(3, 21)})
 
 # track users that liked each post
 fake_likes = {
     1: {"bob"},
     2: set(),
 }
+fake_likes.update({i: set() for i in range(3, 21)})
 
 # Simple chat and message storage
 fake_chats = [

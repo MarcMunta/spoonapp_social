@@ -6,10 +6,53 @@ import 'auth_provider.dart';
 
 final apiServiceProvider = Provider((ref) => ApiService('http://localhost:8000'));
 
-final postsProvider = FutureProvider<List<Post>>((ref) async {
-  final api = ref.watch(apiServiceProvider);
-  final auth = ref.read(authProvider);
-  return api.fetchPosts(auth?.username);
+class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
+  PostsNotifier(this.ref) : super(const AsyncValue.loading()) {
+    fetch();
+  }
+
+  final Ref ref;
+  int _offset = 0;
+  final int _limit = 10;
+  bool _hasMore = true;
+
+  bool get hasMore => _hasMore;
+
+  Future<void> fetch({bool refresh = false}) async {
+    if (refresh) {
+      _offset = 0;
+      _hasMore = true;
+      state = const AsyncValue.loading();
+    }
+    if (!_hasMore) return;
+    final api = ref.read(apiServiceProvider);
+    final auth = ref.read(authProvider);
+    try {
+      final posts = await api.fetchPosts(
+        auth?.username,
+        offset: _offset,
+        limit: _limit,
+      );
+      if (refresh) {
+        state = AsyncValue.data(posts);
+      } else {
+        final current = state.value ?? [];
+        state = AsyncValue.data([...current, ...posts]);
+      }
+      if (posts.length < _limit) {
+        _hasMore = false;
+      } else {
+        _offset += _limit;
+      }
+    } catch (e, st) {
+      state = AsyncValue.error(e, st);
+    }
+  }
+}
+
+final postsNotifierProvider =
+    StateNotifierProvider<PostsNotifier, AsyncValue<List<Post>>>((ref) {
+  return PostsNotifier(ref);
 });
 
 final toggleLikeProvider = Provider(
@@ -20,7 +63,7 @@ final toggleLikeProvider = Provider(
     } else {
       await api.likePost(post.id, user);
     }
-    ref.invalidate(postsProvider);
+    await ref.read(postsNotifierProvider.notifier).fetch(refresh: true);
   },
 );
 
@@ -31,13 +74,13 @@ final addPostProvider = Provider((ref) => (
     ) async {
       final api = ref.read(apiServiceProvider);
       await api.createPost(user, caption, imageUrl);
-      ref.invalidate(postsProvider);
+      await ref.read(postsNotifierProvider.notifier).fetch(refresh: true);
     });
 
 final deletePostProvider = Provider(
   (ref) => (int postId, String user) async {
     final api = ref.read(apiServiceProvider);
     await api.deletePost(postId, user);
-    ref.invalidate(postsProvider);
+    await ref.read(postsNotifierProvider.notifier).fetch(refresh: true);
   },
 );

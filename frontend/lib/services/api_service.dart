@@ -42,9 +42,14 @@ class ApiService {
       throw Exception('Signup failed');
     }
   }
-
-  Future<List<Post>> fetchPosts([String? user]) async {
-    final url = user == null ? '$baseUrl/posts' : '$baseUrl/posts?user=$user';
+  Future<List<Post>> fetchPosts(
+    String? user, {
+    int offset = 0,
+    int limit = 10,
+  }) async {
+    final params = 'offset=$offset&limit=$limit';
+    final url =
+        user == null ? '$baseUrl/posts?$params' : '$baseUrl/posts?user=$user&$params';
     final response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       final List data = json.decode(response.body) as List;

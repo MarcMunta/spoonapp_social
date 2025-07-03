@@ -45,7 +45,7 @@ flutter run -d chrome
 El backend FastAPI expone endpoints de prueba para la app Flutter:
 
 ```text
-GET /posts    # Lista de posts de ejemplo
+GET /posts?offset=0&limit=10    # Lista paginada de posts
 POST /posts   # Crear un post nuevo
 GET /stories  # Lista de historias de ejemplo
 GET /notifications  # Lista de notificaciones de ejemplo
@@ -75,6 +75,9 @@ El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `P
 Los autores pueden **eliminar sus propios posts** y comentarios gracias a los
 endpoints `DELETE /posts/{id}` y
 `DELETE /posts/{id}/comments/{cid}`.
+Ahora la lista de posts se obtiene de forma paginada con los parámetros `offset`
+y `limit`, y el feed implementa **scroll infinito** para cargar más contenido al
+bajar.
 
 El frontend Flutter muestra estas historias con una animación **Hero** al tocar
 cada círculo y los posts se renderizan mediante el widget personalizado

@@ -13,7 +13,8 @@ class FeedPage extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final postsAsync = ref.watch(postsProvider);
+    final postsAsync = ref.watch(postsNotifierProvider);
+    final notifier = ref.read(postsNotifierProvider.notifier);
     final storiesAsync = ref.watch(storiesProvider);
     final auth = ref.watch(authProvider);
     return Scaffold(
@@ -41,12 +42,26 @@ class FeedPage extends ConsumerWidget {
           ),
           Expanded(
             child: postsAsync.when(
-              data: (posts) => ListView.builder(
-                itemCount: posts.length,
-                itemBuilder: (context, index) {
-                  final post = posts[index];
-                  return PostCard(post: post);
-                },
+              data: (posts) => RefreshIndicator(
+                onRefresh: () => notifier.fetch(refresh: true),
+                child: NotificationListener<ScrollNotification>(
+                  onNotification: (notification) {
+                    if (notification.metrics.pixels >=
+                            notification.metrics.maxScrollExtent -
+                                200 &&
+                        notifier.hasMore) {
+                      notifier.fetch();
+                    }
+                    return false;
+                  },
+                  child: ListView.builder(
+                    itemCount: posts.length,
+                    itemBuilder: (context, index) {
+                      final post = posts[index];
+                      return PostCard(post: post);
+                    },
+                  ),
+                ),
               ),
               loading: () => const Center(child: CircularProgressIndicator()),
               error: (e, st) => Center(child: Text('Error: $e')),

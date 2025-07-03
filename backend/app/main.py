@@ -43,10 +43,11 @@ def read_root():
 
 
 @app.get("/posts", response_model=List[Post])
-def list_posts(user: str | None = None):
-    """Return sample list of posts."""
+def list_posts(user: str | None = None, offset: int = 0, limit: int = 10):
+    """Return sample list of posts with pagination."""
     posts: List[Post] = []
-    for p in fake_posts:
+    sliced = fake_posts[offset : offset + limit]
+    for p in sliced:
         likes = len(fake_likes.get(p.id, set()))
         liked = user in fake_likes.get(p.id, set()) if user else False
         posts.append(Post(**p.dict(), likes=likes, liked=liked))

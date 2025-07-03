@@ -15,6 +15,24 @@ function onReady(fn) {
   }
 }
 
+function applyMenuStateFromStorage() {
+  const sidebarState = localStorage.getItem('sidebarHidden');
+  const rightbarState = localStorage.getItem('rightbarHidden');
+  const body = document.body;
+  if (sidebarState !== null) {
+    const hidden = sidebarState === 'true' || sidebarState === '1';
+    body.classList.toggle('sidebar-hidden', hidden);
+    const icon = document.getElementById('menuToggle')?.querySelector('i');
+    if (icon) icon.className = hidden ? 'fas fa-bars' : 'fas fa-times';
+  }
+  if (rightbarState !== null) {
+    const hidden = rightbarState === 'true' || rightbarState === '1';
+    body.classList.toggle('rightbar-hidden', hidden);
+  }
+}
+
+onReady(applyMenuStateFromStorage);
+
 const searchInput = document.getElementById("searchFriendInput");
 if (searchInput) {
   const resultsList = document.getElementById("searchResults");
@@ -52,11 +70,18 @@ if (searchInput) {
     if (!append) resultsList.innerHTML = "";
     users.forEach((user) => {
       const li = document.createElement("li");
+      const status = user.status && user.status !== "Last seen: None" ? user.status : "";
+      const statusHtml = status
+        ? `<div class="friend-status text-muted small">${status}</div>`
+        : "";
       li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
       <img src="${user.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
-      <span>${user.username}</span>
+      <div class="user-suggestion-inner">
+        <span class="username">${user.username}</span>
+        ${statusHtml}
+      </div>
     </div>
   </a>
 `;
@@ -454,13 +479,18 @@ function animateTopMenuIcons() {
       if (bell) icons.push(bell);
     }
   });
+  const profile = document.querySelector('.profile-icon a');
+  if (profile) icons.push(profile);
+  const rightToggle = document.getElementById('rightMenuToggle');
+  if (rightToggle) icons.push(rightToggle);
   icons.forEach((icon, idx) => {
     icon.style.opacity = '0';
+    icon.style.transform = 'translateY(20px)';
     icon.style.animationDelay = `${idx * 0.12}s`;
     icon.addEventListener(
       'animationend',
       (e) => {
-        if (e.animationName === 'menuIconBounce') {
+        if (e.animationName === 'menuIconSlideIn') {
           icon.classList.add('menu-icon-glow');
           icon.removeAttribute('style');
         }
@@ -469,13 +499,13 @@ function animateTopMenuIcons() {
     );
     setTimeout(() => {
       icon.removeAttribute('style');
-    }, 1200);
+    }, 800);
   });
   requestAnimationFrame(() => {
     icons.forEach((icon) => {
-      icon.classList.remove('menu-icon-bounce', 'menu-icon-glow');
+      icon.classList.remove('menu-icon-slide', 'menu-icon-glow');
       void icon.offsetWidth;
-      icon.classList.add('menu-icon-bounce');
+      icon.classList.add('menu-icon-slide');
     });
   });
 }
@@ -669,9 +699,38 @@ onReady(() => {
 
   btn.addEventListener('click', () => {
     const hidden = document.body.classList.toggle('sidebar-hidden');
+    localStorage.setItem('sidebarHidden', hidden);
     if (icon) {
       icon.className = hidden ? 'fas fa-bars' : 'fas fa-times';
     }
     if (!hidden) animateSidebarItems();
+  });
+});
+
+onReady(() => {
+  const btn = document.getElementById('rightMenuToggle');
+  const panel = document.querySelector('.rightbar');
+  if (!btn || !panel) return;
+
+  function animatePanelItems() {
+    const items = panel.children;
+    Array.from(items).forEach((el, idx) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateX(20px)';
+      el.style.transition = 'opacity 0.3s ease, transform 0.3s ease';
+      el.style.transitionDelay = `${idx * 50}ms`;
+    });
+    requestAnimationFrame(() => {
+      Array.from(items).forEach((el) => {
+        el.style.opacity = '1';
+        el.style.transform = 'translateX(0)';
+      });
+    });
+  }
+
+  btn.addEventListener('click', () => {
+    const hidden = document.body.classList.toggle('rightbar-hidden');
+    localStorage.setItem('rightbarHidden', hidden);
+    if (!hidden) animatePanelItems();
   });
 });

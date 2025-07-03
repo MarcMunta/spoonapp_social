@@ -20,6 +20,7 @@ class PostCategory(models.Model):
         "primer-plato": _("First course"),
         "segundo-plato": _("Second course"),
         "postres": _("Desserts"),
+        "clips": _("Clips"),
     }
 
     def __str__(self):
@@ -32,6 +33,8 @@ class Post(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     image = models.BinaryField(null=True, blank=True, editable=True)
     image_mime = models.CharField(max_length=100, null=True, blank=True)
+    video = models.BinaryField(null=True, blank=True, editable=True)
+    video_mime = models.CharField(max_length=100, null=True, blank=True)
     caption = models.TextField(blank=True)
     categories = models.ManyToManyField(PostCategory, related_name='posts')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -44,6 +47,19 @@ class Post(models.Model):
                 base64.b64encode(self.image).decode(),
             )
         return ""
+
+    @property
+    def video_data_url(self):
+        if self.video and self.video_mime:
+            return "data:%s;base64,%s" % (
+                self.video_mime,
+                base64.b64encode(self.video).decode(),
+            )
+        return ""
+
+    @property
+    def is_video(self):
+        return bool(self.video and self.video_mime)
 
 class PostLike(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

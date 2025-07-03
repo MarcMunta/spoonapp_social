@@ -102,11 +102,21 @@ msgstr "Desconectado"
 #: templates/layouts/base.html:175
 #, python-format
 msgid "Last seen: %(f.profile.last_seen|naturaltime)s"
-msgstr "Activo por última vez: %(f.profile.last_seen|naturaltime)s"
+msgstr "Activo hace %(f.profile.last_seen|naturaltime)s"
 
 #: templates/pages/buscador.html:34
 msgid "Last seen:"
-msgstr "Activos por última vez:"
+msgstr "Activo hace:"
+
+#: backend/core/views.py:670
+#, python-format
+msgid "Last seen: %(time)s"
+msgstr "Activo hace: %(time)s"
+
+#: templates/layouts/base.html:182
+#, python-format
+msgid "Active %(time)s ago"
+msgstr "Activo hace %(time)s"
 
 #: templates/pages/chat_detail.html:102
 msgid "Share your food thoughts... 🍽️"
@@ -166,8 +176,8 @@ msgid "Publish"
 msgstr "Publicar"
 
 #: templates/pages/feed.html:21
-msgid "Drag an image here or click"
-msgstr "Arrastra una imagen aquí o haz clic"
+msgid "Drag an image or video here or click"
+msgstr "Arrastra una imagen o video aquí o haz clic"
 
 #: templates/pages/feed.html:51 templates/pages/feed.html:113
 #: templates/pages/feed.html:120
@@ -394,7 +404,7 @@ msgid "Home"
 msgstr "Inicio"
 
 msgid "Last seen"
-msgstr "Activos por última vez"
+msgstr "Activo hace"
 
 msgid "Scroll up for older messages"
 msgstr "Desplázate arriba para ver mensajes antiguos"
@@ -474,6 +484,9 @@ msgstr "Segundo plato"
 msgid "Desserts"
 msgstr "Postres"
 
+msgid "Clips"
+msgstr "Clips"
+
 msgid "What's on your spoon?"
 msgstr "¿Qué tienes en tu cuchara?"
 
@@ -533,6 +546,10 @@ msgstr "Sí, eliminar mi cuenta"
 
 msgid "Delete Account"
 msgstr "Eliminar cuenta"
+
+# Validation messages
+msgid "Video must be 3 minutes or shorter."
+msgstr "El video debe durar 3 minutos o menos."
 
 # Filters
 msgid "Search users"

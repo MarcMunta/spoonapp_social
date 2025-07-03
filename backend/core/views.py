@@ -30,7 +30,17 @@ from .models import (
 from .forms import PostForm, CommentForm, ProfileForm, StoryForm, UserForm
 from django.utils import timezone
 from django.http import HttpResponseForbidden
-from django.db.models import Q, Prefetch, Count, F, FloatField, ExpressionWrapper
+from django.db.models import (
+    Q,
+    Prefetch,
+    Count,
+    F,
+    FloatField,
+    ExpressionWrapper,
+    Case,
+    When,
+    IntegerField,
+)
 from django.db.models.functions import Random
 import random
 from django.template.loader import render_to_string
@@ -511,7 +521,27 @@ def profile(request, username):
     else:
         posts = posts_all
     user_profile, _ = Profile.objects.get_or_create(user=profile_user)
-    categories = PostCategory.objects.exclude(slug__isnull=True)
+    order = [
+        "Entrantes",
+        "Clips",
+        "Primer plato",
+        "Segundo plato",
+        "Postres",
+    ]
+    when_statements = [
+        When(name=name, then=idx) for idx, name in enumerate(order)
+    ]
+    categories = (
+        PostCategory.objects.annotate(
+            order_priority=Case(
+                *when_statements,
+                default=len(order),
+                output_field=IntegerField(),
+            )
+        )
+        .order_by("order_priority", "name")
+        .exclude(slug__isnull=True)
+    )
 
     posts_by_category = {'all': list(posts_all)}
     for category in categories:

@@ -1,10 +1,17 @@
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
+import os
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-demo-key'
-DEBUG = True # Cambiar a False en producción
-ALLOWED_HOSTS = ['127.0.0.1', 'localhost']  # o ['*'] para desarrollo local
+DEBUG = True  # Cambiar a False en producción
+
+# Allow connections from any host during development so mobile devices
+# can reach the server when DEBUG is True. In production you can specify
+# allowed hosts via the ALLOWED_HOSTS environment variable.
+ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+if DEBUG:
+    ALLOWED_HOSTS = ['*']
 
 INSTALLED_APPS = [
     'django.contrib.admin',

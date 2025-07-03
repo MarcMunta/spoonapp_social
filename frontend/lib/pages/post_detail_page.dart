@@ -35,7 +35,19 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
     final auth = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.post.user),
+        title: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+          decoration: BoxDecoration(
+            color: widget.post.bubbleColor != null
+                ? Color(int.parse(widget.post.bubbleColor!.substring(1), radix: 16) + 0xFF000000)
+                : Colors.grey.shade300,
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Text(
+            widget.post.user,
+            style: const TextStyle(color: Colors.white),
+          ),
+        ),
         actions: [
           if (auth != null && auth.username == widget.post.user)
             IconButton(
@@ -89,7 +101,22 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             data: (comments) => Column(
               children: comments
                   .map((c) => ListTile(
-                        title: Text(c.user),
+                        title: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 8, vertical: 4),
+                          decoration: BoxDecoration(
+                            color: c.bubbleColor != null
+                                ? Color(int.parse(c.bubbleColor!.substring(1),
+                                        radix: 16) +
+                                    0xFF000000)
+                                : Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Text(
+                            c.user,
+                            style: const TextStyle(color: Colors.white),
+                          ),
+                        ),
                         subtitle: Text(c.content),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,

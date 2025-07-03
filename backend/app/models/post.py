@@ -11,6 +11,7 @@ class Post(BaseModel):
     likes: int = 0
     liked: bool = False
     categories: list[str] = []
+    bubble_color: str | None = None
 
 
 class PostRequest(BaseModel):

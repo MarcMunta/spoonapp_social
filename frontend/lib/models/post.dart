@@ -8,6 +8,7 @@ class Post {
   final int likes;
   final bool liked;
   final List<String> categories;
+  final String? bubbleColor;
 
   Post({
     required this.id,
@@ -19,6 +20,7 @@ class Post {
     this.likes = 0,
     this.liked = false,
     this.categories = const [],
+    this.bubbleColor,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
@@ -33,5 +35,6 @@ class Post {
         categories: (json['categories'] as List? ?? [])
             .map((e) => e as String)
             .toList(),
+        bubbleColor: json['bubble_color'] as String?,
       );
 }

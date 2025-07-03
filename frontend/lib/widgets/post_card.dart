@@ -24,7 +24,19 @@ class PostCard extends ConsumerWidget {
           children: [
             ListTile(
               leading: CircleAvatar(child: Text(post.user[0].toUpperCase())),
-              title: Text(post.user),
+              title: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: post.bubbleColor != null
+                      ? Color(int.parse(post.bubbleColor!.substring(1), radix: 16) + 0xFF000000)
+                      : Colors.grey.shade300,
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: Text(
+                  post.user,
+                  style: const TextStyle(color: Colors.white),
+                ),
+              ),
               subtitle: Text(post.createdAt.toLocal().toString()),
               trailing: auth != null && auth.username == post.user
                   ? PopupMenuButton(

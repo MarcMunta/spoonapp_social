@@ -41,6 +41,28 @@ from .data import (
     fake_categories,
 )
 
+
+def _user_color(username: str) -> str | None:
+    for u in fake_users:
+        if u.username == username:
+            return u.bubble_color
+    return None
+
+
+def _post_response(post: Post, liked: bool | None = None) -> Post:
+    likes = len(fake_likes.get(post.id, set()))
+    liked_val = (
+        liked
+        if liked is not None
+        else False
+    )
+    return Post(
+        **post.dict(),
+        likes=likes,
+        liked=liked_val,
+        bubble_color=_user_color(post.user),
+    )
+
 app = FastAPI(title="SpoonApp API")
 
 @app.get("/")
@@ -62,9 +84,8 @@ def list_posts(
         posts_source = [p for p in posts_source if category in p.categories]
     sliced = posts_source[offset : offset + limit]
     for p in sliced:
-        likes = len(fake_likes.get(p.id, set()))
         liked = user in fake_likes.get(p.id, set()) if user else False
-        posts.append(Post(**p.dict(), likes=likes, liked=liked))
+        posts.append(_post_response(p, liked))
     return posts
 
 
@@ -78,10 +99,11 @@ def create_post(data: PostRequest):
         image_url=data.image_url,
         likes=0,
         categories=data.categories,
+        bubble_color=_user_color(data.user),
     )
     fake_posts.append(post)
     fake_likes[post.id] = set()
-    return post
+    return _post_response(post)
 
 
 @app.get("/stories", response_model=List[Story])
@@ -137,14 +159,24 @@ def list_categories():
 
 @app.get("/posts/{post_id}/comments", response_model=List[Comment])
 def list_comments(post_id: int):
-    return fake_comments.get(post_id, [])
+    comments = fake_comments.get(post_id, [])
+    return [
+        Comment(**c.dict(), bubble_color=_user_color(c.user)) for c in comments
+    ]
 
 @app.post("/posts/{post_id}/comments", response_model=Comment)
 def add_comment(post_id: int, data: CommentRequest):
     comments = fake_comments.setdefault(post_id, [])
-    comment = Comment(id=len(comments)+1, post_id=post_id, user=data.user, content=data.content, created_at=datetime.utcnow())
+    comment = Comment(
+        id=len(comments) + 1,
+        post_id=post_id,
+        user=data.user,
+        content=data.content,
+        created_at=datetime.utcnow(),
+    )
     comments.append(comment)
-    return comment
+    return Comment(**comment.dict(), bubble_color=_user_color(data.user))
+
 
 
 def _get_post(post_id: int) -> Post:
@@ -160,7 +192,8 @@ def like_post(post_id: int, data: LikeRequest):
     likes = fake_likes.setdefault(post_id, set())
     likes.add(data.user)
     post.likes = len(likes)
-    return Post(**post.dict(), likes=post.likes, liked=True)
+    return _post_response(post, True)
+
 
 
 @app.delete("/posts/{post_id}/likes", response_model=Post)
@@ -169,7 +202,8 @@ def unlike_post(post_id: int, data: LikeRequest):
     likes = fake_likes.setdefault(post_id, set())
     likes.discard(data.user)
     post.likes = len(likes)
-    return Post(**post.dict(), likes=post.likes, liked=False)
+    return _post_response(post, False)
+
 
 
 @app.delete("/posts/{post_id}")

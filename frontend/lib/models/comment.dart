@@ -4,6 +4,7 @@ class Comment {
   final String user;
   final String content;
   final DateTime createdAt;
+  final String? bubbleColor;
 
   Comment({
     required this.id,
@@ -11,6 +12,7 @@ class Comment {
     required this.user,
     required this.content,
     required this.createdAt,
+    this.bubbleColor,
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
@@ -19,5 +21,6 @@ class Comment {
         user: json['user'] as String,
         content: json['content'] as String,
         createdAt: DateTime.parse(json['created_at'] as String),
+        bubbleColor: json['bubble_color'] as String?,
       );
 }

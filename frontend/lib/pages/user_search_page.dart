@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/search_provider.dart';
+import '../providers/friend_request_provider.dart';
+import '../providers/auth_provider.dart';
 import '../providers/language_provider.dart';
 import '../utils/l10n.dart';
 
@@ -20,6 +22,7 @@ class _UserSearchPageState extends ConsumerState<UserSearchPage> {
     final usersAsync =
         ref.watch(searchUsersProvider(_query.isEmpty ? null : _query));
     final locale = ref.watch(languageProvider);
+    final auth = ref.watch(authProvider);
     return Scaffold(
       appBar: AppBar(
         title: TextField(
@@ -33,9 +36,27 @@ class _UserSearchPageState extends ConsumerState<UserSearchPage> {
           itemCount: users.length,
           itemBuilder: (context, index) {
             final u = users[index];
+            final canRequest = auth != null && auth.username != u.username;
             return ListTile(
               leading: CircleAvatar(child: Text(u.username[0].toUpperCase())),
               title: Text(u.username),
+              trailing: canRequest
+                  ? IconButton(
+                      icon: const Icon(Icons.person_add),
+                      tooltip: L10n.of(locale, 'send_request'),
+                      onPressed: () async {
+                        await ref
+                            .read(sendFriendRequestProvider)(u.username);
+                        if (mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                                content: Text(
+                                    '${L10n.of(locale, 'send_request')}: ${u.username}')),
+                          );
+                        }
+                      },
+                    )
+                  : null,
             );
           },
         ),

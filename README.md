@@ -111,7 +111,8 @@ biografía, el avatar y el color de burbuja mediante los endpoints `/users/{user
 Existe también una pantalla de **solicitudes de amistad** que muestra las
 peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
 Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que
-consumen los endpoints `/blocks` y `/users` respectivamente.
+consumen los endpoints `/blocks` y `/users` respectivamente. Desde el buscador
+es posible **enviar solicitudes de amistad** mediante el botón de "Enviar solicitud".
 Existe también una página de **historias ocultas** para gestionar a quién
 ocultas tus historias, que usa los endpoints `/story-blocks`.
 Se añadió una pantalla de **categorías** desde el perfil para ver la lista

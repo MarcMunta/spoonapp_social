@@ -32,6 +32,7 @@ class L10n {
       'bio': 'Bio',
       'logout': 'Log out',
       'dark_theme': 'Dark theme',
+      'send_request': 'Send request',
       'not_authenticated': 'Not authenticated',
     },
     'es': {
@@ -62,6 +63,7 @@ class L10n {
       'bio': 'Biografía',
       'logout': 'Cerrar sesión',
       'dark_theme': 'Tema oscuro',
+      'send_request': 'Enviar solicitud',
       'not_authenticated': 'No autenticado',
     },
   };

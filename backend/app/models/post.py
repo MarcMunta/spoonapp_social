@@ -10,9 +10,11 @@ class Post(BaseModel):
     video_url: str | None = None
     likes: int = 0
     liked: bool = False
+    categories: list[str] = []
 
 
 class PostRequest(BaseModel):
     user: str
     caption: str
     image_url: str | None = None
+    categories: list[str] = []

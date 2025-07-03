@@ -24,6 +24,7 @@ from .models import (
     BlockCreate,
     StoryBlock,
     StoryBlockCreate,
+    Category,
 )
 from .data import (
     fake_posts,
@@ -37,6 +38,7 @@ from .data import (
     fake_friend_requests,
     fake_blocks,
     fake_story_blocks,
+    fake_categories,
 )
 
 app = FastAPI(title="SpoonApp API")
@@ -67,6 +69,7 @@ def create_post(data: PostRequest):
         created_at=datetime.utcnow(),
         image_url=data.image_url,
         likes=0,
+        categories=data.categories,
     )
     fake_posts.append(post)
     fake_likes[post.id] = set()
@@ -105,7 +108,6 @@ def delete_story(story_id: int, user: str):
 
 
 
-
 @app.get("/notifications", response_model=List[Notification])
 def list_notifications():
     """Return sample list of notifications."""
@@ -120,6 +122,10 @@ def mark_notification_read(nid: int):
             return {"read": True}
     raise HTTPException(status_code=404, detail="Notification not found")
 
+
+@app.get("/categories", response_model=List[Category])
+def list_categories():
+    return fake_categories
 
 
 @app.get("/posts/{post_id}/comments", response_model=List[Comment])

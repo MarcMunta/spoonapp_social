@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/post_provider.dart';
 import '../providers/auth_provider.dart';
+import '../providers/category_provider.dart';
 
 class NewPostPage extends ConsumerStatefulWidget {
   const NewPostPage({super.key});
@@ -16,6 +17,7 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
   final _imageController = TextEditingController();
   bool _sending = false;
   String? _error;
+  final List<String> _selectedCategories = [];
 
   Future<void> _submit() async {
     final auth = ref.read(authProvider);
@@ -28,6 +30,7 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
       await ref.read(addPostProvider)(
         auth.username,
         _captionController.text,
+        _selectedCategories,
         _imageController.text.isEmpty ? null : _imageController.text,
       );
       if (mounted) Navigator.of(context).pop();
@@ -44,26 +47,50 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
       appBar: AppBar(title: const Text('Nuevo post')),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            TextField(
-              controller: _captionController,
-              decoration: const InputDecoration(labelText: 'Título'),
-            ),
-            TextField(
-              controller: _imageController,
-              decoration: const InputDecoration(labelText: 'URL de la imagen (opcional)'),
-            ),
-            const SizedBox(height: 16),
-            if (_error != null)
-              Text(_error!, style: const TextStyle(color: Colors.red)),
-            ElevatedButton(
-              onPressed: _sending ? null : _submit,
-              child: _sending
-                  ? const CircularProgressIndicator()
-                  : const Text('Publicar'),
-            ),
-          ],
+        child: Consumer(
+          builder: (context, ref, _) {
+            final catsAsync = ref.watch(categoriesProvider);
+            return catsAsync.when(
+              data: (cats) => ListView(
+                children: [
+                  TextField(
+                    controller: _captionController,
+                    decoration: const InputDecoration(labelText: 'Título'),
+                  ),
+                  TextField(
+                    controller: _imageController,
+                    decoration: const InputDecoration(labelText: 'URL de la imagen (opcional)'),
+                  ),
+                  const SizedBox(height: 16),
+                  Text('Categorías', style: Theme.of(context).textTheme.titleMedium),
+                  ...cats.map((c) => CheckboxListTile(
+                        title: Text(c.name),
+                        value: _selectedCategories.contains(c.name),
+                        onChanged: (v) {
+                          setState(() {
+                            if (v == true) {
+                              _selectedCategories.add(c.name);
+                            } else {
+                              _selectedCategories.remove(c.name);
+                            }
+                          });
+                        },
+                      )),
+                  const SizedBox(height: 16),
+                  if (_error != null)
+                    Text(_error!, style: const TextStyle(color: Colors.red)),
+                  ElevatedButton(
+                    onPressed: _sending ? null : _submit,
+                    child: _sending
+                        ? const CircularProgressIndicator()
+                        : const Text('Publicar'),
+                  ),
+                ],
+              ),
+              loading: () => const Center(child: CircularProgressIndicator()),
+              error: (e, st) => Center(child: Text('Error: $e')),
+            );
+          },
         ),
       ),
     );

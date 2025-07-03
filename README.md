@@ -52,6 +52,7 @@ POST /stories # Crear una historia
 DELETE /stories/{id}?user=alice  # Borrar historia (propietario)
 GET /notifications  # Lista de notificaciones de ejemplo
 POST /notifications/{id}/read  # Marcar notificación como leída
+GET /categories               # Lista de categorías disponibles
 GET /chats               # Lista de chats del usuario
 GET /chats/{id}/messages  # Mensajes de un chat
 POST /chats/{id}/messages # Enviar mensaje
@@ -78,6 +79,7 @@ POST /story-blocks/{username}/unhide?owner=alice  # Dejar de ocultar
 ```
 Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
 El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
+Al crear un post se pueden seleccionar categorías que luego se muestran en el feed.
 Los autores pueden **eliminar sus propios posts** y comentarios gracias a los
 endpoints `DELETE /posts/{id}` y
 `DELETE /posts/{id}/comments/{cid}`.
@@ -111,6 +113,8 @@ Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que
 consumen los endpoints `/blocks` y `/users` respectivamente.
 Existe también una página de **historias ocultas** para gestionar a quién
 ocultas tus historias, que usa los endpoints `/story-blocks`.
+Se añadió una pantalla de **categorías** desde el perfil para ver la lista
+disponible mediante `GET /categories`.
 Ahora la aplicación soporta **cambio de idioma** entre inglés y español. Un
 nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
 `shared_preferences`.
@@ -124,7 +128,8 @@ SpoonApp
 │   ├── lib/
 │   │   ├── main.dart          # Arranque con ProviderScope
 │   │   ├── app.dart           # Configuración de rutas y tema
-│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, NewStory, FriendRequests, BlockedUsers, UserSearch, Settings)
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, NewStory, FriendRequests, BlockedUsers, HiddenStories, Categories, UserSearch, Settings)
+
 │   │   ├── models/            # Modelos Dart
 │   │   ├── services/          # Llamadas HTTP
 │   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)

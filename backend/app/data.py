@@ -10,7 +10,14 @@ from .models import (
     FriendRequest,
     Block,
     StoryBlock,
+    Category,
 )
+
+fake_categories = [
+    Category(id=1, name="Food", slug="food"),
+    Category(id=2, name="Travel", slug="travel"),
+    Category(id=3, name="Clips", slug="clips"),
+]
 
 fake_posts = [
     Post(
@@ -20,8 +27,16 @@ fake_posts = [
         created_at=datetime.utcnow(),
         image_url="https://placehold.co/600x400",
         likes=1,
+        categories=["Food"],
     ),
-    Post(id=2, user="bob", caption="Second Post", created_at=datetime.utcnow(), likes=0),
+    Post(
+        id=2,
+        user="bob",
+        caption="Second Post",
+        created_at=datetime.utcnow(),
+        likes=0,
+        categories=["Travel"],
+    ),
 ] + [
     Post(
         id=i,
@@ -30,6 +45,7 @@ fake_posts = [
         created_at=datetime.utcnow(),
         image_url="https://placehold.co/600x400",
         likes=0,
+        categories=["Food"] if i % 2 else ["Clips"],
     )
     for i in range(3, 21)
 ]

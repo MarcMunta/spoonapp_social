@@ -58,6 +58,11 @@ class ProfilePage extends ConsumerWidget {
                     ),
                     const SizedBox(height: 16),
                     ElevatedButton(
+                      onPressed: () => context.push('/categories'),
+                      child: const Text('Categories'),
+                    ),
+                    const SizedBox(height: 16),
+                    ElevatedButton(
                       onPressed: () => context.push('/search'),
                       child: Text(L10n.of(locale, 'search_users')),
                     ),

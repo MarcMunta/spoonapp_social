@@ -15,6 +15,24 @@ function onReady(fn) {
   }
 }
 
+function applyMenuStateFromStorage() {
+  const sidebarState = localStorage.getItem('sidebarHidden');
+  const rightbarState = localStorage.getItem('rightbarHidden');
+  const body = document.body;
+  if (sidebarState !== null) {
+    const hidden = sidebarState === 'true' || sidebarState === '1';
+    body.classList.toggle('sidebar-hidden', hidden);
+    const icon = document.getElementById('menuToggle')?.querySelector('i');
+    if (icon) icon.className = hidden ? 'fas fa-bars' : 'fas fa-times';
+  }
+  if (rightbarState !== null) {
+    const hidden = rightbarState === 'true' || rightbarState === '1';
+    body.classList.toggle('rightbar-hidden', hidden);
+  }
+}
+
+onReady(applyMenuStateFromStorage);
+
 const searchInput = document.getElementById("searchFriendInput");
 if (searchInput) {
   const resultsList = document.getElementById("searchResults");
@@ -681,6 +699,7 @@ onReady(() => {
 
   btn.addEventListener('click', () => {
     const hidden = document.body.classList.toggle('sidebar-hidden');
+    localStorage.setItem('sidebarHidden', hidden);
     if (icon) {
       icon.className = hidden ? 'fas fa-bars' : 'fas fa-times';
     }
@@ -711,6 +730,7 @@ onReady(() => {
 
   btn.addEventListener('click', () => {
     const hidden = document.body.classList.toggle('rightbar-hidden');
+    localStorage.setItem('rightbarHidden', hidden);
     if (!hidden) animatePanelItems();
   });
 });

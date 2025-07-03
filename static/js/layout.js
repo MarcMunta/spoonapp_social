@@ -52,11 +52,18 @@ if (searchInput) {
     if (!append) resultsList.innerHTML = "";
     users.forEach((user) => {
       const li = document.createElement("li");
+      const status = user.status && user.status !== "Last seen: None" ? user.status : "";
+      const statusHtml = status
+        ? `<div class="friend-status text-muted small">${status}</div>`
+        : "";
       li.innerHTML = `
   <a href="${LANG_PREFIX}/profile/${user.username}/" class="user-suggestion-link">
     <div class="user-suggestion">
       <img src="${user.avatar || "https://via.placeholder.com/40"}" alt="avatar" />
-      <span>${user.username}</span>
+      <div class="user-suggestion-inner">
+        <span class="username">${user.username}</span>
+        ${statusHtml}
+      </div>
     </div>
   </a>
 `;

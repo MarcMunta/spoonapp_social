@@ -173,4 +173,7 @@ SpoonApp
 └── setup_env.sh
 ```
 
+Se retiró el archivo `backend/package-lock.json` ya que el proyecto
+no utiliza dependencias de Node; todo el frontend se desarrolla con Flutter.
+
 Este README irá ampliándose conforme avance la migración.

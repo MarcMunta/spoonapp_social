@@ -35,4 +35,25 @@ else
   echo "Flutter not found. Skipping flutter pub get"
 fi
 
-echo "Environment ready. Activate with: source backend/app/env/bin/activate (Unix) or backend\\app\\env\\Scripts\\activate (Windows)"
+RUN_FLAG=false
+if [[ "$1" == "--start" ]]; then
+  RUN_FLAG=true
+fi
+
+if [ "$RUN_FLAG" = true ]; then
+  echo "Starting backend..."
+  uvicorn main:app --reload &
+  BACKEND_PID=$!
+  if command -v flutter >/dev/null 2>&1; then
+    echo "Starting Flutter app in Chrome..."
+    (cd "$SCRIPT_DIR/frontend" && flutter run -d chrome) &
+    FLUTTER_PID=$!
+    wait $FLUTTER_PID
+  else
+    echo "Flutter not found. Backend running at http://localhost:8000"
+    wait $BACKEND_PID
+  fi
+else
+  echo "Environment ready. Activate with: source backend/app/env/bin/activate (Unix) or backend\\app\\env\\Scripts\\activate (Windows)"
+  echo "Run './setup_env.sh --start' to launch the backend and Flutter app"
+fi

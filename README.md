@@ -2,7 +2,12 @@
 
 Este repositorio contiene la migración en curso de **SpoonApp** a un stack
 compuesto por **Flutter** en el frontend y **FastAPI** para el backend. La
-antigua aplicación Django se conserva solo como referencia.
+antigua aplicación Django se conserva solo como referencia, pero las
+plantillas ya han sido reemplazadas por páginas Flutter.
+
+Todas las vistas que antes se generaban con Django ahora cuentan con su
+equivalente en Flutter. Por ello se eliminaron las carpetas `templates/` y
+`frontend_legacy/`.
 
 ## Requisitos
 - Flutter >= 3.x
@@ -151,7 +156,6 @@ SpoonApp
 │   │   └── .env.example
 │   └── ...                    # Código Django existente (referencia)
 │
-├── frontend_legacy/           # Antiguo frontend JavaScript
 └── setup_env.sh
 ```
 

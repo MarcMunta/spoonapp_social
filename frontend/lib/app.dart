@@ -78,7 +78,7 @@ GoRouter _buildRouter(AuthState? auth) {
     redirect: (context, state) {
       final loggedIn = auth != null;
       final loggingIn =
-          state.location == '/login' || state.location == '/signup';
+          state.uri.toString() == '/login' || state.uri.toString() == '/signup';
       if (!loggedIn && !loggingIn) return '/login';
       if (loggedIn && loggingIn) return '/';
       return null;

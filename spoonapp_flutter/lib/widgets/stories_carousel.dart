@@ -32,34 +32,46 @@ class StoriesCarousel extends StatelessWidget {
                 : Colors.grey;
             return Padding(
               padding: const EdgeInsets.symmetric(horizontal: 8),
-              child: InkWell(
-                onTap: () async {
-                  final res = await FilePicker.platform.pickFiles(
-                      type: FileType.image);
-                  if (res != null && res.files.single.bytes != null) {
-                    await postProv.addStory(user, res.files.single.bytes!);
-                  }
-                },
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Stack(
-                      children: [
-                        Container(
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Stack(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          final idx = postProv.indexOfFirstStory(user);
+                          if (idx >= 0) {
+                            showDialog(
+                              context: context,
+                              builder: (_) => StoryViewer(
+                                stories: stories,
+                                initialIndex: idx,
+                              ),
+                            );
+                          }
+                        },
+                        child: Container(
                           padding: const EdgeInsets.all(2),
                           decoration: BoxDecoration(
                             shape: BoxShape.circle,
                             border: Border.all(color: borderColor, width: 2),
                           ),
                           child: CircleAvatar(
-                            backgroundImage:
-                                NetworkImage(user.profileImage),
+                            backgroundImage: NetworkImage(user.profileImage),
                             radius: 30,
                           ),
                         ),
-                        Positioned(
-                          bottom: 0,
-                          right: 0,
+                      ),
+                      Positioned(
+                        bottom: 0,
+                        right: 0,
+                        child: GestureDetector(
+                          onTap: () async {
+                            final res = await FilePicker.platform.pickFiles(type: FileType.image);
+                            if (res != null && res.files.single.bytes != null) {
+                              await postProv.addStory(user, res.files.single.bytes!);
+                            }
+                          },
                           child: Container(
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
@@ -70,22 +82,22 @@ class StoriesCarousel extends StatelessWidget {
                             padding: const EdgeInsets.all(2),
                             child: const Icon(Icons.add, size: 16, color: Colors.white),
                           ),
-                        )
-                      ],
+                        ),
+                      )
+                    ],
+                  ),
+                  const SizedBox(height: 4),
+                  SizedBox(
+                    width: 60,
+                    child: Text(
+                      user.name,
+                      style: const TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
                     ),
-                    const SizedBox(height: 4),
-                    SizedBox(
-                      width: 60,
-                      child: Text(
-                        user.name,
-                        style: const TextStyle(fontSize: 12),
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        maxLines: 1,
-                      ),
-                    ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             );
           }

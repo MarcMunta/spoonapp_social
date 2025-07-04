@@ -155,6 +155,8 @@ onReady(() => {
   let optionsOpen = false;
   const currentUsername = document.body.dataset.currentUser || "";
 
+  const loadingEl = document.querySelector(".story-loading");
+
   const countdownEl = document.querySelector(".story-countdown");
 
   function hideViewsModal() {
@@ -229,6 +231,10 @@ onReady(() => {
     const type = currentTypes[idx] || "";
     const direction = idx > prevIndex ? "left" : "right";
     prevIndex = idx;
+    if (loadingEl) loadingEl.style.display = "block";
+    img.onload = video.onloadeddata = () => {
+      if (loadingEl) loadingEl.style.display = "none";
+    };
     modal.style.setProperty("--bg-url", `url(${url})`);
     img.classList.remove("fade-in", "slide-left", "slide-right");
     video.classList.remove("fade-in", "slide-left", "slide-right");
@@ -365,6 +371,7 @@ onReady(() => {
     if (countdownEl) countdownEl.textContent = "";
     if (viewsModal) viewsModal.classList.remove("show");
     if (deleteBtn) deleteBtn.style.display = "none";
+    if (loadingEl) loadingEl.style.display = "none";
   }
 
   function nextStory() {

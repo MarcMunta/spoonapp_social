@@ -26,8 +26,6 @@ class _FeedPageState extends State<FeedPage> {
   Widget build(BuildContext context) {
     final posts = context.watch<PostProvider>().posts;
     final stories = context.watch<PostProvider>().stories;
-    final width = MediaQuery.of(context).size.width;
-    final showLeft = width > 1000;
 
     final feedContent = ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -48,7 +46,6 @@ class _FeedPageState extends State<FeedPage> {
     final body = Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        if (showLeft) const SidebarLeft(),
         Expanded(child: feed),
       ],
     );
@@ -62,8 +59,17 @@ class _FeedPageState extends State<FeedPage> {
       body: Stack(
         children: [
           body,
-          if (!showLeft)
-            AnimatedPositioned(
+          Positioned.fill(
+            child: IgnorePointer(
+              ignoring: true,
+              child: AnimatedOpacity(
+                opacity: _leftOpen || _rightOpen ? 0.3 : 0.0,
+                duration: const Duration(milliseconds: 200),
+                child: Container(color: Colors.black),
+              ),
+            ),
+          ),
+          AnimatedPositioned(
               duration: const Duration(milliseconds: 200),
               top: 0,
               bottom: 0,

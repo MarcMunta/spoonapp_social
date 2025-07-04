@@ -3,6 +3,7 @@ import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../providers/language_provider.dart';
+import '../providers/theme_provider.dart';
 import '../utils/l10n.dart';
 
 class HomePage extends ConsumerStatefulWidget {
@@ -20,33 +21,46 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     final ref = this.ref;
     final locale = ref.watch(languageProvider);
+    final themeMode = ref.watch(themeProvider);
     return Scaffold(
-      body: widget.child,
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _index,
-        onTap: (i) {
-          setState(() => _index = i);
-          switch (i) {
-            case 0:
+      appBar: AppBar(
+        title: const Text('🍴 SpoonApp'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.home),
+            onPressed: () {
+              setState(() => _index = 0);
               context.go('/');
-              break;
-            case 1:
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.notifications),
+            onPressed: () {
+              setState(() => _index = 1);
               context.go('/notifications');
-              break;
-            case 2:
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.chat),
+            onPressed: () {
+              setState(() => _index = 2);
               context.go('/chats');
-              break;
-            default:
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.person),
+            onPressed: () {
+              setState(() => _index = 3);
               context.go('/profile');
-          }
-        },
-        items: [
-          BottomNavigationBarItem(icon: const Icon(Icons.home), label: L10n.of(locale, 'feed')),
-          BottomNavigationBarItem(icon: const Icon(Icons.notifications), label: L10n.of(locale, 'notifications')),
-          BottomNavigationBarItem(icon: const Icon(Icons.chat), label: L10n.of(locale, 'chats')),
-          BottomNavigationBarItem(icon: const Icon(Icons.person), label: L10n.of(locale, 'profile')),
+            },
+          ),
+          IconButton(
+            icon: Icon(themeMode == ThemeMode.dark ? Icons.dark_mode : Icons.light_mode),
+            onPressed: () => ref.read(themeProvider.notifier).toggle(),
+          ),
         ],
       ),
+      body: widget.child,
     );
   }
 }

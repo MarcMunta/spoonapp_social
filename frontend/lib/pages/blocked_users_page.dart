@@ -30,7 +30,7 @@ class BlockedUsersPage extends ConsumerWidget {
           },
         ),
         loading: () => const Center(child: CircularProgressIndicator()),
-        error: (e, st) => Center(child: Text('Error: $e')),
+        error: (e, st) => Center(child: Text('${L10n.of(locale, 'error')} $e')),
       ),
     );
   }

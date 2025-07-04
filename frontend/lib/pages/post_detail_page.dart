@@ -161,7 +161,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
             ),
             loading: () =>
                 const Center(child: CircularProgressIndicator()),
-            error: (e, st) => Center(child: Text('Error: $e')),
+            error: (e, st) => Center(child: Text('${L10n.of(locale, 'error')} $e')),
           ),
           Padding(
             padding: const EdgeInsets.all(16.0),
@@ -170,8 +170,8 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
                 Expanded(
                   child: TextField(
                     controller: _controller,
-                    decoration: const InputDecoration(
-                        hintText: 'Escribe un comentario'),
+                    decoration: InputDecoration(
+                        hintText: L10n.of(locale, 'comment_hint')),
                   ),
                 ),
                 IconButton(

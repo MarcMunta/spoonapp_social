@@ -43,15 +43,11 @@ if [ "$RUN_FLAG" = true ]; then
   echo "Starting backend..."
   uvicorn main:app --reload &
   BACKEND_PID=$!
-  # Launch Flutter in Chrome only if it is available
+  # Launch Flutter automatically if available
   if command -v flutter >/dev/null 2>&1; then
-    echo "Starting Flutter app in Chrome..."
-    (cd "$SCRIPT_DIR/frontend" && flutter run -d chrome) &
-    FLUTTER_PID=$!
-    wait $FLUTTER_PID
-  else
-    wait $BACKEND_PID
+    (cd "$SCRIPT_DIR/frontend" && flutter pub get && flutter run -d chrome)
   fi
+  wait $BACKEND_PID
 else
   echo "Environment ready. Activate with: source backend/app/env/bin/activate (Unix) or backend\\app\\env\\Scripts\\activate (Windows)"
   echo "Run './setup_env.sh --start' to launch the backend and Flutter app"

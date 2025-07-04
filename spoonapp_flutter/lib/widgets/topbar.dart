@@ -12,31 +12,32 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   Widget build(BuildContext context) {
     return AppBar(
-      title: Text(title),
-      centerTitle: false,
+      centerTitle: true,
       backgroundColor: Colors.transparent,
+      leading: const Icon(Icons.restaurant_menu, color: Colors.white),
+      title: Text(title, style: const TextStyle(color: Colors.white)),
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF7B1FA2), Color(0xFF9C27B0)],
+            colors: [Color(0xFFB46DDD), Color(0xFFD9A7C7)],
           ),
         ),
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.home),
+          icon: const Icon(Icons.home, color: Colors.white),
           onPressed: () {},
         ),
         IconButton(
-          icon: const Icon(Icons.add),
+          icon: const Icon(Icons.add, color: Colors.white),
           onPressed: () {},
         ),
         IconButton(
-          icon: const Icon(Icons.notifications),
+          icon: const Icon(Icons.notifications, color: Colors.white),
           onPressed: () {},
         ),
         IconButton(
-          icon: const Icon(Icons.restaurant),
+          icon: const Icon(Icons.restaurant, color: Colors.white),
           onPressed: () {},
         ),
         Padding(

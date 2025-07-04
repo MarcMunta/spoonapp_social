@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/post.dart';
 import '../providers/comment_provider.dart';
@@ -32,7 +33,7 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final commentsAsync = ref.watch(commentsProvider(widget.post.id));
     final auth = ref.watch(authProvider);
     final locale = ref.watch(languageProvider);

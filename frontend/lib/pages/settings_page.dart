@@ -17,7 +17,7 @@ class SettingsPage extends ConsumerWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(L10n.of(locale, 'language'), style: Theme.of(context).textTheme.headline6),
+            Text(L10n.of(locale, 'language'), style: Theme.of(context).textTheme.titleLarge),
             const SizedBox(height: 8),
             DropdownButton<Locale>(
               value: locale,

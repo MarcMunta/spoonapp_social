@@ -79,6 +79,13 @@ fake_users = [
         avatar_url="https://placehold.co/64x64",
         bubble_color="#008000",
     ),
+    User(
+        username="marc",
+        password="marc",
+        bio="",
+        avatar_url=None,
+        bubble_color="#0000ff",
+    ),
 ]
 
 fake_stories = [

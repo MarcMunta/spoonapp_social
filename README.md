@@ -105,3 +105,8 @@ python manage.py delete_expired_stories
 
 You can schedule this with `cron` to run every hour so that stories
 older than 24 hours are purged automatically.
+
+## Uploading stories
+Click the **+** button on your profile picture in the feed or profile page to
+upload a new story from your computer. Once you select an image or video file,
+the story is stored directly in the database with a 24‑hour expiration time.

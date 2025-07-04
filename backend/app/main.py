@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, Response
 from datetime import datetime
 from typing import List
 
-from .models import (
+from models import (
     Post,
     Story,
     StoryCreate,
@@ -26,7 +26,7 @@ from .models import (
     StoryBlockCreate,
     Category,
 )
-from .data import (
+from data import (
     fake_posts,
     fake_stories,
     fake_notifications,

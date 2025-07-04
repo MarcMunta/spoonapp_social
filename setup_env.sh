@@ -28,11 +28,10 @@ pip install -r requirements.txt
 
 cp .env.example .env 2>/dev/null || true
 
+# Install Flutter dependencies only if Flutter is available
 if command -v flutter >/dev/null 2>&1; then
   echo "Installing Flutter dependencies"
   (cd "$SCRIPT_DIR/frontend" && flutter pub get)
-else
-  echo "Flutter not found. Skipping flutter pub get"
 fi
 
 RUN_FLAG=false
@@ -44,13 +43,13 @@ if [ "$RUN_FLAG" = true ]; then
   echo "Starting backend..."
   uvicorn main:app --reload &
   BACKEND_PID=$!
+  # Launch Flutter in Chrome only if it is available
   if command -v flutter >/dev/null 2>&1; then
     echo "Starting Flutter app in Chrome..."
     (cd "$SCRIPT_DIR/frontend" && flutter run -d chrome) &
     FLUTTER_PID=$!
     wait $FLUTTER_PID
   else
-    echo "Flutter not found. Backend running at http://localhost:8000"
     wait $BACKEND_PID
   fi
 else

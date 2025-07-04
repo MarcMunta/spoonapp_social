@@ -34,6 +34,7 @@ dependencies:
   aws_dynamodb_api: ^2.0.0
   aws_s3_api: ^2.0.0
   provider: ^6.0.5
+  intl: ^0.18.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

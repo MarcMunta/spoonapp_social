@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 import '../providers/user_provider.dart';
+import '../assets/spoonapp_logo_base64.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const TopBar({super.key, required this.title});
+  const TopBar({super.key, this.title = ''});
 
   @override
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
@@ -15,7 +17,10 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       leading: const Icon(Icons.restaurant_menu, color: Colors.white),
-      title: Text(title, style: const TextStyle(color: Colors.white)),
+      title: Image.memory(
+        base64Decode(spoonappLogoBase64),
+        height: 45,
+      ),
       flexibleSpace: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(

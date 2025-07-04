@@ -63,6 +63,8 @@ flutter:
   # the material Icons class.
   uses-material-design: true
 
+  # Image assets are embedded as base64 strings to avoid binary files in git.
+
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg

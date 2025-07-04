@@ -1,5 +1,5 @@
 from .post import Post, PostRequest
-from .story import Story
+from .story import Story, StoryCreate
 from .user import LoginRequest, User, UserProfile, ProfileUpdate
 from .notification import Notification
 from .comment import Comment, CommentRequest

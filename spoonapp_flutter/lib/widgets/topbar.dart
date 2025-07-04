@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart';
 
 import '../providers/user_provider.dart';
 import '../providers/post_provider.dart';
@@ -137,18 +136,6 @@ class _ProfileButton extends StatelessWidget {
     final provider = context.watch<PostProvider>();
     final hasStory = provider.userHasStory(user);
 
-    Future<void> addStory() async {
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.custom,
-        allowedExtensions: ['png', 'jpg', 'jpeg', 'mp4'],
-      );
-      if (result != null && result.files.single.bytes != null) {
-        context.read<PostProvider>().addStory(user, result.files.single.bytes!);
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Historia subida')),
-        );
-      }
-    }
 
     return Material(
       color: const Color(0xFFFFF0B3),
@@ -184,21 +171,6 @@ class _ProfileButton extends StatelessWidget {
               child: CircleAvatar(
                 backgroundImage: NetworkImage(user.profileImage),
                 radius: 16,
-              ),
-            ),
-            Positioned(
-              bottom: -2,
-              right: -2,
-              child: GestureDetector(
-                onTap: addStory,
-                child: Container(
-                  decoration: const BoxDecoration(
-                    color: Colors.blueAccent,
-                    shape: BoxShape.circle,
-                  ),
-                  padding: const EdgeInsets.all(2),
-                  child: const Icon(Icons.add, size: 12, color: Colors.white),
-                ),
               ),
             ),
           ],

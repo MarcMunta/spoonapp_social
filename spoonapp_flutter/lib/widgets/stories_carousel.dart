@@ -74,7 +74,16 @@ class StoriesCarousel extends StatelessWidget {
                       ],
                     ),
                     const SizedBox(height: 4),
-                    Text(user.name, style: const TextStyle(fontSize: 12)),
+                    SizedBox(
+                      width: 60,
+                      child: Text(
+                        user.name,
+                        style: const TextStyle(fontSize: 12),
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        maxLines: 1,
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -111,9 +120,15 @@ class StoriesCarousel extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 4),
-                  Text(
-                    story.user.name,
-                    style: const TextStyle(fontSize: 12),
+                  SizedBox(
+                    width: 60,
+                    child: Text(
+                      story.user.name,
+                      style: const TextStyle(fontSize: 12),
+                      overflow: TextOverflow.ellipsis,
+                      textAlign: TextAlign.center,
+                      maxLines: 1,
+                    ),
                   ),
                 ],
               ),

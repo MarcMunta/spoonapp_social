@@ -95,9 +95,26 @@ class _StoryViewerState extends State<StoryViewer> {
             Positioned(
               top: 40,
               left: 16,
-              child: Text(
-                widget.stories[_current].user.name,
-                style: const TextStyle(color: Colors.white, fontSize: 16),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    radius: 16,
+                    backgroundImage: widget
+                            .stories[_current].user.profileImage
+                            .startsWith('http')
+                        ? NetworkImage(
+                            widget.stories[_current].user.profileImage)
+                        : AssetImage(
+                            widget.stories[_current].user.profileImage)
+                            as ImageProvider,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    widget.stories[_current].user.name,
+                    style:
+                        const TextStyle(color: Colors.white, fontSize: 16),
+                  ),
+                ],
               ),
             ),
             Positioned(

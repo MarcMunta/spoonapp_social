@@ -40,10 +40,20 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
             if (showLogo)
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Image.asset(
-                  'assets/images/spoonapp.png',
-                  height: 45,
-                  fit: BoxFit.contain,
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const FeedPage(),
+                      ),
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/images/spoonapp.png',
+                    height: 45,
+                    fit: BoxFit.contain,
+                  ),
                 ),
               ),
             Expanded(

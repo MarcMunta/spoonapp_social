@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/post_provider.dart';
 import '../widgets/post_card.dart';
-import '../widgets/story_list.dart';
+import '../widgets/stories_carousel.dart';
 import '../widgets/topbar.dart';
 import '../widgets/sidebar.dart';
 import 'create_post_page.dart';
@@ -16,15 +16,23 @@ class FeedPage extends StatelessWidget {
     final stories = context.watch<PostProvider>().stories;
     final isWide = MediaQuery.of(context).size.width > 800;
 
-    final feed = ListView(
+    final feedContent = ListView(
+      padding: const EdgeInsets.symmetric(vertical: 8),
       children: [
-        StoryList(stories: stories),
+        StoriesCarousel(stories: stories),
         ...posts.map((p) => PostCard(post: p)),
       ],
     );
 
+    final feed = Align(
+      alignment: Alignment.topCenter,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 700),
+        child: feedContent,
+      ),
+    );
+
     return Scaffold(
-      backgroundColor: const Color(0xFFFFF0F5),
       appBar: const TopBar(title: 'SpoonApp Social'),
       body: isWide
           ? Row(
@@ -36,6 +44,7 @@ class FeedPage extends StatelessWidget {
             )
           : feed,
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color(0xFFD9A7C7),
         onPressed: () {
           Navigator.push(
               context, MaterialPageRoute(builder: (_) => const CreatePostPage()));

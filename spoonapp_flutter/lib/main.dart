@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/post_provider.dart';
 import 'providers/user_provider.dart';
@@ -22,7 +23,9 @@ class SpoonApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'SpoonApp Social',
         theme: ThemeData(
-          colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
+          fontFamily: GoogleFonts.lato().fontFamily,
+          colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFB46DDD)),
+          scaffoldBackgroundColor: const Color(0xFFFFF5FA),
           useMaterial3: true,
         ),
         home: const FeedPage(),

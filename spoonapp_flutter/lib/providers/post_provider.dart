@@ -6,9 +6,11 @@ import '../models/story.dart';
 class PostProvider extends ChangeNotifier {
   final List<Post> _posts = [];
   final List<Story> _stories = [];
+  final List<User> _activeUsers = [];
 
   List<Post> get posts => _posts;
   List<Story> get stories => _stories;
+  List<User> get activeUsers => _activeUsers;
 
   PostProvider() {
     _stories.addAll([
@@ -43,6 +45,12 @@ class PostProvider extends ChangeNotifier {
         mediaUrl: 'https://picsum.photos/400/200?2',
         likes: 2,
       ),
+    ]);
+
+    _activeUsers.addAll([
+      User(name: 'Alice', profileImage: 'https://picsum.photos/40/40?1'),
+      User(name: 'Bob', profileImage: 'https://picsum.photos/40/40?2'),
+      User(name: 'Charlie', profileImage: 'https://picsum.photos/40/40?3'),
     ]);
   }
 

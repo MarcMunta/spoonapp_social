@@ -59,23 +59,13 @@ class _FeedPageState extends State<FeedPage> {
       body: Stack(
         children: [
           body,
-          Positioned.fill(
-            child: IgnorePointer(
-              ignoring: true,
-              child: AnimatedOpacity(
-                opacity: _leftOpen || _rightOpen ? 0.3 : 0.0,
-                duration: const Duration(milliseconds: 200),
-                child: Container(color: Colors.black),
-              ),
-            ),
-          ),
           AnimatedPositioned(
-              duration: const Duration(milliseconds: 200),
-              top: 0,
-              bottom: 0,
-              left: _leftOpen ? 0 : -216,
-              child: const SidebarLeft(),
-            ),
+            duration: const Duration(milliseconds: 200),
+            top: 0,
+            bottom: 0,
+            left: _leftOpen ? 0 : -216,
+            child: const SidebarLeft(),
+          ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 200),
             top: 0,

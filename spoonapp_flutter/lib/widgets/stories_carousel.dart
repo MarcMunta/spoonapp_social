@@ -114,28 +114,32 @@ class StoriesCarousel extends StatelessWidget {
                   ),
                 );
               },
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Container(
-                    padding: const EdgeInsets.all(2),
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: Colors.blueAccent, width: 2),
+              child: SizedBox(
+                width: 72,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Expanded(
+                      child: Container(
+                        padding: const EdgeInsets.all(2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: Colors.blueAccent, width: 2),
+                        ),
+                        child: CircleAvatar(
+                          backgroundImage: story.user.profileImage.startsWith('http')
+                              ? NetworkImage(story.user.profileImage)
+                                  as ImageProvider
+                              : AssetImage(story.user.profileImage),
+                          radius: 30,
+                        ),
+                      ),
                     ),
-                    child: CircleAvatar(
-                      backgroundImage: story.user.profileImage.startsWith('http')
-                          ? NetworkImage(story.user.profileImage)
-                              as ImageProvider
-                          : AssetImage(story.user.profileImage),
-                      radius: 30,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  SizedBox(
-                    width: 60,
-                    child: Text(
-                      story.user.name,
+                    const SizedBox(height: 4),
+                    SizedBox(
+                      width: 60,
+                      child: Text(
+                        story.user.name,
                       style: const TextStyle(fontSize: 12),
                       overflow: TextOverflow.ellipsis,
                       textAlign: TextAlign.center,

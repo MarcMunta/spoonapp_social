@@ -25,5 +25,9 @@ To run the sample feed:
 ./run_feed.sh
 ```
 
+The top bar now includes left and right menu buttons that open their
+corresponding drawers. A profile button on the right navigates to a simple
+profile page.
+
 See the [online documentation](https://docs.flutter.dev/) for general Flutter
 guides and API reference.

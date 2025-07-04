@@ -7,7 +7,9 @@ plantillas ya han sido reemplazadas por páginas Flutter.
 
 Todas las vistas que antes se generaban con Django ahora cuentan con su
 equivalente en Flutter. Por ello se eliminaron las carpetas `templates/` y
-`frontend_legacy/`.
+`frontend_legacy/`. Igualmente, los ficheros estáticos y las traducciones de
+Django dejaron de usarse, por lo que se suprimieron los directorios `static/` y
+`locale/` junto con el antiguo script `setup_env`.
 
 ## Requisitos
 - Flutter >= 3.x

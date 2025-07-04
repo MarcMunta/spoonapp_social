@@ -8,8 +8,19 @@ import '../widgets/sidebar_left.dart';
 import '../widgets/sidebar_right.dart';
 import 'create_post_page.dart';
 
-class FeedPage extends StatelessWidget {
+class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
+
+  @override
+  State<FeedPage> createState() => _FeedPageState();
+}
+
+class _FeedPageState extends State<FeedPage> {
+  bool _leftOpen = false;
+  bool _rightOpen = false;
+
+  void _toggleLeft() => setState(() => _leftOpen = !_leftOpen);
+  void _toggleRight() => setState(() => _rightOpen = !_rightOpen);
 
   @override
   Widget build(BuildContext context) {
@@ -34,15 +45,38 @@ class FeedPage extends StatelessWidget {
       ),
     );
 
+    final body = Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        if (showLeft) const SidebarLeft(),
+        Expanded(child: feed),
+      ],
+    );
+
     return Scaffold(
-      appBar: const TopBar(title: 'SpoonApp Social'),
-      drawer: showLeft ? null : const SidebarLeft(),
-      endDrawer: const SidebarRight(),
-      body: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
+      appBar: TopBar(
+        title: 'SpoonApp Social',
+        onLeftMenu: _toggleLeft,
+        onRightMenu: _toggleRight,
+      ),
+      body: Stack(
         children: [
-          if (showLeft) const SidebarLeft(),
-          Expanded(child: feed),
+          body,
+          if (!showLeft)
+            AnimatedPositioned(
+              duration: const Duration(milliseconds: 200),
+              top: 0,
+              bottom: 0,
+              left: _leftOpen ? 0 : -216,
+              child: const SidebarLeft(),
+            ),
+          AnimatedPositioned(
+            duration: const Duration(milliseconds: 200),
+            top: 0,
+            bottom: 0,
+            right: _rightOpen ? 0 : -216,
+            child: const SidebarRight(),
+          ),
         ],
       ),
       floatingActionButton: Container(

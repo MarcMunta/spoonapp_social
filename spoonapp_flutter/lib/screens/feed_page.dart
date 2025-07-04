@@ -17,7 +17,6 @@ class FeedPage extends StatelessWidget {
     final stories = context.watch<PostProvider>().stories;
     final width = MediaQuery.of(context).size.width;
     final showLeft = width > 1000;
-    final showRight = width > 600;
 
     final feedContent = ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -37,12 +36,12 @@ class FeedPage extends StatelessWidget {
 
     return Scaffold(
       appBar: const TopBar(title: 'SpoonApp Social'),
+      endDrawer: const SidebarRight(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           if (showLeft) const SidebarLeft(),
           Expanded(child: feed),
-          if (showRight) const SidebarRight(),
         ],
       ),
       floatingActionButton: Container(

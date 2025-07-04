@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../models/story.dart';
 
 class StoryList extends StatelessWidget {
   final List<Story> stories;
@@ -33,12 +34,4 @@ class StoryList extends StatelessWidget {
       ),
     );
   }
-}
-
-class Story {
-  final String id;
-  final String user;
-  final String mediaUrl;
-  final DateTime expiresAt;
-  Story({required this.id, required this.user, required this.mediaUrl, required this.expiresAt});
 }

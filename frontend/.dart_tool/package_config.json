@@ -105,9 +105,9 @@
     },
     {
       "name": "go_router",
-      "rootUri": "file:///Users/frenchkissbrandltd/.pub-cache/hosted/pub.dev/go_router-7.1.1",
+      "rootUri": "file:///Users/frenchkissbrandltd/.pub-cache/hosted/pub.dev/go_router-13.2.5",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.2"
     },
     {
       "name": "http",

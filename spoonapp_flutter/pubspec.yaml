@@ -30,7 +30,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  uuid: ^3.0.7
+  uuid: ^4.5.1
   aws_dynamodb_api: ^2.0.0
   aws_s3_api: ^2.0.0
   provider: ^6.0.5

@@ -42,7 +42,8 @@ class _EditProfilePageState extends ConsumerState<EditProfilePage> {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final auth = ref.watch(authProvider);
     if (auth == null) return const SizedBox.shrink();
     final profileAsync = ref.watch(profileProvider(auth.username));

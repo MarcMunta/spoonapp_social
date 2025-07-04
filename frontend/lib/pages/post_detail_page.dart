@@ -33,7 +33,8 @@ class _PostDetailPageState extends ConsumerState<PostDetailPage> {
   }
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final commentsAsync = ref.watch(commentsProvider(widget.post.id));
     final auth = ref.watch(authProvider);
     final locale = ref.watch(languageProvider);

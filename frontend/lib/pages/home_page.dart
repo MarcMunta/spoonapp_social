@@ -17,7 +17,8 @@ class _HomePageState extends ConsumerState<HomePage> {
   int _index = 0;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  Widget build(BuildContext context) {
+    final ref = this.ref;
     final locale = ref.watch(languageProvider);
     return Scaffold(
       body: widget.child,

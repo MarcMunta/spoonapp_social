@@ -6,7 +6,9 @@ import '../screens/profile_page.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
-  const TopBar({super.key, this.title = ''});
+  final VoidCallback? onLeftMenu;
+  final VoidCallback? onRightMenu;
+  const TopBar({super.key, this.title = '', this.onLeftMenu, this.onRightMenu});
 
   @override
   Size get preferredSize => const Size.fromHeight(70);
@@ -30,8 +32,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
           children: [
             const SizedBox(width: 8),
             _MenuButton(
-              onPressed: () {
-                Scaffold.of(context).openDrawer();
+              onPressed: onLeftMenu ?? () {
+                Scaffold.maybeOf(context)?.openDrawer();
               },
             ),
             if (showLogo)
@@ -68,8 +70,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             const SizedBox(width: 8),
             _MenuButton(
-              onPressed: () {
-                Scaffold.of(context).openEndDrawer();
+              onPressed: onRightMenu ?? () {
+                Scaffold.maybeOf(context)?.openEndDrawer();
               },
             ),
             const SizedBox(width: 8),

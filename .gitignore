@@ -13,3 +13,4 @@ __pycache__/
 backend/static/js/
 # Ignore compiled translation files
 locale/*/LC_MESSAGES/*.mo
+spoonapp_flutter/assets/images/spoonapp.png

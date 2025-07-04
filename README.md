@@ -94,3 +94,14 @@ pip install -r backend/requirements.txt
 ```
 
 This installs the Pillow package required by Django's image fields.
+
+## Story cleanup
+Run the following command periodically to remove expired stories:
+
+```bash
+cd backend
+python manage.py delete_expired_stories
+```
+
+You can schedule this with `cron` to run every hour so that stories
+older than 24 hours are purged automatically.

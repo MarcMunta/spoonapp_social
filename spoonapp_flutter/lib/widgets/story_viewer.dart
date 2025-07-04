@@ -16,6 +16,7 @@ class _StoryViewerState extends State<StoryViewer> {
   late PageController _controller;
   late int _current;
   Timer? _timer;
+  double _progress = 0;
 
   @override
   void initState() {
@@ -27,7 +28,14 @@ class _StoryViewerState extends State<StoryViewer> {
 
   void _startTimer() {
     _timer?.cancel();
-    _timer = Timer(const Duration(seconds: 5), _next);
+    _progress = 0;
+    _timer = Timer.periodic(const Duration(milliseconds: 50), (t) {
+      setState(() => _progress += 0.01);
+      if (_progress >= 1) {
+        t.cancel();
+        _next();
+      }
+    });
   }
 
   void _next() {
@@ -58,6 +66,12 @@ class _StoryViewerState extends State<StoryViewer> {
         onTap: _next,
         child: Stack(
           children: [
+            Positioned(
+              top: 0,
+              left: 0,
+              right: 0,
+              child: LinearProgressIndicator(value: _progress, backgroundColor: Colors.grey[300], color: Colors.blueAccent),
+            ),
             PageView.builder(
               controller: _controller,
               onPageChanged: (i) {

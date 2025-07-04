@@ -831,6 +831,54 @@ def search_locations(request):
 
         return JsonResponse(results, safe=False)
 
+
+@login_required(login_url='/custom-login/')
+def api_stories(request):
+    """Return active stories as JSON"""
+    Story.objects.filter(expires_at__lte=timezone.now()).update(is_active=False)
+    stories = (
+        Story.objects.filter(expires_at__gt=timezone.now(), is_active=True)
+        .select_related('user')
+        .order_by('created_at')
+    )
+    data = []
+    for st in stories:
+        avatar = (
+            st.user.profile.profile_picture_data_url
+            if st.user.profile.profile_picture
+            else ''
+        )
+        data.append(
+            {
+                'id': st.id,
+                'user': st.user.username,
+                'avatar': avatar,
+                'url': request.build_absolute_uri(st.media_data_url),
+                'created_at': st.created_at.isoformat(),
+            }
+        )
+    return JsonResponse({'stories': data})
+
+
+@login_required(login_url='/custom-login/')
+def api_upload_story(request):
+    """Upload a new story via multipart/form-data"""
+    if request.method != 'POST':
+        return JsonResponse({'error': 'Invalid method'}, status=405)
+
+    file = request.FILES.get('image')
+    if not file:
+        return JsonResponse({'error': 'No file'}, status=400)
+
+    story = Story.objects.create(user=request.user, image=file)
+    return JsonResponse(
+        {
+            'id': story.id,
+            'url': request.build_absolute_uri(story.media_data_url),
+            'created_at': story.created_at.isoformat(),
+        }
+    )
+
 @login_required(login_url='/custom-login/')
 def send_friend_request(request):
     if request.method == "POST":

@@ -5,6 +5,7 @@ from django.utils.text import slugify
 from django.utils.translation import gettext_lazy as _
 from datetime import timedelta
 import base64
+import uuid
 
 class PostCategory(models.Model):
     name = models.CharField(max_length=100)
@@ -100,10 +101,17 @@ def default_expiration():
     return timezone.now() + timedelta(hours=24)
 
 
+def story_upload_path(instance, filename):
+    ext = filename.split('.')[-1]
+    return f"stories/{uuid.uuid4().hex}.{ext}"
+
+
 class Story(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     media_data = models.BinaryField(null=True, blank=True, editable=True)
     media_mime = models.CharField(max_length=100, null=True, blank=True)
+    image = models.ImageField(upload_to=story_upload_path, null=True, blank=True)
+    is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     expires_at = models.DateTimeField(default=default_expiration)
 
@@ -118,6 +126,8 @@ class Story(models.Model):
                 self.media_mime,
                 base64.b64encode(self.media_data).decode(),
             )
+        if self.image:
+            return self.image.url
         return ""
 
 class StoryView(models.Model):

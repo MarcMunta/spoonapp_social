@@ -1,24 +1,24 @@
 import 'dart:typed_data';
+import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import '../models/post.dart';
 import '../models/user.dart';
 import '../models/story.dart';
+import '../services/backend.dart';
 
 class PostProvider extends ChangeNotifier {
+  final BackendService _backend;
   final List<Post> _posts = [];
   final List<Story> _stories = [];
   final List<User> _activeUsers = [];
 
   List<Post> get posts => _posts;
-  List<Story> get stories {
-    _cleanStories();
-    return _stories;
-  }
+  List<Story> get stories => _stories;
   List<User> get activeUsers => _activeUsers;
 
-  PostProvider() {
+  PostProvider(this._backend) {
     final alice = User(
       name: 'Alice',
       profileImage: 'https://picsum.photos/50/50?1',
@@ -29,20 +29,6 @@ class PostProvider extends ChangeNotifier {
       profileImage: 'https://picsum.photos/50/50?2',
       email: 'bob@example.com',
     );
-    _stories.addAll([
-      Story(
-        id: const Uuid().v4(),
-        user: alice,
-        mediaUrl: 'https://picsum.photos/300/400?1',
-        expiresAt: DateTime.now().add(const Duration(hours: 24)),
-      ),
-      Story(
-        id: const Uuid().v4(),
-        user: bob,
-        mediaUrl: 'https://picsum.photos/300/400?2',
-        expiresAt: DateTime.now().add(const Duration(hours: 24)),
-      ),
-    ]);
 
     _posts.addAll([
       Post(
@@ -72,6 +58,8 @@ class PostProvider extends ChangeNotifier {
         email: 'charlie@example.com',
       ),
     ]);
+
+    Future.microtask(() => loadStories());
   }
 
   void likePost(Post post) {
@@ -89,15 +77,18 @@ class PostProvider extends ChangeNotifier {
     return _stories.indexWhere((s) => s.user.email == user.email);
   }
 
-  void addStory(User user, Uint8List bytes) {
-    _stories.add(
-      Story(
-        id: const Uuid().v4(),
-        user: user,
-        mediaBytes: bytes,
-        expiresAt: DateTime.now().add(const Duration(hours: 24)),
-      ),
-    );
+  Future<void> addStory(User user, Uint8List bytes) async {
+    final ok = await _backend.uploadStory(bytes, 'story.webp');
+    if (ok) {
+      await loadStories();
+    }
+  }
+
+  Future<void> loadStories() async {
+    final fetched = await _backend.fetchStories();
+    _stories
+      ..clear()
+      ..addAll(fetched);
     notifyListeners();
   }
 

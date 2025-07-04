@@ -27,7 +27,9 @@ To run the sample feed:
 
 The top bar now includes left and right menu buttons that open their
 corresponding drawers. A profile button on the right navigates to a simple
-profile page.
+profile page. The picture shows a small `+` icon to upload a new story using
+`file_picker`. Uploaded images or videos appear in the stories carousel and
+disappear automatically after 24 hours.
 
 See the [online documentation](https://docs.flutter.dev/) for general Flutter
 guides and API reference.

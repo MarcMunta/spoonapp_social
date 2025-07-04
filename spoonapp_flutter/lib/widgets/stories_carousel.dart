@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../models/story.dart';
+import 'story_viewer.dart';
 
 class StoriesCarousel extends StatelessWidget {
   final List<Story> stories;
@@ -22,19 +23,40 @@ class StoriesCarousel extends StatelessWidget {
           final story = stories[index];
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(story.mediaUrl),
-                  radius: 30,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  story.user,
-                  style: const TextStyle(fontSize: 12),
-                ),
-              ],
+            child: InkWell(
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (_) => StoryViewer(
+                    stories: stories,
+                    initialIndex: index,
+                  ),
+                );
+              },
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    padding: const EdgeInsets.all(2),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Colors.blueAccent, width: 2),
+                    ),
+                    child: CircleAvatar(
+                      backgroundImage: story.user.profileImage.startsWith('http')
+                          ? NetworkImage(story.user.profileImage)
+                              as ImageProvider
+                          : AssetImage(story.user.profileImage),
+                      radius: 30,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    story.user.name,
+                    style: const TextStyle(fontSize: 12),
+                  ),
+                ],
+              ),
             ),
           );
         },

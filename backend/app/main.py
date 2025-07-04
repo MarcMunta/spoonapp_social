@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException, Response, Depends
+from fastapi.middleware.cors import CORSMiddleware
 from datetime import datetime
 from typing import List
 from sqlalchemy.orm import Session
@@ -78,6 +79,15 @@ def _post_response(db_post: PostDB, liked: bool | None = None) -> Post:
     )
 
 app = FastAPI(title="SpoonApp API")
+
+# CORS for Flutter Web
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Puedes restringir a ["http://localhost:55976"] si lo deseas
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 
 @app.on_event("startup")

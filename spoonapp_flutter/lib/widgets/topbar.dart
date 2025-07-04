@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../providers/user_provider.dart';
+import '../screens/profile_page.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -22,36 +26,53 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
             colors: [Color(0xFFB46DDD), Color(0xFFD9A7C7)],
           ),
         ),
-        child: Stack(
-          alignment: Alignment.center,
+        child: Row(
           children: [
-            if (showNav)
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  _NavButton(icon: Icons.home, onPressed: () {}),
-                  _NavButton(icon: Icons.add, onPressed: () {}),
-                  _NavButton(icon: Icons.notifications, onPressed: () {}),
-                  _NavButton(icon: Icons.restaurant, onPressed: () {}),
-                ],
-              ),
-            Positioned(
-              left: 8,
-              child: _MenuButton(
-                onPressed: () {
-                  Scaffold.of(context).openEndDrawer();
-                },
-              ),
+            const SizedBox(width: 8),
+            _MenuButton(
+              onPressed: () {
+                Scaffold.of(context).openDrawer();
+              },
             ),
             if (showLogo)
-              Positioned(
-                right: 8,
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
                 child: Image.asset(
                   'assets/images/spoonapp.png',
                   height: 45,
                   fit: BoxFit.contain,
                 ),
               ),
+            Expanded(
+              child: showNav
+                  ? Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _NavButton(icon: Icons.home, onPressed: () {}),
+                        _NavButton(icon: Icons.add, onPressed: () {}),
+                        _NavButton(
+                            icon: Icons.notifications, onPressed: () {}),
+                        _NavButton(icon: Icons.restaurant, onPressed: () {}),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
+            ),
+            _ProfileButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (_) => const ProfilePage()),
+                );
+              },
+            ),
+            const SizedBox(width: 8),
+            _MenuButton(
+              onPressed: () {
+                Scaffold.of(context).openEndDrawer();
+              },
+            ),
+            const SizedBox(width: 8),
           ],
         ),
       ),
@@ -74,6 +95,31 @@ class _MenuButton extends StatelessWidget {
         child: const Padding(
           padding: EdgeInsets.all(8),
           child: Icon(Icons.menu, color: Color(0xFF5D1049)),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProfileButton extends StatelessWidget {
+  final VoidCallback onPressed;
+  const _ProfileButton({required this.onPressed});
+
+  @override
+  Widget build(BuildContext context) {
+    final user = context.watch<UserProvider>().currentUser;
+    return Material(
+      color: const Color(0xFFFFF0B3),
+      shape: const CircleBorder(),
+      child: InkWell(
+        customBorder: const CircleBorder(),
+        onTap: onPressed,
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: CircleAvatar(
+            backgroundImage: NetworkImage(user.profileImage),
+            radius: 16,
+          ),
         ),
       ),
     );

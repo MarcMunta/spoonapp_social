@@ -36,6 +36,7 @@ class FeedPage extends StatelessWidget {
 
     return Scaffold(
       appBar: const TopBar(title: 'SpoonApp Social'),
+      drawer: showLeft ? null : const SidebarLeft(),
       endDrawer: const SidebarRight(),
       body: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

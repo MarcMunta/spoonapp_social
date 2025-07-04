@@ -30,6 +30,8 @@ Para el frontend ejecuta:
 cd frontend
 flutter pub get
 ```
+La aplicación Flutter usa por defecto la URL `http://localhost:8000` para el backend.
+Puedes cambiarla en tiempo de ejecución añadiendo `--dart-define=API_BASE_URL=https://mi-servidor` al comando `flutter run` o `flutter build`.
 
 ## Ejecución en desarrollo
 
@@ -45,6 +47,8 @@ Frontend Flutter Web:
 ```bash
 cd frontend
 flutter run -d chrome
+# O define la URL del backend
+# flutter run -d chrome --dart-define=API_BASE_URL=https://mi-servidor
 ```
 
 ### Endpoints de ejemplo

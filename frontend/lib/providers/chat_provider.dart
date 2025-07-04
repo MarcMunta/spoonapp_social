@@ -1,9 +1,8 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/chat.dart';
-import '../services/api_service.dart';
 import 'auth_provider.dart';
-import 'post_provider.dart';
+import 'api_provider.dart';
 
 final chatsProvider = FutureProvider<List<Chat>>((ref) async {
   final api = ref.watch(apiServiceProvider);

@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/friend_request.dart';
 import 'auth_provider.dart';
-import 'post_provider.dart';
+import 'api_provider.dart';
 
 final friendRequestsProvider = FutureProvider<List<FriendRequest>>((ref) async {
   final api = ref.watch(apiServiceProvider);

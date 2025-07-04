@@ -2,7 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/block.dart';
 import 'auth_provider.dart';
-import 'post_provider.dart';
+import 'api_provider.dart';
 
 final blocksProvider = FutureProvider<List<Block>>((ref) async {
   final api = ref.watch(apiServiceProvider);

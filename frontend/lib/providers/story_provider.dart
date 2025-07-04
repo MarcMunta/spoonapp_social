@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/story.dart';
-import 'post_provider.dart';
+import 'api_provider.dart';
 
 class StoriesNotifier extends StateNotifier<AsyncValue<List<Story>>> {
   StoriesNotifier(this.ref) : super(const AsyncValue.loading()) {

@@ -1,12 +1,11 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/post.dart';
-import '../services/api_service.dart';
 import 'auth_provider.dart';
+import 'api_provider.dart';
 
 final selectedCategoryProvider = StateProvider<String?>((ref) => null);
 
-final apiServiceProvider = Provider((ref) => ApiService('http://localhost:8000'));
 
 class PostsNotifier extends StateNotifier<AsyncValue<List<Post>>> {
   PostsNotifier(this.ref) : super(const AsyncValue.loading()) {

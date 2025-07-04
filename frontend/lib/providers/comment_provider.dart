@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/comment.dart';
-import 'post_provider.dart';
+import 'api_provider.dart';
 
 final commentsProvider = FutureProvider.family<List<Comment>, int>((ref, postId) async {
   final api = ref.watch(apiServiceProvider);

@@ -45,7 +45,10 @@ if [ "$RUN_FLAG" = true ]; then
   BACKEND_PID=$!
   # Launch Flutter automatically if available
   if command -v flutter >/dev/null 2>&1; then
-    (cd "$SCRIPT_DIR/frontend" && flutter pub get && flutter run -d chrome)
+    echo "Starting Flutter app in Chrome..."
+    (cd "$SCRIPT_DIR/frontend" && flutter pub get && flutter run -d chrome) &
+    FLUTTER_PID=$!
+    wait $FLUTTER_PID
   fi
   wait $BACKEND_PID
 else

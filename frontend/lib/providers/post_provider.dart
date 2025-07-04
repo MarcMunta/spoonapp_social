@@ -78,7 +78,7 @@ final addPostProvider = Provider(
         String user,
         String caption,
         List<String> categories,
-        [String? imageUrl],
+        [String? imageUrl]
       ) async {
         final api = ref.read(apiServiceProvider);
         await api.createPost(user, caption, categories, imageUrl);

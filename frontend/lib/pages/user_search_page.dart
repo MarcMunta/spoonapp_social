@@ -19,7 +19,7 @@ class _UserSearchPageState extends ConsumerState<UserSearchPage> {
   String _query = '';
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final usersAsync =
         ref.watch(searchUsersProvider(_query.isEmpty ? null : _query));
     final blocksAsync = ref.watch(blocksProvider);

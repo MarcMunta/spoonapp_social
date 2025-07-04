@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 
 import 'pages/feed_page.dart';
 import 'pages/home_page.dart';
@@ -77,7 +78,7 @@ GoRouter _buildRouter(AuthState? auth) {
     redirect: (context, state) {
       final loggedIn = auth != null;
       final loggingIn =
-          state.uri.toString() == '/login' || state.uri.toString() == '/signup';
+          state.location == '/login' || state.location == '/signup';
       if (!loggedIn && !loggingIn) return '/login';
       if (loggedIn && loggingIn) return '/';
       return null;
@@ -104,7 +105,7 @@ class SpoonApp extends ConsumerWidget {
       localizationsDelegates: const [
         DefaultWidgetsLocalizations.delegate,
         DefaultMaterialLocalizations.delegate,
-        DefaultCupertinoLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
       ],
       routerConfig: router,
     );

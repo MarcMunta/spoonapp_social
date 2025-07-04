@@ -44,7 +44,7 @@ class _NewPostPageState extends ConsumerState<NewPostPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(languageProvider);
     return Scaffold(
       appBar: AppBar(title: Text(L10n.of(locale, 'new_post'))),

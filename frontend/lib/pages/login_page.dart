@@ -36,7 +36,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final locale = ref.watch(languageProvider);
     return Scaffold(
       appBar: AppBar(title: Text(L10n.of(locale, 'login'))),

@@ -52,7 +52,7 @@ flutter run -d chrome
 El backend FastAPI expone endpoints de prueba para la app Flutter:
 
 ```text
-GET /posts?offset=0&limit=10[&category=food]    # Lista paginada de posts
+GET /posts?offset=0&limit=10[&category=food][&user=bob]    # Lista paginada de posts (filtrables por usuario)
 POST /posts   # Crear un post nuevo
 GET /stories  # Lista de historias de ejemplo
 POST /stories # Crear una historia
@@ -125,6 +125,8 @@ Existe también una página de **historias ocultas** para gestionar a quién
 ocultas tus historias, que usa los endpoints `/story-blocks`.
 Se añadió una pantalla de **categorías** desde el perfil para ver la lista
 disponible mediante `GET /categories`.
+Además, la página de perfil muestra ahora tus propias publicaciones usando
+`GET /posts?user=<nombre>`.
 Ahora la aplicación soporta **cambio de idioma** entre inglés y español. Un
 nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
 `shared_preferences`.

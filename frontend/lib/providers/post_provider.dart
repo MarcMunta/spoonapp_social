@@ -92,3 +92,9 @@ final deletePostProvider = Provider(
     await ref.read(postsNotifierProvider.notifier).fetch(refresh: true);
   },
 );
+
+final userPostsProvider =
+    FutureProvider.family<List<Post>, String>((ref, username) async {
+  final api = ref.watch(apiServiceProvider);
+  return api.fetchPosts(username);
+});

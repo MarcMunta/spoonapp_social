@@ -6,6 +6,8 @@ import '../providers/theme_provider.dart';
 import '../providers/profile_provider.dart';
 import '../providers/language_provider.dart';
 import '../utils/l10n.dart';
+import '../providers/post_provider.dart';
+import '../widgets/post_card.dart';
 import 'package:go_router/go_router.dart';
 
 class ProfilePage extends ConsumerWidget {
@@ -93,6 +95,27 @@ class ProfilePage extends ConsumerWidget {
                       value: themeMode == ThemeMode.dark,
                       onChanged: (_) =>
                           ref.read(themeProvider.notifier).toggle(),
+                    ),
+                    const SizedBox(height: 16),
+                    Text(L10n.of(locale, 'my_posts'),
+                        style: Theme.of(context).textTheme.titleMedium),
+                    const SizedBox(height: 8),
+                    Consumer(
+                      builder: (context, ref, _) {
+                        final postsAsync =
+                            ref.watch(userPostsProvider(profile.username));
+                        return postsAsync.when(
+                          data: (posts) => Column(
+                            children: [
+                              for (final post in posts) PostCard(post: post),
+                            ],
+                          ),
+                          loading: () => const Center(
+                              child: CircularProgressIndicator()),
+                          error: (e, st) =>
+                              Center(child: Text('${L10n.of(locale, 'error')} $e')),
+                        );
+                      },
                     ),
                   ],
                 ),

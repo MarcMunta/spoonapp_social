@@ -24,6 +24,7 @@ Django dejaron de usarse, por lo que se suprimieron los directorios `static/` y
 
 Este script creará un entorno virtual en `backend/app/env`, instalará todas las dependencias y generará un archivo `.env` de ejemplo. Funciona tanto en macOS como en Windows (Git Bash o PowerShell). Si añades la opción `--start`, también iniciará el backend con **uvicorn** y abrirá la app Flutter en Chrome (si está disponible).
 
+
 Para el frontend ejecuta manualmente si lo prefieres:
 
 ```bash

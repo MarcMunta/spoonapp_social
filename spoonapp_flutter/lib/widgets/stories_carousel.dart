@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import '../models/story.dart';
 
-class StoryList extends StatelessWidget {
+class StoriesCarousel extends StatelessWidget {
   final List<Story> stories;
-  const StoryList({super.key, required this.stories});
+  const StoriesCarousel({super.key, required this.stories});
 
   @override
   Widget build(BuildContext context) {

@@ -95,6 +95,15 @@ pip install -r backend/requirements.txt
 
 This installs the Pillow package required by Django's image fields.
 
+If the Flutter client prints `ClientException: Failed to fetch` when hitting `http://localhost:8000/api/stories/`, make sure the Django server is running:
+
+```bash
+cd backend
+python manage.py runserver 0.0.0.0:8000
+```
+
+Visit `http://localhost:8000/api/stories/` in your browser to verify it returns JSON. When serving the API from a different host, configure [CORS](https://pypi.org/project/django-cors-headers/) so the Flutter app can access it.
+
 ## Story cleanup
 Run the following command periodically to remove expired stories:
 

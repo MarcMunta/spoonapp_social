@@ -123,8 +123,8 @@ nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
 `shared_preferences`.
 Las acciones habituales (borrar posts o comentarios, iniciar sesión o
 registrarse) también están traducidas en ambos idiomas. El cuadro para
-escribir comentarios y los mensajes de error ahora usan estas
-traducciones.
+escribir comentarios, los mensajes de error y el texto del botón para
+añadir historia ahora usan estas traducciones.
 
 ## Estructura
 

@@ -51,6 +51,7 @@ class L10n {
       'post_error': 'Failed to create post',
       'story_error': 'Failed to create story',
       'error': 'Error:',
+      'add': 'Add',
     },
     'es': {
       'feed': 'Inicio',
@@ -99,6 +100,7 @@ class L10n {
       'post_error': 'Error al crear el post',
       'story_error': 'Error al crear la historia',
       'error': 'Error:',
+      'add': 'Añadir',
     },
   };
 

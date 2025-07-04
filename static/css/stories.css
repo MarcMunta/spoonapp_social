@@ -1,20 +1,20 @@
 .stories-wrapper {
     max-width: 650px;
-    margin: 0 auto;
+    margin: 0 auto 1rem;
 }
 
 .story-item {
     text-align: center;
-    width: 64px;
+    width: 80px;
     flex-shrink: 0;
     font-family: 'Poppins', sans-serif;
 }
 
 .story-thumb {
     --story-color: #adb5bd;
-    width: 56px;
-    height: 56px;
-    border-radius: 50%;
+    width: 80px;
+    height: 70px;
+    border-radius: 12px;
     overflow: hidden;
     position: relative;
     cursor: pointer;
@@ -71,7 +71,7 @@
     width: 100%;
     height: 100%;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 12px;
     transition: transform 0.2s ease;
 }
 
@@ -126,13 +126,6 @@
     overflow: hidden;
 }
 
-.story-progress-bar {
-    height: 100%;
-    width: 0;
-    background: linear-gradient(90deg, #0d6efd, #6610f2);
-    background-size: 200% 100%;
-    animation: progress-slide 1s linear infinite;
-}
 
 .story-header {
     display: flex;
@@ -211,9 +204,8 @@
 .story-progress-bar {
     height: 100%;
     width: 0;
-    background: linear-gradient(90deg, #0d6efd, #6610f2);
-    background-size: 200% 100%;
-    animation: progress-slide 1s linear infinite;
+    background: #0d6efd;
+    transition: width 0.1s linear;
 }
 
 #storyImage,
@@ -343,7 +335,7 @@
 }
 
 .stories-container {
-    margin-top: 50px;
+    margin-top: 0;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -410,7 +402,7 @@
     left: 0;
     width: 100%;
     height: 6px;
-    background: rgba(255, 255, 255, 0.3);
+    background: #dee2e6;
     overflow: hidden;
     border-radius: 3px;
 }

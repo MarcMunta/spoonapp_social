@@ -1,15 +1,7 @@
 # Ignore Python virtual environments
 env/
 
-# Ignore node modules
-frontend_legacy/node_modules/
-
 # Uploaded media
 media/
 
 __pycache__/
-
-# Ignore built frontend bundle
-backend/static/js/
-# Ignore compiled translation files
-locale/*/LC_MESSAGES/*.mo

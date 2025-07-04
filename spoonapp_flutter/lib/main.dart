@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import 'providers/post_provider.dart';
 import 'providers/user_provider.dart';
 import 'screens/feed_page.dart';
+import 'services/backend.dart';
 
 void main() {
   runApp(const SpoonApp());
@@ -17,7 +18,8 @@ class SpoonApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(create: (_) => UserProvider()),
-        ChangeNotifierProvider(create: (_) => PostProvider()),
+        ChangeNotifierProvider(
+            create: (_) => PostProvider(BackendService('http://localhost:8000'))),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,

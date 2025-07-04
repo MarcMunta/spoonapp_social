@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/story.dart';
 import 'story_viewer.dart';
+import 'package:provider/provider.dart';
+import '../providers/post_provider.dart';
+import '../providers/user_provider.dart';
+import 'package:file_picker/file_picker.dart';
 
 class StoriesCarousel extends StatelessWidget {
   final List<Story> stories;
@@ -18,9 +22,65 @@ class StoriesCarousel extends StatelessWidget {
       height: 100,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
-        itemCount: stories.length,
+        itemCount: stories.length + 1,
         itemBuilder: (context, index) {
-          final story = stories[index];
+          final user = context.read<UserProvider>().currentUser;
+          final postProv = context.read<PostProvider>();
+          if (index == 0) {
+            final borderColor = postProv.userHasStory(user)
+                ? Colors.blueAccent
+                : Colors.grey;
+            return Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: InkWell(
+                onTap: () async {
+                  final res = await FilePicker.platform.pickFiles(
+                      type: FileType.image);
+                  if (res != null && res.files.single.bytes != null) {
+                    await postProv.addStory(user, res.files.single.bytes!);
+                  }
+                },
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Stack(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.all(2),
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            border: Border.all(color: borderColor, width: 2),
+                          ),
+                          child: CircleAvatar(
+                            backgroundImage:
+                                NetworkImage(user.profileImage),
+                            radius: 30,
+                          ),
+                        ),
+                        Positioned(
+                          bottom: 0,
+                          right: 0,
+                          child: Container(
+                            decoration: const BoxDecoration(
+                              shape: BoxShape.circle,
+                              gradient: LinearGradient(
+                                colors: [Color(0xFFB46DDD), Color(0xFFD9A7C7)],
+                              ),
+                            ),
+                            padding: const EdgeInsets.all(2),
+                            child: const Icon(Icons.add, size: 16, color: Colors.white),
+                          ),
+                        )
+                      ],
+                    ),
+                    const SizedBox(height: 4),
+                    Text(user.name, style: const TextStyle(fontSize: 12)),
+                  ],
+                ),
+              ),
+            );
+          }
+          final story = stories[index - 1];
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 8),
             child: InkWell(
@@ -29,7 +89,7 @@ class StoriesCarousel extends StatelessWidget {
                   context: context,
                   builder: (_) => StoryViewer(
                     stories: stories,
-                    initialIndex: index,
+                    initialIndex: index - 1,
                   ),
                 );
               },

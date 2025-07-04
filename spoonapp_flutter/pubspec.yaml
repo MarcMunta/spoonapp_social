@@ -64,9 +64,8 @@ flutter:
   uses-material-design: true
 
   assets:
-    # Use the logo from the repository root without storing a copy in this
-    # Flutter package.
-    - ../static/img/spoonapp.png
+    # SpoonApp logo expected at this path but not tracked in git.
+    - assets/images/spoonapp.png
 
   # Image assets are embedded as base64 strings to avoid binary files in git.
 

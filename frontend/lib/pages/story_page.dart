@@ -54,7 +54,7 @@ class _StoryPageState extends ConsumerState<StoryPage> {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(

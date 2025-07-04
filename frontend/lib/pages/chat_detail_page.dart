@@ -18,7 +18,7 @@ class _ChatDetailPageState extends ConsumerState<ChatDetailPage> {
   final _controller = TextEditingController();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final messagesAsync = ref.watch(messagesProvider(widget.chatId));
     final sendMessage = ref.read(sendMessageProvider);
     final auth = ref.watch(authProvider);

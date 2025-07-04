@@ -25,7 +25,7 @@
       <i class="fas fa-bars"></i>
     </button>
     <div class="app-title">
-      <a href="{% url 'home' %}" class="spoonapp-logo-link">
+      <a href="{% url 'home' %}" class="spoonapp-logo-link home-link">
         <img src="{% static 'img/spoonapp.png' %}" alt="{% trans "SpoonApp Logo" %}" class="spoonapp-logo-large" />
         <div class="spoonapp-text-wrapper">
           <span class="social-text">SOCIAL</span>
@@ -34,7 +34,7 @@
     </div>
 
     <div class="topbar-icons center">
-      <a href="{% url 'home' %}">🏠</a>
+      <a href="{% url 'home' %}" class="home-link">🏠</a>
       <a href="{% url 'subir_publicacion' %}" aria-label="Crear publicación">
         <i class="fas fa-plus"></i>
       </a>

@@ -18,6 +18,10 @@ with [esbuild](https://esbuild.github.io/).
 * User and location search
 * Multi-language support (English/Spanish) with automatic language detection
 
+Navigation notes: use the button in the top-left corner to toggle the left
+sidebar. Clicking the SpoonApp logo or the home icon in the top bar always
+returns you to the main feed.
+
 ## Frontend
 See `frontend/README.md` for setup and build instructions. After building, the
 bundle is placed in `backend/static/js/main.js` and automatically loaded on the home page.

@@ -16,7 +16,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       backgroundColor: Colors.transparent,
       leading: const Icon(Icons.restaurant_menu, color: Colors.white),
       title: Image.asset(
-        '../static/img/spoonapp.png',
+        'assets/images/spoonapp.png',
         height: 45,
         fit: BoxFit.contain,
       ),

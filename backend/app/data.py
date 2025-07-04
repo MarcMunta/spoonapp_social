@@ -1,5 +1,5 @@
 from datetime import datetime
-from .models import (
+from models import (
     Post,
     Story,
     User,

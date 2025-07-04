@@ -9,6 +9,7 @@ import 'pages/notifications_page.dart';
 import 'pages/post_detail_page.dart';
 import 'pages/new_post_page.dart';
 import 'pages/new_story_page.dart';
+import 'pages/story_page.dart';
 import 'pages/chat_list_page.dart';
 import 'pages/chat_detail_page.dart';
 import 'pages/login_page.dart';
@@ -75,7 +76,8 @@ GoRouter _buildRouter(AuthState? auth) {
     ],
     redirect: (context, state) {
       final loggedIn = auth != null;
-      final loggingIn = state.subloc == '/login' || state.subloc == '/signup';
+      final loggingIn =
+          state.uri.toString() == '/login' || state.uri.toString() == '/signup';
       if (!loggedIn && !loggingIn) return '/login';
       if (loggedIn && loggingIn) return '/';
       return null;

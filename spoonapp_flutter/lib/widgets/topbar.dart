@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../screens/profile_page.dart';
+import '../screens/feed_page.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -51,7 +52,17 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                       mainAxisAlignment: MainAxisAlignment.center,
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        _NavButton(icon: Icons.home, onPressed: () {}),
+                        _NavButton(
+                          icon: Icons.home,
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const FeedPage(),
+                              ),
+                            );
+                          },
+                        ),
                         _NavButton(icon: Icons.add, onPressed: () {}),
                         _NavButton(
                             icon: Icons.notifications, onPressed: () {}),

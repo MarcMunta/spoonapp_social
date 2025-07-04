@@ -31,7 +31,11 @@ class PostProvider extends ChangeNotifier {
     _posts.addAll([
       Post(
         id: '1',
-        user: User(name: 'Alice', profileImage: 'https://picsum.photos/50/50?1'),
+        user: User(
+          name: 'Alice',
+          profileImage: 'https://picsum.photos/50/50?1',
+          email: 'alice@example.com',
+        ),
         date: DateTime.now().subtract(const Duration(hours: 1)),
         text: 'Hello from Flutter!',
         mediaUrl: 'https://picsum.photos/400/200?1',
@@ -39,7 +43,11 @@ class PostProvider extends ChangeNotifier {
       ),
       Post(
         id: '2',
-        user: User(name: 'Bob', profileImage: 'https://picsum.photos/50/50?2'),
+        user: User(
+          name: 'Bob',
+          profileImage: 'https://picsum.photos/50/50?2',
+          email: 'bob@example.com',
+        ),
         date: DateTime.now().subtract(const Duration(hours: 2)),
         text: 'Another post',
         mediaUrl: 'https://picsum.photos/400/200?2',
@@ -48,9 +56,21 @@ class PostProvider extends ChangeNotifier {
     ]);
 
     _activeUsers.addAll([
-      User(name: 'Alice', profileImage: 'https://picsum.photos/40/40?1'),
-      User(name: 'Bob', profileImage: 'https://picsum.photos/40/40?2'),
-      User(name: 'Charlie', profileImage: 'https://picsum.photos/40/40?3'),
+      User(
+        name: 'Alice',
+        profileImage: 'https://picsum.photos/40/40?1',
+        email: 'alice@example.com',
+      ),
+      User(
+        name: 'Bob',
+        profileImage: 'https://picsum.photos/40/40?2',
+        email: 'bob@example.com',
+      ),
+      User(
+        name: 'Charlie',
+        profileImage: 'https://picsum.photos/40/40?3',
+        email: 'charlie@example.com',
+      ),
     ]);
   }
 

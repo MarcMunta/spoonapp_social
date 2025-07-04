@@ -9,3 +9,5 @@ from .friend_request import FriendRequest, FriendRequestCreate
 from .block import Block, BlockCreate
 from .story_block import StoryBlock, StoryBlockCreate
 from .category import Category
+from .story import StoryCreate
+

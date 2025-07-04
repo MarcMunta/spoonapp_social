@@ -5,3 +5,13 @@ env/
 media/
 
 __pycache__/
+
+# IDE config
+.idea/
+
+# Local DB
+backend/db.sqlite3
+
+# Flutter build outputs
+frontend/build/
+

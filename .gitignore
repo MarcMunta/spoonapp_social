@@ -1,15 +1,17 @@
 # Ignore Python virtual environments
 env/
 
-# Ignore node modules
-frontend/node_modules/
-
 # Uploaded media
 media/
 
 __pycache__/
 
-# Ignore built frontend bundle
-backend/static/js/
-# Ignore compiled translation files
-locale/*/LC_MESSAGES/*.mo
+# IDE config
+.idea/
+
+# Local DB
+backend/db.sqlite3
+
+# Flutter build outputs
+frontend/build/
+

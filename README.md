@@ -1,92 +1,176 @@
 # SpoonApp Social
 
-This Django project powers the SpoonApp social network. The repository separates
-backend and frontend code. The backend resides in the `backend/` directory while
-the modern JavaScript frontend lives inside the `frontend/` folder and is built
-with [esbuild](https://esbuild.github.io/).
+Este repositorio contiene la migración en curso de **SpoonApp** a un stack
+compuesto por **Flutter** en el frontend y **FastAPI** para el backend. La
+antigua aplicación Django se conserva solo como referencia, pero las
+plantillas ya han sido reemplazadas por páginas Flutter.
 
-## Features
-* Image posts with category tags
-* Comments with nested replies and likes
-* Post likes and share counter
-* Stories that disappear after 24 hours
-* Private messaging between friends (non-friends can only send one message)
-* Friend requests and follower management
-* User profiles with custom avatar, bio and chat bubble color
-* Privacy settings, block list and hidden stories
-* Notifications for messages and friend events
-* User and location search
-* Multi-language support (English/Spanish) with automatic language detection
+Todas las vistas que antes se generaban con Django ahora cuentan con su
+equivalente en Flutter. Por ello se eliminaron las carpetas `templates/` y
+`frontend_legacy/`. Igualmente, los ficheros estáticos y las traducciones de
+Django dejaron de usarse, por lo que se suprimieron los directorios `static/` y
+`locale/` junto con el antiguo script `setup_env` y los viejos `backend/setup_env.*`.
 
-## Frontend
-See `frontend/README.md` for setup and build instructions. After building, the
-bundle is placed in `backend/static/js/main.js` and automatically loaded on the home page.
+## Requisitos
+- Flutter >= 3.x
+- Dart >= 3.x
+- Python 3.11
 
-## Running
-Ensure Python and Node.js are installed, then install Python dependencies from
-`requirements.txt`:
+## Instalación rápida
 
-Build the virtual environment:
-
-```mermaid
-graph TD
-    A["📂 Root folder: spoonapp_social"] --> B{Sistema operativo}
-    B -->|Windows| C["Ejecuta: .\backend\setup_env.ps1"]
-    B -->|macOS / Linux| D["Ejecuta: ./backend/setup_env.sh"]
-    C --> E["Entorno virtual activo"]
-    D --> E
+```bash
+./setup_env.sh
 ```
 
-Build the frontend:
+Este script creará un entorno virtual en `backend/app/env`, instalará todas las dependencias y generará un archivo `.env` de ejemplo. Funciona tanto en macOS como en Windows (Git Bash o PowerShell). Si añades la opción `--start`, también iniciará el backend con **uvicorn** y abrirá la app Flutter en Chrome (si está disponible).
+Desde la carpeta `backend` también existe `setup_env.sh`, que simplemente llama a este mismo script.
+
+Para el frontend ejecuta manualmente si lo prefieres:
 
 ```bash
 cd frontend
-npm install
-npm run build
+flutter pub get
 ```
+La aplicación Flutter usa por defecto la URL `http://localhost:8000` para el backend.
+Puedes cambiarla en tiempo de ejecución añadiendo `--dart-define=API_BASE_URL=https://mi-servidor` al comando `flutter run` o `flutter build`.
 
-The translations are automatically compiled whenever `manage.py` is executed,
-so you no longer need to run `django-admin compilemessages` manually. Selecting
-a different language in the app also recompiles the translations automatically.
-If you want to compile the translations outside of Django you can run:
+## Ejecución en desarrollo
+
+Backend FastAPI:
 
 ```bash
-./setup_env
+source backend/app/env/bin/activate  # En Windows: backend\app\env\Scripts\activate
+uvicorn main:app --reload
 ```
 
-This script invokes `./tools/gettext/bin/msgfmt` (or the system `msgfmt` if the
-local binary is missing) and generates the `.mo` files inside the `locale/`
-directories.
+El backend usa SQLite para almacenar usuarios y publicaciones de prueba. La base
+de datos se crea automáticamente al iniciar la aplicación.
 
-Run database migrations and start the development server:
+Frontend Flutter Web:
 
 ```bash
-cd backend
-python manage.py migrate
-python manage.py runserver 0.0.0.0:8000
+cd frontend
+flutter run -d chrome
+# O define la URL del backend
+# flutter run -d chrome --dart-define=API_BASE_URL=https://mi-servidor
 ```
 
-Listening on `0.0.0.0` lets mobile devices on the same network reach the
-development server using your computer's IP address (e.g.
-`http://192.168.1.x:8000`). With `DEBUG` enabled the project accepts
-connections from any host. In production specify allowed hosts via the
-`ALLOWED_HOSTS` environment variable.
+### Endpoints de ejemplo
 
-If the `msgfmt` binary required for compiling translations is missing, `manage.py`
-will attempt to install `gettext` using the available package manager
-(APT on Linux, Homebrew on macOS or Chocolatey/Winget on Windows). The script also
-checks for a bundled distribution under `backend/tools/gettext` and automatically
-adds its `bin` directory to the `PATH` when found. If automatic installation fails,
-install `gettext` manually. On Windows you can run
-`choco install gettext` or `winget install -e --id GnuWin32.gettext`. Alternatively
-download the prebuilt binaries from
-[mlocati.github.io/gettext-iconv-windows](https://mlocati.github.io/articles/gettext-iconv-windows.html).
+El backend FastAPI expone endpoints de prueba para la app Flutter:
 
-## Troubleshooting
-If you get `ModuleNotFoundError: No module named \`PIL\`` when uploading images, Pillow is missing. Activate your virtual environment and run:
+```text
+GET /posts?offset=0&limit=10[&category=food][&user=bob]    # Lista paginada de posts (filtrables por usuario)
+POST /posts   # Crear un post nuevo
+GET /stories  # Lista de historias de ejemplo
+POST /stories # Crear una historia
+DELETE /stories/{id}?user=alice  # Borrar historia (propietario)
+GET /notifications  # Lista de notificaciones de ejemplo
+POST /notifications/{id}/read  # Marcar notificación como leída
+GET /categories               # Lista de categorías disponibles
+GET /chats               # Lista de chats del usuario
+GET /chats/{id}/messages  # Mensajes de un chat
+POST /chats/{id}/messages # Enviar mensaje
+POST /login   # Devuelve un token si la contraseña es "password"
+POST /signup  # Registra un usuario nuevo en memoria
+GET /posts/{id}/comments  # Comentarios de un post
+POST /posts/{id}/comments  # Crear un comentario
+POST /posts/{id}/likes     # Marcar me gusta
+DELETE /posts/{id}/likes   # Quitar me gusta
+DELETE /posts/{id}         # Borrar un post (propietario)
+DELETE /posts/{id}/comments/{cid}  # Borrar comentario (propietario)
+GET /users/{username}      # Obtener perfil de usuario
+PUT /users/{username}      # Actualizar perfil (bio, avatar, bubble_color)
+GET /friend-requests       # Solicitudes de amistad (opcional ?user=)
+POST /friend-requests      # Enviar solicitud de amistad
+POST /friend-requests/{id}/accept  # Aceptar solicitud
+GET /users?q=alice   # Buscar usuarios (opcional)
+GET /blocks?blocker=alice  # Usuarios bloqueados por un usuario
+POST /blocks               # Bloquear usuario
+POST /blocks/{username}/unblock?blocker=alice  # Desbloquear
+GET /story-blocks?owner=alice  # Usuarios a los que ocultas tus historias
+POST /story-blocks             # Ocultar historias a un usuario
+POST /story-blocks/{username}/unhide?owner=alice  # Dejar de ocultar
+```
+Tambien se pueden consultar y publicar comentarios en `PostDetailPage` usando el endpoint de comentarios. Los posts y sus comentarios incluyen ahora un campo `bubble_color` que indica el color elegido por cada usuario. Los mensajes de chat también devuelven `bubble_color` para mostrar los nombres coloreados. Los posts muestran un botón de "me gusta" que envía peticiones a `/posts/{id}/likes`.
+El feed dispone de un botón flotante para **crear nuevos posts** que utiliza `POST /posts`.
+Al crear un post se pueden seleccionar categorías que luego se muestran en el feed.
+Los autores pueden **eliminar sus propios posts** y comentarios gracias a los
+endpoints `DELETE /posts/{id}` y
+`DELETE /posts/{id}/comments/{cid}`.
+Ahora la lista de posts se obtiene de forma paginada con los parámetros `offset`
+y `limit`, y el feed implementa **scroll infinito** para cargar más contenido al
+bajar. Además, pueden filtrarse por categoría usando `GET /posts?category=<slug>`
+y en el feed existe un botón para elegir la categoría.
 
-```bash
-pip install -r backend/requirements.txt
+El frontend Flutter muestra estas historias con una animación **Hero** al tocar
+cada círculo. Al abrirlas se reproducen en pantalla completa con avance
+automático y se pueden pausar con una pulsación prolongada. Los posts se
+renderizan mediante el widget personalizado
+`PostCard`. Al pulsar sobre un post se abre un `PostDetailPage` con transición
+`Hero` para la imagen. Las imágenes se cargan usando `cached_network_image` para
+mejorar el rendimiento. Se añadieron páginas de **login** y **registro** en Flutter
+que consumen los endpoints `/login` y `/signup`.
+El token de autenticación se persiste localmente usando
+`shared_preferences` para mantener la sesión entre reinicios.
+También existe una página de **notificaciones** que consume `/notifications`.
+Ahora se pueden marcar como leídas enviando `POST /notifications/{id}/read`.
+La pantalla **Nuevo Post** permite publicar mensajes con una imagen opcional.
+De igual forma existe **Nueva Historia** para crear historias con `/stories`.
+Se añadieron pantallas de **chats** para enviar y recibir mensajes usando los
+endpoints `/chats` y `/chats/{id}/messages`.
+La página de perfil ahora tiene un interruptor para activar el tema oscuro o
+claro. La preferencia se guarda localmente con `shared_preferences`.
+Desde la página de perfil es posible acceder a **Editar Perfil** para cambiar la
+biografía, el avatar y el color de burbuja mediante los endpoints `/users/{username}`.
+Existe también una pantalla de **solicitudes de amistad** que muestra las
+peticiones pendientes y permite aceptarlas a través de `/friend-requests`.
+Se añadieron páginas de **usuarios bloqueados** y **buscador de usuarios** que
+consumen los endpoints `/blocks` y `/users` respectivamente. Desde el buscador
+es posible **enviar solicitudes de amistad** y también **bloquear o desbloquear**
+usuarios mediante los botones correspondientes.
+Existe también una página de **historias ocultas** para gestionar a quién
+ocultas tus historias, que usa los endpoints `/story-blocks`.
+Se añadió una pantalla de **categorías** desde el perfil para ver la lista
+disponible mediante `GET /categories`.
+Además, la página de perfil muestra ahora tus propias publicaciones usando
+`GET /posts?user=<nombre>`.
+Ahora la aplicación soporta **cambio de idioma** entre inglés y español. Un
+nuevo **SettingsPage** permite elegir el idioma y la preferencia se guarda con
+`shared_preferences`.
+Las acciones habituales (borrar posts o comentarios, iniciar sesión o
+registrarse) también están traducidas en ambos idiomas. El cuadro para
+escribir comentarios, los mensajes de error y el texto del botón para
+añadir historia ahora usan estas traducciones.
+
+## Estructura
+
+```
+SpoonApp
+│
+├── frontend/                  # Código Flutter
+│   ├── lib/
+│   │   ├── main.dart          # Arranque con ProviderScope
+│   │   ├── app.dart           # Configuración de rutas y tema
+│   │   ├── pages/             # Vistas (Feed, Notifications, Chats, Profile, Story, PostDetail, Login, Signup, NewPost, NewStory, FriendRequests, BlockedUsers, HiddenStories, Categories, UserSearch, Settings)
+│   │   ├── models/            # Modelos Dart
+│   │   ├── services/          # Llamadas HTTP
+│   │   ├── providers/         # Gestión de estado (posts, stories, notifications, chats, auth, theme)
+│   │   └── widgets/           # Widgets reutilizables (StoryCircle, PostCard)
+│   └── pubspec.yaml
+│
+├── backend/
+│   ├── app/                   # Backend FastAPI
+│   │   ├── main.py
+│   │   ├── models/
+│   │   ├── database.py        # SQLAlchemy y SQLite
+│   │   ├── data.py
+│   │   ├── requirements.txt
+│   │   └── .env.example
+│   ├── setup_env.sh           # Envoltorio para el script raíz
+│   └── ...                    # Código Django existente (referencia)
+│
+└── setup_env.sh
 ```
 
-This installs the Pillow package required by Django's image fields.
+Este README irá ampliándose conforme avance la migración.

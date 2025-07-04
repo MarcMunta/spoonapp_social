@@ -14,6 +14,10 @@ A few resources to get you started if this is your first Flutter project:
 Binary image assets were removed from version control. If you need the default
 app icons, run `flutter create .` inside this directory to regenerate them.
 
+The SpoonApp logo is referenced from `../static/img/spoonapp.png` so no binary
+assets are stored inside this directory. After cloning the project run
+`flutter pub get` to download the required packages.
+
 To run the sample feed:
 
 ```bash

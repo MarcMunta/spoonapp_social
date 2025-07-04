@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'dart:convert';
 import '../providers/user_provider.dart';
-import '../assets/spoonapp_logo_base64.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -17,9 +15,10 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
       centerTitle: true,
       backgroundColor: Colors.transparent,
       leading: const Icon(Icons.restaurant_menu, color: Colors.white),
-      title: Image.memory(
-        base64Decode(spoonappLogoBase64),
+      title: Image.asset(
+        '../static/img/spoonapp.png',
         height: 45,
+        fit: BoxFit.contain,
       ),
       flexibleSpace: Container(
         decoration: const BoxDecoration(

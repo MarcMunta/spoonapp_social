@@ -734,3 +734,12 @@ onReady(() => {
     if (!hidden) animatePanelItems();
   });
 });
+
+onReady(() => {
+  document.querySelectorAll('.home-link').forEach((link) => {
+    link.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = `${LANG_PREFIX}/`;
+    });
+  });
+});

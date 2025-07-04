@@ -219,7 +219,7 @@ body {
     background-color: #fdf2fa;
     width: 220px;
     position: fixed;
-    top: 60px;
+    top: 80px;
     bottom: 0;
     left: 0;
     padding: 1rem;
@@ -458,14 +458,14 @@ body:has(.spoon-chat-container) .rightbar {
 .rightbar {
     position: fixed;
     right: 0;
-    top: 60px;
+    top: 80px;
     width: 280px;
     background-color: #fff6fa;
     padding: 1rem;
     border-left: 2px solid #f3c2e1;
     box-shadow: -2px 0 4px rgba(0, 0, 0, 0.05);
     overflow-y: auto;
-    height: calc(100vh - 60px);
+    height: calc(100vh - 80px);
     padding-top: 3rem;
     transition: transform 0.3s ease, opacity 0.3s ease;
 }

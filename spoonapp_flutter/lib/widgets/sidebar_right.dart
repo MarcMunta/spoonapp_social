@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/post_provider.dart';
 
-class Sidebar extends StatelessWidget {
-  const Sidebar({super.key});
+class SidebarRight extends StatelessWidget {
+  const SidebarRight({super.key});
 
   @override
   Widget build(BuildContext context) {

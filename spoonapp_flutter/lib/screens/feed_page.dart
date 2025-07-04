@@ -4,7 +4,8 @@ import '../providers/post_provider.dart';
 import '../widgets/post_card.dart';
 import '../widgets/stories_carousel.dart';
 import '../widgets/topbar.dart';
-import '../widgets/sidebar.dart';
+import '../widgets/sidebar_left.dart';
+import '../widgets/sidebar_right.dart';
 import 'create_post_page.dart';
 
 class FeedPage extends StatelessWidget {
@@ -14,7 +15,9 @@ class FeedPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final posts = context.watch<PostProvider>().posts;
     final stories = context.watch<PostProvider>().stories;
-    final isWide = MediaQuery.of(context).size.width > 800;
+    final width = MediaQuery.of(context).size.width;
+    final showLeft = width > 1000;
+    final showRight = width > 600;
 
     final feedContent = ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -34,22 +37,31 @@ class FeedPage extends StatelessWidget {
 
     return Scaffold(
       appBar: const TopBar(title: 'SpoonApp Social'),
-      body: isWide
-          ? Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Expanded(child: feed),
-                const Sidebar(),
-              ],
-            )
-          : feed,
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: const Color(0xFFD9A7C7),
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (_) => const CreatePostPage()));
-        },
-        child: const Icon(Icons.add),
+      body: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          if (showLeft) const SidebarLeft(),
+          Expanded(child: feed),
+          if (showRight) const SidebarRight(),
+        ],
+      ),
+      floatingActionButton: Container(
+        width: 56,
+        height: 56,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFFB46DDD), Color(0xFFD9A7C7)],
+          ),
+          borderRadius: BorderRadius.circular(28),
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 4)],
+        ),
+        child: IconButton(
+          icon: const Icon(Icons.add, color: Colors.white),
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const CreatePostPage()));
+          },
+        ),
       ),
     );
   }

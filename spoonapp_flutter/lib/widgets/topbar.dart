@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 import '../providers/user_provider.dart';
 import '../providers/post_provider.dart';
+import '../providers/menu_provider.dart';
 import '../screens/profile_page.dart';
 import '../screens/feed_page.dart';
 import 'story_viewer.dart';
@@ -59,6 +60,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
     final width = MediaQuery.of(context).size.width;
     final showNav = width > 600;
     final showLogo = width > 350;
+    final menu = context.watch<MenuProvider>();
 
     return Material(
       color: Colors.transparent,
@@ -76,6 +78,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onLeftMenu ?? () {
                 Scaffold.maybeOf(context)?.openDrawer();
               },
+              icon: menu.leftOpen ? Icons.cancel : Icons.menu,
+              animate: true,
             ),
             if (showLogo)
               Padding(
@@ -139,6 +143,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onRightMenu ?? () {
                 Scaffold.maybeOf(context)?.openEndDrawer();
               },
+              icon: Icons.cancel,
             ),
             const SizedBox(width: 8),
           ],
@@ -150,7 +155,9 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
 
 class _MenuButton extends StatelessWidget {
   final VoidCallback onPressed;
-  const _MenuButton({required this.onPressed});
+  final IconData icon;
+  final bool animate;
+  const _MenuButton({required this.onPressed, required this.icon, this.animate = false});
 
   @override
   Widget build(BuildContext context) {
@@ -163,9 +170,21 @@ class _MenuButton extends StatelessWidget {
           child: InkWell(
             customBorder: const CircleBorder(),
             onTap: onPressed,
-            child: const Padding(
-              padding: EdgeInsets.all(8),
-              child: Icon(Icons.menu, color: Colors.black),
+            child: Padding(
+              padding: const EdgeInsets.all(8),
+              child: animate
+                  ? AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 200),
+                      transitionBuilder: (child, animation) => FadeTransition(
+                        opacity: animation,
+                        child: ScaleTransition(
+                          scale: Tween<double>(begin: 0.8, end: 1.0).animate(animation),
+                          child: child,
+                        ),
+                      ),
+                      child: Icon(icon, key: ValueKey(icon), color: Colors.black),
+                    )
+                  : Icon(icon, color: Colors.black),
             ),
           ),
         ),

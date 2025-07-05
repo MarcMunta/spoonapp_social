@@ -75,31 +75,40 @@ class _CreatePostPageState extends State<CreatePostPage> {
     final menu = context.watch<MenuProvider>();
 
     final card = ClipRRect(
-      borderRadius: BorderRadius.circular(16),
+      borderRadius: BorderRadius.circular(20),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        filter: ImageFilter.blur(sigmaX: 20, sigmaY: 20),
         child: Container(
           width: boxWidth,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            gradient: const LinearGradient(
-              colors: [Color(0xFFB46DDD), Color(0xFFD9A7C7)],
+            gradient: LinearGradient(
+              colors: [
+                const Color(0xFFB46DDD).withOpacity(0.25),
+                const Color(0xFFD9A7C7).withOpacity(0.25),
+              ],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
             ),
-            borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white54, width: 1),
-            boxShadow: const [
+            borderRadius: BorderRadius.circular(20),
+            border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
+            boxShadow: [
               BoxShadow(
-                color: Colors.black26,
-                blurRadius: 10,
-                offset: Offset(0, 4),
+                color: Colors.black.withOpacity(0.15),
+                blurRadius: 20,
+                spreadRadius: 1,
+                offset: const Offset(0, 10),
               ),
             ],
           ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
+          child: DefaultTextStyle(
+            style: TextStyle(
+              color: Colors.white.withOpacity(0.9),
+              fontWeight: FontWeight.w500,
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
               GestureDetector(
                 onTap: _pickFile,
                 child: ClipRRect(

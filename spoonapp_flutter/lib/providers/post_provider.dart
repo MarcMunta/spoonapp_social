@@ -19,7 +19,10 @@ class PostProvider extends ChangeNotifier {
   List<User> get activeUsers => _activeUsers;
 
   PostProvider(this._backend) {
-    Future.microtask(() => loadStories());
+    Future.microtask(() async {
+      await loadStories();
+      await loadPosts();
+    });
   }
 
   void likePost(Post post) {
@@ -42,6 +45,31 @@ class PostProvider extends ChangeNotifier {
     if (ok) {
       await loadStories();
     }
+  }
+
+  Future<void> addPost(User user, Uint8List bytes, String filename,
+      String description, String category, String token) async {
+    final data = await _backend.uploadPost(
+        bytes, filename, description, category, token);
+    if (data != null) {
+      final post = Post(
+        id: data['id'] as String,
+        user: user,
+        date: DateTime.now(),
+        text: description,
+        mediaUrl: data['url'] as String,
+      );
+      _posts.insert(0, post);
+      notifyListeners();
+    }
+  }
+
+  Future<void> loadPosts() async {
+    final fetched = await _backend.fetchPosts();
+    _posts
+      ..clear()
+      ..addAll(fetched);
+    notifyListeners();
   }
 
   Future<void> loadStories() async {

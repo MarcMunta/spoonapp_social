@@ -55,4 +55,37 @@ class PostProvider extends ChangeNotifier {
   void _cleanStories() {
     _stories.removeWhere((s) => s.expiresAt.isBefore(DateTime.now()));
   }
+
+  Future<bool> addPost({
+    required User user,
+    required Uint8List bytes,
+    required String filename,
+    required String description,
+    required String category,
+    required String token,
+  }) async {
+    final ok = await _backend.uploadPost(
+      bytes: bytes,
+      filename: filename,
+      description: description,
+      category: category,
+      token: token,
+    );
+    if (ok) {
+      // Reload posts from backend when implemented
+      // For now simply add locally
+      _posts.insert(
+        0,
+        Post(
+          id: DateTime.now().millisecondsSinceEpoch.toString(),
+          user: user,
+          date: DateTime.now(),
+          text: description,
+          mediaUrl: '',
+        ),
+      );
+      notifyListeners();
+    }
+    return ok;
+  }
 }

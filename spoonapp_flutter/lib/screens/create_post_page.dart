@@ -109,110 +109,111 @@ class _CreatePostPageState extends State<CreatePostPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-              GestureDetector(
-                onTap: _pickFile,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(12),
-                  child: DottedBorder(
-                    child: Container(
-                      height: 150,
-                      alignment: Alignment.center,
-                      color: _fileBytes == null ? Colors.transparent : Colors.white24,
-                      child: _fileBytes == null
-                          ? Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              mainAxisSize: MainAxisSize.min,
-                              children: const [
-                                Icon(Icons.attach_file, color: Colors.grey),
-                                SizedBox(width: 8),
-                                Text(
-                                  '🖱️ Arrastra una imagen o video aquí o haz clic',
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
-                            )
-                          : Image.memory(_fileBytes!, fit: BoxFit.cover),
+                GestureDetector(
+                  onTap: _pickFile,
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: DottedBorder(
+                      child: Container(
+                        height: 150,
+                        alignment: Alignment.center,
+                        color: _fileBytes == null ? Colors.transparent : Colors.white24,
+                        child: _fileBytes == null
+                            ? Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                mainAxisSize: MainAxisSize.min,
+                                children: const [
+                                  Icon(Icons.attach_file, color: Colors.grey),
+                                  SizedBox(width: 8),
+                                  Text(
+                                    '🖱️ Arrastra una imagen o video aquí o haz clic',
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              )
+                            : Image.memory(_fileBytes!, fit: BoxFit.cover),
+                      ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              TextField(
-                controller: _descController,
-                minLines: 3,
-                maxLines: null,
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Color(0xFFF8F5FF),
-                  hintText: '🧑‍🍳 ¿Qué tienes en tu cuchara?',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-              ),
-              const SizedBox(height: 16),
-              DropdownButtonFormField<String>(
-                value: _category,
-                decoration: const InputDecoration(
-                  filled: true,
-                  fillColor: Color(0xFFF8F5FF),
-                  hintText: 'Selecciona la categoría de tu plato 🍲',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                    borderSide: BorderSide.none,
-                  ),
-                ),
-                items: const [
-                  DropdownMenuItem(
-                    value: 'Entrantes',
-                    child: Text('Entrantes'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Primer plato',
-                    child: Text('Primer plato'),
-                  ),
-                  DropdownMenuItem(
-                    value: 'Segundo plato',
-                    child: Text('Segundo plato'),
-                  ),
-                  DropdownMenuItem(value: 'Postres', child: Text('Postres')),
-                ],
-                onChanged: (v) => setState(() => _category = v),
-              ),
-              const SizedBox(height: 20),
-              Align(
-                alignment: Alignment.centerRight,
-                child: ElevatedButton.icon(
-                  onPressed:
-                      (_fileBytes == null || _category == null || _loading)
-                      ? null
-                      : _publish,
-                  icon: _loading
-                      ? const SizedBox(
-                          width: 16,
-                          height: 16,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
-                        )
-                      : const Text('🚀'),
-                  label: const Text('Publicar'),
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFB46DDD),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 24,
-                      vertical: 12,
-                    ),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(24),
+                const SizedBox(height: 16),
+                TextField(
+                  controller: _descController,
+                  minLines: 3,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xFFF8F5FF),
+                    hintText: '🧑‍🍳 ¿Qué tienes en tu cuchara?',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      borderSide: BorderSide.none,
                     ),
                   ),
                 ),
-              ),
-            ],
+                const SizedBox(height: 16),
+                DropdownButtonFormField<String>(
+                  value: _category,
+                  decoration: const InputDecoration(
+                    filled: true,
+                    fillColor: Color(0xFFF8F5FF),
+                    hintText: 'Selecciona la categoría de tu plato 🍲',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  items: const [
+                    DropdownMenuItem(
+                      value: 'Entrantes',
+                      child: Text('Entrantes'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Primer plato',
+                      child: Text('Primer plato'),
+                    ),
+                    DropdownMenuItem(
+                      value: 'Segundo plato',
+                      child: Text('Segundo plato'),
+                    ),
+                    DropdownMenuItem(value: 'Postres', child: Text('Postres')),
+                  ],
+                  onChanged: (v) => setState(() => _category = v),
+                ),
+                const SizedBox(height: 20),
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton.icon(
+                    onPressed:
+                        (_fileBytes == null || _category == null || _loading)
+                        ? null
+                        : _publish,
+                    icon: _loading
+                        ? const SizedBox(
+                            width: 16,
+                            height: 16,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              color: Colors.white,
+                            ),
+                          )
+                        : const Text('🚀'),
+                    label: const Text('Publicar'),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFB46DDD),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 24,
+                        vertical: 12,
+                      ),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(24),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),

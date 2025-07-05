@@ -6,7 +6,7 @@ import '../widgets/stories_carousel.dart';
 import '../widgets/topbar.dart';
 import '../widgets/sidebar_left.dart';
 import '../widgets/sidebar_right.dart';
-import 'create_post_page.dart';
+import '../providers/menu_provider.dart';
 
 class FeedPage extends StatefulWidget {
   const FeedPage({super.key});
@@ -16,16 +16,14 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  bool _leftOpen = false;
-  bool _rightOpen = false;
-
-  void _toggleLeft() => setState(() => _leftOpen = !_leftOpen);
-  void _toggleRight() => setState(() => _rightOpen = !_rightOpen);
+  void _toggleLeft() => context.read<MenuProvider>().toggleLeft();
+  void _toggleRight() => context.read<MenuProvider>().toggleRight();
 
   @override
   Widget build(BuildContext context) {
     final posts = context.watch<PostProvider>().posts;
     final stories = context.watch<PostProvider>().stories;
+    final menu = context.watch<MenuProvider>();
 
     final feedContent = ListView(
       padding: const EdgeInsets.symmetric(vertical: 8),
@@ -63,14 +61,14 @@ class _FeedPageState extends State<FeedPage> {
             duration: const Duration(milliseconds: 200),
             top: 0,
             bottom: 0,
-            left: _leftOpen ? 0 : -216,
+            left: menu.leftOpen ? 0 : -216,
             child: const SidebarLeft(),
           ),
           AnimatedPositioned(
             duration: const Duration(milliseconds: 200),
             top: 0,
             bottom: 0,
-            right: _rightOpen ? 0 : -216,
+            right: menu.rightOpen ? 0 : -216,
             child: const SidebarRight(),
           ),
         ],

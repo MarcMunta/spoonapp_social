@@ -11,16 +11,20 @@ class SidebarRight extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(16),
       child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        filter: ImageFilter.blur(sigmaX: 25, sigmaY: 25),
         child: Container(
           width: 200,
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFFF00).withOpacity(0.25),
+            color: const Color(0xFFFFF4FA).withOpacity(0.2),
             borderRadius: BorderRadius.circular(16),
-            border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
-            boxShadow: const [
-              BoxShadow(color: Colors.white54, blurRadius: 10, spreadRadius: 1),
+            border: Border.all(color: Colors.white.withOpacity(0.25), width: 1),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.pinkAccent.withOpacity(0.1),
+                blurRadius: 20,
+                offset: const Offset(0, 8),
+              ),
             ],
           ),
           child: DefaultTextStyle(
@@ -37,17 +41,27 @@ class SidebarRight extends StatelessWidget {
                         backgroundImage: NetworkImage(u.profileImage)),
                     title: Text(u.name),
                     subtitle: const Text('Activo'),
+                    hoverColor: const Color(0xFFFF80AB).withOpacity(0.1),
                   ),
                 ),
                 const Divider(),
                 const Text('Comunidades',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const ListTile(title: Text('Cocina')),
-                const ListTile(title: Text('Viajes')),
+                ListTile(
+                  title: const Text('Cocina'),
+                  hoverColor: const Color(0xFFFF80AB).withOpacity(0.1),
+                ),
+                ListTile(
+                  title: const Text('Viajes'),
+                  hoverColor: const Color(0xFFFF80AB).withOpacity(0.1),
+                ),
                 const Divider(),
                 const Text('Patrocinados',
                     style: TextStyle(fontWeight: FontWeight.bold)),
-                const ListTile(title: Text('Anuncio 1')),
+                ListTile(
+                  title: const Text('Anuncio 1'),
+                  hoverColor: const Color(0xFFFF80AB).withOpacity(0.1),
+                ),
               ],
             ),
           ),

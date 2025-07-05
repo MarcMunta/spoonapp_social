@@ -143,7 +143,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
               onPressed: onRightMenu ?? () {
                 Scaffold.maybeOf(context)?.openEndDrawer();
               },
-              icon: Icons.cancel,
+              icon: Icons.people,
             ),
             const SizedBox(width: 8),
           ],
@@ -153,38 +153,63 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-class _MenuButton extends StatelessWidget {
+class _MenuButton extends StatefulWidget {
   final VoidCallback onPressed;
   final IconData icon;
   final bool animate;
   const _MenuButton({required this.onPressed, required this.icon, this.animate = false});
 
   @override
+  State<_MenuButton> createState() => _MenuButtonState();
+}
+
+class _MenuButtonState extends State<_MenuButton> {
+  bool _hover = false;
+
+  @override
   Widget build(BuildContext context) {
-    return ClipOval(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-        child: Material(
-          color: Colors.white.withOpacity(0.2),
-          shape: const CircleBorder(),
-          child: InkWell(
-            customBorder: const CircleBorder(),
-            onTap: onPressed,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: animate
-                  ? AnimatedSwitcher(
-                      duration: const Duration(milliseconds: 200),
-                      transitionBuilder: (child, animation) => FadeTransition(
-                        opacity: animation,
-                        child: ScaleTransition(
-                          scale: Tween<double>(begin: 0.8, end: 1.0).animate(animation),
-                          child: child,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
+      child: ClipOval(
+        child: BackdropFilter(
+          filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+          child: AnimatedContainer(
+            duration: const Duration(milliseconds: 150),
+            decoration: BoxDecoration(
+              color: Colors.white.withOpacity(0.2),
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white.withOpacity(0.3), width: 1.5),
+              boxShadow: _hover
+                  ? [
+                      BoxShadow(
+                        color: Colors.pinkAccent.withOpacity(0.6),
+                        blurRadius: 8,
+                        spreadRadius: 1,
+                      )
+                    ]
+                  : null,
+            ),
+            child: InkWell(
+              customBorder: const CircleBorder(),
+              onTap: widget.onPressed,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: widget.animate
+                    ? AnimatedSwitcher(
+                        duration: const Duration(milliseconds: 200),
+                        transitionBuilder: (child, animation) => FadeTransition(
+                          opacity: animation,
+                          child: ScaleTransition(
+                            scale:
+                                Tween<double>(begin: 0.8, end: 1.0).animate(animation),
+                            child: child,
+                          ),
                         ),
-                      ),
-                      child: Icon(icon, key: ValueKey(icon), color: Colors.black),
-                    )
-                  : Icon(icon, color: Colors.black),
+                        child: Icon(widget.icon, key: ValueKey(widget.icon), color: Colors.black),
+                      )
+                    : Icon(widget.icon, color: Colors.black),
+              ),
             ),
           ),
         ),

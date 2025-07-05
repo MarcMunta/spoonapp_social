@@ -154,15 +154,20 @@ class _MenuButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: const Color(0xFFFFF0B3),
-      shape: const CircleBorder(),
-      child: InkWell(
-        customBorder: const CircleBorder(),
-        onTap: onPressed,
-        child: const Padding(
-          padding: EdgeInsets.all(8),
-          child: Icon(Icons.menu, color: Color(0xFF5D1049)),
+    return ClipOval(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: Material(
+          color: Colors.white.withOpacity(0.2),
+          shape: const CircleBorder(),
+          child: InkWell(
+            customBorder: const CircleBorder(),
+            onTap: onPressed,
+            child: const Padding(
+              padding: EdgeInsets.all(8),
+              child: Icon(Icons.menu, color: Colors.black),
+            ),
+          ),
         ),
       ),
     );

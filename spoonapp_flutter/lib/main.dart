@@ -31,7 +31,7 @@ class SpoonApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: GoogleFonts.lato().fontFamily,
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFB46DDD)),
-          scaffoldBackgroundColor: const Color(0xFFFFF5FA),
+          scaffoldBackgroundColor: const Color(0xFFFFFDF4),
           useMaterial3: true,
         ),
         routes: {

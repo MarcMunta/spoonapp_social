@@ -75,7 +75,7 @@ class StoriesCarousel extends StatelessWidget {
                                 backgroundImage: user.profileImage.startsWith('http')
                                     ? NetworkImage(user.profileImage)
                                     : AssetImage(user.profileImage) as ImageProvider,
-                                radius: 24,
+                                radius: 26,
                                 backgroundColor: Colors.grey.shade200,
                               ),
                             ),
@@ -189,7 +189,7 @@ class StoriesCarousel extends StatelessWidget {
                                   backgroundImage: story.user.profileImage.startsWith('http')
                                       ? NetworkImage(story.user.profileImage)
                                       : AssetImage(story.user.profileImage) as ImageProvider,
-                                  radius: 24,
+                                  radius: 26,
                                   backgroundColor: Colors.grey.shade200,
                                 ),
                               ),

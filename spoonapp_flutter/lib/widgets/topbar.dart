@@ -6,7 +6,6 @@ import '../providers/post_provider.dart';
 import '../screens/profile_page.dart';
 import '../screens/feed_page.dart';
 import 'story_viewer.dart';
-import '../assets/base64_images.dart';
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -52,8 +51,8 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                       ),
                     );
                   },
-                  child: Image.memory(
-                    spoonappLogoBytes,
+                  child: Image.asset(
+                    'assets/images/spoonapp.png',
                     height: 45,
                     fit: BoxFit.contain,
                   ),
@@ -76,12 +75,7 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                             );
                           },
                         ),
-                        _NavButton(
-                          icon: Icons.add,
-                          onPressed: () {
-                            Navigator.pushNamed(context, '/publish');
-                          },
-                        ),
+                        _NavButton(icon: Icons.add, onPressed: () {}),
                         _NavButton(
                             icon: Icons.notifications, onPressed: () {}),
                         _NavButton(icon: Icons.restaurant, onPressed: () {}),

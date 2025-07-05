@@ -98,11 +98,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   GestureDetector(
                     onTap: _pickFile,
                     child: DottedBorder(
-                      color: Colors.white70,
-                      strokeWidth: 2,
-                      dashPattern: const [6, 4],
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(8),
+                      options: RoundedRectDottedBorderOptions(
+                        color: Colors.white70,
+                        strokeWidth: 2,
+                        dashPattern: const [6, 4],
+                        radius: const Radius.circular(8),
+                      ),
                       child: Container(
                         height: 150,
                         alignment: Alignment.center,

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'providers/post_provider.dart';
 import 'providers/user_provider.dart';
+import 'providers/menu_provider.dart';
 import 'screens/feed_page.dart';
 import 'screens/splash_router.dart';
 import 'screens/create_post_page.dart';
@@ -22,6 +23,7 @@ class SpoonApp extends StatelessWidget {
         ChangeNotifierProvider(create: (_) => UserProvider()),
         ChangeNotifierProvider(
             create: (_) => PostProvider(BackendService('http://localhost:8000'))),
+        ChangeNotifierProvider(create: (_) => MenuProvider()),
       ],
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
@@ -29,7 +31,7 @@ class SpoonApp extends StatelessWidget {
         theme: ThemeData(
           fontFamily: GoogleFonts.lato().fontFamily,
           colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFFB46DDD)),
-          scaffoldBackgroundColor: const Color(0xFFFFF5FA),
+          scaffoldBackgroundColor: const Color(0xFFFFFFF5),
           useMaterial3: true,
         ),
         routes: {

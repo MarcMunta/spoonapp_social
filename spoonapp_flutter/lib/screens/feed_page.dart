@@ -88,7 +88,8 @@ class _FeedPageState extends State<FeedPage> {
         child: IconButton(
           icon: const Icon(Icons.add, color: Colors.white),
           onPressed: () {
-            Navigator.pushNamed(context, '/publish');
+            Navigator.push(
+                context, MaterialPageRoute(builder: (_) => const CreatePostPage()));
           },
         ),
       ),

@@ -44,22 +44,4 @@ class BackendService {
     final response = await request.send();
     return response.statusCode == 200;
   }
-
-  Future<bool> uploadPost({
-    required Uint8List bytes,
-    required String filename,
-    required String description,
-    required String category,
-    required String token,
-  }) async {
-    final uri = Uri.parse('$baseUrl/api/posts/upload/');
-    final request = http.MultipartRequest('POST', uri);
-    request.headers['Authorization'] = 'Token $token';
-    request.fields['description'] = description;
-    request.fields['category'] = category;
-    request.files
-        .add(http.MultipartFile.fromBytes('file', bytes, filename: filename));
-    final resp = await request.send();
-    return resp.statusCode == 200;
-  }
 }

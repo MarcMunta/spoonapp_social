@@ -37,7 +37,6 @@ dependencies:
   intl: ^0.18.1
   google_fonts: ^6.1.0
   file_picker: ^10.2.0
-  dotted_border: ^2.1.0
   http: ^1.2.1
   shared_preferences: ^2.2.2
 
@@ -69,7 +68,10 @@ flutter:
   uses-material-design: true
 
   assets:
-    # No image assets included in repository.
+    # SpoonApp logo expected at this path but not tracked in git.
+    - assets/images/spoonapp.png
+
+  # Image assets are embedded as base64 strings to avoid binary files in git.
 
   # To add assets to your application, add an assets section, like this:
   # assets:

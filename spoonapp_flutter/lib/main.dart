@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'providers/post_provider.dart';
 import 'providers/user_provider.dart';
 import 'screens/feed_page.dart';
-import 'screens/create_post_page.dart';
 import 'screens/splash_router.dart';
 import 'services/backend.dart';
 
@@ -32,9 +31,6 @@ class SpoonApp extends StatelessWidget {
           scaffoldBackgroundColor: const Color(0xFFFFF5FA),
           useMaterial3: true,
         ),
-        routes: {
-          '/publish': (_) => const CreatePostPage(),
-        },
         home: const SplashRouter(),
       ),
     );

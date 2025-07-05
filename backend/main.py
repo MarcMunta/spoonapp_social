@@ -12,10 +12,12 @@ load_dotenv()
 AWS_REGION = os.getenv("AWS_REGION")
 S3_BUCKET = os.getenv("S3_BUCKET")
 DYNAMODB_TABLE = os.getenv("DYNAMODB_TABLE")
+DYNAMODB_POSTS_TABLE = os.getenv("DYNAMODB_POSTS_TABLE", "posts")
 
 s3 = boto3.client("s3", region_name=AWS_REGION)
 dynamodb = boto3.resource("dynamodb", region_name=AWS_REGION)
 table = dynamodb.Table(DYNAMODB_TABLE)
+posts_table = dynamodb.Table(DYNAMODB_POSTS_TABLE)
 
 app = FastAPI()
 
@@ -95,3 +97,43 @@ def get_stories():
         if item["expires_at"] > now
     ]
     return {"stories": stories}
+
+
+@app.post("/api/posts/upload/")
+async def upload_post(
+    image: UploadFile = File(None),
+    video: UploadFile = File(None),
+    description: str = Form(""),
+    category: str = Form(""),
+    token: str = Form(...),
+):
+    user = get_user_from_token(token)
+    file = image or video
+    if not file:
+        raise HTTPException(status_code=400, detail="No file uploaded")
+    ext = file.filename.split('.')[-1]
+    post_id = str(uuid.uuid4())
+    s3_key = f"posts/{post_id}.{ext}"
+    s3.upload_fileobj(file.file, S3_BUCKET, s3_key, ExtraArgs={"ACL": "public-read"})
+    url = f"https://{S3_BUCKET}.s3.{AWS_REGION}.amazonaws.com/{s3_key}"
+    posts_table.put_item(Item={
+        "id": post_id,
+        "user_id": user["id"],
+        "user_name": user["name"],
+        "avatar": user["avatar"],
+        "email": user["email"],
+        "url": url,
+        "description": description,
+        "category": category,
+        "created_at": datetime.utcnow().isoformat(),
+        "type": "video" if video else "image",
+    })
+    return {"ok": True, "url": url, "id": post_id}
+
+
+@app.get("/api/posts/")
+def get_posts():
+    response = posts_table.scan()
+    items = response.get("Items", [])
+    posts = sorted(items, key=lambda x: x.get("created_at", ""), reverse=True)
+    return {"posts": posts}

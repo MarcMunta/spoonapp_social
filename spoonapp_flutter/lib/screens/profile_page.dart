@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../widgets/topbar.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:provider/provider.dart';
 import '../providers/user_provider.dart';
 
@@ -36,8 +37,32 @@ class ProfilePage extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             OutlinedButton(
-              onPressed: () {},
-              child: const Text('Cerrar sesi\u00f3n'),
+              onPressed: () async {
+                final confirm = await showDialog<bool>(
+                  context: context,
+                  builder: (ctx) => AlertDialog(
+                    title: const Text('Cerrar sesión'),
+                    content: const Text('¿Seguro que quieres cerrar sesión?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(false),
+                        child: const Text('Cancelar'),
+                      ),
+                      TextButton(
+                        onPressed: () => Navigator.of(ctx).pop(true),
+                        child: const Text('Cerrar sesión'),
+                      ),
+                    ],
+                  ),
+                );
+                if (confirm == true) {
+                  final prefs = await SharedPreferences.getInstance();
+                  await prefs.remove('auth_token');
+                  context.read<UserProvider>().setToken('');
+                  Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                }
+              },
+              child: const Text('Cerrar sesión'),
             ),
           ],
         ),

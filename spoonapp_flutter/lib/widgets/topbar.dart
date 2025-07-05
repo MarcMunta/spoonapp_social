@@ -169,8 +169,11 @@ class _ProfileButton extends StatelessWidget {
                     : null,
               ),
               child: CircleAvatar(
-                backgroundImage: NetworkImage(user.profileImage),
+                backgroundImage: user.profileImage.startsWith('http')
+                    ? NetworkImage(user.profileImage)
+                    : AssetImage(user.profileImage) as ImageProvider,
                 radius: 16,
+                backgroundColor: Colors.grey.shade200,
               ),
             ),
           ],

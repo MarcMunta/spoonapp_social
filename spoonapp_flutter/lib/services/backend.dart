@@ -26,12 +26,21 @@ class BackendService {
     }).toList();
   }
 
-  Future<bool> uploadStory(Uint8List bytes, String filename) async {
+  Future<bool> uploadStory(Uint8List bytes, String filename, String token, {String? mimeType}) async {
     final uri = Uri.parse('$baseUrl/api/stories/upload/');
     final request = http.MultipartRequest('POST', uri);
-    request.files.add(
-      http.MultipartFile.fromBytes('image', bytes, filename: filename),
-    );
+    final ext = filename.split('.').last.toLowerCase();
+    final isVideo = ['mp4', 'mov', 'avi', 'webm'].contains(ext);
+    request.headers['Authorization'] = 'Token $token';
+    if (isVideo) {
+      request.files.add(
+        http.MultipartFile.fromBytes('video', bytes, filename: filename),
+      );
+    } else {
+      request.files.add(
+        http.MultipartFile.fromBytes('image', bytes, filename: filename),
+      );
+    }
     final response = await request.send();
     return response.statusCode == 200;
   }

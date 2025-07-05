@@ -75,7 +75,12 @@ class TopBar extends StatelessWidget implements PreferredSizeWidget {
                             );
                           },
                         ),
-                        _NavButton(icon: Icons.add, onPressed: () {}),
+                        _NavButton(
+                          icon: Icons.add,
+                          onPressed: () {
+                            Navigator.pushNamed(context, '/publish');
+                          },
+                        ),
                         _NavButton(
                             icon: Icons.notifications, onPressed: () {}),
                         _NavButton(icon: Icons.restaurant, onPressed: () {}),

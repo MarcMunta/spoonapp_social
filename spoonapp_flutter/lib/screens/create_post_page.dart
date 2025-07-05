@@ -121,180 +121,184 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   ],
                 ),
                 child: DefaultTextStyle(
-            style: const TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.w500,
-            ),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                GestureDetector(
-                  onTap: _pickFile,
-                  child: MouseRegion(
-                    onEnter: (_) => setState(() => _hoverFile = true),
-                    onExit: (_) => setState(() => _hoverFile = false),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: DottedBorder(
-                        color: Colors.pinkAccent,
+                  style: const TextStyle(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      GestureDetector(
+                        onTap: _pickFile,
+                        child: MouseRegion(
+                          onEnter: (_) => setState(() => _hoverFile = true),
+                          onExit: (_) => setState(() => _hoverFile = false),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12),
+                            child: DottedBorder(
+                              child: AnimatedContainer(
+                                duration: const Duration(milliseconds: 150),
+                                height: 150,
+                                alignment: Alignment.center,
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFFFFF4FA).withOpacity(0.2),
+                                  boxShadow: _hoverFile
+                                      ? [
+                                          BoxShadow(
+                                            color:
+                                                Colors.pinkAccent.withOpacity(0.4),
+                                            blurRadius: 12,
+                                          )
+                                        ]
+                                      : null,
+                                ),
+                                child: _fileBytes == null
+                                    ? Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        mainAxisSize: MainAxisSize.min,
+                                        children: const [
+                                          Icon(Icons.attach_file, color: Colors.black54),
+                                          SizedBox(width: 8),
+                                          Text(
+                                            '🖱️ Arrastra una imagen o video aquí o haz clic',
+                                            style: TextStyle(color: Colors.black54),
+                                          ),
+                                        ],
+                                      )
+                                    : Image.memory(_fileBytes!, fit: BoxFit.cover),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      MouseRegion(
+                        onEnter: (_) => setState(() => _hoverDesc = true),
+                        onExit: (_) => setState(() => _hoverDesc = false),
                         child: AnimatedContainer(
                           duration: const Duration(milliseconds: 150),
-                          height: 150,
-                          alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: const Color(0xFFFFF4FA).withOpacity(0.2),
-                            boxShadow: _hoverFile
+                            boxShadow: _hoverDesc
                                 ? [
                                     BoxShadow(
-                                      color:
-                                          Colors.pinkAccent.withOpacity(0.4),
+                                      color: Colors.pinkAccent.withOpacity(0.4),
                                       blurRadius: 12,
                                     )
                                   ]
                                 : null,
                           ),
-                          child: _fileBytes == null
-                            ? Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                mainAxisSize: MainAxisSize.min,
-                                children: const [
-                                  Icon(Icons.attach_file, color: Colors.black54),
-                                  SizedBox(width: 8),
-                                  Text(
-                                    '🖱️ Arrastra una imagen o video aquí o haz clic',
-                                    style: TextStyle(color: Colors.black54),
-                                  ),
-                                ],
-                              )
-                            : Image.memory(_fileBytes!, fit: BoxFit.cover),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                MouseRegion(
-                  onEnter: (_) => setState(() => _hoverDesc = true),
-                  onExit: (_) => setState(() => _hoverDesc = false),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    decoration: BoxDecoration(
-                      boxShadow: _hoverDesc
-                          ? [
-                              BoxShadow(
-                                color: Colors.pinkAccent.withOpacity(0.4),
-                                blurRadius: 12,
-                              )
-                            ]
-                          : null,
-                    ),
-                    child: TextField(
-                      controller: _descController,
-                      minLines: 3,
-                      maxLines: null,
-                      style: const TextStyle(color: Colors.black),
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xFFFFF4FA).withOpacity(0.2),
-                        hintText: '🧑‍🍳 ¿Qué tienes en tu cuchara?',
-                        hintStyle: const TextStyle(color: Colors.black54),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                MouseRegion(
-                  onEnter: (_) => setState(() => _hoverDropdown = true),
-                  onExit: (_) => setState(() => _hoverDropdown = false),
-                  child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 150),
-                    decoration: BoxDecoration(
-                      boxShadow: _hoverDropdown
-                          ? [
-                              BoxShadow(
-                                color: Colors.pinkAccent.withOpacity(0.4),
-                                blurRadius: 12,
-                              )
-                            ]
-                          : null,
-                    ),
-                    child: DropdownButtonFormField<String>(
-                      value: _category,
-                      decoration: InputDecoration(
-                        filled: true,
-                        fillColor: const Color(0xFFFFF4FA).withOpacity(0.2),
-                        hintText: 'Selecciona la categoría de tu plato 🍲',
-                        hintStyle: const TextStyle(color: Colors.black54),
-                        border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          borderSide: BorderSide.none,
-                        ),
-                      ),
-                      iconEnabledColor: Colors.black,
-                      items: const [
-                    DropdownMenuItem(
-                      value: 'Entrantes',
-                      child: Text('Entrantes', style: TextStyle(color: Colors.black)),
-                    ),
-                    DropdownMenuItem(
-                      value: 'Primer plato',
-                      child: Text('Primer plato', style: TextStyle(color: Colors.black)),
-                    ),
-                    DropdownMenuItem(
-                      value: 'Segundo plato',
-                      child: Text('Segundo plato', style: TextStyle(color: Colors.black)),
-                    ),
-                    DropdownMenuItem(
-                      value: 'Postres',
-                      child: Text('Postres', style: TextStyle(color: Colors.black)),
-                    ),
-                  ],
-                  onChanged: (v) => setState(() => _category = v),
-                ),
-                const SizedBox(height: 20),
-                Align(
-                  alignment: Alignment.centerRight,
-                  child: MouseRegion(
-                    onEnter: (_) => setState(() => _hoverPublish = true),
-                    onExit: (_) => setState(() => _hoverPublish = false),
-                    child: AnimatedContainer(
-                      duration: const Duration(milliseconds: 150),
-                      child: ElevatedButton.icon(
-                        onPressed:
-                            (_fileBytes == null || _category == null || _loading)
-                                ? null
-                                : _publish,
-                        icon: _loading
-                            ? const SizedBox(
-                                width: 16,
-                                height: 16,
-                                child: CircularProgressIndicator(
-                                  strokeWidth: 2,
-                                  color: Colors.black,
-                                ),
-                              )
-                            : const Icon(Icons.rocket_launch, color: Colors.white),
-                        label: const Text('Publicar'),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFFF80AB)
-                              .withOpacity(_hoverPublish ? 0.6 : 0.4),
-                          foregroundColor: Colors.white,
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 24,
-                            vertical: 12,
+                          child: TextField(
+                            controller: _descController,
+                            minLines: 3,
+                            maxLines: null,
+                            style: const TextStyle(color: Colors.black),
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color(0xFFFFF4FA).withOpacity(0.2),
+                              hintText: '🧑‍🍳 ¿Qué tienes en tu cuchara?',
+                              hintStyle: const TextStyle(color: Colors.black54),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
                           ),
-                          shape: const StadiumBorder(),
-                          elevation: 0,
                         ),
                       ),
-                    ),
+                      const SizedBox(height: 16),
+                      MouseRegion(
+                        onEnter: (_) => setState(() => _hoverDropdown = true),
+                        onExit: (_) => setState(() => _hoverDropdown = false),
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 150),
+                          decoration: BoxDecoration(
+                            boxShadow: _hoverDropdown
+                                ? [
+                                    BoxShadow(
+                                      color: Colors.pinkAccent.withOpacity(0.4),
+                                      blurRadius: 12,
+                                    )
+                                  ]
+                                : null,
+                          ),
+                          child: DropdownButtonFormField<String>(
+                            value: _category,
+                            decoration: InputDecoration(
+                              filled: true,
+                              fillColor: const Color(0xFFFFF4FA).withOpacity(0.2),
+                              hintText: 'Selecciona la categoría de tu plato 🍲',
+                              hintStyle: const TextStyle(color: Colors.black54),
+                              border: const OutlineInputBorder(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                borderSide: BorderSide.none,
+                              ),
+                            ),
+                            iconEnabledColor: Colors.black,
+                            items: const [
+                              DropdownMenuItem(
+                                value: 'Entrantes',
+                                child: Text('Entrantes', style: TextStyle(color: Colors.black)),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Primer plato',
+                                child: Text('Primer plato', style: TextStyle(color: Colors.black)),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Segundo plato',
+                                child: Text('Segundo plato', style: TextStyle(color: Colors.black)),
+                              ),
+                              DropdownMenuItem(
+                                value: 'Postres',
+                                child: Text('Postres', style: TextStyle(color: Colors.black)),
+                              ),
+                            ],
+                            onChanged: (v) => setState(() => _category = v),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.centerRight,
+                        child: MouseRegion(
+                          onEnter: (_) => setState(() => _hoverPublish = true),
+                          onExit: (_) => setState(() => _hoverPublish = false),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 150),
+                            child: ElevatedButton.icon(
+                              onPressed:
+                                  (_fileBytes == null || _category == null || _loading)
+                                      ? null
+                                      : _publish,
+                              icon: _loading
+                                  ? const SizedBox(
+                                      width: 16,
+                                      height: 16,
+                                      child: CircularProgressIndicator(
+                                        strokeWidth: 2,
+                                        color: Colors.black,
+                                      ),
+                                    )
+                                  : const Icon(Icons.rocket_launch, color: Colors.white),
+                              label: const Text('Publicar'),
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFFFF80AB)
+                                    .withOpacity(_hoverPublish ? 0.6 : 0.4),
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 24,
+                                  vertical: 12,
+                                ),
+                                shape: const StadiumBorder(),
+                                elevation: 0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
-              ],
+              ),
             ),
           ),
         ),

@@ -115,11 +115,6 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: DottedBorder(
-                      color: Colors.black45,
-                      strokeWidth: 1.5,
-                      borderType: BorderType.RRect,
-                      radius: const Radius.circular(12),
-                      dashPattern: const [6, 3],
                       child: Container(
                         height: 150,
                         alignment: Alignment.center,

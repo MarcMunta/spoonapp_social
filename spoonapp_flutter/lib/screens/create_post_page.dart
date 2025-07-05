@@ -82,14 +82,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
           width: boxWidth,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            gradient: LinearGradient(
-              colors: [
-                const Color(0xFFB46DDD).withOpacity(0.25),
-                const Color(0xFFD9A7C7).withOpacity(0.25),
-              ],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
+            color: Colors.white.withOpacity(0.2),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
             boxShadow: [
@@ -100,10 +93,18 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 offset: const Offset(0, 10),
               ),
             ],
+            gradient: LinearGradient(
+              colors: [
+                Colors.white.withOpacity(0.05),
+                Colors.white.withOpacity(0.0),
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
+            ),
           ),
           child: DefaultTextStyle(
-            style: TextStyle(
-              color: Colors.white.withOpacity(0.9),
+            style: const TextStyle(
+              color: Colors.black,
               fontWeight: FontWeight.w500,
             ),
             child: Column(
@@ -114,20 +115,27 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: DottedBorder(
+                      color: Colors.black45,
+                      strokeWidth: 1.5,
+                      borderType: BorderType.RRect,
+                      radius: const Radius.circular(12),
+                      dashPattern: const [6, 3],
                       child: Container(
                         height: 150,
                         alignment: Alignment.center,
-                        color: _fileBytes == null ? Colors.transparent : Colors.white24,
+                        color: _fileBytes == null
+                            ? Colors.transparent
+                            : Colors.white24,
                         child: _fileBytes == null
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 mainAxisSize: MainAxisSize.min,
                                 children: const [
-                                  Icon(Icons.attach_file, color: Colors.grey),
+                                  Icon(Icons.attach_file, color: Colors.black54),
                                   SizedBox(width: 8),
                                   Text(
                                     '🖱️ Arrastra una imagen o video aquí o haz clic',
-                                    style: TextStyle(color: Colors.grey),
+                                    style: TextStyle(color: Colors.black54),
                                   ),
                                 ],
                               )
@@ -141,11 +149,13 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   controller: _descController,
                   minLines: 3,
                   maxLines: null,
-                  decoration: const InputDecoration(
+                  style: const TextStyle(color: Colors.black),
+                  decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF8F5FF),
+                    fillColor: Colors.white.withOpacity(0.3),
                     hintText: '🧑‍🍳 ¿Qué tienes en tu cuchara?',
-                    border: OutlineInputBorder(
+                    hintStyle: const TextStyle(color: Colors.black54),
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                       borderSide: BorderSide.none,
                     ),
@@ -154,29 +164,34 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   value: _category,
-                  decoration: const InputDecoration(
+                  decoration: InputDecoration(
                     filled: true,
-                    fillColor: Color(0xFFF8F5FF),
+                    fillColor: Colors.white.withOpacity(0.3),
                     hintText: 'Selecciona la categoría de tu plato 🍲',
-                    border: OutlineInputBorder(
+                    hintStyle: const TextStyle(color: Colors.black54),
+                    border: const OutlineInputBorder(
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                       borderSide: BorderSide.none,
                     ),
                   ),
+                  iconEnabledColor: Colors.black,
                   items: const [
                     DropdownMenuItem(
                       value: 'Entrantes',
-                      child: Text('Entrantes'),
+                      child: Text('Entrantes', style: TextStyle(color: Colors.black)),
                     ),
                     DropdownMenuItem(
                       value: 'Primer plato',
-                      child: Text('Primer plato'),
+                      child: Text('Primer plato', style: TextStyle(color: Colors.black)),
                     ),
                     DropdownMenuItem(
                       value: 'Segundo plato',
-                      child: Text('Segundo plato'),
+                      child: Text('Segundo plato', style: TextStyle(color: Colors.black)),
                     ),
-                    DropdownMenuItem(value: 'Postres', child: Text('Postres')),
+                    DropdownMenuItem(
+                      value: 'Postres',
+                      child: Text('Postres', style: TextStyle(color: Colors.black)),
+                    ),
                   ],
                   onChanged: (v) => setState(() => _category = v),
                 ),
@@ -194,14 +209,14 @@ class _CreatePostPageState extends State<CreatePostPage> {
                             height: 16,
                             child: CircularProgressIndicator(
                               strokeWidth: 2,
-                              color: Colors.white,
+                              color: Colors.black,
                             ),
                           )
-                        : const Text('🚀'),
+                        : const Icon(Icons.rocket_launch, color: Colors.black),
                     label: const Text('Publicar'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFFB46DDD),
-                      foregroundColor: Colors.white,
+                      backgroundColor: Colors.white.withOpacity(0.2),
+                      foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,
                         vertical: 12,
@@ -209,6 +224,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(24),
                       ),
+                      elevation: 0,
                     ),
                   ),
                 ),

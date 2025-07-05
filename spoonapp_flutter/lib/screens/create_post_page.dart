@@ -82,12 +82,12 @@ class _CreatePostPageState extends State<CreatePostPage> {
           width: boxWidth,
           padding: const EdgeInsets.all(20),
           decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.2),
+            color: const Color(0xFFFF00FF).withOpacity(0.25),
             borderRadius: BorderRadius.circular(20),
             border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withOpacity(0.15),
+                color: Colors.white54,
                 blurRadius: 20,
                 spreadRadius: 1,
                 offset: const Offset(0, 10),
@@ -118,9 +118,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                       child: Container(
                         height: 150,
                         alignment: Alignment.center,
-                        color: _fileBytes == null
-                            ? Colors.transparent
-                            : Colors.white24,
+                        color: const Color(0xFFFF00FF).withOpacity(0.2),
                         child: _fileBytes == null
                             ? Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
@@ -147,7 +145,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   style: const TextStyle(color: Colors.black),
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.3),
+                    fillColor: const Color(0xFFFF00FF).withOpacity(0.3),
                     hintText: '🧑‍🍳 ¿Qué tienes en tu cuchara?',
                     hintStyle: const TextStyle(color: Colors.black54),
                     border: const OutlineInputBorder(
@@ -161,7 +159,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   value: _category,
                   decoration: InputDecoration(
                     filled: true,
-                    fillColor: Colors.white.withOpacity(0.3),
+                    fillColor: const Color(0xFFFF00FF).withOpacity(0.3),
                     hintText: 'Selecciona la categoría de tu plato 🍲',
                     hintStyle: const TextStyle(color: Colors.black54),
                     border: const OutlineInputBorder(
@@ -210,7 +208,8 @@ class _CreatePostPageState extends State<CreatePostPage> {
                         : const Icon(Icons.rocket_launch, color: Colors.black),
                     label: const Text('Publicar'),
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white.withOpacity(0.2),
+                      backgroundColor:
+                          const Color(0xFFFF00FF).withOpacity(0.3),
                       foregroundColor: Colors.black,
                       padding: const EdgeInsets.symmetric(
                         horizontal: 24,

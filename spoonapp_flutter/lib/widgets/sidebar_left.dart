@@ -14,10 +14,12 @@ class SidebarLeft extends StatelessWidget {
           width: 200,
           margin: const EdgeInsets.all(8),
           decoration: BoxDecoration(
-            color: const Color(0xFFFFF4CC).withOpacity(0.2),
+            color: const Color(0xFFFFFF00).withOpacity(0.25),
             borderRadius: BorderRadius.circular(16),
             border: Border.all(color: Colors.white.withOpacity(0.3), width: 1),
-            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 10)],
+            boxShadow: const [
+              BoxShadow(color: Colors.white54, blurRadius: 10, spreadRadius: 1),
+            ],
           ),
           child: DefaultTextStyle(
             style: const TextStyle(color: Colors.black),

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +8,42 @@ import '../providers/post_provider.dart';
 import '../screens/profile_page.dart';
 import '../screens/feed_page.dart';
 import 'story_viewer.dart';
+
+class _GlassCircle extends StatelessWidget {
+  final Widget child;
+  final bool hover;
+  const _GlassCircle({required this.child, this.hover = false});
+
+  @override
+  Widget build(BuildContext context) {
+    return ClipOval(
+      child: BackdropFilter(
+        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 150),
+          decoration: BoxDecoration(
+            color: Colors.white.withOpacity(0.2),
+            borderRadius: BorderRadius.circular(50),
+            border: Border.all(
+              color: Colors.white.withOpacity(0.3),
+              width: 1.5,
+            ),
+            boxShadow: hover
+                ? [
+                    BoxShadow(
+                      color: Colors.white.withOpacity(0.6),
+                      blurRadius: 6,
+                      spreadRadius: 1,
+                    )
+                  ]
+                : null,
+          ),
+          child: child,
+        ),
+      ),
+    );
+  }
+}
 
 class TopBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
@@ -126,9 +164,16 @@ class _MenuButton extends StatelessWidget {
   }
 }
 
-class _ProfileButton extends StatelessWidget {
+class _ProfileButton extends StatefulWidget {
   final VoidCallback onPressed;
   const _ProfileButton({required this.onPressed});
+
+  @override
+  State<_ProfileButton> createState() => _ProfileButtonState();
+}
+
+class _ProfileButtonState extends State<_ProfileButton> {
+  bool _hover = false;
 
   @override
   Widget build(BuildContext context) {
@@ -136,10 +181,9 @@ class _ProfileButton extends StatelessWidget {
     final provider = context.watch<PostProvider>();
     final hasStory = provider.userHasStory(user);
 
-
-    return Material(
-      color: const Color(0xFFFFF0B3),
-      shape: const CircleBorder(),
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() => _hover = false),
       child: InkWell(
         customBorder: const CircleBorder(),
         onTap: () {
@@ -153,30 +197,33 @@ class _ProfileButton extends StatelessWidget {
               ),
             );
           } else {
-            onPressed();
+            widget.onPressed();
           }
         },
-        child: Stack(
-          clipBehavior: Clip.none,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(4),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: hasStory ? null : Colors.grey.shade300,
-                border: hasStory
-                    ? Border.all(color: Colors.blueAccent, width: 2)
-                    : null,
+        child: _GlassCircle(
+          hover: _hover,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              Container(
+                padding: const EdgeInsets.all(4),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: hasStory ? null : Colors.grey.shade300,
+                  border: hasStory
+                      ? Border.all(color: Colors.blueAccent, width: 2)
+                      : null,
+                ),
+                child: CircleAvatar(
+                  backgroundImage: user.profileImage.startsWith('http')
+                      ? NetworkImage(user.profileImage)
+                      : AssetImage(user.profileImage) as ImageProvider,
+                  radius: 16,
+                  backgroundColor: Colors.grey.shade200,
+                ),
               ),
-              child: CircleAvatar(
-                backgroundImage: user.profileImage.startsWith('http')
-                    ? NetworkImage(user.profileImage)
-                    : AssetImage(user.profileImage) as ImageProvider,
-                radius: 16,
-                backgroundColor: Colors.grey.shade200,
-              ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -200,25 +247,15 @@ class _NavButtonState extends State<_NavButton> {
     return MouseRegion(
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 150),
+      child: Container(
         margin: const EdgeInsets.symmetric(horizontal: 12),
-        decoration: BoxDecoration(
-          color: const Color(0xFFFFF0B3),
-          shape: BoxShape.circle,
-          boxShadow: _hover
-              ? const [
-                  BoxShadow(
-                      color: Colors.black26,
-                      blurRadius: 4,
-                      offset: Offset(0, 2))
-                ]
-              : null,
-        ),
-        child: IconButton(
-          icon: Icon(widget.icon, color: const Color(0xFF5D1049)),
-          onPressed: widget.onPressed,
-          splashRadius: 20,
+        child: _GlassCircle(
+          hover: _hover,
+          child: IconButton(
+            icon: Icon(widget.icon, color: Colors.white),
+            onPressed: widget.onPressed,
+            splashRadius: 20,
+          ),
         ),
       ),
     );

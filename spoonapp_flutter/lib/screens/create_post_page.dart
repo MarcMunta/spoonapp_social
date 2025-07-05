@@ -49,18 +49,19 @@ class _CreatePostPageState extends State<CreatePostPage> {
     setState(() => _loading = true);
     try {
       await context.read<PostProvider>().addPost(
-            userProv.currentUser,
-            _fileBytes!,
-            _fileName ?? 'media',
-            _descController.text,
-            _category!,
-            userProv.token,
-          );
+        userProv.currentUser,
+        _fileBytes!,
+        _fileName ?? 'media',
+        _descController.text,
+        _category!,
+        userProv.token,
+      );
       if (mounted) Navigator.pop(context);
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(const SnackBar(content: Text('Error al publicar')));
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(const SnackBar(content: Text('Error al publicar')));
       }
     } finally {
       if (mounted) setState(() => _loading = false);
@@ -93,7 +94,7 @@ class _CreatePostPageState extends State<CreatePostPage> {
                 color: Colors.black26,
                 blurRadius: 10,
                 offset: Offset(0, 4),
-              )
+              ),
             ],
           ),
           child: Column(
@@ -101,30 +102,28 @@ class _CreatePostPageState extends State<CreatePostPage> {
             children: [
               GestureDetector(
                 onTap: _pickFile,
-                child: DottedBorder(
-                  color: Colors.white70,
-                  strokeWidth: 2,
-                  dashPattern: const [6, 4],
-                  borderType: BorderType.RRect,
-                  radius: const Radius.circular(12),
-                  child: Container(
-                    height: 150,
-                    alignment: Alignment.center,
-                    color: _fileBytes == null ? Colors.transparent : Colors.white24,
-                    child: _fileBytes == null
-                        ? Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            mainAxisSize: MainAxisSize.min,
-                            children: const [
-                              Icon(Icons.attach_file, color: Colors.grey),
-                              SizedBox(width: 8),
-                              Text(
-                                '🖱️ Arrastra una imagen o video aquí o haz clic',
-                                style: TextStyle(color: Colors.grey),
-                              ),
-                            ],
-                          )
-                        : Image.memory(_fileBytes!, fit: BoxFit.cover),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: DottedBorder(
+                    child: Container(
+                      height: 150,
+                      alignment: Alignment.center,
+                      color: _fileBytes == null ? Colors.transparent : Colors.white24,
+                      child: _fileBytes == null
+                          ? Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              mainAxisSize: MainAxisSize.min,
+                              children: const [
+                                Icon(Icons.attach_file, color: Colors.grey),
+                                SizedBox(width: 8),
+                                Text(
+                                  '🖱️ Arrastra una imagen o video aquí o haz clic',
+                                  style: TextStyle(color: Colors.grey),
+                                ),
+                              ],
+                            )
+                          : Image.memory(_fileBytes!, fit: BoxFit.cover),
+                    ),
                   ),
                 ),
               ),
@@ -156,9 +155,18 @@ class _CreatePostPageState extends State<CreatePostPage> {
                   ),
                 ),
                 items: const [
-                  DropdownMenuItem(value: 'Entrantes', child: Text('Entrantes')),
-                  DropdownMenuItem(value: 'Primer plato', child: Text('Primer plato')),
-                  DropdownMenuItem(value: 'Segundo plato', child: Text('Segundo plato')),
+                  DropdownMenuItem(
+                    value: 'Entrantes',
+                    child: Text('Entrantes'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Primer plato',
+                    child: Text('Primer plato'),
+                  ),
+                  DropdownMenuItem(
+                    value: 'Segundo plato',
+                    child: Text('Segundo plato'),
+                  ),
                   DropdownMenuItem(value: 'Postres', child: Text('Postres')),
                 ],
                 onChanged: (v) => setState(() => _category = v),
@@ -167,21 +175,28 @@ class _CreatePostPageState extends State<CreatePostPage> {
               Align(
                 alignment: Alignment.centerRight,
                 child: ElevatedButton.icon(
-                  onPressed: (_fileBytes == null || _category == null || _loading)
+                  onPressed:
+                      (_fileBytes == null || _category == null || _loading)
                       ? null
                       : _publish,
                   icon: _loading
                       ? const SizedBox(
                           width: 16,
                           height: 16,
-                          child: CircularProgressIndicator(strokeWidth: 2, color: Colors.white),
+                          child: CircularProgressIndicator(
+                            strokeWidth: 2,
+                            color: Colors.white,
+                          ),
                         )
                       : const Text('🚀'),
                   label: const Text('Publicar'),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: const Color(0xFFB46DDD),
                     foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 12,
+                    ),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(24),
                     ),
@@ -200,7 +215,9 @@ class _CreatePostPageState extends State<CreatePostPage> {
         onLeftMenu: _toggleLeft,
         onRightMenu: _toggleRight,
       ),
-      backgroundColor: const Color(0xFFFFFDF4), // blanco ligeramente amarillento
+      backgroundColor: const Color(
+        0xFFFFFDF4,
+      ), // blanco ligeramente amarillento
       body: Stack(
         children: [
           Center(
